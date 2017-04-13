@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="true"
+        jar="/Users/AnthonyDoan/.gradle/caches/modules-2/files-2.1/com.parse.bolts/bolts-tasks/1.4.0/d85884acf6810a3bbbecb587f239005cbc846dc4/bolts-tasks-1.4.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="d85884acf6810a3bbbecb587f239005cbc846dc4">
+        <dex dex="/Users/AnthonyDoan/Desktop/workspace/OInterface/OConnect/Android/Oconnect/app/build/intermediates/transforms/dex/debug/folders/1000/10/bolts-tasks-1.4.0_bfacf266f3307b71fd66034604a087df1ebccb26/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/AnthonyDoan/Library/Android/sdk/extras/m2repository/com/android/support/constraint/constraint-layout-solver/1.0.2/constraint-layout-solver-1.0.2.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="b9cd8fc6bd15cb915735d34535db30ece0c44603">
+        <dex dex="/Users/AnthonyDoan/Desktop/workspace/OInterface/OConnect/Android/Oconnect/app/build/intermediates/transforms/dex/debug/folders/1000/10/constraint-layout-solver-1.0.2_2f15b4c53c4ac48742c54009bd53d46a9e2f681e/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/AnthonyDoan/.android/build-cache/ff3b1f6edcec94d8693f4c94fe8ec91e5b381b84/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
+        <dex dex="/Users/AnthonyDoan/Desktop/workspace/OInterface/OConnect/Android/Oconnect/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_f036ab980071f9ba8ba43bae34ed6daf02141151/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/AnthonyDoan/.android/build-cache/764de1ef8c0077bf66eb09886632f6ac1c96afc0/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="d4cf6227dd6a2ceff0f7dcf0c324380b7abf2c28">
+        <dex dex="/Users/AnthonyDoan/Desktop/workspace/OInterface/OConnect/Android/Oconnect/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_7612103a717d5d060657f416dc582dcd5d767c4f/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/AnthonyDoan/.android/build-cache/c96c3e5d27574a75c40d26f7c9795ce2caef5cf1/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="45f697922e6f072daa12f8a2995dc77ab03c11da">
+        <dex dex="/Users/AnthonyDoan/Desktop/workspace/OInterface/OConnect/Android/Oconnect/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_65c1b800fad9d67d323a905676b2d8c68a1dbdb2/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/AnthonyDoan/.android/build-cache/fa7ba8699752cce228f0f5d0ae3d34b9e1410384/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="4a26a1154d053ab11aaf4c3967c42a4d66390991">
+        <dex dex="/Users/AnthonyDoan/Desktop/workspace/OInterface/OConnect/Android/Oconnect/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_161a91570cf8718c9c968d67cf22d2831345f7a1/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/AnthonyDoan/.android/build-cache/ab779166f71b4f4c7d1d71c0faa4ba377781cfdc/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="efb8cb62d47d157c29d1521daac7eefd4cb881ee">
+        <dex dex="/Users/AnthonyDoan/Desktop/workspace/OInterface/OConnect/Android/Oconnect/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_a2bcf606688d90b6e34865a81652c7fb2599c11f/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/AnthonyDoan/.android/build-cache/a6d1d1f197f632eac86393d913c0f8d03292760b/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="38789e20ace9ab7dbd00554bd2673ab424478d3b">
+        <dex dex="/Users/AnthonyDoan/Desktop/workspace/OInterface/OConnect/Android/Oconnect/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_32d6b9680e508b19d52c46ad9def3efb995cc5b6/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/AnthonyDoan/Desktop/workspace/OInterface/OConnect/Android/Oconnect/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="65a753b42d00c3a168db5f61b92ffa6351386994">
+        <dex dex="/Users/AnthonyDoan/Desktop/workspace/OInterface/OConnect/Android/Oconnect/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_6cf85325bc9c7ae72951e82b8983537512f39368/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/AnthonyDoan/.gradle/caches/modules-2/files-2.1/io.realm/realm-android/0.84.1/b86074e6240f0f876701810a047b0261f7bd060e/realm-android-0.84.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="b86074e6240f0f876701810a047b0261f7bd060e">
+        <dex dex="/Users/AnthonyDoan/Desktop/workspace/OInterface/OConnect/Android/Oconnect/app/build/intermediates/transforms/dex/debug/folders/1000/10/realm-android-0.84.1_779f4d85c21f09423d5efb3ce236bcf97aa95d21/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/AnthonyDoan/.android/build-cache/bcf693135b619d6256c28f2ac4c4c4b58e0c80e2/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="6ef31f1555bb4cc513ec8d52711365a8b89f3600">
+        <dex dex="/Users/AnthonyDoan/Desktop/workspace/OInterface/OConnect/Android/Oconnect/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_6a7610ecc830962f0e6b952c8e3a9f07b5b64f91/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/AnthonyDoan/Desktop/workspace/OInterface/OConnect/Android/Oconnect/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="510aa6efc159983dfbffa676a0dae37568c0a46f">
+        <dex dex="/Users/AnthonyDoan/Desktop/workspace/OInterface/OConnect/Android/Oconnect/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run_b26579096a150511f5d2ac72e7f11e30de930fd5/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/AnthonyDoan/.gradle/caches/modules-2/files-2.1/com.squareup.okio/okio/1.11.0/840897fcd7223a8143f1d9b6f69714e7be34fd50/okio-1.11.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="840897fcd7223a8143f1d9b6f69714e7be34fd50">
+        <dex dex="/Users/AnthonyDoan/Desktop/workspace/OInterface/OConnect/Android/Oconnect/app/build/intermediates/transforms/dex/debug/folders/1000/10/okio-1.11.0_585081ad5a10cfc20acc7988f6d988f02c2e2d50/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/AnthonyDoan/.gradle/caches/modules-2/files-2.1/com.parse/parse-android/1.14.1/b35bb849e7bda4497fe6dfce4bd9f332087c2e3b/parse-android-1.14.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="b35bb849e7bda4497fe6dfce4bd9f332087c2e3b">
+        <dex dex="/Users/AnthonyDoan/Desktop/workspace/OInterface/OConnect/Android/Oconnect/app/build/intermediates/transforms/dex/debug/folders/1000/10/parse-android-1.14.1_20057c9a5069fb33270aba39f800b7824f7096d8/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/AnthonyDoan/.android/build-cache/94c84247dbfa8b4b3a00d2867ef5169dfa59aea5/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="95519720620b553f63afc789beba9ad582807f7c">
+        <dex dex="/Users/AnthonyDoan/Desktop/workspace/OInterface/OConnect/Android/Oconnect/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_fe9232ccb8c78e0a8a1456afe004f0b3663f043e/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/AnthonyDoan/.gradle/caches/modules-2/files-2.1/com.squareup.okhttp3/okhttp/3.6.0/69edde9fc4b01c9fd51d25b83428837478c27254/okhttp-3.6.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="69edde9fc4b01c9fd51d25b83428837478c27254">
+        <dex dex="/Users/AnthonyDoan/Desktop/workspace/OInterface/OConnect/Android/Oconnect/app/build/intermediates/transforms/dex/debug/folders/1000/10/okhttp-3.6.0_6c98f6dcaa9840f44e7736428447af5b249ac598/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/AnthonyDoan/.android/build-cache/d37c21d06fe24f59931f19ff1854a7ab67115519/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="44ee06abb66da30f5855e6bf54574e64cdcd982a">
+        <dex dex="/Users/AnthonyDoan/Desktop/workspace/OInterface/OConnect/Android/Oconnect/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_be7b8c0a3ea22ff350a63164b9c02439f5d8f256/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/AnthonyDoan/.android/build-cache/9ec194e941934cc36b59d47fbe77b6b18ca08dcd/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="150252b33b00274cc868578ade018fda0d43a3eb">
+        <dex dex="/Users/AnthonyDoan/Desktop/workspace/OInterface/OConnect/Android/Oconnect/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_41f989f28ba3c76a5ed1e4e246187b4cb3497658/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/AnthonyDoan/.android/build-cache/c3bc8bcfb543f072b462439cc484ac0f88e5cb67/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="47635644d0d5c103c1dd8360549eb9ba3225c7d3">
+        <dex dex="/Users/AnthonyDoan/Desktop/workspace/OInterface/OConnect/Android/Oconnect/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_7df8a8f11cb190e529131dc27e26d6b9862368d4/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/AnthonyDoan/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/25.3.1/support-annotations-25.3.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="bf8841d29fa39e077730e7a91222c2ce269fa7c9">
+        <dex dex="/Users/AnthonyDoan/Desktop/workspace/OInterface/OConnect/Android/Oconnect/app/build/intermediates/transforms/dex/debug/folders/1000/10/support-annotations-25.3.1_0bc63fa0a9b6881eb2ef8e4746dc0c2285184c04/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/AnthonyDoan/.android/build-cache/2f67cf2dd2e34526218bb125ecc36c8abad8b2d9/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="da27a32db6af8954ee8061537c7d476fcb1df46f">
+        <dex dex="/Users/AnthonyDoan/Desktop/workspace/OInterface/OConnect/Android/Oconnect/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_22c500a15a286421d416917b66cefa2e7a2d0870/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/AnthonyDoan/.android/build-cache/d96a3cafe1a981990766d1272aaadd39c3a94b98/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="052f5f840f21174a3ecf6544130194e2652cbb73">
+        <dex dex="/Users/AnthonyDoan/Desktop/workspace/OInterface/OConnect/Android/Oconnect/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_c9e76f11322f390edee8e9229743b1100382395d/classes.dex" />
+    </item>
+
+</items>

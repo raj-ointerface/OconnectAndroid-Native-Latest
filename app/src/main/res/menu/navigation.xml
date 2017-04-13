@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_coming_soon"
+        android:title="@string/label_coming_soon" />
+
+    <item
+        android:id="@+id/navigation_all_upcoming"
+        android:title="@string/label_all_upcoming" />
+
+    <item
+        android:id="@+id/navigation_past"
+        android:title="@string/label_past" />
+
+</menu>
