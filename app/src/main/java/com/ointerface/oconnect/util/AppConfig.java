@@ -15,10 +15,14 @@ public class AppConfig {
     static public String lastSyncDateName = "com.ointerface.oconnect.sharedprefs.lastSyncDate";
     static public String sharedPrefsConferenceID = "com.ointerface.oconnect.sharedprefs.conferenceID";
     static public String sharedPrefsIsSignedIn = "com.ointerface.oconnect.sharedprefs.isSignedIn";
+    static public String sharedPrefsSignedInUserID = "com.ointerface.oconnect.sharedprefs.signedInUserID";
+    static public String getSharedPrefsPinPromptConferenceList = "com.ointerface.oconnect.sharedprefs.pinPromptConferenceList";
+    static public String getSharedPrefsPinPromptSkippedConferenceList = "com.ointerface.oconnect.sharedprefs.pinPromptSkippedConferenceList";
 
     static public String defaultDateTimeFormat = "yyyy-MM-dd'T'HH:mm:ss";
 
     // Default UI values
     static public int defaultThemeColor = 0xFF5595D0;
     static public int whiteColor = 0xFFFFFFFF;
+    static public int lightGreyColor = 0xFFE2E2E0;
 }

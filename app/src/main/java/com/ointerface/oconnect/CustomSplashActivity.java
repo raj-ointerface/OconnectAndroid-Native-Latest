@@ -34,7 +34,7 @@ public class CustomSplashActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_custom_splash);
 
-        Realm realm = Realm.getInstance(App.getInstance());
+        Realm realm = AppUtil.getRealmInstance(App.getInstance());
         Organization result = realm.where(Organization.class).equalTo("objectId", AppConfig.primaryOrganizationID).findFirst();
 
         if (result != null) {

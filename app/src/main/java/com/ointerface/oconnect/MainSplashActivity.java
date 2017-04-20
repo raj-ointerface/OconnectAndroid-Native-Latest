@@ -1,6 +1,9 @@
 package com.ointerface.oconnect;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,7 +21,14 @@ public class MainSplashActivity extends AppCompatActivity implements IDataSyncLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_splash);
 
-        DataSyncManager.beginDataSync(getApplicationContext(), this);
+        DataSyncManager.dialog = ProgressDialog.show((Context)this, null, "Initializing Data ... Please wait.");
+
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                DataSyncManager.beginDataSync(getApplicationContext(), MainSplashActivity.this);
+            }
+        });
     }
 
     public void onDataSyncFinish() {

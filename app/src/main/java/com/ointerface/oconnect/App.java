@@ -2,7 +2,10 @@ package com.ointerface.oconnect;
 
 import android.app.Application;
 
+import com.ointerface.oconnect.util.AppUtil;
 import com.parse.Parse;
+import com.parse.ParseACL;
+import com.parse.ParseUser;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
@@ -26,9 +29,16 @@ public class App extends Application {
                 .clientKey(getString(R.string.parse_client_key))
                 .build());
 
-        RealmConfiguration config = new RealmConfiguration.Builder(getApplicationContext()).build();
+        /*
+        ParseUser.enableAutomaticUser();
+        ParseACL defaultACL = new ParseACL();
 
-        Realm.setDefaultConfiguration(config);
+        ParseACL.setDefaultACL(defaultACL, true);
+        */
+
+        AppUtil.realmConfiguration = new RealmConfiguration.Builder(getApplicationContext()).build();
+
+        Realm.setDefaultConfiguration(AppUtil.realmConfiguration);
     }
 
     public static App getInstance() {

@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -25,8 +26,12 @@ import android.widget.TextView;
 import com.ointerface.oconnect.activities.*;
 
 import com.ointerface.oconnect.data.Conference;
+import com.ointerface.oconnect.data.Person;
 import com.ointerface.oconnect.util.AppConfig;
 import com.ointerface.oconnect.util.AppUtil;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import java.text.DateFormat;
 import java.text.FieldPosition;
@@ -35,6 +40,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -66,21 +72,30 @@ public class ConferenceListViewActivity extends AppCompatActivity {
 
             switch (item.getItemId()) {
                 case R.id.navigation_coming_soon:
-                    view1.setBackgroundColor(AppConfig.whiteColor);
+                    view1.setBackgroundColor(AppConfig.lightGreyColor);
+
                     view2.setBackgroundColor(AppConfig.defaultThemeColor);
+
                     view3.setBackgroundColor(AppConfig.defaultThemeColor);
+
                     displayComingSoon();
                     return true;
                 case R.id.navigation_all_upcoming:
                     view1.setBackgroundColor(AppConfig.defaultThemeColor);
-                    view2.setBackgroundColor(AppConfig.whiteColor);
+
+                    view2.setBackgroundColor(AppConfig.lightGreyColor);
+
                     view3.setBackgroundColor(AppConfig.defaultThemeColor);
+
                     displayAllUpcoming();
                     return true;
                 case R.id.navigation_past:
                     view1.setBackgroundColor(AppConfig.defaultThemeColor);
+
                     view2.setBackgroundColor(AppConfig.defaultThemeColor);
-                    view3.setBackgroundColor(AppConfig.whiteColor);
+
+                    view3.setBackgroundColor(AppConfig.lightGreyColor);
+
                     displayPast();
                     return true;
             }
@@ -106,12 +121,15 @@ public class ConferenceListViewActivity extends AppCompatActivity {
                 if (adapter.sectionHeader.contains(position)) {
                     return;
                 }
+
                 final Conference conference = adapter.mData.get(position);
+
+                OConnectBaseActivity.selectedConference = adapter.mData.get(position);
 
                 if (conference.isPublic() == false &&
                         (AppUtil.getIsSignedIn(ConferenceListViewActivity.this) == false ||
                                 (AppUtil.getIsSignedIn(ConferenceListViewActivity.this) == true
-                                && !AppUtil.getSelectedConferenceID(ConferenceListViewActivity.this).equalsIgnoreCase(conference.getObjectId()) ))) {
+                                        && !AppUtil.getSelectedConferenceID(ConferenceListViewActivity.this).equalsIgnoreCase(conference.getObjectId())))) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(ConferenceListViewActivity.this);
                     builder.setTitle("Enter Password");
 
@@ -123,9 +141,24 @@ public class ConferenceListViewActivity extends AppCompatActivity {
                     builder.setPositiveButton("Enter Conference", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            if (input.getText().toString().contentEquals(conference.getCode())) {
-                                Intent i = new Intent(ConferenceListViewActivity.this, DashboardActivity.class);
-                                startActivity(i);
+
+                                if (input.getText().toString().contentEquals(conference.getCode())) {
+                                    AppUtil.setSelectedConferenceID(ConferenceListViewActivity.this, conference.getObjectId());
+
+                                    if (AppUtil.getIsSignedIn(ConferenceListViewActivity.this) == false) {
+                                        Intent i = new Intent(ConferenceListViewActivity.this, SignInActivity1.class);
+                                        startActivity(i);
+                                        overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up);
+                                    } else {
+                                        if (AppUtil.hasPinPromptEnteredForConference(ConferenceListViewActivity.this, conference.getObjectId()) == false &&
+                                                conference.isShouldShowPin() == true &&
+                                                AppUtil.hasPinPromptSkippedForConference(ConferenceListViewActivity.this, conference.getObjectId()) == false) {
+                                            callPINPromptWorkflow(conference);
+                                        } else {
+                                            Intent i = new Intent(ConferenceListViewActivity.this, DashboardActivity.class);
+                                            startActivity(i);
+                                        }
+                                    }
                             } else {
                                 AlertDialog alertDialog = new AlertDialog.Builder(ConferenceListViewActivity.this).create();
                                 alertDialog.setTitle("");
@@ -147,11 +180,18 @@ public class ConferenceListViewActivity extends AppCompatActivity {
                         }
                     });
 
-                    builder.show();
+                    AlertDialog dialog = builder.create();
+
+                    dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+
+                    dialog.show();
                 } else {
+                    AppUtil.setSelectedConferenceID(ConferenceListViewActivity.this, conference.getObjectId());
                     Intent i = new Intent(ConferenceListViewActivity.this, DashboardActivity.class);
                     startActivity(i);
                 }
+
+
             }
         });
 
@@ -270,6 +310,169 @@ public class ConferenceListViewActivity extends AppCompatActivity {
         displayComingSoon();
     }
 
+    public void callPINPromptWorkflow(Conference conference) {
+        if (AppUtil.getIsSignedIn(ConferenceListViewActivity.this) == true) {
+            Realm realm = AppUtil.getRealmInstance(App.getInstance());
+            OConnectBaseActivity.currentPerson = realm.where(Person.class).equalTo("objectId", AppUtil.getSignedInUserID(ConferenceListViewActivity.this)).findFirst();
+        }
+
+        String usernametxt = OConnectBaseActivity.currentPerson.getContact_email();
+        try {
+            List<ParseObject> speakerList = ParseQuery.getQuery("Speaker").whereEqualTo("email", usernametxt).find();
+            List<ParseObject> attendeeList = ParseQuery.getQuery("Attendee").whereEqualTo("email", usernametxt).find();
+
+
+            if (speakerList.size() == 0 &&
+                    attendeeList.size() == 0 &&
+                    AppUtil.hasPinPromptEnteredForConference(ConferenceListViewActivity.this, OConnectBaseActivity.selectedConference.getObjectId()) == false
+                    && OConnectBaseActivity.selectedConference.isShouldShowPin() == true) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(ConferenceListViewActivity.this);
+                builder.setTitle("Please Enter Your PIN To Verify Your Identity");
+                builder.setMessage("If you have received an email from the organizer with a PIN number, please enter it here to verify your identity.  If you did not receive an email, please Skip this step.");
+
+                final EditText input = new EditText(ConferenceListViewActivity.this);
+
+                input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                builder.setView(input);
+
+                builder.setPositiveButton("Enter PIN", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        try {
+                            List<ParseObject> speakerList = ParseQuery.getQuery("Speaker").whereEqualTo("IOS_code", input.getText().toString()).find();
+                            List<ParseObject> attendeeList = ParseQuery.getQuery("Attendee").whereEqualTo("IOS_code", input.getText().toString()).find();
+
+                            boolean bUserLinked = false;
+
+                            if (speakerList.size() > 0) {
+                                ParseObject speakerObj = speakerList.get(0);
+                                speakerObj.put("UserLink", OConnectBaseActivity.currentPerson.getObjectId());
+                                speakerObj.save();
+                                bUserLinked = true;
+                            } else if (attendeeList.size() > 0) {
+                                ParseObject attendeeObj = attendeeList.get(0);
+                                attendeeObj.put("UserLink", OConnectBaseActivity.currentPerson.getObjectId());
+                                attendeeObj.save();
+                                bUserLinked = true;
+                            }
+
+                            if (bUserLinked == true) {
+                                AppUtil.addConferenceForPinPromptEntered(ConferenceListViewActivity.this, OConnectBaseActivity.selectedConference.getObjectId());
+                                ConferenceListViewActivity.this.finish();
+                                Intent i = new Intent(ConferenceListViewActivity.this, DashboardActivity.class);
+                                startActivity(i);
+                                overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up);
+                            } else {
+                                AlertDialog alertDialog = new AlertDialog.Builder(ConferenceListViewActivity.this).create();
+                                alertDialog.setTitle("Error");
+                                alertDialog.setMessage("Incorrect PIN.  Please try again when logging in.");
+                                alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                ConferenceListViewActivity.this.finish();
+                                                Intent i = new Intent(ConferenceListViewActivity.this, DashboardActivity.class);
+                                                startActivity(i);
+                                                overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up);
+                                            }
+                                        });
+                                alertDialog.show();
+                            }
+                        } catch (Exception ex) {
+                            Log.d("SignIn2", ex.getMessage());
+                        }
+                    }
+                });
+
+                builder.setNegativeButton("Skip", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(ConferenceListViewActivity.this);
+                        builder.setTitle("Are You Sure?");
+                        builder.setMessage("If you received an email with a PIN, we strongly recommend you enter it so that we can verify your identity properly.");
+
+                        final EditText input = new EditText(ConferenceListViewActivity.this);
+
+                        input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                        builder.setView(input);
+
+                        builder.setPositiveButton("Enter PIN", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                try {
+                                    List<ParseObject> speakerList = ParseQuery.getQuery("Speaker").whereEqualTo("IOS_code", input.getText().toString()).find();
+                                    List<ParseObject> attendeeList = ParseQuery.getQuery("Attendee").whereEqualTo("IOS_code", input.getText().toString()).find();
+
+                                    boolean bUserLinked = false;
+
+                                    if (speakerList.size() > 0) {
+                                        ParseObject speakerObj = speakerList.get(0);
+                                        speakerObj.put("UserLink", OConnectBaseActivity.currentPerson.getObjectId());
+                                        speakerObj.save();
+                                        bUserLinked = true;
+                                    } else if (attendeeList.size() > 0) {
+                                        ParseObject attendeeObj = attendeeList.get(0);
+                                        attendeeObj.put("UserLink", OConnectBaseActivity.currentPerson.getObjectId());
+                                        attendeeObj.save();
+                                        bUserLinked = true;
+                                    }
+
+                                    if (bUserLinked == true) {
+                                        AppUtil.addConferenceForPinPromptEntered(ConferenceListViewActivity.this, OConnectBaseActivity.selectedConference.getObjectId());
+                                        ConferenceListViewActivity.this.finish();
+                                        Intent i = new Intent(ConferenceListViewActivity.this, DashboardActivity.class);
+                                        startActivity(i);
+                                        overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up);
+                                    } else {
+                                        AlertDialog alertDialog = new AlertDialog.Builder(ConferenceListViewActivity.this).create();
+                                        alertDialog.setTitle("Error");
+                                        alertDialog.setMessage("Incorrect PIN.  Please try again when logging in.");
+                                        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                                                new DialogInterface.OnClickListener() {
+                                                    public void onClick(DialogInterface dialog, int which) {
+                                                        ConferenceListViewActivity.this.finish();
+                                                        Intent i = new Intent(ConferenceListViewActivity.this, DashboardActivity.class);
+                                                        startActivity(i);
+                                                        overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up);
+                                                    }
+                                                });
+                                        alertDialog.show();
+                                    }
+                                } catch (Exception ex) {
+                                    Log.d("SignIn2", ex.getMessage());
+                                }
+                            }
+                        });
+
+                        builder.setNegativeButton("Skip", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                AppUtil.addConferenceForPinPromptSkipped(ConferenceListViewActivity.this, AppUtil.getSelectedConferenceID(ConferenceListViewActivity.this));
+                                Intent i = new Intent(ConferenceListViewActivity.this, DashboardActivity.class);
+                                startActivity(i);
+                                overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up );
+                            }
+                        });
+
+                        builder.create().show();
+                    }
+                });
+
+                builder.create().show();
+
+                // AlertDialog dialog = builder.create();
+
+                // dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+
+                //dialog.show();
+            } else {
+                Intent i = new Intent(ConferenceListViewActivity.this, DashboardActivity.class);
+                startActivity(i);
+            }
+        } catch (Exception ex) {
+            Log.d("SignIn2", ex.getMessage());
+        }
+    }
+
     public void populateListView() {
         lvConferences.setAdapter(adapter);
     }
@@ -277,7 +480,7 @@ public class ConferenceListViewActivity extends AppCompatActivity {
     public void displaySearchResults(String searchText) {
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
 
-        Realm realm = Realm.getInstance(App.getInstance());
+        Realm realm = AppUtil.getRealmInstance(App.getInstance());
         RealmResults<Conference> results = null;
         Date dNow = new Date();
 
@@ -362,7 +565,7 @@ public class ConferenceListViewActivity extends AppCompatActivity {
     }
 
     public void displayComingSoon() {
-        Realm realm = Realm.getInstance(App.getInstance());
+        Realm realm = AppUtil.getRealmInstance(App.getInstance());
 
         Calendar c=new GregorianCalendar();
         c.add(Calendar.DATE, 30);
@@ -420,7 +623,7 @@ public class ConferenceListViewActivity extends AppCompatActivity {
     }
 
     public void displayAllUpcoming() {
-        Realm realm = Realm.getInstance(App.getInstance());
+        Realm realm = AppUtil.getRealmInstance(App.getInstance());
 
         Date dNow = new Date();
 
@@ -474,7 +677,7 @@ public class ConferenceListViewActivity extends AppCompatActivity {
     }
 
     public void displayPast() {
-        Realm realm = Realm.getInstance(App.getInstance());
+        Realm realm = AppUtil.getRealmInstance(App.getInstance());
 
         Date dNow = new Date();
 

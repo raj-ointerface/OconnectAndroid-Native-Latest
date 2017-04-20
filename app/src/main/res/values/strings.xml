@@ -11,7 +11,7 @@
     <string name="parse_app_id">OxZLwjHXEjFjuFExxotUrwvOlxdT2efPN8pv06JI</string>
     <string name="parse_server_url">http://45.55.255.189:8080/parse</string>
     <string name="parse_client_key">qe62myjfXeXhlS2sYYRyFobYqQ5Bvs82FXuU3CsN</string>
-
+    <string name="parse_rest_api_key">gRM2GVEI6I6HdtRv8inJSW9LUF9ZPInwz9FlIb4r</string>
 
     <string name="title_activity_conference_list_view">Conferences</string>
     <string name="title_home">Home</string>
@@ -30,4 +30,18 @@
 
     <string name="action_settings">Settings</string>
     <string name="title_activity_dashboard">DashboardActivity</string>
+
+    <!-- Sign In -->
+    <string name="label_hello_guest">Hello Guest,</string>
+    <string name="label_please_sign_in">Please Sign In.</string>
+    <string name="label_or">Or</string>
+
+    <string name="facebook_app_id">1670809836530865</string>
+
+    <string name="no_internet">No Internet</string>
+    <string name="internet_message">Please connect to the Internet to use this app.</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_announcements">AnnouncementsActivity</string>
 </resources>

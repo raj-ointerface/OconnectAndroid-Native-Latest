@@ -7,4 +7,15 @@
     <color name="colorBlack">#000000</color>
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorOconnectDefault">#5595D0</color>
+    <color name="colorFacebook">#3b5998</color>
+    <color name="colorTwitter">#0084b4</color>
+    <color name="colorLinkedIn">#007bb6</color>
+    <color name="loginLinkGreen">#3CB371</color>
+    <color name="loginButtonGreen">#76CE99</color>
+    <color name="colorRed">#D66B6E</color>
+    <color name="navBarBackgroundGray">#4C4C4C</color>
+    <color name="dashboardSectionBackgroundColor">#1B939E</color>
+    <color name="dashboardTextGrey">#CCCCCC</color>
+    <color name="eventDotColor">#48A6D4</color>
+    <color name="dashboardSchedulePreviewHeaderBackgroundColor">#005F68</color>
 </resources>

@@ -3,6 +3,7 @@
     package="com.ointerface.oconnect">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:name=".App"
@@ -18,6 +19,12 @@
         <meta-data
             android:name="com.parse.APPLICATION_ID"
             android:value="@string/parse_app_id" />
+        <meta-data
+            android:name="com.crashlytics.ApiKey"
+            android:value="7709e1de5fdf4aba1efd6cccee763a959d117682" />
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
 
         <activity
             android:name=".MainSplashActivity"
@@ -39,15 +46,35 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
-            android:name=".activities.OConnectBaseActivity"
-            android:label="@string/title_activity_oconnect_base"
+            android:name=".activities.DashboardActivity"
+            android:label=""
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activities.DashboardActivity"
-            android:label="@string/title_activity_dashboard"
+            android:name=".activities.OConnectBaseActivity"
+            android:label=""
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activities.SignInActivity1"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"></activity>
+        <activity
+            android:name=".activities.SignInActivity1"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+        <activity
+            android:name=".activities.SignInActivity2"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+        <activity
+            android:name=".activities.CreateAccountActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+        <activity
+            android:name=".activities.ScheduleActivity"
+            android:label=""
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.AnnouncementsActivity"
+            android:label="@string/title_activity_announcements"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
