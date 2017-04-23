@@ -44,4 +44,14 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_announcements">AnnouncementsActivity</string>
+    <string name="title_activity_info">InfoActivity</string>
+    <string name="title_activity_maps_list">MapsListActivity</string>
+    <string name="title_activity_map">MapActivity</string>
+    <string name="title_activity_about_us">AboutUsActivity</string>
+    <string name="title_activity_qrcode_scanner">QRCodeScannerActivity</string>
+    <string name="title_activity_web_view">WebViewActivity</string>
+    <string name="title_activity_sponsors_list">SponsorsListActivity</string>
+    <string name="title_activity_my_notes">MyNotesActivity</string>
+    <string name="title_activity_add_note">AddNoteActivity</string>
+    <string name="title_activity_my_agenda">MyAgendaActivity</string>
 </resources>

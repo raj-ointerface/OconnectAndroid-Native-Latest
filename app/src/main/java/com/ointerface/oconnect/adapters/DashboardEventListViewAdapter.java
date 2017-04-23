@@ -69,15 +69,18 @@ public class DashboardEventListViewAdapter extends BaseAdapter {
 
         TextView tvDate = (TextView) convertView.findViewById(R.id.tvDateDay);
 
-        tvDate.setText(dfDay.format(event.getStartTime()) + ",");
-
         TextView tvTimeStart = (TextView) convertView.findViewById(R.id.tvStartTime);
 
-        tvTimeStart.setText(dfTime.format(event.getStartTime()) + " - ");
+        if (event.getStartTime() != null) {
+            tvDate.setText(dfDay.format(event.getStartTime()) + ",");
+            tvTimeStart.setText(dfTime.format(event.getStartTime()) + " - ");
+        }
 
         TextView tvTimeEnd = (TextView) convertView.findViewById(R.id.tvEndTime);
 
-        tvTimeEnd.setText(dfTime.format(event.getEndTime()));
+        if (event.getEndTime() != null) {
+            tvTimeEnd.setText(dfTime.format(event.getEndTime()));
+        }
 
         TextView tvEventName = (TextView) convertView.findViewById(R.id.tvEventName);
 

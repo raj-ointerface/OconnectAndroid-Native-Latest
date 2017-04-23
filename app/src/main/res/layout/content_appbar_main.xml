@@ -14,16 +14,41 @@
             android:layout_height="wrap_content"
             >
             <ImageView
+                android:id="@+id/ivHeaderBack"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:scaleType="fitCenter"
+                android:layout_marginLeft="0dp"
+                android:layout_centerVertical="true"
+                android:foregroundGravity="center_vertical"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:visibility="gone"
+                android:background="@drawable/icon_back"/>
+            <TextView
+                android:id="@+id/tvHeaderBack"
+                android:layout_marginLeft="5dp"
+                android:layout_toRightOf="@id/ivHeaderBack"
+                android:textColor="@color/colorWhite"
+                android:textSize="14sp"
+                android:layout_marginTop="3dp"
+                android:gravity="center_vertical"
+                android:foregroundGravity="center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
+            <ImageView
                 android:id="@+id/ivProfileLanyard"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:scaleType="fitCenter"
+                android:layout_toRightOf="@+id/tvHeaderBack"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:background="@drawable/icon_profile_lanyard"/>
             <ImageView
                 android:id="@+id/ivQuestion"
-                android:layout_toLeftOf="@+id/ivSearch"
+                android:layout_toLeftOf="@+id/ivRightToolbarPerson"
                 android:layout_marginRight="15dp"
                 android:layout_width="25dp"
                 android:layout_height="25dp"

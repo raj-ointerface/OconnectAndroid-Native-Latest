@@ -1,6 +1,7 @@
 package com.ointerface.oconnect.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.Menu;

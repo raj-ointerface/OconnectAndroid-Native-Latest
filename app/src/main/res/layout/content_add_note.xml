@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.ointerface.oconnect.activities.MyNotesActivity"
+    tools:showIn="@layout/activity_my_notes">
+    <EditText
+        android:id="@+id/etTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Give these notes a title"
+        android:layout_marginLeft="20dp"
+        android:textStyle="italic"
+        android:textSize="18sp"
+        android:textColor="@color/colorTurquoise"
+        android:inputType="text"
+        android:gravity="top"/>
+    <EditText
+        android:id="@+id/etNote"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:gravity="top"
+        android:foregroundGravity="top"
+        android:layout_marginLeft="20dp"
+        android:textStyle="italic"
+        android:textSize="18sp"
+        android:textColor="@color/colorTurquoise"
+        android:hint="Enter some notes here"
+        android:layout_below="@+id/etTitle"
+        android:inputType="text|textMultiLine"
+        />
+</RelativeLayout>

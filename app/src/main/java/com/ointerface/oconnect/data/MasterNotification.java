@@ -15,6 +15,15 @@ public class MasterNotification extends RealmObject {
     private Date createdAt = null;
     private String alert = "";
     private String conference = "";
+    private boolean isNew = true;
+
+    public boolean isNew() {
+        return isNew;
+    }
+
+    public void setNew(boolean aNew) {
+        isNew = aNew;
+    }
 
     public String getObjectId() {
         return objectId;

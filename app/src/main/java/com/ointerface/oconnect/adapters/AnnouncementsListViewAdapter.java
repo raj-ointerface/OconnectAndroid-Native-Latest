@@ -93,7 +93,11 @@ public class AnnouncementsListViewAdapter extends BaseAdapter {
 
         TextView tvNew = (TextView) convertView.findViewById(R.id.tvNew);
 
-        tvNew.setVisibility(View.VISIBLE);
+        if (announcement.isNew() == true) {
+            tvNew.setVisibility(View.VISIBLE);
+        } else {
+            tvNew.setVisibility(GONE);
+        }
 
         return convertView;
     }

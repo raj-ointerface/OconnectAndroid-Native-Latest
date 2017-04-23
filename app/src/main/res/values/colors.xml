@@ -18,4 +18,5 @@
     <color name="dashboardTextGrey">#CCCCCC</color>
     <color name="eventDotColor">#48A6D4</color>
     <color name="dashboardSchedulePreviewHeaderBackgroundColor">#005F68</color>
+    <color name="colorTurquoise">#40E0D0</color>
 </resources>

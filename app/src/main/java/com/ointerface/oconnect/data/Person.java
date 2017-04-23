@@ -1,12 +1,17 @@
 package com.ointerface.oconnect.data;
 
+import android.util.Log;
+
 import com.ointerface.oconnect.App;
 import com.ointerface.oconnect.util.AppUtil;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.ParseRelation;
 import com.twitter.sdk.android.core.models.User;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmList;
@@ -36,6 +41,15 @@ public class Person extends RealmObject {
     private String pictureURL = "";
     private String password = "";
     private RealmList<MasterNotification> deletedNotificationIds = new RealmList<MasterNotification>();
+    private RealmList<Event> favoriteEvents = new RealmList<Event>();
+
+    public RealmList<Event> getFavoriteEvents() {
+        return favoriteEvents;
+    }
+
+    public void setFavoriteEvents(RealmList<Event> favoriteEvents) {
+        this.favoriteEvents = favoriteEvents;
+    }
 
     public RealmList<MasterNotification> getDeletedNotificationIds() {
         return deletedNotificationIds;
@@ -211,6 +225,27 @@ public class Person extends RealmObject {
         }
 
         person.setDeletedNotificationIds(realmDeletedAlerts);
+
+        RealmList<Event> realmFavoriteEvents = new RealmList<Event>();
+
+        ParseRelation<ParseObject> eventsRelation = parseObject.getRelation("favoriteEventsRelation");
+
+        ParseQuery<ParseObject> eventsQuery = eventsRelation.getQuery();
+
+        try {
+            List<ParseObject> eventsList = eventsQuery.find();
+
+            for (ParseObject eventObj : eventsList) {
+                Event event = realm.where(Event.class).equalTo("objectId", eventObj.getObjectId()).findFirst();
+                if (event != null) {
+                    realmFavoriteEvents.add(event);
+                }
+            }
+
+            person.setFavoriteEvents(realmFavoriteEvents);
+        } catch (Exception ex) {
+            Log.d("DataSyncManager", "Line 727: " + ex.getMessage());
+        }
 
         realm.commitTransaction();
 

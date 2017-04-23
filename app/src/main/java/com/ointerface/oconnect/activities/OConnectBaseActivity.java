@@ -1,6 +1,8 @@
 package com.ointerface.oconnect.activities;
 
 import android.app.FragmentManager;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -8,8 +10,11 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.graphics.drawable.DrawableCompat;
@@ -40,11 +45,15 @@ import com.ointerface.oconnect.R;
 import com.ointerface.oconnect.adapters.NavExpandableListViewAdapter;
 import com.ointerface.oconnect.containers.MenuItemHolder;
 import com.ointerface.oconnect.data.Conference;
+import com.ointerface.oconnect.data.DataSyncManager;
+import com.ointerface.oconnect.data.IDataSyncListener;
 import com.ointerface.oconnect.data.Person;
 import com.ointerface.oconnect.fragments.SearchDialogFragment;
 import com.ointerface.oconnect.util.AppUtil;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -54,7 +63,7 @@ import static android.view.View.GONE;
 
 
 public class OConnectBaseActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, IDataSyncListener {
 
     NavExpandableListViewAdapter listAdapter;
     ExpandableListView expListView;
@@ -72,10 +81,14 @@ public class OConnectBaseActivity extends AppCompatActivity
     public ImageView ivRightToolbarIcon;
     public TextView tvToolbarTitle;
     public TextView tvEdit;
+    public ImageView ivHeaderBack;
+    public TextView tvHeaderBack;
 
     public NavigationView navigationView;
     public NavigationView navigationViewRight;
     public DrawerLayout drawer;
+
+    public boolean isTransparentToolbar = false;
 
     protected void onCreateDrawer() {
         // super.onCreate(savedInstanceState);
@@ -97,7 +110,25 @@ public class OConnectBaseActivity extends AppCompatActivity
 
         toolbar.setTitle("");
 
+
+        if (selectedConference.getColor() != null &&
+                !selectedConference.getColor().equalsIgnoreCase("")
+                && !selectedConference.getColor().equalsIgnoreCase("#") &&
+                isTransparentToolbar == false) {
+            int color = Color.parseColor(selectedConference.getColor());
+
+            toolbar.getBackground().setAlpha(255);
+
+            Drawable wrappedDrawable = DrawableCompat.wrap(toolbar.getBackground());
+            DrawableCompat.setTint(wrappedDrawable, color);
+
+            getSupportActionBar().setBackgroundDrawable(wrappedDrawable);
+        }
+
         tvToolbarTitle = (TextView) findViewById(R.id.tvToolbarTitle);
+
+        tvHeaderBack = (TextView) findViewById(R.id.tvHeaderBack);
+        ivHeaderBack = (ImageView) findViewById(R.id.ivHeaderBack);
 
         ivProfileLanyard = (ImageView) toolbar.findViewById(R.id.ivProfileLanyard);
 
@@ -112,6 +143,13 @@ public class OConnectBaseActivity extends AppCompatActivity
         ivRightToolbarIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (AppUtil.getIsSignedIn(OConnectBaseActivity.this) == false) {
+                    Intent i = new Intent(OConnectBaseActivity.this, SignInActivity1.class);
+                    startActivity(i);
+                    overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up);
+                    return;
+                }
+
                 NavigationView navigationViewRight = (NavigationView) findViewById(R.id.nav_view_right);
                 DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
@@ -265,6 +303,10 @@ public class OConnectBaseActivity extends AppCompatActivity
                         i = new Intent(OConnectBaseActivity.this, DashboardActivity.class);
                         startActivity(i);
                         break;
+                    case R.drawable.icon_schedule:
+                        i = new Intent(OConnectBaseActivity.this, ScheduleActivity.class);
+                        startActivity(i);
+                        break;
                     case R.drawable.icon_announcements:
                         if (AppUtil.getIsSignedIn(OConnectBaseActivity.this) == false) {
                             AppUtil.displayPleaseSignInDialog(OConnectBaseActivity.this);
@@ -272,6 +314,60 @@ public class OConnectBaseActivity extends AppCompatActivity
                             i = new Intent(OConnectBaseActivity.this, AnnouncementsActivity.class);
                             startActivity(i);
                         }
+                        break;
+                    case R.drawable.icon_info:
+                        i = new Intent(OConnectBaseActivity.this, InfoActivity.class);
+                        startActivity(i);
+                        break;
+                    case R.drawable.icon_maps:
+                        i = new Intent(OConnectBaseActivity.this, MapsListActivity.class);
+                        startActivity(i);
+                        break;
+                    case R.drawable.icon_refresh:
+                        DataSyncManager.dialog = ProgressDialog.show((Context)OConnectBaseActivity.this, null, "Refreshing Data ... Please wait.");
+
+                        AsyncTask.execute(new Runnable() {
+                            @Override
+                            public void run() {
+                                DataSyncManager.beginDataSync(getApplicationContext(), OConnectBaseActivity.this);
+                            }
+                        });
+                        break;
+                    case R.drawable.icon_share:
+                        i = new Intent(Intent.ACTION_SEND);
+                        i.setType("text/plain");
+                        String shareBody = selectedConference.getWebsite();
+                        i.putExtra(Intent.EXTRA_SUBJECT, "oConnect Website");
+                        i.putExtra(Intent.EXTRA_TEXT, shareBody);
+                        startActivity(Intent.createChooser(i, "Share via oConnect"));
+                        break;
+                    case R.drawable.icon_about_us:
+                        i = new Intent(OConnectBaseActivity.this, AboutUsActivity.class);
+                        startActivity(i);
+                        break;
+                    case R.drawable.icon_qr_scanner:
+                        i = new Intent(OConnectBaseActivity.this, QRCodeScannerActivity.class);
+                        startActivity(i);
+                        break;
+                    case R.drawable.icon_sponsors:
+                        i = new Intent(OConnectBaseActivity.this, SponsorsListActivity.class);
+                        startActivity(i);
+                        break;
+                    case R.drawable.icon_my_notes:
+                        if (AppUtil.getIsSignedIn(OConnectBaseActivity.this) == false) {
+                            AppUtil.displayPleaseSignInDialog(OConnectBaseActivity.this);
+                            return false;
+                        }
+                        i = new Intent(OConnectBaseActivity.this, MyNotesActivity.class);
+                        startActivity(i);
+                        break;
+                    case R.drawable.icon_my_agenda:
+                        if (AppUtil.getIsSignedIn(OConnectBaseActivity.this) == false) {
+                            AppUtil.displayPleaseSignInDialog(OConnectBaseActivity.this);
+                            return false;
+                        }
+                        i = new Intent(OConnectBaseActivity.this, MyAgendaActivity.class);
+                        startActivity(i);
                         break;
                     default:
                         break;
@@ -362,7 +458,7 @@ public class OConnectBaseActivity extends AppCompatActivity
                 itemStr = selectedConference.getToolbarLabelNonTimedEvent();
             }
 
-            section2.add(new MenuItemHolder(R.drawable.icon_non_timed_event, itemStr));
+            section2.add(new MenuItemHolder(R.drawable.icon_non_timed_event_2, itemStr));
         }
 
         if (selectedConference.isShowParticipants()) {
@@ -521,5 +617,14 @@ public class OConnectBaseActivity extends AppCompatActivity
     public void signOutClicked (View view) {
         AppUtil.setIsSignedIn(OConnectBaseActivity.this, false);
         drawer.closeDrawer(navigationViewRight);
+    }
+
+    public void onDataSyncFinish() {
+        if (DataSyncManager.dialog.isShowing() == true) {
+            DataSyncManager.dialog.hide();
+        }
+
+        Date dateTimeNow = Calendar.getInstance().getTime();
+        DataSyncManager.setLastSyncDate(dateTimeNow);
     }
 }

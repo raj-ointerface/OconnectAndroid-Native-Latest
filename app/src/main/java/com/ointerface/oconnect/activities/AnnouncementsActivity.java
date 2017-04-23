@@ -8,6 +8,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ExpandableListView;
@@ -21,6 +22,7 @@ import com.ointerface.oconnect.adapters.ScheduleExpandableListViewAdapter;
 import com.ointerface.oconnect.data.MasterNotification;
 import com.ointerface.oconnect.data.Session;
 import com.ointerface.oconnect.util.AppUtil;
+import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -55,7 +57,6 @@ public class AnnouncementsActivity extends OConnectBaseActivity {
 
         drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, navigationViewRight);
 
-
         getListViewData();
 
         adapter = new AnnouncementsListViewAdapter(AnnouncementsActivity.this, mData, markForDeleteList);
@@ -72,15 +73,34 @@ public class AnnouncementsActivity extends OConnectBaseActivity {
                     adapter.isEdit = true;
                     adapter.notifyDataSetChanged();
                 } else {
-                    for (int i = adapter.mData.size() - 1; i >= 0; --i) {
-                        Boolean shouldRemove = adapter.markForDeleteList.get(i);
+                    try {
+                        Realm realm = AppUtil.getRealmInstance(App.getInstance());
 
-                        if (shouldRemove == true) {
-                            // TODO : Add MasterNotification to deleted list in Parse and Realm
+                        ParseUser user = ParseUser.getQuery().get(currentPerson.getObjectId()).fetchIfNeeded();
 
-                            adapter.mData.remove(i);
-                            adapter.markForDeleteList.remove(i);
+                        ArrayList<String> deletedList = (ArrayList<String>)user.get("deletedNotificationIds");
+
+                        for (int i = adapter.mData.size() - 1; i >= 0; --i) {
+                            Boolean shouldRemove = adapter.markForDeleteList.get(i);
+
+
+                            if (shouldRemove == true) {
+                                // TODO : Add MasterNotification to deleted list in Parse and Realm
+                                deletedList.add(adapter.mData.get(i).getObjectId());
+
+                                realm.beginTransaction();
+                                MasterNotification alert = adapter.mData.get(i);
+                                currentPerson.getDeletedNotificationIds().add(alert);
+                                realm.commitTransaction();
+
+                                adapter.mData.remove(i);
+                                adapter.markForDeleteList.remove(i);
+                            }
                         }
+
+                        user.put("deletedNotificationIds", deletedList);
+                    } catch (Exception ex) {
+                        Log.d("Announcements", ex.getMessage());
                     }
 
                     tvEdit.setText("Edit");
@@ -93,7 +113,14 @@ public class AnnouncementsActivity extends OConnectBaseActivity {
         lvAnnouncements.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Realm realm = AppUtil.getRealmInstance(App.getInstance());
+
+                realm.beginTransaction();
                 MasterNotification alert = adapter.mData.get(position);
+                alert.setNew(false);
+                realm.commitTransaction();
+
+                adapter.notifyDataSetChanged();
 
                 AlertDialog alertDialog = new AlertDialog.Builder(AnnouncementsActivity.this).create();
                 alertDialog.setTitle("Announcement");

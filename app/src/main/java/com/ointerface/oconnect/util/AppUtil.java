@@ -52,7 +52,6 @@ public class AppUtil {
                     if (e == null) {
                         Bitmap bmp = BitmapFactory.decodeByteArray(data, 0, data.length);
                         img.setImageBitmap(bmp);
-                    } else {
                     }
                 }
             });

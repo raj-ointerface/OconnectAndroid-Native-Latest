@@ -584,6 +584,20 @@ public class DataSyncManager {
 
                 if (sessionObj != null) {
                     event.setSession(sessionObj.getObjectId());
+
+                    if (parseObject.getBoolean("isNonTimedEvent") == true) {
+                        try {
+                            if (sessionObj.fetchIfNeeded().getDate("startTime") != null) {
+                                event.setStartTime(sessionObj.getDate("startTime"));
+                            }
+
+                            if (sessionObj.fetchIfNeeded().getDate("endTime") != null) {
+                                event.setEndTime(sessionObj.getDate("endTime"));
+                            }
+                        } catch (Exception ex) {
+                            Log.d("DataSync", ex.getMessage());
+                        }
+                    }
                 }
 
                 event.setUpdatedAt(parseObject.getUpdatedAt());
@@ -635,6 +649,11 @@ public class DataSyncManager {
 
                 if (sessionObj != null) {
                     result.setSession(sessionObj.getObjectId());
+
+                    if (parseObject.getBoolean("isNonTimedEvent") == true) {
+                        result.setStartTime(sessionObj.getDate("startTime"));
+                        result.setEndTime(sessionObj.getDate("endTime"));
+                    }
                 }
 
                 result.setUpdatedAt(parseObject.getUpdatedAt());
@@ -968,6 +987,7 @@ public class DataSyncManager {
 
                 alert.setObjectId(parseObject.getObjectId());
                 alert.setAlert(parseObject.getString("alert"));
+                alert.setNew(true);
 
                 ParseObject conferenceObj = parseObject.getParseObject("conference");
 
@@ -991,6 +1011,198 @@ public class DataSyncManager {
                 }
 
                 result.setCreatedAt(parseObject.getCreatedAt());
+
+                realm.commitTransaction();
+            }
+        }
+
+        dataSyncMaps();
+    }
+
+    static public void dataSyncMaps(){
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Maps").setLimit(1000);
+
+        Date date = getLastSyncDate();
+
+        if (date != null) {
+            query.whereGreaterThanOrEqualTo("updatedAt", date).whereNotEqualTo("isDeleted", true);
+        }
+
+        Log.d("DataSyncManager", "Start Query for Parse Maps");
+
+        List<ParseObject> allObjects = new ArrayList<ParseObject>();
+
+        int countSkip = 0, loopCloseCount = 0;
+        do {
+            query.setLimit(1000);
+            query.setSkip(countSkip);
+            List<ParseObject> objects = null;
+            try {
+                objects = query.find();
+                loopCloseCount = objects.size();
+                countSkip += objects.size();
+                if (loopCloseCount > 0) {
+                    allObjects.addAll(objects);
+                }
+            } catch (com.parse.ParseException e) {
+                e.printStackTrace();
+                loopCloseCount = 0;
+            }
+        } while (loopCloseCount > 0);
+
+        Log.d("DataSyncManager", "Start Processing Maps: " + allObjects.size() + " objects");
+
+        for (ParseObject parseObject : allObjects) {
+            Realm realm = AppUtil.getRealmInstance(App.getInstance());
+
+            Maps result = realm.where(Maps.class).equalTo("objectId", parseObject.getObjectId()).findFirst();
+
+            if (result == null) {
+                realm.beginTransaction();
+
+                // Create an object
+                Maps map = realm.createObject(Maps.class);
+
+                map.setObjectId(parseObject.getObjectId());
+                map.setLabel(parseObject.getString("label"));
+
+                ParseObject conferenceObj = parseObject.getParseObject("conference");
+
+                if (conferenceObj != null) {
+                    map.setConference(conferenceObj.getObjectId());
+                }
+
+                ParseFile parseMapImage = (ParseFile) parseObject.getParseFile("map");
+
+                try {
+                    if (parseMapImage != null) {
+                        map.setUrl(parseMapImage.getUrl());
+                        map.setMap(parseMapImage.getData());
+                    }
+                } catch (Exception ex) {
+                    Log.d("DataSyncManager", "Line 231 " + ex.getMessage());
+                }
+
+                realm.commitTransaction();
+            } else {
+                realm.beginTransaction();
+
+                result.setObjectId(parseObject.getObjectId());
+                result.setLabel(parseObject.getString("label"));
+
+                ParseObject conferenceObj = parseObject.getParseObject("conference");
+
+                if (conferenceObj != null) {
+                    result.setConference(conferenceObj.getObjectId());
+                }
+
+                ParseFile parseMapImage = (ParseFile) parseObject.getParseFile("map");
+
+                try {
+                    if (parseMapImage != null) {
+                        result.setUrl(parseMapImage.getUrl());
+                        result.setMap(parseMapImage.getData());
+                    }
+                } catch (Exception ex) {
+                    Log.d("DataSyncManager", "Line 1087 " + ex.getMessage());
+                }
+
+                realm.commitTransaction();
+            }
+        }
+
+        dataSyncSponsors();
+    }
+
+    static public void dataSyncSponsors() {
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Sponsor").setLimit(1000);
+
+        Date date = getLastSyncDate();
+
+        if (date != null) {
+            query.whereGreaterThanOrEqualTo("updatedAt", date).whereNotEqualTo("isDeleted", true);
+        }
+
+        Log.d("DataSyncManager", "Start Query for Parse Sponsors");
+
+        List<ParseObject> allObjects = new ArrayList<ParseObject>();
+
+        int countSkip = 0, loopCloseCount = 0;
+        do {
+            query.setLimit(1000);
+            query.setSkip(countSkip);
+            List<ParseObject> objects = null;
+            try {
+                objects = query.find();
+                loopCloseCount = objects.size();
+                countSkip += objects.size();
+                if (loopCloseCount > 0) {
+                    allObjects.addAll(objects);
+                }
+            } catch (com.parse.ParseException e) {
+                e.printStackTrace();
+                loopCloseCount = 0;
+            }
+        } while (loopCloseCount > 0);
+
+        Log.d("DataSyncManager", "Start Processing Sponsors: " + allObjects.size() + " objects");
+
+        for (ParseObject parseObject : allObjects) {
+            Realm realm = AppUtil.getRealmInstance(App.getInstance());
+
+            Sponsor result = realm.where(Sponsor.class).equalTo("objectId", parseObject.getObjectId()).findFirst();
+
+            if (result == null) {
+                realm.beginTransaction();
+
+                // Create an object
+                Sponsor sponsor = realm.createObject(Sponsor.class);
+
+                sponsor.setObjectId(parseObject.getObjectId());
+                sponsor.setName(parseObject.getString("name"));
+                sponsor.setType(parseObject.getString("type"));
+                sponsor.setWebsite(parseObject.getString("website"));
+
+                ParseObject conferenceObj = parseObject.getParseObject("conference");
+
+                if (conferenceObj != null) {
+                    sponsor.setConference(conferenceObj.getObjectId());
+                }
+
+                ParseFile parseImage = (ParseFile) parseObject.getParseFile("logo");
+
+                try {
+                    if (parseImage != null) {
+                        sponsor.setLogo(parseImage.getData());
+                    }
+                } catch (Exception ex) {
+                    Log.d("DataSyncManager", "Line 1159 " + ex.getMessage());
+                }
+
+                realm.commitTransaction();
+            } else {
+                realm.beginTransaction();
+
+                result.setObjectId(parseObject.getObjectId());
+                result.setName(parseObject.getString("name"));
+                result.setType(parseObject.getString("type"));
+                result.setWebsite(parseObject.getString("website"));
+
+                ParseObject conferenceObj = parseObject.getParseObject("conference");
+
+                if (conferenceObj != null) {
+                    result.setConference(conferenceObj.getObjectId());
+                }
+
+                ParseFile parseImage = (ParseFile) parseObject.getParseFile("logo");
+
+                try {
+                    if (parseImage != null) {
+                        result.setLogo(parseImage.getData());
+                    }
+                } catch (Exception ex) {
+                    Log.d("DataSyncManager", "Line 1159 " + ex.getMessage());
+                }
 
                 realm.commitTransaction();
             }
