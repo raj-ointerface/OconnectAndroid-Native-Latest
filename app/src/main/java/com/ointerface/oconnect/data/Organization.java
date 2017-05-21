@@ -11,6 +11,7 @@ import io.realm.annotations.Required;
  */
 
 public class Organization extends RealmObject {
+    @Required
     @PrimaryKey
     private String objectId = "";
     private boolean showSplash = false;

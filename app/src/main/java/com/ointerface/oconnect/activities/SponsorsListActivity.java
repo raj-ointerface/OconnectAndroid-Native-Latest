@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmResults;
+import io.realm.Sort;
 
 import static android.view.View.GONE;
 
@@ -82,7 +83,7 @@ public class SponsorsListActivity extends OConnectBaseActivity {
 
         RealmResults<Sponsor> sponsorResults;
 
-        sponsorResults  = realm.where(Sponsor.class).equalTo("conference", AppUtil.getSelectedConferenceID(SponsorsListActivity.this)).findAllSorted("name", true);
+        sponsorResults  = realm.where(Sponsor.class).equalTo("conference", AppUtil.getSelectedConferenceID(SponsorsListActivity.this)).findAllSorted("name", Sort.ASCENDING);
 
         mData = new ArrayList<Sponsor>();
 

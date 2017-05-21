@@ -2,12 +2,14 @@ package com.ointerface.oconnect.data;
 
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
+import io.realm.annotations.Required;
 
 /**
  * Created by AnthonyDoan on 4/20/17.
  */
 
 public class Maps extends RealmObject {
+    @Required
     @PrimaryKey
     private String objectId = "";
     private String url = "";

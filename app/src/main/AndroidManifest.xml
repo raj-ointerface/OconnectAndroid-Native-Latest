@@ -1,23 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.ointerface.oconnect"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.ointerface.oconnect">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
+
     <uses-feature android:name="android.hardware.camera" />
-    <uses-feature android:name="android.hardware.camera.autofocus" />
+    <uses-feature android:name="android.hardware.camera2" />
+    <uses-feature android:name="android.hardware.camera.any" />
 
     <application
         android:name=".App"
         android:allowBackup="true"
-        tools:replace="android:icon"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:replace="android:icon">
         <meta-data
             android:name="com.parse.SERVER_URL"
             android:value="@string/parse_server_url" />
@@ -130,6 +134,50 @@
             android:name=".activities.MyAgendaActivity"
             android:label="@string/title_activity_my_agenda"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.ParticipantsActivity"
+            android:label="@string/title_activity_participants"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.SurveyActivity"
+            android:label="@string/title_activity_survey"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.ConnectionsActivity"
+            android:label="@string/title_activity_connections"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.HelpViewPagerActivity"
+            android:label="@string/title_activity_help_view_pager"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.ParkingActivity"
+            android:label="@string/title_activity_parking"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <service
+            android:name=".service.BackgroundService"
+            android:enabled="true"
+            android:exported="true" />
+
+        <activity
+            android:name=".activities.EventDetailViewActivity"
+            android:label="@string/title_activity_event_detail_view"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.SpeakerDetailViewActivity"
+            android:label="@string/title_activity_speaker_detail_view"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.AttendeeDetailViewActivity"
+            android:label="@string/title_activity_attendee_detail_view"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

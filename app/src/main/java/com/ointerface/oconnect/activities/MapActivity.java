@@ -1,11 +1,16 @@
 package com.ointerface.oconnect.activities;
 
+import android.Manifest;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -21,11 +26,16 @@ import com.parse.ParseQuery;
 
 import org.w3c.dom.Text;
 
+import java.net.URLEncoder;
+import java.util.Map;
+
 import static android.view.View.GONE;
 
 public class MapActivity extends OConnectBaseActivity {
 
     private WebView wvMap;
+
+    private String doc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +97,11 @@ public class MapActivity extends OConnectBaseActivity {
         tvHeaderBack.bringToFront();
 
         wvMap = (WebView) findViewById(R.id.wvMap);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
 
         try {
             String mapObjectId = getIntent().getStringExtra("objectId");
@@ -97,16 +112,25 @@ public class MapActivity extends OConnectBaseActivity {
 
             Log.d("Parse", parseImage.getUrl());
 
-            // ImageView ivMap = (ImageView) findViewById(R.id.ivMap);
+            String urlEncodedString = parseImage.getUrl().replace(" ", "%20");
 
-            // AppUtil.loadImages(parseImage, ivMap);
+            Log.d("APD", urlEncodedString);
 
-            String doc = "<html><body style='margin:0;padding:0;'><iframe src='http://docs.google.com/gview?embedded=true&url=" + parseImage.getUrl() + "'" +
-            "width='100%' height='100%'" +
-            "style='border: none;margin:0;padding:0;'></iframe></body></html>";
+            doc = "<html><body style='margin:0;padding:0;'><iframe src='http://docs.google.com/gview?key=AIzaSyBq63wjlYlN0rINBaNZhDtNXJY6Ezv9_oE&embedded=true&url=" + urlEncodedString + "'" +
+                    " width='100%' height='100%' " +
+                    " style='border: none;margin:0;padding:0;'></iframe></body></html>";
 
-            wvMap.getSettings().setJavaScriptEnabled(true);
-            wvMap.loadData( doc , "text/html",  "UTF-8");
+            Log.d("APD", doc);
+
+            if (ContextCompat.checkSelfPermission(MapActivity.this, Manifest.permission.INTERNET)
+                    != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(MapActivity.this,
+                        new String[]{Manifest.permission.INTERNET}, 11);
+                return;
+            } else {
+                wvMap.getSettings().setJavaScriptEnabled(true);
+                wvMap.loadData( doc , "text/html",  "UTF-8");
+            }
 
             //wvMap.loadUrl("http://docs.google.com/gview?embedded=true&url=" + parseImage.getUrl());
         } catch (Exception ex) {
@@ -114,4 +138,15 @@ public class MapActivity extends OConnectBaseActivity {
         }
     }
 
+    protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
+        super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
+        switch(requestCode) {
+            case 11:
+                if(resultCode == RESULT_OK) {
+                    wvMap.getSettings().setJavaScriptEnabled(true);
+                    wvMap.loadData( doc , "text/html",  "UTF-8");
+                }
+                break;
+        }
+    }
 }

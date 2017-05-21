@@ -4,13 +4,19 @@
 
     <!-- Parse Config -->
     <!-- Production -->
-    <!-- <string name="parse_app_id">341E4A86uPW4m5xKuTy7XvoqjjKgSuEZZ1Me0q5W</string>
-     <string name="parse_client_key">JQExacTKTDJ7e21oq38vPO0jj3WHdzKLixrr9dVx</string>  -->
+    <!--
+    <string name="parse_app_id">341E4A86uPW4m5xKuTy7XvoqjjKgSuEZZ1Me0q5W</string>
+     <string name="parse_client_key">JQExacTKTDJ7e21oq38vPO0jj3WHdzKLixrr9dVx</string> -->
+    <!-- <string name="parse_server_url">http://oconnectapp.com/api/parse/</string> -->
+
 
     <!-- Staging -->
     <string name="parse_app_id">OxZLwjHXEjFjuFExxotUrwvOlxdT2efPN8pv06JI</string>
-    <string name="parse_server_url">http://45.55.255.189:8080/parse</string>
+    <string name="parse_server_url">http://45.55.255.189:8080/parse/</string>
+
+    <!-- <string name="parse_server_url">http://stage.oconnectapp.com/api/parse</string> -->
     <string name="parse_client_key">qe62myjfXeXhlS2sYYRyFobYqQ5Bvs82FXuU3CsN</string>
+
     <string name="parse_rest_api_key">gRM2GVEI6I6HdtRv8inJSW9LUF9ZPInwz9FlIb4r</string>
 
     <string name="title_activity_conference_list_view">Conferences</string>
@@ -41,6 +47,12 @@
     <string name="no_internet">No Internet</string>
     <string name="internet_message">Please connect to the Internet to use this app.</string>
 
+    <!-- Bottom Navigation for Participants View and Connections View -->
+    <string name="label_speakers">Speakers</string>
+    <string name="label_attendees">Attendees</string>
+    <string name="label_my_connections">My Connections</string>
+    <string name="label_suggestions">Suggestions</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_announcements">AnnouncementsActivity</string>
@@ -54,4 +66,12 @@
     <string name="title_activity_my_notes">MyNotesActivity</string>
     <string name="title_activity_add_note">AddNoteActivity</string>
     <string name="title_activity_my_agenda">MyAgendaActivity</string>
+    <string name="title_activity_participants">ParticipantsActivity</string>
+    <string name="title_activity_survey">SurveyActivity</string>
+    <string name="title_activity_connections">ConnectionsActivity</string>
+    <string name="title_activity_help_view_pager">HelpViewPagerActivity</string>
+    <string name="title_activity_parking">ParkingActivity</string>
+    <string name="title_activity_event_detail_view">EventDetailViewActivity</string>
+    <string name="title_activity_speaker_detail_view">SpeakerDetailViewActivity</string>
+    <string name="title_activity_attendee_detail_view">AttendeeDetailViewActivity</string>
 </resources>

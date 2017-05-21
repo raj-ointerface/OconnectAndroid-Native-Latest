@@ -77,9 +77,21 @@ public class MyNotesListViewAdapter extends BaseAdapter {
 
         tvNoteTitle.setText(myNote.getTitle());
 
+        if (tvNoteTitle.getText().toString().equals("")) {
+            tvNoteTitle.setVisibility(GONE);
+        } else {
+            tvNoteTitle.setVisibility(View.VISIBLE);
+        }
+
         TextView tvNoteText = (TextView) convertView.findViewById(R.id.tvNoteText);
 
         tvNoteText.setText(myNote.getContent());
+
+        if (tvNoteText.getText().toString().equals("")) {
+            tvNoteText.setVisibility(GONE);
+        } else {
+            tvNoteText.setVisibility(View.VISIBLE);
+        }
 
         final CheckBox cbSelect = (CheckBox) convertView.findViewById(R.id.cbSelect);
 

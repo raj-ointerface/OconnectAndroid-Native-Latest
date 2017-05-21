@@ -4,12 +4,14 @@ import java.util.Date;
 
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
+import io.realm.annotations.Required;
 
 /**
  * Created by AnthonyDoan on 4/21/17.
  */
 
 public class MyNote extends RealmObject {
+    @Required
     @PrimaryKey
     private String objectId = "";
     private String User = "";

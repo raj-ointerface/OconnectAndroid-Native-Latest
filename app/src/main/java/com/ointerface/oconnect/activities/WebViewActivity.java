@@ -1,7 +1,9 @@
 package com.ointerface.oconnect.activities;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -9,9 +11,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -28,6 +33,14 @@ public class WebViewActivity extends OConnectBaseActivity {
     private WebView wvContent;
     private ProgressDialog progDailog;
 
+    private float x1;
+    private float x2;
+    static final int MIN_DISTANCE = 150;
+
+    private boolean isEventBriteRegistration = false;
+
+    private String globalUrl;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,46 +52,59 @@ public class WebViewActivity extends OConnectBaseActivity {
         ivRightToolbarIcon.setVisibility(View.GONE);
         ivSearch.setVisibility(GONE);
 
+        isEventBriteRegistration = getIntent().getBooleanExtra("isRegistration", false);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        if (isEventBriteRegistration == true) {
+            ivHelp.setVisibility(View.VISIBLE);
+            ivRightToolbarIcon.setVisibility(View.VISIBLE);
 
-        Drawable dr = getResources().getDrawable(R.drawable.icon_back);
-        Bitmap bitmap = ((BitmapDrawable) dr).getBitmap();
+            tvHeaderBack.setVisibility(GONE);
+            ivHeaderBack.setVisibility(GONE);
+        } else {
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        Drawable d = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, AppUtil.convertDPToPXInt(WebViewActivity.this, 20), AppUtil.convertDPToPXInt(WebViewActivity.this, 20), true));
+            Drawable dr = getResources().getDrawable(R.drawable.icon_back);
+            Bitmap bitmap = ((BitmapDrawable) dr).getBitmap();
 
-        // toolbar.setNavigationIcon(d);
+            Drawable d = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, AppUtil.convertDPToPXInt(WebViewActivity.this, 20), AppUtil.convertDPToPXInt(WebViewActivity.this, 20), true));
 
-        getSupportActionBar().setHomeAsUpIndicator(d);
+            // toolbar.setNavigationIcon(d);
 
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                WebViewActivity.this.finish();
-            }
-        });
+            getSupportActionBar().setHomeAsUpIndicator(d);
 
-        tvHeaderBack.setVisibility(View.VISIBLE);
-        ivHeaderBack.setVisibility(View.VISIBLE);
+            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    WebViewActivity.this.finish();
+                }
+            });
 
-        ivHeaderBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                WebViewActivity.this.finish();
-            }
-        });
+            tvHeaderBack.setVisibility(View.VISIBLE);
+            ivHeaderBack.setVisibility(View.VISIBLE);
 
-        tvHeaderBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                WebViewActivity.this.finish();
-            }
-        });
+            ivHeaderBack.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    WebViewActivity.this.finish();
+                }
+            });
+
+            tvHeaderBack.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    WebViewActivity.this.finish();
+                }
+            });
+
+        }
 
         String title = getIntent().getStringExtra("TITLE");
         String backText = getIntent().getStringExtra("BACK_TEXT");
         final String url = getIntent().getStringExtra("URL");
+        globalUrl = getIntent().getStringExtra("URL");
+
         String open = getIntent().getStringExtra("OPEN");
 
         if (!open.equalsIgnoreCase("")) {
@@ -123,11 +149,65 @@ public class WebViewActivity extends OConnectBaseActivity {
                 }
             });
 
-            wvContent.loadUrl(url);
+            if (ContextCompat.checkSelfPermission(WebViewActivity.this, Manifest.permission.INTERNET)
+                    != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(WebViewActivity.this,
+                        new String[]{Manifest.permission.INTERNET}, 12);
+                return;
+            } else {
+                wvContent.loadUrl(url);
+            }
 
         } catch (Exception ex) {
             Log.d("WebViewActivity", ex.getMessage());
         }
     }
 
+    @Override
+    public boolean onTouchEvent(MotionEvent event)
+    {
+        switch(event.getAction())
+        {
+            case MotionEvent.ACTION_DOWN:
+                x1 = event.getX();
+                break;
+            case MotionEvent.ACTION_UP:
+                x2 = event.getX();
+                float deltaX = x2 - x1;
+
+                if (Math.abs(deltaX) > MIN_DISTANCE)
+                {
+                    // Left to Right swipe action
+                    if (x2 > x1)
+                    {
+                        // Toast.makeText(this, "Left to Right swipe [Next]", Toast.LENGTH_SHORT).show ();
+                        WebViewActivity.this.finish();
+                    }
+
+                    // Right to left swipe action
+                    else
+                    {
+                        // Toast.makeText(this, "Right to Left swipe [Previous]", Toast.LENGTH_SHORT).show ();
+                    }
+
+                }
+                else
+                {
+                    // consider as something else - a screen tap for example
+                }
+                break;
+        }
+        return super.onTouchEvent(event);
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
+        super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
+        switch(requestCode) {
+            case 12:
+                if(resultCode == RESULT_OK) {
+                    wvContent.loadUrl(globalUrl);
+                }
+                break;
+        }
+    }
 }

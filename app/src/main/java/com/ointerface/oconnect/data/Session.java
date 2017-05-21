@@ -4,12 +4,14 @@ import java.util.Date;
 
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
+import io.realm.annotations.Required;
 
 /**
  * Created by AnthonyDoan on 4/16/17.
  */
 
 public class Session extends RealmObject {
+    @Required
     @PrimaryKey
     private String objectId = "";
     private Date endTime = null;
@@ -19,6 +21,15 @@ public class Session extends RealmObject {
     private String conference = "";
     private Date updatedAt = null;
     private String moderator = "";
+    private String color = "";
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
 
     public String getModerator() {
         return moderator;

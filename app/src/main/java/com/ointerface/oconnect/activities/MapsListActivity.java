@@ -21,6 +21,7 @@ import java.util.Map;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
+import io.realm.Sort;
 
 import static android.view.View.GONE;
 
@@ -48,7 +49,7 @@ public class MapsListActivity extends OConnectBaseActivity {
 
         Realm realm = AppUtil.getRealmInstance(App.getInstance());
 
-        final RealmResults<Maps> mapResults = realm.where(Maps.class).equalTo("conference", selectedConference.getObjectId()).findAllSorted("label", true);
+        final RealmResults<Maps> mapResults = realm.where(Maps.class).equalTo("conference", selectedConference.getObjectId()).findAllSorted("label", Sort.ASCENDING);
 
         ArrayList<String> labelList = new ArrayList<String>();
 

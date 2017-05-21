@@ -4,9 +4,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
@@ -44,6 +46,7 @@ import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
+import io.realm.Sort;
 
 import static android.webkit.ConsoleMessage.MessageLevel.LOG;
 
@@ -54,6 +57,15 @@ public class ConferenceListViewActivity extends AppCompatActivity {
     private ListView lvConferences;
 
     private SearchView search;
+
+    static public boolean showCancel = false;
+    static public boolean launchedFromLeftNav = false;
+    static public boolean hasMovedToNextActivity = false;
+
+    private TextView tvCancel;
+    private TextView tvTitle;
+
+    static public int customColor = AppConfig.defaultThemeColor;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -74,25 +86,25 @@ public class ConferenceListViewActivity extends AppCompatActivity {
                 case R.id.navigation_coming_soon:
                     view1.setBackgroundColor(AppConfig.lightGreyColor);
 
-                    view2.setBackgroundColor(AppConfig.defaultThemeColor);
+                    view2.setBackgroundColor(customColor);
 
-                    view3.setBackgroundColor(AppConfig.defaultThemeColor);
+                    view3.setBackgroundColor(customColor);
 
                     displayComingSoon();
                     return true;
                 case R.id.navigation_all_upcoming:
-                    view1.setBackgroundColor(AppConfig.defaultThemeColor);
+                    view1.setBackgroundColor(customColor);
 
                     view2.setBackgroundColor(AppConfig.lightGreyColor);
 
-                    view3.setBackgroundColor(AppConfig.defaultThemeColor);
+                    view3.setBackgroundColor(customColor);
 
                     displayAllUpcoming();
                     return true;
                 case R.id.navigation_past:
-                    view1.setBackgroundColor(AppConfig.defaultThemeColor);
+                    view1.setBackgroundColor(customColor);
 
-                    view2.setBackgroundColor(AppConfig.defaultThemeColor);
+                    view2.setBackgroundColor(customColor);
 
                     view3.setBackgroundColor(AppConfig.lightGreyColor);
 
@@ -112,6 +124,36 @@ public class ConferenceListViewActivity extends AppCompatActivity {
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         myToolbar.setBackgroundColor(AppConfig.defaultThemeColor);
         setSupportActionBar(myToolbar);
+
+        tvCancel = (TextView) findViewById(R.id.tvHeaderCancel);
+        tvTitle = (TextView) findViewById(R.id.tvTitle);
+
+        tvTitle.setText("Conferences");
+
+        if (showCancel == true) {
+            tvCancel.setVisibility(View.VISIBLE);
+
+            tvCancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ConferenceListViewActivity.this.finish();
+                    overridePendingTransition(R.anim.hold, R.anim.disappear_to_bottom);
+                }
+            });
+        }
+
+        if (OConnectBaseActivity.selectedConference != null && OConnectBaseActivity.selectedConference.getColor() != null &&
+                !OConnectBaseActivity.selectedConference.getColor().equalsIgnoreCase("")
+                && !OConnectBaseActivity.selectedConference.getColor().equalsIgnoreCase("#")) {
+            customColor = Color.parseColor(OConnectBaseActivity.selectedConference.getColor());
+
+            myToolbar.getBackground().setAlpha(255);
+
+            Drawable wrappedDrawable = DrawableCompat.wrap(myToolbar.getBackground());
+            DrawableCompat.setTint(wrappedDrawable, customColor);
+
+            getSupportActionBar().setBackgroundDrawable(wrappedDrawable);
+        }
 
         lvConferences = (ListView) findViewById(R.id.lvConferences);
 
@@ -306,8 +348,45 @@ public class ConferenceListViewActivity extends AppCompatActivity {
         autoComplete.setTextSize(16);
         // autoComplete.setBackground(getResources().getDrawable(R.drawable.search_view));
 
+
+        if (AppConfig.isPrivateLabelApp == true && launchedFromLeftNav == false) {
+            if (getConferenceCount() <= 1) {
+                if (AppUtil.getIsSignedIn(ConferenceListViewActivity.this) == true) {
+                    Realm realm = AppUtil.getRealmInstance(App.getInstance());
+                    OConnectBaseActivity.currentPerson = realm.where(Person.class).equalTo("objectId", AppUtil.getSignedInUserID(ConferenceListViewActivity.this)).findFirst();
+                }
+
+                Log.d("APD", "First start activity to Dashboard");
+
+                ConferenceListViewActivity.this.finish();
+                Intent i = new Intent(ConferenceListViewActivity.this, DashboardActivity.class);
+                startActivity(i);
+            }
+        }
+
+        if (launchedFromLeftNav == false && !AppUtil.getSelectedConferenceID(ConferenceListViewActivity.this).equalsIgnoreCase("")) {
+            if (AppUtil.getIsSignedIn(ConferenceListViewActivity.this) == true) {
+                Realm realm = AppUtil.getRealmInstance(App.getInstance());
+                OConnectBaseActivity.currentPerson = realm.where(Person.class).equalTo("objectId", AppUtil.getSignedInUserID(ConferenceListViewActivity.this)).findFirst();
+            }
+
+            Log.d("APD", "Second start activity to Dashboard");
+
+            ConferenceListViewActivity.this.finish();
+            Intent i = new Intent(ConferenceListViewActivity.this, DashboardActivity.class);
+            startActivity(i);
+        }
+
         navigation.setSelectedItemId(R.id.navigation_coming_soon);
         displayComingSoon();
+    }
+
+    public int getConferenceCount() {
+        Realm realm = AppUtil.getRealmInstance(App.getInstance());
+
+        RealmResults<Conference> results = realm.where(Conference.class).equalTo("organization", AppConfig.primaryOrganizationID).findAll();
+
+        return results.size();
     }
 
     public void callPINPromptWorkflow(Conference conference) {
@@ -485,7 +564,7 @@ public class ConferenceListViewActivity extends AppCompatActivity {
         Date dNow = new Date();
 
         String[] sortBy = {"group","startTime", "endTime"};
-        boolean[] sortAscending = {true, false, true};
+        Sort[] sortAscending = {Sort.ASCENDING, Sort.DESCENDING, Sort.ASCENDING};
 
         switch (navigation.getSelectedItemId()) {
             case R.id.navigation_coming_soon:
@@ -574,7 +653,7 @@ public class ConferenceListViewActivity extends AppCompatActivity {
         Date dNow = new Date();
 
         String[] sortBy = {"group","startTime", "endTime"};
-        boolean[] sortAscending = {true, false, true};
+        Sort[] sortAscending = {Sort.ASCENDING, Sort.DESCENDING, Sort.ASCENDING};
 
         RealmResults<Conference> results = realm.where(Conference.class).lessThan("startTime", d30).greaterThanOrEqualTo("startTime", dNow).findAllSorted(sortBy,sortAscending);
 
@@ -628,7 +707,7 @@ public class ConferenceListViewActivity extends AppCompatActivity {
         Date dNow = new Date();
 
         String[] sortBy = {"group","startTime", "endTime"};
-        boolean[] sortAscending = {true, false, true};
+        Sort[] sortAscending = {Sort.ASCENDING, Sort.DESCENDING, Sort.ASCENDING};
 
         RealmResults<Conference> results = realm.where(Conference.class).greaterThanOrEqualTo("startTime", dNow).or().greaterThanOrEqualTo("endTime", dNow).findAllSorted(sortBy,sortAscending);
 
@@ -682,7 +761,7 @@ public class ConferenceListViewActivity extends AppCompatActivity {
         Date dNow = new Date();
 
         String[] sortBy = {"group","startTime", "endTime"};
-        boolean[] sortAscending = {true, false, true};
+        Sort[] sortAscending = {Sort.ASCENDING, Sort.DESCENDING, Sort.ASCENDING};
 
         RealmResults<Conference> results = realm.where(Conference.class).lessThanOrEqualTo("endTime", dNow).findAllSorted(sortBy,sortAscending);
 

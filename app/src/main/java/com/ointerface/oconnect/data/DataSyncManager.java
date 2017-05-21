@@ -25,6 +25,9 @@ import java.util.TimeZone;
 import com.ointerface.oconnect.App;
 import com.parse.ParseRelation;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmResults;
@@ -39,6 +42,7 @@ public class DataSyncManager {
     static private Context context;
     static private IDataSyncListener callback;
     static public ProgressDialog dialog;
+    static public boolean shouldSyncAll = true;
 
     // private static List<ParseObject> allObjects = new ArrayList<ParseObject>();
 
@@ -48,6 +52,11 @@ public class DataSyncManager {
 
         dataSyncOrganizations();
 
+    }
+
+    static public void initDataSyncManager(Context contextArg, IDataSyncListener callbackArg) {
+        context = contextArg;
+        callback = callbackArg;
     }
 
     static public void dataSyncOrganizations() {
@@ -67,20 +76,24 @@ public class DataSyncManager {
             public void done(List<ParseObject> objects, com.parse.ParseException e) {
                 if (e == null) {
                     Log.d("DataSyncManager", "Start Processing Org Records: " + objects.size() + " objects");
-                    for (ParseObject parseObject : objects){
-                        Realm realm = AppUtil.getRealmInstance(App.getInstance());
+
+                    Realm realm = AppUtil.getRealmInstance(App.getInstance());
+
+                    realm.beginTransaction();
+
+                    for (ParseObject parseObject : objects) {
 
                         Organization result = realm.where(Organization.class).equalTo("objectId", parseObject.getObjectId()).findFirst();
 
                         if (result == null) {
                             // Insert into Realm
-                            realm.beginTransaction();
+
 
                             // Create an object
-                            Organization org = realm.createObject(Organization.class);
+                            Organization org = realm.createObject(Organization.class, parseObject.getObjectId());
 
                             // Set its fields
-                            org.setObjectId(parseObject.getObjectId());
+                            // org.setObjectId(parseObject.getObjectId());
                             org.setShowSplash(parseObject.getBoolean("showSplash"));
                             org.setName(parseObject.getString("name"));
                             org.setUpdatedAt(parseObject.getUpdatedAt());
@@ -98,12 +111,10 @@ public class DataSyncManager {
                                 Log.d("DataSyncManager", "Line 90 " + ex.getMessage());
                             }
 
-                            realm.commitTransaction();
                         } else {
                             // Update in Realm
-                            realm.beginTransaction();
 
-                            result.setObjectId(parseObject.getObjectId());
+                            // result.setObjectId(parseObject.getObjectId());
                             result.setShowSplash(parseObject.getBoolean("showSplash"));
                             result.setName(parseObject.getString("name"));
                             result.setUpdatedAt(parseObject.getUpdatedAt());
@@ -121,14 +132,21 @@ public class DataSyncManager {
                                 Log.d("DataSyncManager", "Line 113 " + ex.getMessage());
                             }
 
-                            realm.commitTransaction();
+
                         }
                     }
+
+                    realm.commitTransaction();
+                    realm.close();
                 } else {
-                    Log.d("DataSyncManager", "Line 120 " + e.getMessage());
+                    Log.d("DataSyncManager", "Line 120 " + e.getMessage() + " " + e.getStackTrace());
                 }
 
-                dataSyncConferences();
+                if (shouldSyncAll == true) {
+                    dataSyncConferences();
+                } else {
+                    callback.onDataSyncFinish();
+                }
             }
         });
     }
@@ -148,20 +166,22 @@ public class DataSyncManager {
             public void done(List<ParseObject> objects, com.parse.ParseException e) {
                 if (e == null) {
                     Log.d("DataSyncManager", "Start Processing Conferences: " + objects.size() + " objects");
+
+                    Realm realm = AppUtil.getRealmInstance(App.getInstance());
+                    realm.beginTransaction();
+
                     for (ParseObject parseObject : objects){
-                        Realm realm = AppUtil.getRealmInstance(App.getInstance());
+
 
                         Conference result = realm.where(Conference.class).equalTo("objectId", parseObject.getObjectId()).findFirst();
 
                         if (result == null) {
-                            // Insert into Realm
-                            realm.beginTransaction();
 
                             // Create an object
-                            Conference conference = realm.createObject(Conference.class);
+                            Conference conference = realm.createObject(Conference.class, parseObject.getObjectId());
 
                             // Set its fields
-                            conference.setObjectId(parseObject.getObjectId());
+                            // conference.setObjectId(parseObject.getObjectId());
                             conference.setShowQRScanner(parseObject.getBoolean("showQRScanner"));
                             conference.setShowNonTimedEvents(parseObject.getBoolean("showNonTimedEvents"));
                             conference.setZip(parseObject.getString("zip"));
@@ -248,12 +268,10 @@ public class DataSyncManager {
                             conference.setToolbarLabelExternalLink(parseObject.getString("toolbarLabelExternalLink"));
                             conference.setGroup(parseObject.getString("group"));
 
-                            realm.commitTransaction();
                         } else {
                             // Update in Realm
-                            realm.beginTransaction();
 
-                            result.setObjectId(parseObject.getObjectId());
+                            // result.setObjectId(parseObject.getObjectId());
                             result.setShowQRScanner(parseObject.getBoolean("showQRScanner"));
                             result.setShowNonTimedEvents(parseObject.getBoolean("showNonTimedEvents"));
                             result.setZip(parseObject.getString("zip"));
@@ -340,14 +358,20 @@ public class DataSyncManager {
                             result.setToolbarLabelExternalLink(parseObject.getString("toolbarLabelExternalLink"));
                             result.setGroup(parseObject.getString("group"));
 
-                            realm.commitTransaction();
                         }
                     }
+
+                    realm.commitTransaction();
+                    realm.close();
                 } else {
-                    Log.d("DataSyncManager", "Line 336 " + e.getMessage());
+                    Log.d("DataSyncManager", "Line 336 " + e.getMessage() + " " + e.getStackTrace());
                 }
 
-                dataSyncSessions();
+                if (shouldSyncAll == true) {
+                    dataSyncSessions();
+                } else {
+                    callback.onDataSyncFinish();
+                }
 
             }
         });
@@ -384,82 +408,43 @@ public class DataSyncManager {
             }
         } while (loopCloseCount > 0);
 
-        Log.d("DataSyncManager", "Query for Sessions Completed");
-        Log.d("DataSyncManager", "Start Processing Sessions: " + allObjects.size() + " objects");
-        for (ParseObject parseObject : allObjects) {
-            Realm realm = AppUtil.getRealmInstance(App.getInstance());
-
-            Session result = realm.where(Session.class).equalTo("objectId", parseObject.getObjectId()).findFirst();
-
-            if (result == null) {
-                realm.beginTransaction();
-
-                // Create an object
-                Session session = realm.createObject(Session.class);
-
-                // Set its fields
-                session.setObjectId(parseObject.getObjectId());
-                session.setEndTime(parseObject.getDate("endTime"));
-                session.setTrack(parseObject.getString("track"));
-                session.setStartTime(parseObject.getDate("startTime"));
-                session.setLocation(parseObject.getString("location"));
-                session.setModerator(parseObject.getString("moderator"));
-
-                ParseObject tempObj = parseObject.getParseObject("conference");
-
-                if (tempObj != null) {
-                    session.setConference(tempObj.getObjectId());
-                }
-
-                session.setUpdatedAt(parseObject.getUpdatedAt());
-
-                realm.commitTransaction();
-            } else {
-                realm.beginTransaction();
-
-                result.setObjectId(parseObject.getObjectId());
-                result.setEndTime(parseObject.getDate("endTime"));
-                result.setTrack(parseObject.getString("track"));
-                result.setStartTime(parseObject.getDate("startTime"));
-                result.setLocation(parseObject.getString("location"));
-                result.setModerator(parseObject.getString("moderator"));
-
-                ParseObject tempObj = parseObject.getParseObject("conference");
-
-                if (tempObj != null) {
-                    result.setConference(tempObj.getObjectId());
-                }
-
-                result.setUpdatedAt(parseObject.getUpdatedAt());
-
-                realm.commitTransaction();
-            }
-        }
-
-        dataSyncEvents();
-
         /*
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> objects, com.parse.ParseException e) {
                 if (e == null) {
-                    for (ParseObject parseObject : objects) {
-                        Realm realm = AppUtil.getRealmInstance(App.getInstance());
+                */
+
+                    Log.d("DataSyncManager", "Query for Sessions Completed");
+                    Log.d("DataSyncManager", "Start Processing Sessions: " + allObjects.size() + " objects");
+
+                    int counter = 1;
+
+                    Realm realm = AppUtil.getRealmInstance(App.getInstance());
+                    realm.beginTransaction();
+
+                    for (ParseObject parseObject : allObjects) {
+
+
+                        if (counter % 100 == 0) {
+                            Log.d("DataSyncManager", "Session Number: " + counter);
+                        }
+                        ++counter;
 
                         Session result = realm.where(Session.class).equalTo("objectId", parseObject.getObjectId()).findFirst();
 
                         if (result == null) {
-                            realm.beginTransaction();
 
                             // Create an object
-                            Session session = realm.createObject(Session.class);
+                            Session session = realm.createObject(Session.class, parseObject.getObjectId());
 
                             // Set its fields
-                            session.setObjectId(parseObject.getObjectId());
+                            // session.setObjectId(parseObject.getObjectId());
                             session.setEndTime(parseObject.getDate("endTime"));
                             session.setTrack(parseObject.getString("track"));
                             session.setStartTime(parseObject.getDate("startTime"));
                             session.setLocation(parseObject.getString("location"));
+                            session.setModerator(parseObject.getString("moderator"));
 
                             ParseObject tempObj = parseObject.getParseObject("conference");
 
@@ -467,17 +452,18 @@ public class DataSyncManager {
                                 session.setConference(tempObj.getObjectId());
                             }
 
-                            session.setUpdatedAt(parseObject.getDate("updatedAt"));
+                            session.setUpdatedAt(parseObject.getUpdatedAt());
 
-                            realm.commitTransaction();
+
                         } else {
-                            realm.beginTransaction();
 
-                            result.setObjectId(parseObject.getObjectId());
+
+                            // result.setObjectId(parseObject.getObjectId());
                             result.setEndTime(parseObject.getDate("endTime"));
                             result.setTrack(parseObject.getString("track"));
                             result.setStartTime(parseObject.getDate("startTime"));
                             result.setLocation(parseObject.getString("location"));
+                            result.setModerator(parseObject.getString("moderator"));
 
                             ParseObject tempObj = parseObject.getParseObject("conference");
 
@@ -485,17 +471,28 @@ public class DataSyncManager {
                                 result.setConference(tempObj.getObjectId());
                             }
 
-                            result.setUpdatedAt(parseObject.getDate("updatedAt"));
+                            result.setUpdatedAt(parseObject.getUpdatedAt());
 
-                            realm.commitTransaction();
+
                         }
                     }
+
+                    realm.commitTransaction();
+                    realm.close();
+
+                    /*
+                } else {
+                    Log.d("DataSync", e.getMessage());
+                }
+                */
+
+                if (shouldSyncAll == true) {
+                    dataSyncEvents();
+                } else {
+                    callback.onDataSyncFinish();
                 }
 
-                dataSyncEvents();
-            }
-        });
-        */
+            // }});
     }
 
     static public void dataSyncEvents() {
@@ -508,6 +505,7 @@ public class DataSyncManager {
         }
 
         Log.d("DataSyncManager", "Start Query For Parse Events");
+
         List<ParseObject>  allObjects = new ArrayList<ParseObject>();
 
         int countSkip=0,loopCloseCount=0;
@@ -528,199 +526,328 @@ public class DataSyncManager {
             }
         } while (loopCloseCount > 0);
 
-        Log.d("DataSyncManager", "Start Processing Events: " + allObjects.size() + " objects");
-
-        for (ParseObject parseObject : allObjects) {
-            Realm realm = AppUtil.getRealmInstance(App.getInstance());
-
-            Event result = realm.where(Event.class).equalTo("objectId", parseObject.getObjectId()).findFirst();
-
-            if (result == null) {
-                realm.beginTransaction();
-
-                // Create an object
-                Event event = realm.createObject(Event.class);
-
-                event.setObjectId(parseObject.getObjectId());
-                event.setNonTimedEvent(parseObject.getBoolean("isNonTimedEvent"));
-                event.setEndTime(parseObject.getDate("endTime"));
-                event.setName(parseObject.getString("name"));
-                event.setStartTime(parseObject.getDate("startTime"));
-                event.setLocation(parseObject.getString("location"));
-
-                ParseRelation<ParseObject> speakersRelation = parseObject.getRelation("speakers");
-
-                ParseQuery<ParseObject> speakersQuery = speakersRelation.getQuery();
-
-                try {
-                    List<ParseObject> speakersList = speakersQuery.find();
-
-                    RealmList<Speaker> realmSpeakerList = new RealmList<Speaker>();
-
-                    for (ParseObject speakerObj: speakersList) {
-                        Speaker speaker = realm.where(Speaker.class).equalTo("objectId", speakerObj.getObjectId()).findFirst();
-
-                        if (speaker == null) {
-                            speaker = realm.createObject(Speaker.class);
-
-                        }
-
-                        speaker.setObjectId(speakerObj.getObjectId());
-                        speaker.setName(speakerObj.getString("name"));
-                        speaker.setAllowCheckIn(speakerObj.getBoolean("allowCheckIn"));
-                        speaker.setIOS_code(speakerObj.getString("IOS_code"));
-                        speaker.setUpdatedAt(speakerObj.getUpdatedAt());
-
-                        realmSpeakerList.add(speaker);
-                    }
-
-                    event.setSpeakers(realmSpeakerList);
-                } catch (Exception ex) {
-                    Log.d("DataSyncManager", "Line 551: " + ex.getMessage());
-                }
-
-
-                ParseObject sessionObj = parseObject.getParseObject("session");
-
-                if (sessionObj != null) {
-                    event.setSession(sessionObj.getObjectId());
-
-                    if (parseObject.getBoolean("isNonTimedEvent") == true) {
-                        try {
-                            if (sessionObj.fetchIfNeeded().getDate("startTime") != null) {
-                                event.setStartTime(sessionObj.getDate("startTime"));
-                            }
-
-                            if (sessionObj.fetchIfNeeded().getDate("endTime") != null) {
-                                event.setEndTime(sessionObj.getDate("endTime"));
-                            }
-                        } catch (Exception ex) {
-                            Log.d("DataSync", ex.getMessage());
-                        }
-                    }
-                }
-
-                event.setUpdatedAt(parseObject.getUpdatedAt());
-
-                realm.commitTransaction();
-            } else {
-                realm.beginTransaction();
-
-                result.setObjectId(parseObject.getObjectId());
-                result.setNonTimedEvent(parseObject.getBoolean("isNonTimedEvent"));
-                result.setEndTime(parseObject.getDate("endTime"));
-                result.setName(parseObject.getString("name"));
-                result.setStartTime(parseObject.getDate("startTime"));
-                result.setLocation(parseObject.getString("location"));
-
-                ParseRelation<ParseObject> speakersRelation = parseObject.getRelation("speakers");
-
-                ParseQuery<ParseObject> speakersQuery = speakersRelation.getQuery();
-
-                try {
-                    List<ParseObject> speakersList = speakersQuery.find();
-
-                    RealmList<Speaker> realmSpeakerList = new RealmList<Speaker>();
-
-                    for (ParseObject speakerObj: speakersList) {
-                        Speaker speaker = realm.where(Speaker.class).equalTo("objectId", speakerObj.getObjectId()).findFirst();
-
-                        if (speaker == null) {
-                            speaker = realm.createObject(Speaker.class);
-
-                        }
-
-                        speaker.setObjectId(speakerObj.getObjectId());
-                        speaker.setName(speakerObj.getString("name"));
-                        speaker.setAllowCheckIn(speakerObj.getBoolean("allowCheckIn"));
-                        speaker.setIOS_code(speakerObj.getString("IOS_code"));
-                        speaker.setUpdatedAt(speakerObj.getUpdatedAt());
-
-                        realmSpeakerList.add(speaker);
-                    }
-
-                    result.setSpeakers(realmSpeakerList);
-                } catch (Exception ex) {
-                    Log.d("DataSyncManager", "Line 551: " + ex.getMessage());
-                }
-
-
-                ParseObject sessionObj = parseObject.getParseObject("session");
-
-                if (sessionObj != null) {
-                    result.setSession(sessionObj.getObjectId());
-
-                    if (parseObject.getBoolean("isNonTimedEvent") == true) {
-                        result.setStartTime(sessionObj.getDate("startTime"));
-                        result.setEndTime(sessionObj.getDate("endTime"));
-                    }
-                }
-
-                result.setUpdatedAt(parseObject.getUpdatedAt());
-
-                realm.commitTransaction();
-            }
-        }
-
-        dataSyncSpeakers();
-
         /*
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> objects, com.parse.ParseException e) {
                 if (e == null) {
-                    for (ParseObject parseObject : objects) {
-                        Realm realm = AppUtil.getRealmInstance(App.getInstance());
+                */
+                    Log.d("DataSyncManager", "Start Processing Events: " + allObjects.size() + " objects");
+
+                    int counter = 1;
+
+                    Realm realm = AppUtil.getRealmInstance(App.getInstance());
+                    realm.beginTransaction();
+
+                    for (ParseObject parseObject : allObjects) {
+
+
+                        if (counter % 100 == 0) {
+                            Log.d("DataSyncManager", "Events Number: " + counter);
+                        }
+                        ++counter;
 
                         Event result = realm.where(Event.class).equalTo("objectId", parseObject.getObjectId()).findFirst();
 
                         if (result == null) {
-                            realm.beginTransaction();
 
                             // Create an object
-                            Event event = realm.createObject(Event.class);
+                            Event event = realm.createObject(Event.class, parseObject.getObjectId());
 
-                            event.setObjectId(parseObject.getObjectId());
+                            // event.setObjectId(parseObject.getObjectId());
+
                             event.setNonTimedEvent(parseObject.getBoolean("isNonTimedEvent"));
                             event.setEndTime(parseObject.getDate("endTime"));
                             event.setName(parseObject.getString("name"));
                             event.setStartTime(parseObject.getDate("startTime"));
+                            event.setLocation(parseObject.getString("location"));
+
+                            event.setInfo(parseObject.getString("info"));
+
+                            JSONArray linksJSONArr = parseObject.getJSONArray("links");
+
+                            if (linksJSONArr != null) {
+                                for (int m = 0; m < linksJSONArr.length(); ++m) {
+                                    try {
+                                        JSONObject linksObj = linksJSONArr.getJSONObject(m);
+
+                                        EventLink eventLink = realm.createObject(EventLink.class, parseObject.getObjectId() + m);
+
+                                        eventLink.setEventID(parseObject.getObjectId());
+                                        eventLink.setLabel(linksObj.getString("label"));
+                                        eventLink.setLink(linksObj.getString("link"));
+                                    } catch (Exception ex) {
+                                        Log.d("DataSync", ex.getMessage());
+                                    }
+                                }
+                            }
+
+                            JSONArray filesJSONArr = parseObject.getJSONArray("slidesFiles");
+
+                            if (filesJSONArr != null) {
+                                for (int m = 0; m < filesJSONArr.length(); ++m) {
+                                    try {
+                                        JSONObject fileObj = filesJSONArr.getJSONObject(m);
+
+                                        EventFile eventFile = realm.createObject(EventFile.class, parseObject.getObjectId() + m);
+
+                                        eventFile.setEventID(parseObject.getObjectId());
+                                        eventFile.set__type(fileObj.getString("__type"));
+                                        eventFile.setName(fileObj.getString("name"));
+                                        eventFile.setUrl(fileObj.getString("url"));
+                                    } catch (Exception ex) {
+                                        Log.d("DataSync", ex.getMessage());
+                                    }
+                                }
+                            }
+
+                            JSONArray abstractJSONArr = parseObject.getJSONArray("abstractFiles");
+
+                            if (abstractJSONArr != null) {
+                                for (int m = 0; m < abstractJSONArr.length(); ++m) {
+                                    try {
+                                        JSONObject fileObj = abstractJSONArr.getJSONObject(m);
+
+                                        EventAbstract eventAbstract = realm.createObject(EventAbstract.class, parseObject.getObjectId() + m);
+
+                                        eventAbstract.setEventID(parseObject.getObjectId());
+                                        eventAbstract.set__type(fileObj.getString("__type"));
+                                        eventAbstract.setName(fileObj.getString("name"));
+                                        eventAbstract.setUrl(fileObj.getString("url"));
+                                    } catch (Exception ex) {
+                                        Log.d("DataSync", ex.getMessage());
+                                    }
+                                }
+                            }
+
+                            JSONArray journalsJSONArr = parseObject.getJSONArray("journalFiles");
+
+                            if (journalsJSONArr != null) {
+                                for (int m = 0; m < journalsJSONArr.length(); ++m) {
+                                    try {
+                                        JSONObject fileObj = journalsJSONArr.getJSONObject(m);
+
+                                        EventJournal eventJournal = realm.createObject(EventJournal.class, parseObject.getObjectId() + m);
+
+                                        eventJournal.setEventID(parseObject.getObjectId());
+                                        eventJournal.set__type(fileObj.getString("__type"));
+                                        eventJournal.setName(fileObj.getString("name"));
+                                        eventJournal.setUrl(fileObj.getString("url"));
+                                    } catch (Exception ex) {
+                                        Log.d("DataSync", ex.getMessage());
+                                    }
+                                }
+                            }
+
+                            JSONArray miscJSONArr = parseObject.getJSONArray("miscellaneousFiles");
+
+                            if (miscJSONArr != null) {
+                                for (int m = 0; m < miscJSONArr.length(); ++m) {
+                                    try {
+                                        JSONObject fileObj = miscJSONArr.getJSONObject(m);
+
+                                        EventMisc eventMisc = realm.createObject(EventMisc.class, parseObject.getObjectId() + m);
+
+                                        eventMisc.setEventID(parseObject.getObjectId());
+                                        eventMisc.set__type(fileObj.getString("__type"));
+                                        eventMisc.setName(fileObj.getString("name"));
+                                        eventMisc.setUrl(fileObj.getString("url"));
+                                    } catch (Exception ex) {
+                                        Log.d("DataSync", ex.getMessage());
+                                    }
+                                }
+                            }
+
+                            ParseRelation<ParseObject> speakersRelation = parseObject.getRelation("speakers");
+
+                            ParseQuery<ParseObject> speakersQuery = speakersRelation.getQuery();
+
+                            /*
+                            try {
+                                List<ParseObject> speakersList = speakersQuery.find();
+
+                                RealmList<Speaker> realmSpeakerList = new RealmList<Speaker>();
+
+                                for (ParseObject speakerObj : speakersList) {
+                                    Speaker speaker = realm.where(Speaker.class).equalTo("objectId", speakerObj.getObjectId()).findFirst();
+
+                                    if (speaker == null) {
+                                        speaker = realm.createObject(Speaker.class);
+
+                                    }
+
+                                    speaker.setObjectId(speakerObj.getObjectId());
+                                    speaker.setName(speakerObj.getString("name"));
+                                    speaker.setAllowCheckIn(speakerObj.getBoolean("allowCheckIn"));
+                                    speaker.setIOS_code(speakerObj.getString("IOS_code"));
+                                    speaker.setUpdatedAt(speakerObj.getUpdatedAt());
+
+                                    realmSpeakerList.add(speaker);
+                                }
+
+                                event.setSpeakers(realmSpeakerList);
+                            } catch (Exception ex) {
+                                Log.d("DataSyncManager", "Line 551: " + ex.getMessage());
+                            }
+                            */
+
 
                             ParseObject sessionObj = parseObject.getParseObject("session");
 
                             if (sessionObj != null) {
                                 event.setSession(sessionObj.getObjectId());
+
+                                if (parseObject.getBoolean("isNonTimedEvent") == true) {
+                                    try {
+                                        if (sessionObj.fetchIfNeeded().getDate("startTime") != null) {
+                                            event.setStartTime(sessionObj.getDate("startTime"));
+                                        }
+
+                                        if (sessionObj.fetchIfNeeded().getDate("endTime") != null) {
+                                            event.setEndTime(sessionObj.getDate("endTime"));
+                                        }
+                                    } catch (Exception ex) {
+                                        Log.d("DataSync", ex.getMessage());
+                                    }
+                                }
                             }
 
-                            event.setUpdatedAt(parseObject.getDate("updatedAt"));
+                            event.setUpdatedAt(parseObject.getUpdatedAt());
 
-                            realm.commitTransaction();
                         } else {
-                            realm.beginTransaction();
 
-                            result.setObjectId(parseObject.getObjectId());
+
+                            // result.setObjectId(parseObject.getObjectId());
                             result.setNonTimedEvent(parseObject.getBoolean("isNonTimedEvent"));
                             result.setEndTime(parseObject.getDate("endTime"));
                             result.setName(parseObject.getString("name"));
                             result.setStartTime(parseObject.getDate("startTime"));
+                            result.setLocation(parseObject.getString("location"));
+
+                            result.setInfo(parseObject.getString("info"));
+
+                            JSONArray linksJSONArr = parseObject.getJSONArray("links");
+
+                            if (linksJSONArr != null) {
+                                for (int m = 0; m < linksJSONArr.length(); ++m) {
+                                    try {
+                                        JSONObject linksObj = linksJSONArr.getJSONObject(m);
+
+                                        EventLink eventLink = realm.createObject(EventLink.class, parseObject.getObjectId() + m);
+
+                                        eventLink.setEventID(parseObject.getObjectId());
+                                        eventLink.setLabel(linksObj.getString("label"));
+                                        eventLink.setLink(linksObj.getString("link"));
+                                    } catch (Exception ex) {
+                                        Log.d("DataSync", ex.getMessage());
+                                    }
+                                }
+                            }
+
+                            JSONArray filesJSONArr = parseObject.getJSONArray("slidesFiles");
+
+                            if (filesJSONArr != null) {
+                                for (int m = 0; m < filesJSONArr.length(); ++m) {
+                                    try {
+                                        JSONObject fileObj = filesJSONArr.getJSONObject(m);
+
+                                        EventFile eventFile = realm.createObject(EventFile.class, parseObject.getObjectId() + m);
+
+                                        eventFile.setEventID(parseObject.getObjectId());
+                                        eventFile.set__type(fileObj.getString("__type"));
+                                        eventFile.setName(fileObj.getString("name"));
+                                        eventFile.setUrl(fileObj.getString("url"));
+                                    } catch (Exception ex) {
+                                        Log.d("DataSync", ex.getMessage());
+                                    }
+                                }
+                            }
+
+                            JSONArray abstractJSONArr = parseObject.getJSONArray("abstractFiles");
+
+                            if (abstractJSONArr != null) {
+                                for (int m = 0; m < abstractJSONArr.length(); ++m) {
+                                    try {
+                                        JSONObject fileObj = abstractJSONArr.getJSONObject(m);
+
+                                        EventAbstract eventAbstract = realm.createObject(EventAbstract.class, parseObject.getObjectId() + m);
+
+                                        eventAbstract.setEventID(parseObject.getObjectId());
+                                        eventAbstract.set__type(fileObj.getString("__type"));
+                                        eventAbstract.setName(fileObj.getString("name"));
+                                        eventAbstract.setUrl(fileObj.getString("url"));
+                                    } catch (Exception ex) {
+                                        Log.d("DataSync", ex.getMessage());
+                                    }
+                                }
+                            }
+
+                            ParseRelation<ParseObject> speakersRelation = parseObject.getRelation("speakers");
+
+                            ParseQuery<ParseObject> speakersQuery = speakersRelation.getQuery();
+
+                            /*
+                            try {
+                                List<ParseObject> speakersList = speakersQuery.find();
+
+                                RealmList<Speaker> realmSpeakerList = new RealmList<Speaker>();
+
+                                for (ParseObject speakerObj : speakersList) {
+                                    Speaker speaker = realm.where(Speaker.class).equalTo("objectId", speakerObj.getObjectId()).findFirst();
+
+                                    if (speaker == null) {
+                                        speaker = realm.createObject(Speaker.class);
+
+                                    }
+
+                                    speaker.setObjectId(speakerObj.getObjectId());
+                                    speaker.setName(speakerObj.getString("name"));
+                                    speaker.setAllowCheckIn(speakerObj.getBoolean("allowCheckIn"));
+                                    speaker.setIOS_code(speakerObj.getString("IOS_code"));
+                                    speaker.setUpdatedAt(speakerObj.getUpdatedAt());
+
+                                    realmSpeakerList.add(speaker);
+                                }
+
+                                result.setSpeakers(realmSpeakerList);
+                            } catch (Exception ex) {
+                                Log.d("DataSyncManager", "Line 551: " + ex.getMessage());
+                            }
+                            */
+
 
                             ParseObject sessionObj = parseObject.getParseObject("session");
 
                             if (sessionObj != null) {
                                 result.setSession(sessionObj.getObjectId());
+
+                                if (parseObject.getBoolean("isNonTimedEvent") == true) {
+                                    result.setStartTime(sessionObj.getDate("startTime"));
+                                    result.setEndTime(sessionObj.getDate("endTime"));
+                                }
                             }
 
-                            result.setUpdatedAt(parseObject.getDate("updatedAt"));
+                            result.setUpdatedAt(parseObject.getUpdatedAt());
 
-                            realm.commitTransaction();
                         }
                     }
-                }
 
-                callback.onDataSyncFinish();
-            }
-        });
-        */
+                    realm.commitTransaction();
+                    realm.close();
+
+                    /*
+                } else {
+                    Log.d("DataSync", e.getMessage());
+                }
+                */
+
+                if (shouldSyncAll == true) {
+                    dataSyncSpeakers();
+                } else {
+                    callback.onDataSyncFinish();
+                }
+            // }});
+
     }
 
     static public void dataSyncSpeakers() {
@@ -753,82 +880,379 @@ public class DataSyncManager {
             }
         } while (loopCloseCount > 0);
 
-        Log.d("DataSyncManager", "Start Processing Speakers: " + allObjects.size() + " objects");
 
-        for (ParseObject parseObject : allObjects) {
-            Realm realm = AppUtil.getRealmInstance(App.getInstance());
+        /*
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, com.parse.ParseException e) {
+                if (e == null) {
+                */
 
-            Speaker result = realm.where(Speaker.class).equalTo("objectId", parseObject.getObjectId()).findFirst();
+                    Log.d("DataSyncManager", "Start Processing Speakers: " + allObjects.size() + " objects");
 
-            if (result == null) {
-                realm.beginTransaction();
+                    Realm realm = AppUtil.getRealmInstance(App.getInstance());
+                    realm.beginTransaction();
 
-                // Create an object
-                Speaker speaker = realm.createObject(Speaker.class);
+                    int counter = 1;
+                    for (final ParseObject parseObject : allObjects) {
 
-                speaker.setObjectId(parseObject.getObjectId());
-                speaker.setName(parseObject.getString("name"));
-                speaker.setAllowCheckIn(parseObject.getBoolean("allowCheckIn"));
-                speaker.setIOS_code(parseObject.getString("IOS_code"));
-                speaker.setUpdatedAt(parseObject.getUpdatedAt());
 
-                ParseRelation<ParseObject> eventsRelation = parseObject.getRelation("event");
+                        if (counter % 100 == 0) {
+                            Log.d("DataSyncManager", "Speaker Number: " + counter);
+                        }
+                        ++counter;
 
-                ParseQuery<ParseObject> eventsQuery = eventsRelation.getQuery();
+                        Speaker result = realm.where(Speaker.class).equalTo("objectId", parseObject.getObjectId()).findFirst();
 
-                try {
-                    List<ParseObject> eventsList = eventsQuery.find();
+                        if (result == null) {
 
-                    RealmList<Event> realmEventList = new RealmList<Event>();
 
-                    for (ParseObject eventObj : eventsList) {
-                        Event event = realm.where(Event.class).equalTo("objectId", eventObj.getObjectId()).findFirst();
-                        if (event != null) {
-                            realmEventList.add(event);
+                            // Create an object
+                            Speaker speaker = realm.createObject(Speaker.class, parseObject.getObjectId());
+
+                            // speaker.setObjectId(parseObject.getObjectId());
+                            speaker.setName(parseObject.getString("name"));
+                            speaker.setAllowCheckIn(parseObject.getBoolean("allowCheckIn"));
+                            speaker.setIOS_code(parseObject.getString("IOS_code"));
+                            speaker.setUpdatedAt(parseObject.getUpdatedAt());
+
+                            speaker.setLocation(parseObject.getString("location"));
+                            speaker.setOrganization(parseObject.getString("organization"));
+                            speaker.setContactable(parseObject.getBoolean("isContactable"));
+
+                            speaker.setJob(parseObject.getString("job"));
+                            speaker.setBio(parseObject.getString("bio"));
+
+                            speaker.setSpeakerLabel(parseObject.getString("speakerLabel"));
+
+                            ParseObject conferenceObj = parseObject.getParseObject("conference");
+
+                            if (conferenceObj != null) {
+                                speaker.setConference(conferenceObj.getObjectId());
+                            }
+
+                            ParseFile parseImage = (ParseFile) parseObject.getParseFile("image");
+
+                            try {
+                                if (parseImage != null) {
+                                    speaker.setImage(parseImage.getData());
+                                }
+                            } catch (Exception ex) {
+                                Log.d("DataSyncManager", "Line 699 " + ex.getMessage());
+                            }
+
+                            // Log.d("APD", "Speaker ObjectId: " + speaker.getObjectId() +
+                            // " IOS_code: " + speaker.getIOS_code());
+
+                            JSONArray linksJSONArr = parseObject.getJSONArray("links");
+
+                            if (linksJSONArr != null) {
+                                for (int m = 0; m < linksJSONArr.length(); ++m) {
+                                    try {
+                                        JSONObject linksObj = linksJSONArr.getJSONObject(m);
+
+                                        SpeakerLink speakerLink = realm.createObject(SpeakerLink.class, parseObject.getObjectId() + m);
+
+                                        speakerLink.setSpeakerID(parseObject.getObjectId());
+                                        speakerLink.setLabel(linksObj.getString("label"));
+                                        speakerLink.setLink(linksObj.getString("link"));
+                                    } catch (Exception ex) {
+                                        Log.d("DataSync", ex.getMessage());
+                                    }
+                                }
+                            }
+
+                            JSONArray filesJSONArr = parseObject.getJSONArray("slidesFiles");
+
+                            if (filesJSONArr != null) {
+                                for (int m = 0; m < filesJSONArr.length(); ++m) {
+                                    try {
+                                        JSONObject fileObj = filesJSONArr.getJSONObject(m);
+
+                                        SpeakerFile speakerFile = realm.createObject(SpeakerFile.class, parseObject.getObjectId() + m);
+
+                                        speakerFile.setSpeakerID(parseObject.getObjectId());
+                                        speakerFile.set__type(fileObj.getString("__type"));
+                                        speakerFile.setName(fileObj.getString("name"));
+                                        speakerFile.setUrl(fileObj.getString("url"));
+                                    } catch (Exception ex) {
+                                        Log.d("DataSync", ex.getMessage());
+                                    }
+                                }
+                            }
+
+                            JSONArray journalsJSONArr = parseObject.getJSONArray("journalFiles");
+
+                            if (journalsJSONArr != null) {
+                                for (int m = 0; m < journalsJSONArr.length(); ++m) {
+                                    try {
+                                        JSONObject fileObj = journalsJSONArr.getJSONObject(m);
+
+                                        SpeakerJournal speakerJournal = realm.createObject(SpeakerJournal.class, parseObject.getObjectId() + m);
+
+                                        speakerJournal.setSpeakerID(parseObject.getObjectId());
+                                        speakerJournal.set__type(fileObj.getString("__type"));
+                                        speakerJournal.setName(fileObj.getString("name"));
+                                        speakerJournal.setUrl(fileObj.getString("url"));
+                                    } catch (Exception ex) {
+                                        Log.d("DataSync", ex.getMessage());
+                                    }
+                                }
+                            }
+
+                            JSONArray miscJSONArr = parseObject.getJSONArray("miscellaneousFiles");
+
+                            if (miscJSONArr != null) {
+                                for (int m = 0; m < miscJSONArr.length(); ++m) {
+                                    try {
+                                        JSONObject fileObj = miscJSONArr.getJSONObject(m);
+
+                                        SpeakerMisc speakerMisc = realm.createObject(SpeakerMisc.class, parseObject.getObjectId() + m);
+
+                                        speakerMisc.setSpeakerID(parseObject.getObjectId());
+                                        speakerMisc.set__type(fileObj.getString("__type"));
+                                        speakerMisc.setName(fileObj.getString("name"));
+                                        speakerMisc.setUrl(fileObj.getString("url"));
+                                    } catch (Exception ex) {
+                                        Log.d("DataSync", ex.getMessage());
+                                    }
+                                }
+                            }
+
+                            JSONArray abstractJSONArr = parseObject.getJSONArray("abstractFiles");
+
+                            if (abstractJSONArr != null) {
+                                for (int m = 0; m < abstractJSONArr.length(); ++m) {
+                                    try {
+                                        JSONObject fileObj = abstractJSONArr.getJSONObject(m);
+
+                                        SpeakerAbstract speakerAbstract = realm.createObject(SpeakerAbstract.class, parseObject.getObjectId() + m);
+
+                                        speakerAbstract.setSpeakerID(parseObject.getObjectId());
+                                        speakerAbstract.set__type(fileObj.getString("__type"));
+                                        speakerAbstract.setName(fileObj.getString("name"));
+                                        speakerAbstract.setUrl(fileObj.getString("url"));
+                                    } catch (Exception ex) {
+                                        Log.d("DataSync", ex.getMessage());
+                                    }
+                                }
+                            }
+
+                            ParseRelation<ParseObject> eventsRelation = parseObject.getRelation("event");
+
+                            ParseQuery<ParseObject> eventsQuery = eventsRelation.getQuery();
+
+                            /*
+                            try {
+                                eventsQuery.findInBackground(new FindCallback<ParseObject>() {
+                                    @Override
+                                    public void done(List<ParseObject> objects, ParseException e) {
+                                        if (e == null) {
+                                            Realm realm = AppUtil.getRealmInstance(App.getInstance());
+                                            realm.beginTransaction();
+                                            RealmList<Event> realmEventList = new RealmList<Event>();
+
+                                            for (ParseObject eventObj : objects) {
+
+                                                Event event = realm.where(Event.class).equalTo("objectId", eventObj.getObjectId()).findFirst();
+                                                if (event != null) {
+                                                    realmEventList.add(event);
+                                                }
+                                            }
+
+                                            speaker.setEventsList(realmEventList);
+                                            realm.commitTransaction();
+                                            realm.close();
+                                        }
+                                    }
+                                });
+                            } catch (Exception ex) {
+                                Log.d("DataSyncManager", "Line 727: " + ex.getMessage());
+                            }
+                            */
+
+                        } else {
+
+
+                            // result.setObjectId(parseObject.getObjectId());
+                            result.setName(parseObject.getString("name"));
+                            result.setAllowCheckIn(parseObject.getBoolean("allowCheckIn"));
+                            result.setIOS_code(parseObject.getString("IOS_code"));
+                            result.setUpdatedAt(parseObject.getUpdatedAt());
+
+                            result.setLocation(parseObject.getString("location"));
+                            result.setOrganization(parseObject.getString("organization"));
+                            result.setContactable(parseObject.getBoolean("isContactable"));
+
+                            result.setJob(parseObject.getString("job"));
+                            result.setBio(parseObject.getString("bio"));
+
+                            result.setSpeakerLabel(parseObject.getString("speakerLabel"));
+
+                            ParseObject conferenceObj = parseObject.getParseObject("conference");
+
+                            if (conferenceObj != null) {
+                                result.setConference(conferenceObj.getObjectId());
+                            }
+
+                            ParseFile parseImage = (ParseFile) parseObject.getParseFile("image");
+
+                            try {
+                                if (parseImage != null) {
+                                    result.setImage(parseImage.getData());
+                                }
+                            } catch (Exception ex) {
+                                Log.d("DataSyncManager", "Line 755 " + ex.getMessage());
+                            }
+
+                            JSONArray linksJSONArr = parseObject.getJSONArray("links");
+
+                            if (linksJSONArr != null) {
+                                for (int m = 0; m < linksJSONArr.length(); ++m) {
+                                    try {
+                                        JSONObject linksObj = linksJSONArr.getJSONObject(m);
+
+                                        SpeakerLink speakerLink = realm.createObject(SpeakerLink.class, parseObject.getObjectId() + m);
+
+                                        speakerLink.setSpeakerID(parseObject.getObjectId());
+                                        speakerLink.setLabel(linksObj.getString("label"));
+                                        speakerLink.setLink(linksObj.getString("link"));
+                                    } catch (Exception ex) {
+                                        Log.d("DataSync", ex.getMessage());
+                                    }
+                                }
+                            }
+
+                            JSONArray filesJSONArr = parseObject.getJSONArray("slidesFiles");
+
+                            if (filesJSONArr != null) {
+                                for (int m = 0; m < filesJSONArr.length(); ++m) {
+                                    try {
+                                        JSONObject fileObj = filesJSONArr.getJSONObject(m);
+
+                                        SpeakerFile speakerFile = realm.createObject(SpeakerFile.class, parseObject.getObjectId() + m);
+
+                                        speakerFile.setSpeakerID(parseObject.getObjectId());
+                                        speakerFile.set__type(fileObj.getString("__type"));
+                                        speakerFile.setName(fileObj.getString("name"));
+                                        speakerFile.setUrl(fileObj.getString("url"));
+                                    } catch (Exception ex) {
+                                        Log.d("DataSync", ex.getMessage());
+                                    }
+                                }
+                            }
+
+                            JSONArray journalsJSONArr = parseObject.getJSONArray("journalFiles");
+
+                            if (journalsJSONArr != null) {
+                                for (int m = 0; m < journalsJSONArr.length(); ++m) {
+                                    try {
+                                        JSONObject fileObj = journalsJSONArr.getJSONObject(m);
+
+                                        SpeakerJournal speakerJournal = realm.createObject(SpeakerJournal.class, parseObject.getObjectId() + m);
+
+                                        speakerJournal.setSpeakerID(parseObject.getObjectId());
+                                        speakerJournal.set__type(fileObj.getString("__type"));
+                                        speakerJournal.setName(fileObj.getString("name"));
+                                        speakerJournal.setUrl(fileObj.getString("url"));
+                                    } catch (Exception ex) {
+                                        Log.d("DataSync", ex.getMessage());
+                                    }
+                                }
+                            }
+
+                            JSONArray miscJSONArr = parseObject.getJSONArray("miscellaneousFiles");
+
+                            if (miscJSONArr != null) {
+                                for (int m = 0; m < miscJSONArr.length(); ++m) {
+                                    try {
+                                        JSONObject fileObj = miscJSONArr.getJSONObject(m);
+
+                                        SpeakerMisc speakerMisc = realm.createObject(SpeakerMisc.class, parseObject.getObjectId() + m);
+
+                                        speakerMisc.setSpeakerID(parseObject.getObjectId());
+                                        speakerMisc.set__type(fileObj.getString("__type"));
+                                        speakerMisc.setName(fileObj.getString("name"));
+                                        speakerMisc.setUrl(fileObj.getString("url"));
+                                    } catch (Exception ex) {
+                                        Log.d("DataSync", ex.getMessage());
+                                    }
+                                }
+                            }
+
+                            JSONArray abstractJSONArr = parseObject.getJSONArray("abstractFiles");
+
+                            if (abstractJSONArr != null) {
+                                for (int m = 0; m < abstractJSONArr.length(); ++m) {
+                                    try {
+                                        JSONObject fileObj = abstractJSONArr.getJSONObject(m);
+
+                                        SpeakerAbstract speakerAbstract = realm.createObject(SpeakerAbstract.class, parseObject.getObjectId() + m);
+
+                                        speakerAbstract.setSpeakerID(parseObject.getObjectId());
+                                        speakerAbstract.set__type(fileObj.getString("__type"));
+                                        speakerAbstract.setName(fileObj.getString("name"));
+                                        speakerAbstract.setUrl(fileObj.getString("url"));
+                                    } catch (Exception ex) {
+                                        Log.d("DataSync", ex.getMessage());
+                                    }
+                                }
+                            }
+
+                            ParseRelation<ParseObject> eventsRelation = parseObject.getRelation("event");
+
+                            ParseQuery<ParseObject> eventsQuery = eventsRelation.getQuery();
+
+
+
+                            try {
+                                eventsQuery.findInBackground(new FindCallback<ParseObject>() {
+                                    @Override
+                                    public void done(List<ParseObject> objects, ParseException e) {
+                                        if (e == null) {
+                                            Realm realm = AppUtil.getRealmInstance(App.getInstance());
+                                            realm.beginTransaction();
+                                            RealmList<Event> realmEventList = new RealmList<Event>();
+                                            Speaker result = realm.where(Speaker.class).equalTo("objectId", parseObject.getObjectId()).findFirst();
+
+                                            for (ParseObject eventObj : objects) {
+
+                                                Event event = realm.where(Event.class).equalTo("objectId", eventObj.getObjectId()).findFirst();
+                                                if (event != null) {
+                                                    realmEventList.add(event);
+                                                }
+                                            }
+
+                                            result.setEventsList(realmEventList);
+                                            realm.commitTransaction();
+                                            realm.close();
+                                        }
+                                    }
+                                });
+                            } catch (Exception ex) {
+                                Log.d("DataSyncManager", "Line 754: " + ex.getMessage());
+                            }
+
                         }
                     }
 
-                    speaker.setEventsList(realmEventList);
-                } catch (Exception ex) {
-                    Log.d("DataSyncManager", "Line 727: " + ex.getMessage());
+                    realm.commitTransaction();
+                    realm.close();
+
+                    /*
+                } else {
+                    Log.d("DataSync", e.getMessage());
                 }
+                */
 
-                realm.commitTransaction();
-            } else {
-                realm.beginTransaction();
-
-                result.setObjectId(parseObject.getObjectId());
-                result.setName(parseObject.getString("name"));
-                result.setAllowCheckIn(parseObject.getBoolean("allowCheckIn"));
-                result.setIOS_code(parseObject.getString("IOS_code"));
-                result.setUpdatedAt(parseObject.getUpdatedAt());
-
-                ParseRelation<ParseObject> eventsRelation = parseObject.getRelation("event");
-
-                ParseQuery<ParseObject> eventsQuery = eventsRelation.getQuery();
-
-                try {
-                    List<ParseObject> eventsList = eventsQuery.find();
-
-                    RealmList<Event> realmEventList = new RealmList<Event>();
-
-                    for (ParseObject eventObj : eventsList) {
-                        Event event = realm.where(Event.class).equalTo("objectId", eventObj.getObjectId()).findFirst();
-                        if (event != null) {
-                            realmEventList.add(event);
-                        }
-                    }
-
-                    result.setEventsList(realmEventList);
-                } catch (Exception ex) {
-                    Log.d("DataSyncManager", "Line 754: " + ex.getMessage());
+                if (shouldSyncAll == true) {
+                    dataSyncAttendees();
+                } else {
+                    callback.onDataSyncFinish();
                 }
+            // }});
 
-                realm.commitTransaction();
-            }
-        }
 
-        dataSyncAttendees();
     }
 
     static public void dataSyncAttendees() {
@@ -862,83 +1286,160 @@ public class DataSyncManager {
             }
         } while (loopCloseCount > 0);
 
-        Log.d("DataSyncManager", "Start Processing Attendees: " + allObjects.size() + " objects");
 
-        for (ParseObject parseObject : allObjects) {
-            Realm realm = AppUtil.getRealmInstance(App.getInstance());
+        /*
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, com.parse.ParseException e) {
+                if (e == null) {
+                */
+                    Log.d("DataSyncManager", "Start Processing Attendees: " + allObjects.size() + " objects");
 
-            Attendee result = realm.where(Attendee.class).equalTo("objectId", parseObject.getObjectId()).findFirst();
+                    int counter = 1;
 
-            if (result == null) {
-                realm.beginTransaction();
+                    Realm realm = AppUtil.getRealmInstance(App.getInstance());
+                    realm.beginTransaction();
 
-                // Create an object
-                Attendee attendee = realm.createObject(Attendee.class);
+                    for (ParseObject parseObject : allObjects) {
 
-                attendee.setObjectId(parseObject.getObjectId());
-                attendee.setName(parseObject.getString("name"));
-                attendee.setAllowCheckIn(parseObject.getBoolean("allowCheckIn"));
-                attendee.setIOS_code(parseObject.getString("IOS_code"));
-                attendee.setUpdatedAt(parseObject.getUpdatedAt());
 
-                ParseRelation<ParseObject> eventsRelation = parseObject.getRelation("event");
+                        if (counter % 100 == 0) {
+                            Log.d("DataSyncManager", "Attendee Number: " + counter);
+                        }
+                        ++counter;
 
-                ParseQuery<ParseObject> eventsQuery = eventsRelation.getQuery();
+                        Attendee result = realm.where(Attendee.class).equalTo("objectId", parseObject.getObjectId()).findFirst();
 
-                try {
-                    List<ParseObject> eventsList = eventsQuery.find();
+                        if (result == null) {
+                            // realm.beginTransaction();
 
-                    RealmList<Event> realmEventList = new RealmList<Event>();
+                            // Create an object
+                            Attendee attendee = realm.createObject(Attendee.class, parseObject.getObjectId());
 
-                    for (ParseObject eventObj : eventsList) {
-                        Event event = realm.where(Event.class).equalTo("objectId", eventObj.getObjectId()).findFirst();
-                        if (event != null) {
-                            realmEventList.add(event);
+                            // attendee.setObjectId(parseObject.getObjectId());
+                            attendee.setName(parseObject.getString("name"));
+                            attendee.setAllowCheckIn(parseObject.getBoolean("allowCheckIn"));
+                            attendee.setIOS_code(parseObject.getString("IOS_code"));
+                            attendee.setUpdatedAt(parseObject.getUpdatedAt());
+
+                            attendee.setLocation(parseObject.getString("location"));
+                            attendee.setOrganization(parseObject.getString("organization"));
+                            attendee.setContactable(parseObject.getBoolean("isContactable"));
+
+                            attendee.setJob(parseObject.getString("job"));
+
+                            ParseObject conferenceObj = parseObject.getParseObject("conference");
+
+                            if (conferenceObj != null) {
+                                attendee.setConference(conferenceObj.getObjectId());
+                            }
+
+                            ParseFile parseImage = (ParseFile) parseObject.getParseFile("image");
+
+                            try {
+                                if (parseImage != null) {
+                                    attendee.setImage(parseImage.getData());
+                                }
+                            } catch (Exception ex) {
+                                Log.d("DataSyncManager", "Line 859 " + ex.getMessage());
+                            }
+
+                            ParseRelation<ParseObject> eventsRelation = parseObject.getRelation("event");
+
+                            ParseQuery<ParseObject> eventsQuery = eventsRelation.getQuery();
+
+                            /*
+                            try {
+                                List<ParseObject> eventsList = eventsQuery.find();
+
+                                RealmList<Event> realmEventList = new RealmList<Event>();
+
+                                for (ParseObject eventObj : eventsList) {
+                                    Event event = realm.where(Event.class).equalTo("objectId", eventObj.getObjectId()).findFirst();
+                                    if (event != null) {
+                                        realmEventList.add(event);
+                                    }
+                                }
+
+                                attendee.setEventsList(realmEventList);
+
+                            } catch (Exception ex) {
+                                Log.d("DataSyncManager", "Line 727: " + ex.getMessage());
+                            }
+                            */
+
+                        } else {
+
+                            // result.setObjectId(parseObject.getObjectId());
+                            result.setName(parseObject.getString("name"));
+                            result.setAllowCheckIn(parseObject.getBoolean("allowCheckIn"));
+                            result.setIOS_code(parseObject.getString("IOS_code"));
+                            result.setUpdatedAt(parseObject.getUpdatedAt());
+
+                            result.setLocation(parseObject.getString("location"));
+                            result.setOrganization(parseObject.getString("organization"));
+                            result.setContactable(parseObject.getBoolean("isContactable"));
+
+                            result.setJob(parseObject.getString("job"));
+
+                            ParseObject conferenceObj = parseObject.getParseObject("conference");
+
+                            if (conferenceObj != null) {
+                                result.setConference(conferenceObj.getObjectId());
+                            }
+
+                            ParseFile parseImage = (ParseFile) parseObject.getParseFile("image");
+
+                            try {
+                                if (parseImage != null) {
+                                    result.setImage(parseImage.getData());
+                                }
+                            } catch (Exception ex) {
+                                Log.d("DataSyncManager", "Line 755 " + ex.getMessage());
+                            }
+
+                            ParseRelation<ParseObject> eventsRelation = parseObject.getRelation("event");
+
+                            ParseQuery<ParseObject> eventsQuery = eventsRelation.getQuery();
+
+                            /*
+                            try {
+                                List<ParseObject> eventsList = eventsQuery.find();
+
+                                RealmList<Event> realmEventList = new RealmList<Event>();
+
+                                for (ParseObject eventObj : eventsList) {
+                                    Event event = realm.where(Event.class).equalTo("objectId", eventObj.getObjectId()).findFirst();
+                                    if (event != null) {
+                                        realmEventList.add(event);
+                                    }
+                                }
+
+                                result.setEventsList(realmEventList);
+                            } catch (Exception ex) {
+                                Log.d("DataSyncManager", "Line 754: " + ex.getMessage());
+                            }
+                            */
                         }
                     }
 
-                    attendee.setEventsList(realmEventList);
+                    realm.commitTransaction();
+                    realm.close();
 
-                } catch (Exception ex) {
-                    Log.d("DataSyncManager", "Line 727: " + ex.getMessage());
+                    /*
+                } else {
+                    Log.d("DataSync", e.getMessage());
+                }
+                */
+
+                if (shouldSyncAll == true) {
+                    dataSyncMasterNotifications();
+                } else {
+                    callback.onDataSyncFinish();
                 }
 
-                realm.commitTransaction();
-            } else {
-                realm.beginTransaction();
+            // }});
 
-                result.setObjectId(parseObject.getObjectId());
-                result.setName(parseObject.getString("name"));
-                result.setAllowCheckIn(parseObject.getBoolean("allowCheckIn"));
-                result.setIOS_code(parseObject.getString("IOS_code"));
-                result.setUpdatedAt(parseObject.getUpdatedAt());
-
-                ParseRelation<ParseObject> eventsRelation = parseObject.getRelation("event");
-
-                ParseQuery<ParseObject> eventsQuery = eventsRelation.getQuery();
-
-                try {
-                    List<ParseObject> eventsList = eventsQuery.find();
-
-                    RealmList<Event> realmEventList = new RealmList<Event>();
-
-                    for (ParseObject eventObj : eventsList) {
-                        Event event = realm.where(Event.class).equalTo("objectId", eventObj.getObjectId()).findFirst();
-                        if (event != null) {
-                            realmEventList.add(event);
-                        }
-                    }
-
-                    result.setEventsList(realmEventList);
-                } catch (Exception ex) {
-                    Log.d("DataSyncManager", "Line 754: " + ex.getMessage());
-                }
-
-                realm.commitTransaction();
-            }
-        }
-
-        dataSyncMasterNotifications();
     }
 
     static public void dataSyncMasterNotifications() {
@@ -952,6 +1453,7 @@ public class DataSyncManager {
 
         Log.d("DataSyncManager", "Start Query for Parse MasterNotifications");
 
+        /*
         List<ParseObject> allObjects = new ArrayList<ParseObject>();
 
         int countSkip = 0, loopCloseCount = 0;
@@ -971,52 +1473,71 @@ public class DataSyncManager {
                 loopCloseCount = 0;
             }
         } while (loopCloseCount > 0);
+        */
 
-        Log.d("DataSyncManager", "Start Processing MasterNotifications: " + allObjects.size() + " objects");
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, com.parse.ParseException e) {
+                if (e == null) {
 
-        for (ParseObject parseObject : allObjects) {
-            Realm realm = AppUtil.getRealmInstance(App.getInstance());
 
-            MasterNotification result = realm.where(MasterNotification.class).equalTo("objectId", parseObject.getObjectId()).findFirst();
+                    Log.d("DataSyncManager", "Start Processing MasterNotifications: " + objects.size() + " objects");
 
-            if (result == null) {
-                realm.beginTransaction();
+                    Realm realm = AppUtil.getRealmInstance(App.getInstance());
+                    realm.beginTransaction();
 
-                // Create an object
-                MasterNotification alert = realm.createObject(MasterNotification.class);
+                    for (ParseObject parseObject : objects) {
 
-                alert.setObjectId(parseObject.getObjectId());
-                alert.setAlert(parseObject.getString("alert"));
-                alert.setNew(true);
 
-                ParseObject conferenceObj = parseObject.getParseObject("conference");
+                        MasterNotification result = realm.where(MasterNotification.class).equalTo("objectId", parseObject.getObjectId()).findFirst();
 
-                if (conferenceObj != null) {
-                    alert.setConference(conferenceObj.getObjectId());
+                        if (result == null) {
+
+
+                            // Create an object
+                            MasterNotification alert = realm.createObject(MasterNotification.class, parseObject.getObjectId());
+
+                            // alert.setObjectId(parseObject.getObjectId());
+                            alert.setAlert(parseObject.getString("alert"));
+                            alert.setNew(true);
+
+                            ParseObject conferenceObj = parseObject.getParseObject("conference");
+
+                            if (conferenceObj != null) {
+                                alert.setConference(conferenceObj.getObjectId());
+                            }
+
+                            alert.setCreatedAt(parseObject.getCreatedAt());
+
+                        } else {
+
+                            // result.setObjectId(parseObject.getObjectId());
+                            result.setAlert(parseObject.getString("alert"));
+
+                            ParseObject conferenceObj = parseObject.getParseObject("conference");
+
+                            if (conferenceObj != null) {
+                                result.setConference(conferenceObj.getObjectId());
+                            }
+
+                            result.setCreatedAt(parseObject.getCreatedAt());
+
+                        }
+                    }
+
+                    realm.commitTransaction();
+                    realm.close();
+                } else {
+                    Log.d("DataSync", e.getMessage());
                 }
 
-                alert.setCreatedAt(parseObject.getCreatedAt());
-
-                realm.commitTransaction();
-            } else {
-                realm.beginTransaction();
-
-                result.setObjectId(parseObject.getObjectId());
-                result.setAlert(parseObject.getString("alert"));
-
-                ParseObject conferenceObj = parseObject.getParseObject("conference");
-
-                if (conferenceObj != null) {
-                    result.setConference(conferenceObj.getObjectId());
+                if (shouldSyncAll == true) {
+                    dataSyncMaps();
+                } else {
+                    callback.onDataSyncFinish();
                 }
+            }});
 
-                result.setCreatedAt(parseObject.getCreatedAt());
-
-                realm.commitTransaction();
-            }
-        }
-
-        dataSyncMaps();
     }
 
     static public void dataSyncMaps(){
@@ -1030,6 +1551,7 @@ public class DataSyncManager {
 
         Log.d("DataSyncManager", "Start Query for Parse Maps");
 
+        /*
         List<ParseObject> allObjects = new ArrayList<ParseObject>();
 
         int countSkip = 0, loopCloseCount = 0;
@@ -1049,69 +1571,85 @@ public class DataSyncManager {
                 loopCloseCount = 0;
             }
         } while (loopCloseCount > 0);
+        */
 
-        Log.d("DataSyncManager", "Start Processing Maps: " + allObjects.size() + " objects");
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, com.parse.ParseException e) {
+                if (e == null) {
+                    Log.d("DataSyncManager", "Start Processing Maps: " + objects.size() + " objects");
 
-        for (ParseObject parseObject : allObjects) {
-            Realm realm = AppUtil.getRealmInstance(App.getInstance());
+                    Realm realm = AppUtil.getRealmInstance(App.getInstance());
+                    realm.beginTransaction();
 
-            Maps result = realm.where(Maps.class).equalTo("objectId", parseObject.getObjectId()).findFirst();
+                    for (ParseObject parseObject : objects) {
 
-            if (result == null) {
-                realm.beginTransaction();
 
-                // Create an object
-                Maps map = realm.createObject(Maps.class);
+                        Maps result = realm.where(Maps.class).equalTo("objectId", parseObject.getObjectId()).findFirst();
 
-                map.setObjectId(parseObject.getObjectId());
-                map.setLabel(parseObject.getString("label"));
+                        if (result == null) {
 
-                ParseObject conferenceObj = parseObject.getParseObject("conference");
+                            // Create an object
+                            Maps map = realm.createObject(Maps.class, parseObject.getObjectId());
 
-                if (conferenceObj != null) {
-                    map.setConference(conferenceObj.getObjectId());
-                }
+                            // map.setObjectId(parseObject.getObjectId());
+                            map.setLabel(parseObject.getString("label"));
 
-                ParseFile parseMapImage = (ParseFile) parseObject.getParseFile("map");
+                            ParseObject conferenceObj = parseObject.getParseObject("conference");
 
-                try {
-                    if (parseMapImage != null) {
-                        map.setUrl(parseMapImage.getUrl());
-                        map.setMap(parseMapImage.getData());
+                            if (conferenceObj != null) {
+                                map.setConference(conferenceObj.getObjectId());
+                            }
+
+                            ParseFile parseMapImage = (ParseFile) parseObject.getParseFile("map");
+
+                            try {
+                                if (parseMapImage != null) {
+                                    map.setUrl(parseMapImage.getUrl());
+                                    map.setMap(parseMapImage.getData());
+                                }
+                            } catch (Exception ex) {
+                                Log.d("DataSyncManager", "Line 231 " + ex.getMessage());
+                            }
+
+                        } else {
+
+                            // result.setObjectId(parseObject.getObjectId());
+                            result.setLabel(parseObject.getString("label"));
+
+                            ParseObject conferenceObj = parseObject.getParseObject("conference");
+
+                            if (conferenceObj != null) {
+                                result.setConference(conferenceObj.getObjectId());
+                            }
+
+                            ParseFile parseMapImage = (ParseFile) parseObject.getParseFile("map");
+
+                            try {
+                                if (parseMapImage != null) {
+                                    result.setUrl(parseMapImage.getUrl());
+                                    result.setMap(parseMapImage.getData());
+                                }
+                            } catch (Exception ex) {
+                                Log.d("DataSyncManager", "Line 1087 " + ex.getMessage());
+                            }
+
+
+                        }
                     }
-                } catch (Exception ex) {
-                    Log.d("DataSyncManager", "Line 231 " + ex.getMessage());
+
+                    realm.commitTransaction();
+                    realm.close();
+                } else {
+                    Log.d("DataSync", e.getMessage());
                 }
 
-                realm.commitTransaction();
-            } else {
-                realm.beginTransaction();
-
-                result.setObjectId(parseObject.getObjectId());
-                result.setLabel(parseObject.getString("label"));
-
-                ParseObject conferenceObj = parseObject.getParseObject("conference");
-
-                if (conferenceObj != null) {
-                    result.setConference(conferenceObj.getObjectId());
+                if (shouldSyncAll == true) {
+                    dataSyncSponsors();
+                } else {
+                    callback.onDataSyncFinish();
                 }
-
-                ParseFile parseMapImage = (ParseFile) parseObject.getParseFile("map");
-
-                try {
-                    if (parseMapImage != null) {
-                        result.setUrl(parseMapImage.getUrl());
-                        result.setMap(parseMapImage.getData());
-                    }
-                } catch (Exception ex) {
-                    Log.d("DataSyncManager", "Line 1087 " + ex.getMessage());
-                }
-
-                realm.commitTransaction();
-            }
-        }
-
-        dataSyncSponsors();
+            }});
     }
 
     static public void dataSyncSponsors() {
@@ -1125,6 +1663,121 @@ public class DataSyncManager {
 
         Log.d("DataSyncManager", "Start Query for Parse Sponsors");
 
+        /*
+        List<ParseObject> allObjects = new ArrayList<ParseObject>();
+
+        int countSkip = 0, loopCloseCount = 0;
+        do {
+            query.setLimit(1000);
+            query.setSkip(countSkip);
+            List<ParseObject> objects = null;
+            try {
+                objects = query.find();
+                loopCloseCount = objects.size();
+                countSkip += objects.size();
+                if (loopCloseCount > 0) {
+                    allObjects.addAll(objects);
+                }
+            } catch (com.parse.ParseException e) {
+                e.printStackTrace();
+                loopCloseCount = 0;
+            }
+        } while (loopCloseCount > 0);
+        */
+
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, com.parse.ParseException e) {
+                if (e == null) {
+                    Log.d("DataSyncManager", "Start Processing Sponsors: " + objects.size() + " objects");
+
+                    Realm realm = AppUtil.getRealmInstance(App.getInstance());
+                    realm.beginTransaction();
+
+                    for (ParseObject parseObject : objects) {
+
+                        Sponsor result = realm.where(Sponsor.class).equalTo("objectId", parseObject.getObjectId()).findFirst();
+
+                        if (result == null) {
+
+                            // Create an object
+                            Sponsor sponsor = realm.createObject(Sponsor.class, parseObject.getObjectId());
+
+                            // sponsor.setObjectId(parseObject.getObjectId());
+
+                            sponsor.setName(parseObject.getString("name"));
+                            sponsor.setType(parseObject.getString("type"));
+                            sponsor.setWebsite(parseObject.getString("website"));
+
+                            ParseObject conferenceObj = parseObject.getParseObject("conference");
+
+                            if (conferenceObj != null) {
+                                sponsor.setConference(conferenceObj.getObjectId());
+                            }
+
+                            ParseFile parseImage = (ParseFile) parseObject.getParseFile("logo");
+
+                            try {
+                                if (parseImage != null) {
+                                    sponsor.setLogo(parseImage.getData());
+                                }
+                            } catch (Exception ex) {
+                                Log.d("DataSyncManager", "Line 1159 " + ex.getMessage());
+                            }
+
+                        } else {
+
+
+                            // result.setObjectId(parseObject.getObjectId());
+                            result.setName(parseObject.getString("name"));
+                            result.setType(parseObject.getString("type"));
+                            result.setWebsite(parseObject.getString("website"));
+
+                            ParseObject conferenceObj = parseObject.getParseObject("conference");
+
+                            if (conferenceObj != null) {
+                                result.setConference(conferenceObj.getObjectId());
+                            }
+
+                            ParseFile parseImage = (ParseFile) parseObject.getParseFile("logo");
+
+                            try {
+                                if (parseImage != null) {
+                                    result.setLogo(parseImage.getData());
+                                }
+                            } catch (Exception ex) {
+                                Log.d("DataSyncManager", "Line 1159 " + ex.getMessage());
+                            }
+
+                        }
+                    }
+                    realm.commitTransaction();
+                    realm.close();
+                } else {
+                    Log.d("DataSync", e.getMessage());
+                }
+
+                if (shouldSyncAll == true) {
+                    dataSyncSpeakerEventCache();
+                } else {
+                    callback.onDataSyncFinish();
+                }
+            }});
+
+    }
+
+    static public void dataSyncSpeakerEventCache() {
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("IOS_SPEAKER_EVENT_CACHE").setLimit(1000);
+
+        Date date = getLastSyncDate();
+
+        if (date != null) {
+            query.whereGreaterThanOrEqualTo("updatedAt", date).whereNotEqualTo("isDeleted", true);
+        }
+
+
+        Log.d("DataSyncManager", "Start Query for Parse IOS_SPEAKER_EVENT_CACHE ");
+
         List<ParseObject> allObjects = new ArrayList<ParseObject>();
 
         int countSkip = 0, loopCloseCount = 0;
@@ -1145,71 +1798,63 @@ public class DataSyncManager {
             }
         } while (loopCloseCount > 0);
 
-        Log.d("DataSyncManager", "Start Processing Sponsors: " + allObjects.size() + " objects");
 
-        for (ParseObject parseObject : allObjects) {
-            Realm realm = AppUtil.getRealmInstance(App.getInstance());
+        /*
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, com.parse.ParseException e) {
+                if (e == null) {
+                */
 
-            Sponsor result = realm.where(Sponsor.class).equalTo("objectId", parseObject.getObjectId()).findFirst();
+                    Log.d("DataSyncManager", "Start Processing SpeakerEventCache: " + allObjects.size() + " objects");
 
-            if (result == null) {
-                realm.beginTransaction();
+                    int counter = 1;
 
-                // Create an object
-                Sponsor sponsor = realm.createObject(Sponsor.class);
+                    Realm realm = AppUtil.getRealmInstance(App.getInstance());
+                    realm.beginTransaction();
 
-                sponsor.setObjectId(parseObject.getObjectId());
-                sponsor.setName(parseObject.getString("name"));
-                sponsor.setType(parseObject.getString("type"));
-                sponsor.setWebsite(parseObject.getString("website"));
+                    for (ParseObject parseObject : allObjects) {
 
-                ParseObject conferenceObj = parseObject.getParseObject("conference");
 
-                if (conferenceObj != null) {
-                    sponsor.setConference(conferenceObj.getObjectId());
-                }
+                        if (counter % 100 == 0) {
+                            Log.d("DataSyncManager", "SpeakerEventCache Number: " + counter);
+                        }
+                        ++counter;
 
-                ParseFile parseImage = (ParseFile) parseObject.getParseFile("logo");
+                        SpeakerEventCache result = realm.where(SpeakerEventCache.class).equalTo("objectId", parseObject.getObjectId()).findFirst();
 
-                try {
-                    if (parseImage != null) {
-                        sponsor.setLogo(parseImage.getData());
+                        if (result == null) {
+
+                            // Create an object
+                            SpeakerEventCache cache = realm.createObject(SpeakerEventCache.class, parseObject.getObjectId());
+
+                            // cache.setObjectId(parseObject.getObjectId());
+                            cache.setEventID(parseObject.getString("eventID"));
+                            cache.setSpeakerID(parseObject.getString("speakerID"));
+
+                        } else {
+
+
+                            // result.setObjectId(parseObject.getObjectId());
+                            result.setEventID(parseObject.getString("eventID"));
+                            result.setSpeakerID(parseObject.getString("speakerID"));
+
+
+                        }
                     }
-                } catch (Exception ex) {
-                    Log.d("DataSyncManager", "Line 1159 " + ex.getMessage());
+
+                    realm.commitTransaction();
+                    realm.close();
+                    /*
+                } else {
+                    Log.d("DataSync", e.getMessage());
                 }
+                */
 
-                realm.commitTransaction();
-            } else {
-                realm.beginTransaction();
-
-                result.setObjectId(parseObject.getObjectId());
-                result.setName(parseObject.getString("name"));
-                result.setType(parseObject.getString("type"));
-                result.setWebsite(parseObject.getString("website"));
-
-                ParseObject conferenceObj = parseObject.getParseObject("conference");
-
-                if (conferenceObj != null) {
-                    result.setConference(conferenceObj.getObjectId());
-                }
-
-                ParseFile parseImage = (ParseFile) parseObject.getParseFile("logo");
-
-                try {
-                    if (parseImage != null) {
-                        result.setLogo(parseImage.getData());
-                    }
-                } catch (Exception ex) {
-                    Log.d("DataSyncManager", "Line 1159 " + ex.getMessage());
-                }
-
-                realm.commitTransaction();
-            }
-        }
-
-        callback.onDataSyncFinish();
+                callback.onDataSyncFinish();
+            // }});
     }
+
 
     static public void setLastSyncDate(Date syncDate) {
         DateFormat df = new SimpleDateFormat(AppConfig.defaultDateTimeFormat);
@@ -1223,7 +1868,7 @@ public class DataSyncManager {
 
     static public Date getLastSyncDate() {
         SharedPreferences prefs = context.getSharedPreferences(AppConfig.sharedPrefsName, MODE_PRIVATE);
-        String lastSyncDateStr = prefs.getString(AppConfig.lastSyncDateName, "2010-01-01T00:00:00");
+        String lastSyncDateStr = prefs.getString(AppConfig.lastSyncDateName, "2017-05-15T17:00:00");
 
         SimpleDateFormat isoFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
         isoFormat.setTimeZone(TimeZone.getTimeZone("UTC"));

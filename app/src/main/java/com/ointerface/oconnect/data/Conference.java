@@ -4,12 +4,14 @@ import java.util.Date;
 
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
+import io.realm.annotations.Required;
 
 /**
  * Created by AnthonyDoan on 4/11/17.
  */
 
 public class Conference extends RealmObject {
+    @Required
     @PrimaryKey
     private String objectId = "";
     private boolean showQRScanner = true;

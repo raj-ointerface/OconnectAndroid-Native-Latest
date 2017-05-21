@@ -29,6 +29,7 @@ import java.util.ArrayList;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
+import io.realm.Sort;
 
 import static android.view.View.GONE;
 
@@ -184,7 +185,7 @@ public class MyNotesActivity extends OConnectBaseActivity {
 
         RealmResults<MyNote> myNotesResults;
 
-        myNotesResults  = realm.where(MyNote.class).equalTo("Conference", AppUtil.getSelectedConferenceID(MyNotesActivity.this)).equalTo("User", currentPerson.getObjectId()).notEqualTo("isDeleted", true).findAllSorted("createdAt", true);
+        myNotesResults  = realm.where(MyNote.class).equalTo("Conference", AppUtil.getSelectedConferenceID(MyNotesActivity.this)).equalTo("User", currentPerson.getObjectId()).notEqualTo("isDeleted", true).findAllSorted("createdAt", Sort.ASCENDING);
 
         mData = new ArrayList<MyNote>();
         markForDeleteList = new ArrayList<Boolean>();

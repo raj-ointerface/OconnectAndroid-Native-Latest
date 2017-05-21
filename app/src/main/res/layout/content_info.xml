@@ -178,7 +178,8 @@
             android:layout_width="0dp"
             android:layout_height="60dp"
             android:orientation="vertical"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:onClick="websiteClicked">
             <ImageView
                 android:id="@+id/ivWebsite"
                 android:background="@drawable/icon_globe"
@@ -200,7 +201,8 @@
             android:layout_width="0dp"
             android:layout_height="80dp"
             android:orientation="vertical"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:onClick="parkingClicked">
             <ImageView
                 android:id="@+id/ivParking"
                 android:background="@drawable/icon_parking"
@@ -222,7 +224,8 @@
             android:layout_width="0dp"
             android:layout_height="80dp"
             android:orientation="vertical"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:onClick="travelClicked">
             <ImageView
                 android:id="@+id/ivTravel"
                 android:background="@drawable/icon_travel"
@@ -244,7 +247,8 @@
             android:layout_width="0dp"
             android:layout_height="80dp"
             android:orientation="vertical"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:onClick="contactUsClicked">
             <ImageView
                 android:id="@+id/ivContactUs"
                 android:background="@drawable/icon_envelop"

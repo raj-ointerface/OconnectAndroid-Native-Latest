@@ -7,7 +7,20 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.ointerface.oconnect.ConferenceListViewActivity">
-
+    <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:context="com.ointerface.oconnect.ConferenceListViewActivity">
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        android:background="@color/colorOconnectDefault">
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
     <android.support.v7.widget.Toolbar
         android:id="@+id/my_toolbar"
         android:layout_width="match_parent"
@@ -16,15 +29,35 @@
         android:elevation="4dp"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/title_activity_conference_list_view"
-            android:layout_gravity="center"
-            android:textSize="24sp"
-            android:textColor="@color/colorWhite"
-            android:id="@+id/toolbar_title" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/title_activity_conference_list_view"
+                android:layout_centerInParent="true"
+                android:textSize="24sp"
+                android:textColor="@color/colorWhite"
+                android:id="@+id/tvTitle" />
+            <TextView
+                android:id="@+id/tvHeaderCancel"
+                android:text="Cancel"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="15dp"
+                android:layout_centerVertical="true"
+                android:gravity="center_vertical"
+                android:textColor="@color/colorWhite"
+                android:textSize="14sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
+        </RelativeLayout>
         </android.support.v7.widget.Toolbar>
+    </RelativeLayout>
+    </android.support.design.widget.AppBarLayout>
+    </android.support.design.widget.CoordinatorLayout>
 
     <android.support.v7.widget.SearchView
         android:id="@+id/search"
@@ -54,7 +87,7 @@
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/navigation"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
         android:layout_gravity="bottom"
         android:background="?android:attr/windowBackground"
         app:menu="@menu/navigation" />

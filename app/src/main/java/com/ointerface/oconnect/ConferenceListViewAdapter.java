@@ -126,6 +126,7 @@ public class ConferenceListViewAdapter extends BaseAdapter {
                     break;
                 case TYPE_SEPARATOR:
                     convertView = mInflater.inflate(R.layout.conference_list_header, null);
+                    convertView.setBackgroundColor(ConferenceListViewActivity.customColor);
                     holder.tvHeader = (TextView) convertView.findViewById(R.id.textSeparator);
                     holder.tvHeader.setText(conference.getGroup());
                     if (conference.getGroup() == null || conference.getGroup().equalsIgnoreCase("")) {

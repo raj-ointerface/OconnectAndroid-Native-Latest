@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.ointerface.oconnect.R;
 import com.ointerface.oconnect.data.MasterNotification;
+import com.ointerface.oconnect.util.AppUtil;
 
 import java.util.ArrayList;
 import java.util.TreeSet;
@@ -95,6 +96,7 @@ public class AnnouncementsListViewAdapter extends BaseAdapter {
 
         if (announcement.isNew() == true) {
             tvNew.setVisibility(View.VISIBLE);
+            tvNew.setTextColor(AppUtil.getPrimaryThemColorAsInt());
         } else {
             tvNew.setVisibility(GONE);
         }

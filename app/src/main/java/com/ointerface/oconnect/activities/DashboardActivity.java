@@ -3,6 +3,7 @@ package com.ointerface.oconnect.activities;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.IntDef;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
@@ -31,9 +32,12 @@ import com.ointerface.oconnect.util.AppUtil;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
+import io.realm.Sort;
 
 public class DashboardActivity extends OConnectBaseActivity {
 
@@ -64,41 +68,21 @@ public class DashboardActivity extends OConnectBaseActivity {
 
         super.onCreateDrawer();
 
-        /*
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-        */
-
         tvToolbarTitle = (TextView) findViewById(R.id.tvToolbarTitle);
 
         tvToolbarTitle.setText("");
 
-        if (selectedConference.isShowDashboard() == false) {
+        if (selectedConference != null && selectedConference.isShowDashboard() == false) {
             Intent i = new Intent(DashboardActivity.this, ScheduleActivity.class);
             startActivity(i);
             finish();
         }
 
-        /*
-        if (AppUtil.getIsSignedIn(DashboardActivity.this) == false) {
-            Intent i = new Intent(DashboardActivity.this, SignInActivity1.class);
-            startActivity(i);
-            overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up);
-        }
-        */
-
         tvConferenceTitle = (TextView) findViewById(R.id.tvConferenceTitle);
 
-        tvConferenceTitle.setText(selectedConference.getName());
+        if (selectedConference != null) {
+            tvConferenceTitle.setText(selectedConference.getName());
+        }
 
         tvTwitterText = (TextView) findViewById(R.id.tvTwitterText);
 
@@ -139,18 +123,44 @@ public class DashboardActivity extends OConnectBaseActivity {
         lvEvents = (ListView) findViewById(R.id.lvEvents);
 
         lvEvents.setAdapter(adapter);
+
+        Calendar cal = Calendar.getInstance();
+
+        Date dateTimeNow = cal.getTime();
+
+        for (int i = 0; i < adapter.eventsList.size(); ++i) {
+            Event currentEvent = adapter.eventsList.get(i);
+
+            if (currentEvent.getStartTime().before(dateTimeNow) && currentEvent.getEndTime().after(dateTimeNow)) {
+                lvEvents.setSelection(i);
+                break;
+            }
+        }
+
+        if (adapter.eventsList.size() > 0) {
+            Event currentEvent = adapter.eventsList.get(0);
+            if (currentEvent.getStartTime().after(dateTimeNow)) {
+                lvEvents.setSelection(0);
+            } else {
+                Event lastEvent = adapter.eventsList.get(adapter.eventsList.size() - 1);
+                if (lastEvent.getEndTime().before(dateTimeNow)) {
+                    lvEvents.setSelection(adapter.eventsList.size() - 1);
+                }
+            }
+        }
     }
 
     @Override
     public void onResume() {
         super.onResume();  // Always call the superclass method first
         removeFirstHeaderInNav();
+        super.onCreateDrawer();
     }
 
     public void getListViewData() {
         Realm realm = AppUtil.getRealmInstance(App.getInstance());
 
-        RealmResults<Session> sessionResults = realm.where(Session.class).equalTo("conference", AppUtil.getSelectedConferenceID(DashboardActivity.this)).findAllSorted("startTime", true);
+        RealmResults<Session> sessionResults = realm.where(Session.class).equalTo("conference", AppUtil.getSelectedConferenceID(DashboardActivity.this)).findAllSorted("startTime", Sort.ASCENDING);
 
         eventsArr = new ArrayList<Event>();
         sessionNamesArr = new ArrayList<String>();
@@ -158,7 +168,7 @@ public class DashboardActivity extends OConnectBaseActivity {
         for (int i = 0; i < sessionResults.size(); ++i) {
             Session currentSession = sessionResults.get(i);
 
-            RealmResults<Event> eventResults = realm.where(Event.class).findAllSorted("startTime", true);
+            RealmResults<Event> eventResults = realm.where(Event.class).findAllSorted("startTime", Sort.ASCENDING);
 
             for (int j = 0; j < eventResults.size(); ++j) {
                 Event currentEvent = eventResults.get(j);
@@ -173,16 +183,43 @@ public class DashboardActivity extends OConnectBaseActivity {
     }
 
     public void messageSpeakersClicked(View view) {
-        AlertDialog alertDialog = new AlertDialog.Builder(DashboardActivity.this).create();
-        alertDialog.setTitle("Not Available");
-        alertDialog.setMessage("This feature is unavailable.");
-        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-        alertDialog.show();
+        Intent i = new Intent(DashboardActivity.this, ParticipantsActivity.class);
+        startActivity(i);
+    }
+
+    public void alertsClicked (View view) {
+        Intent i = new Intent(DashboardActivity.this, AnnouncementsActivity.class);
+        startActivity(i);
+    }
+
+    public void addANoteClicked (View view) {
+        if (AppUtil.getIsSignedIn(DashboardActivity.this) == false) {
+            AppUtil.displayPleaseSignInDialog(DashboardActivity.this);
+            return;
+        }
+        Intent i = new Intent(DashboardActivity.this, MyNotesActivity.class);
+        startActivity(i);
+    }
+
+    public void myAgendaClicked (View view) {
+        if (AppUtil.getIsSignedIn(DashboardActivity.this) == false) {
+            AppUtil.displayPleaseSignInDialog(DashboardActivity.this);
+            return;
+        }
+        Intent i = new Intent(DashboardActivity.this, MyAgendaActivity.class);
+        startActivity(i);
+    }
+
+    public void makeConnectionsClicked (View view) {
+        // AppUtil.displayNotImplementedDialog(DashboardActivity.this);
+
+        Intent i = new Intent(DashboardActivity.this, ConnectionsActivity.class);
+        startActivity(i);
+    }
+
+    public void infoClicked (View view) {
+        Intent i = new Intent(DashboardActivity.this, InfoActivity.class);
+        startActivity(i);
     }
 
     public void threeDotsClicked(View view) {

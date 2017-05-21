@@ -16,11 +16,23 @@
 
     <TextView
         android:id="@+id/tvMenuText"
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:textSize="14sp"
         android:textColor="@color/colorWhite"
          />
+
+    <TextView
+        android:id="@+id/tvAlertText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="3dp"
+        android:layout_marginTop="-5dp"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/holo_red_light"
+        android:visibility="gone"
+        />
 
 </LinearLayout>

@@ -1,7 +1,9 @@
 package com.ointerface.oconnect.activities;
 
+import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -10,6 +12,8 @@ import android.net.Uri;
 import android.os.Environment;
 import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -28,6 +32,7 @@ import com.ointerface.oconnect.data.Person;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
 
 import java.io.ByteArrayOutputStream;
@@ -161,12 +166,18 @@ public class CreateAccountActivity extends AppCompatActivity {
 
             ParseFile image1 = new ParseFile(user.getObjectId() + ".png", data);
 
+            try {
+                image1.save();
+            } catch (Exception ex) {
+                Log.d("APD", ex.getMessage());
+            }
+
             user.put("pictureURL", image1.getUrl());
         }
 
         try {
             user.save();
-            OConnectBaseActivity.currentPerson = Person.saveFromParseUser(user);
+            OConnectBaseActivity.currentPerson = Person.saveFromParseUser(user, false);
         } catch (Exception ex) {
             Log.d("CreateAccount", ex.getMessage());
         }
@@ -193,8 +204,18 @@ public class CreateAccountActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int item) {
                 if (items[item].equals("Take Photo")) {
-                    Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    startActivityForResult(takePicture, 0);
+                    String[] permission = {"android.permission.CAMERA"};
+
+                    if (ContextCompat.checkSelfPermission(CreateAccountActivity.this,
+                            Manifest.permission.CAMERA)
+                            != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(CreateAccountActivity.this,
+                                permission, 10);
+                    }else{
+                        Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        startActivityForResult(takePicture, 0);
+                    }
+
                 } else if (items[item].equals("Choose from Library")) {
                     Intent pickPhoto = new Intent(Intent.ACTION_PICK,
                             android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -242,6 +263,12 @@ public class CreateAccountActivity extends AppCompatActivity {
                     ivProfile.setImageBitmap(bmp);
 
                     isProfilePictureTaken = true;
+                }
+                break;
+            case 10:
+                if(resultCode == RESULT_OK) {
+                    Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    startActivityForResult(takePicture, 0);
                 }
                 break;
         }

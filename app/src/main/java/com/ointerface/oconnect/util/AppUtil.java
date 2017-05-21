@@ -6,16 +6,32 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
+import android.graphics.drawable.Drawable;
+import android.icu.text.IDNA;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.text.InputType;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.ointerface.oconnect.App;
 import com.ointerface.oconnect.ConferenceListViewActivity;
 import com.ointerface.oconnect.R;
 import com.ointerface.oconnect.activities.DashboardActivity;
+import com.ointerface.oconnect.activities.InfoActivity;
+import com.ointerface.oconnect.activities.MapsListActivity;
+import com.ointerface.oconnect.activities.OConnectBaseActivity;
+import com.ointerface.oconnect.activities.ParticipantsActivity;
+import com.ointerface.oconnect.activities.SignInActivity1;
+import com.ointerface.oconnect.activities.SurveyActivity;
+import com.ointerface.oconnect.data.Conference;
 import com.parse.GetDataCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -79,6 +95,18 @@ public class AppUtil {
     static public void setIsSignedIn (Context context, boolean value) {
         SharedPreferences.Editor editor = context.getSharedPreferences(AppConfig.sharedPrefsName, MODE_PRIVATE).edit();
         editor.putBoolean(AppConfig.sharedPrefsIsSignedIn, value);
+        editor.commit();
+    }
+
+    static public boolean getIsLeftNavUnlocked (Context context) {
+        SharedPreferences prefs = context.getSharedPreferences(AppConfig.sharedPrefsName, MODE_PRIVATE);
+        boolean isUnlocked = prefs.getBoolean(AppConfig.getSharedPrefsNavItemPasswordEntered, false);
+        return isUnlocked;
+    }
+
+    static public void setIsLeftNavUnlocked (Context context, boolean value) {
+        SharedPreferences.Editor editor = context.getSharedPreferences(AppConfig.getSharedPrefsNavItemPasswordEntered, MODE_PRIVATE).edit();
+        editor.putBoolean(AppConfig.getSharedPrefsNavItemPasswordEntered, value);
         editor.commit();
     }
 
@@ -199,4 +227,102 @@ public class AppUtil {
         alertDialog.show();
     }
 
+    public static int getPrimaryThemColorAsInt() {
+        if (OConnectBaseActivity.selectedConference != null &&
+                OConnectBaseActivity.selectedConference.getColor() != null &&
+                !OConnectBaseActivity.selectedConference.getColor().equalsIgnoreCase("")
+                && !OConnectBaseActivity.selectedConference.getColor().equalsIgnoreCase("#")) {
+            return Color.parseColor(OConnectBaseActivity.selectedConference.getColor());
+        } else {
+            return AppConfig.defaultThemeColor;
+        }
+    }
+
+    public static void displayNavPassword(final Context context, final int menuItemResID) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Enter Password");
+
+        final EditText input = new EditText(context);
+
+        input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        builder.setView(input);
+
+        builder.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                if (input.getText().toString().contentEquals(OConnectBaseActivity.selectedConference.getInappPassword())) {
+                    AppUtil.setIsLeftNavUnlocked(context, true);
+
+                    if (menuItemResID == R.drawable.icon_maps) {
+                        Intent i = new Intent(context, MapsListActivity.class);
+                        context.startActivity(i);
+                    } else if (menuItemResID == R.drawable.ic_person) {
+                        Intent i = new Intent(context, ParticipantsActivity.class);
+                        context.startActivity(i);
+                    } else if (menuItemResID == R.drawable.icon_survey) {
+                        Intent i = new Intent(context, SurveyActivity.class);
+                        context.startActivity(i);
+                    } else if (menuItemResID == R.drawable.icon_info) {
+                        Intent i = new Intent(context, InfoActivity.class);
+                        context.startActivity(i);
+                    }
+                } else {
+                    AlertDialog alertDialog = new AlertDialog.Builder(context).create();
+                    alertDialog.setTitle("Error");
+                    alertDialog.setMessage("Password is incorrect.  Please try again.");
+                    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                }
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+
+        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+
+        dialog.show();
+    }
+
+    public static Drawable changeDrawableColor(Context context,int icon, int newColor) {
+        Drawable mDrawable = ContextCompat.getDrawable(context, icon).mutate();
+        mDrawable.setColorFilter(new PorterDuffColorFilter(newColor, PorterDuff.Mode.SRC_IN));
+        return mDrawable;
+    }
+
+    public static void displayNotImplementedDialog(Context context) {
+        AlertDialog alertDialog = new AlertDialog.Builder(context).create();
+        alertDialog.setTitle("Message");
+        alertDialog.setMessage("This feature is not implemented yet.");
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+        alertDialog.show();
+    }
+
+    static public boolean getDefaultRealmLoaded (Context context) {
+        SharedPreferences prefs = context.getSharedPreferences(AppConfig.sharedPrefsName, MODE_PRIVATE);
+        boolean value = prefs.getBoolean(AppConfig.getSharedPrefsDefaultRealmLoaded, false);
+        return value;
+    }
+
+    static public void setDefaultRealmLoaded (Context context, boolean value) {
+        SharedPreferences.Editor editor = context.getSharedPreferences(AppConfig.sharedPrefsName, MODE_PRIVATE).edit();
+        editor.putBoolean(AppConfig.getSharedPrefsDefaultRealmLoaded, value);
+        editor.commit();
+    }
 }

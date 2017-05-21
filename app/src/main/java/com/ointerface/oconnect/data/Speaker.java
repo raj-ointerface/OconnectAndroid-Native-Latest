@@ -7,12 +7,14 @@ import java.util.List;
 import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
+import io.realm.annotations.Required;
 
 /**
  * Created by AnthonyDoan on 4/18/17.
  */
 
 public class Speaker extends RealmObject {
+    @Required
     @PrimaryKey
     private String objectId = "";
     private String name = "";
@@ -21,6 +23,78 @@ public class Speaker extends RealmObject {
     private String IOS_code = "";
     private RealmList<Event> eventsList = new RealmList<Event>();
     private Date updatedAt = null;
+    private String organization = "";
+    private String location = "";
+    private boolean isContactable = true;
+    private String conference = "";
+    private String job = "";
+    private byte[] image = null;
+    private String speakerLabel = "Speakers";
+    private String bio = "";
+
+    public String getBio() {
+        return bio;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
+    }
+
+    public String getSpeakerLabel() {
+        return speakerLabel;
+    }
+
+    public void setSpeakerLabel(String speakerLabel) {
+        this.speakerLabel = speakerLabel;
+    }
+
+    public byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
+    }
+
+    public String getJob() {
+        return job;
+    }
+
+    public void setJob(String job) {
+        this.job = job;
+    }
+
+    public String getConference() {
+        return conference;
+    }
+
+    public void setConference(String conference) {
+        this.conference = conference;
+    }
+
+    public String getOrganization() {
+        return organization;
+    }
+
+    public void setOrganization(String organization) {
+        this.organization = organization;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public boolean isContactable() {
+        return isContactable;
+    }
+
+    public void setContactable(boolean contactable) {
+        isContactable = contactable;
+    }
 
     public RealmList<Event> getEventsList() {
         return eventsList;

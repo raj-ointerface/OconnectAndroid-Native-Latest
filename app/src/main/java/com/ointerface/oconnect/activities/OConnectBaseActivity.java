@@ -12,14 +12,18 @@ import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.widget.SearchView;
 import android.util.DisplayMetrics;
+import android.util.Log;
+import android.view.DragEvent;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -32,9 +36,12 @@ import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.ointerface.oconnect.App;
@@ -47,17 +54,24 @@ import com.ointerface.oconnect.containers.MenuItemHolder;
 import com.ointerface.oconnect.data.Conference;
 import com.ointerface.oconnect.data.DataSyncManager;
 import com.ointerface.oconnect.data.IDataSyncListener;
+import com.ointerface.oconnect.data.MasterNotification;
 import com.ointerface.oconnect.data.Person;
 import com.ointerface.oconnect.fragments.SearchDialogFragment;
 import com.ointerface.oconnect.util.AppUtil;
+import com.parse.ParseUser;
 
+import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Realm;
+import io.realm.RealmList;
+import io.realm.RealmResults;
 
 import static android.view.View.GONE;
 
@@ -89,6 +103,18 @@ public class OConnectBaseActivity extends AppCompatActivity
     public DrawerLayout drawer;
 
     public boolean isTransparentToolbar = false;
+    public boolean bJustSignedOut = false;
+
+    public TextView tvName;
+    public CircleImageView ivProfilePicture;
+    public Switch switchContactable;
+    public TextView tvRightNavHeader;
+
+    public Bitmap bmp;
+    public Button btnConnections;
+    public TextView tvSignOut;
+    public ImageView ivSignOut;
+    public ImageView ivAccountEdit;
 
     protected void onCreateDrawer() {
         // super.onCreate(savedInstanceState);
@@ -111,7 +137,7 @@ public class OConnectBaseActivity extends AppCompatActivity
         toolbar.setTitle("");
 
 
-        if (selectedConference.getColor() != null &&
+        if (selectedConference != null && selectedConference.getColor() != null &&
                 !selectedConference.getColor().equalsIgnoreCase("")
                 && !selectedConference.getColor().equalsIgnoreCase("#") &&
                 isTransparentToolbar == false) {
@@ -135,6 +161,14 @@ public class OConnectBaseActivity extends AppCompatActivity
         ivProfileLanyard.setVisibility(GONE);
 
         ivHelp = (ImageView) toolbar.findViewById(R.id.ivQuestion);
+
+        ivHelp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(OConnectBaseActivity.this, HelpViewPagerActivity.class);
+                startActivity(i);
+            }
+        });
 
         ivHelp.setVisibility(GONE);
 
@@ -170,43 +204,143 @@ public class OConnectBaseActivity extends AppCompatActivity
         tvEdit = (TextView) toolbar.findViewById(R.id.tvHeaderEdit);
         tvEdit.setVisibility(GONE);
 
-        /*  Use following code to change icon to different colors
-        int color = Color.parseColor("#3CB371");
-
-        Drawable wrappedDrawable = DrawableCompat.wrap(ivSearch.getBackground());
-        DrawableCompat.setTint(wrappedDrawable, color);
-
-        ivSearch.setBackground(wrappedDrawable);
-        */
-
-        /*
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-        */
-
-        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
-
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         navigationViewRight = (NavigationView) findViewById(R.id.nav_view_right);
         navigationViewRight.setNavigationItemSelectedListener(this);
 
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+                if (bJustSignedOut == false && drawerView.equals(navigationViewRight) && AppUtil.getIsSignedIn(OConnectBaseActivity.this) == false) {
+                    Intent i = new Intent(OConnectBaseActivity.this, SignInActivity1.class);
+                    startActivity(i);
+                    overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up);
+                }
+            }
+        };
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+
+        if (AppUtil.getIsSignedIn(OConnectBaseActivity.this) == false) {
+            drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, navigationViewRight);
+        } else {
+            drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, navigationViewRight);
+        }
+
+        tvName = (TextView) navigationViewRight.findViewById(R.id.tvName);
+        ivProfilePicture = (CircleImageView) navigationViewRight.findViewById(R.id.ivAccountProfilePicture);
+        switchContactable = (Switch) navigationViewRight.findViewById(R.id.switchAccountContactable);
+        tvRightNavHeader = (TextView) navigationViewRight.findViewById(R.id.tvMyAccount);
+        btnConnections = (Button) navigationViewRight.findViewById(R.id.btnConnections);
+        ivSignOut = (ImageView) navigationViewRight.findViewById(R.id.ivSignOut);
+        tvSignOut = (TextView) navigationViewRight.findViewById(R.id.tvSignOut);
+        ivAccountEdit = (ImageView) navigationViewRight.findViewById(R.id.ivAccountEdit);
+
+        tvRightNavHeader.setBackgroundColor(AppUtil.getPrimaryThemColorAsInt());
+        btnConnections.setBackgroundColor(AppUtil.getPrimaryThemColorAsInt());
+        ivSignOut.setBackground(AppUtil.changeDrawableColor(OConnectBaseActivity.this,R.drawable.icon_sign_out, AppUtil.getPrimaryThemColorAsInt()));
+        tvSignOut.setTextColor(AppUtil.getPrimaryThemColorAsInt());
+
+        btnConnections.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // AppUtil.displayNotImplementedDialog(OConnectBaseActivity.this);
+
+                Intent i = new Intent(OConnectBaseActivity.this, ConnectionsActivity.class);
+                startActivity(i);
+            }
+        });
+
+        ivAccountEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AppUtil.displayNotImplementedDialog(OConnectBaseActivity.this);
+            }
+        });
+
+        if (AppUtil.getIsSignedIn(OConnectBaseActivity.this) == true && currentPerson != null) {
+            tvName.setText(currentPerson.getFirstName() + " " + currentPerson.getLastName());
+
+            try {
+                if (currentPerson.getPictureURL() != null
+                        && !currentPerson.getPictureURL().equalsIgnoreCase("")) {
+
+                    final String pictureURL = currentPerson.getPictureURL();
+
+                    new AsyncTask<Void, Void, Void>() {
+                        @Override
+                        protected Void doInBackground(Void... params) {
+                            try {
+                                InputStream in = new URL(pictureURL).openStream();
+                                bmp = BitmapFactory.decodeStream(in);
+                            } catch (Exception e) {
+                                Log.d("APD", e.getMessage());
+                            }
+                            return null;
+                        }
+
+                        @Override
+                        protected void onPostExecute(Void result) {
+                            if (bmp != null) {
+                                ivProfilePicture.setImageBitmap(bmp);
+                            }
+                        }
+
+                    }.execute();
+                }
+            } catch (Exception ex) {
+                if (ex.getMessage() != null) {
+                    Log.d("APD", ex.getMessage());
+                }
+            }
+        }
+
+        /*
+        navigationViewRight.setOnDragListener(new View.OnDragListener() {
+            @Override
+            public boolean onDrag(View v, DragEvent event) {
+                if (AppUtil.getIsSignedIn(OConnectBaseActivity.this) == false) {
+                    Intent i = new Intent(OConnectBaseActivity.this, SignInActivity1.class);
+                    startActivity(i);
+                    overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up);
+                }
+                return false;
+            }
+        });
+        */
+
+        switchContactable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Realm realm = AppUtil.getRealmInstance(App.getInstance());
+                realm.beginTransaction();
+
+                currentPerson.setContactable(isChecked);
+
+                realm.commitTransaction();
+
+                try {
+                    ParseUser user = ParseUser.getQuery().get(currentPerson.getObjectId());
+                    user.put("isContactable", isChecked);
+                    user.save();
+                } catch (Exception ex) {
+                    Log.d("APD", ex.getMessage());
+                }
+
+            }
+        });
+
         // get the listview
         // View headerView = navigationView.getHeaderView(0);
         expListView = (ExpandableListView) navigationView.findViewById(R.id.elvLeftNavItems);
 
         navSearch = (SearchView) navigationView.findViewById(R.id.search);
+
+        navSearch.setBackgroundColor(AppUtil.getPrimaryThemColorAsInt());
 
         navSearch.setActivated(true);
         navSearch.setQueryHint("Search");
@@ -296,7 +430,19 @@ public class OConnectBaseActivity extends AppCompatActivity
 
                 switch (childItem.menuIconResID) {
                     case R.drawable.icon_conferences:
+                        ConferenceListViewActivity.showCancel = true;
+                        ConferenceListViewActivity.launchedFromLeftNav = true;
                         i = new Intent(OConnectBaseActivity.this, ConferenceListViewActivity.class);
+                        startActivity(i);
+                        overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up);
+                        break;
+                    case R.drawable.icon_registration:
+                        i = new Intent(OConnectBaseActivity.this, WebViewActivity.class);
+                        i.putExtra("TITLE", "Registration");
+                        i.putExtra("URL", "https://www.eventbrite.com/e/" + selectedConference.getEventbriteId());
+                        i.putExtra("BACK_TEXT", "");
+                        i.putExtra("OPEN", "");
+                        i.putExtra("isRegistration", true);
                         startActivity(i);
                         break;
                     case R.drawable.icon_dashboard:
@@ -316,10 +462,20 @@ public class OConnectBaseActivity extends AppCompatActivity
                         }
                         break;
                     case R.drawable.icon_info:
+                        if (AppUtil.getIsLeftNavUnlocked(OConnectBaseActivity.this) == false
+                                && selectedConference.isPasswordProtectInfo() == true) {
+                            AppUtil.displayNavPassword(OConnectBaseActivity.this, R.drawable.icon_info);
+                            return false;
+                        }
                         i = new Intent(OConnectBaseActivity.this, InfoActivity.class);
                         startActivity(i);
                         break;
                     case R.drawable.icon_maps:
+                        if (AppUtil.getIsLeftNavUnlocked(OConnectBaseActivity.this) == false
+                                && selectedConference.isPasswordProtectMaps() == true) {
+                            AppUtil.displayNavPassword(OConnectBaseActivity.this, R.drawable.icon_maps);
+                            return false;
+                        }
                         i = new Intent(OConnectBaseActivity.this, MapsListActivity.class);
                         startActivity(i);
                         break;
@@ -329,6 +485,7 @@ public class OConnectBaseActivity extends AppCompatActivity
                         AsyncTask.execute(new Runnable() {
                             @Override
                             public void run() {
+                                DataSyncManager.shouldSyncAll = true;
                                 DataSyncManager.beginDataSync(getApplicationContext(), OConnectBaseActivity.this);
                             }
                         });
@@ -368,6 +525,42 @@ public class OConnectBaseActivity extends AppCompatActivity
                         }
                         i = new Intent(OConnectBaseActivity.this, MyAgendaActivity.class);
                         startActivity(i);
+                        break;
+                    case R.drawable.ic_person:
+                        if (AppUtil.getIsSignedIn(OConnectBaseActivity.this) == false) {
+                            AppUtil.displayPleaseSignInDialog(OConnectBaseActivity.this);
+                            return false;
+                        }
+
+                        if (AppUtil.getIsLeftNavUnlocked(OConnectBaseActivity.this) == false
+                                && selectedConference.isPasswordProtectSpeakers() == true) {
+                            AppUtil.displayNavPassword(OConnectBaseActivity.this, R.drawable.ic_person);
+                            return false;
+                        }
+
+                        i = new Intent(OConnectBaseActivity.this, ParticipantsActivity.class);
+                        startActivity(i);
+                        break;
+                    case R.drawable.icon_survey:
+                        AppUtil.displayNotImplementedDialog(OConnectBaseActivity.this);
+
+                        return false;
+                        /*
+                        if (AppUtil.getIsLeftNavUnlocked(OConnectBaseActivity.this) == false
+                                && selectedConference.isPasswordProtectSurvey() == true) {
+                            AppUtil.displayNavPassword(OConnectBaseActivity.this, R.drawable.icon_survey);
+                            return false;
+                        }
+
+                        i = new Intent(OConnectBaseActivity.this, SurveyActivity.class);
+                        startActivity(i);
+
+
+                        break;
+                        */
+                    case R.drawable.icon_external_link:
+                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(selectedConference.getExternalLink()));
+                        startActivity(browserIntent);
                         break;
                     default:
                         break;
@@ -420,15 +613,15 @@ public class OConnectBaseActivity extends AppCompatActivity
 
         List<MenuItemHolder> section2 = new ArrayList<MenuItemHolder>();
 
-        if (selectedConference.isShowDashboard()) {
+        if (selectedConference != null && selectedConference.isShowDashboard()) {
             section2.add(new MenuItemHolder(R.drawable.icon_dashboard, "Dashboard"));
         }
 
-        if (selectedConference.isShowRegistration()) {
+        if (selectedConference != null && selectedConference.isShowRegistration()) {
             section2.add(new MenuItemHolder(R.drawable.icon_registration, "Registration"));
         }
 
-        if (selectedConference.isShowInfo()) {
+        if (selectedConference != null && selectedConference.isShowInfo()) {
             String infoStr = "Info";
 
             if (selectedConference.getToolbarLabelInfo() != null &&
@@ -439,7 +632,7 @@ public class OConnectBaseActivity extends AppCompatActivity
             section2.add(new MenuItemHolder(R.drawable.icon_info, infoStr));
         }
 
-        if (selectedConference.isShowSchedule()) {
+        if (selectedConference != null && selectedConference.isShowSchedule()) {
             String itemStr = "Schedule";
 
             if (selectedConference.getToolbarLabelSchedule() != null &&
@@ -450,7 +643,7 @@ public class OConnectBaseActivity extends AppCompatActivity
             section2.add(new MenuItemHolder(R.drawable.icon_schedule, itemStr));
         }
 
-        if (selectedConference.isShowNonTimedEvents()) {
+        if (selectedConference != null && selectedConference.isShowNonTimedEvents()) {
             String itemStr = "Non-Timed Event";
 
             if (selectedConference.getToolbarLabelNonTimedEvent() != null &&
@@ -461,7 +654,7 @@ public class OConnectBaseActivity extends AppCompatActivity
             section2.add(new MenuItemHolder(R.drawable.icon_non_timed_event_2, itemStr));
         }
 
-        if (selectedConference.isShowParticipants()) {
+        if (selectedConference != null && selectedConference.isShowParticipants()) {
             String itemStr = "Participants";
 
             if (selectedConference.getToolbarLabelParticipants() != null &&
@@ -472,7 +665,7 @@ public class OConnectBaseActivity extends AppCompatActivity
             section2.add(new MenuItemHolder(R.drawable.ic_person, itemStr));
         }
 
-        if (selectedConference.isShowMaps()) {
+        if (selectedConference != null && selectedConference.isShowMaps()) {
             String itemStr = "Maps";
 
             if (selectedConference.getToolbarLabelMaps() != null &&
@@ -486,7 +679,7 @@ public class OConnectBaseActivity extends AppCompatActivity
         section2.add(new MenuItemHolder(R.drawable.icon_my_agenda, "My Agenda"));
         section2.add(new MenuItemHolder(R.drawable.icon_my_notes, "My Notes"));
 
-        if (selectedConference.isShowSponsors()) {
+        if (selectedConference != null && selectedConference.isShowSponsors()) {
             String itemStr = "Sponsors";
 
             if (selectedConference.getToolbarLabelSponsors() != null &&
@@ -501,13 +694,13 @@ public class OConnectBaseActivity extends AppCompatActivity
 
         List<MenuItemHolder> section3 = new ArrayList<MenuItemHolder>();
 
-        if (selectedConference.isShowQRScanner()) {
+        if (selectedConference != null && selectedConference.isShowQRScanner()) {
             String itemStr = "QR Scanner";
 
             section3.add(new MenuItemHolder(R.drawable.icon_qr_scanner, itemStr));
         }
 
-        if (selectedConference.isShowSurvey()) {
+        if (selectedConference != null && selectedConference.isShowSurvey()) {
             String itemStr = "Survey";
 
             if (selectedConference.getToolbarLabelSurvey() != null &&
@@ -518,7 +711,7 @@ public class OConnectBaseActivity extends AppCompatActivity
             section3.add(new MenuItemHolder(R.drawable.icon_survey, itemStr));
         }
 
-        if (selectedConference.isShowExternalLink()) {
+        if (selectedConference != null && selectedConference.isShowExternalLink()) {
             String itemStr = "External Link";
 
             if (selectedConference.getToolbarLabelExternalLink() != null &&
@@ -615,8 +808,15 @@ public class OConnectBaseActivity extends AppCompatActivity
     }
 
     public void signOutClicked (View view) {
+        bJustSignedOut = true;
         AppUtil.setIsSignedIn(OConnectBaseActivity.this, false);
         drawer.closeDrawer(navigationViewRight);
+
+        if (AppUtil.getIsSignedIn(OConnectBaseActivity.this) == false) {
+            drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, navigationViewRight);
+        } else {
+            drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, navigationViewRight);
+        }
     }
 
     public void onDataSyncFinish() {
@@ -626,5 +826,10 @@ public class OConnectBaseActivity extends AppCompatActivity
 
         Date dateTimeNow = Calendar.getInstance().getTime();
         DataSyncManager.setLastSyncDate(dateTimeNow);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 }

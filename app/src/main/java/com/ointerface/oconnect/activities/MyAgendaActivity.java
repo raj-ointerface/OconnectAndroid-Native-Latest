@@ -1,5 +1,8 @@
 package com.ointerface.oconnect.activities;
 
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -12,7 +15,9 @@ import com.ointerface.oconnect.App;
 import com.ointerface.oconnect.R;
 import com.ointerface.oconnect.adapters.MyAgendaListViewAdapter;
 import com.ointerface.oconnect.adapters.MyNotesListViewAdapter;
+import com.ointerface.oconnect.data.DataSyncManager;
 import com.ointerface.oconnect.data.Event;
+import com.ointerface.oconnect.data.IDataSyncListener;
 import com.ointerface.oconnect.data.MyNote;
 import com.ointerface.oconnect.util.AppUtil;
 
@@ -26,7 +31,7 @@ import io.realm.RealmResults;
 
 import static android.view.View.GONE;
 
-public class MyAgendaActivity extends OConnectBaseActivity {
+public class MyAgendaActivity extends OConnectBaseActivity implements IDataSyncListener {
     private ListView lvMyAgendaList;
     private MyAgendaListViewAdapter adapter;
     public ArrayList<Event> mData = new ArrayList<Event>();
@@ -44,11 +49,18 @@ public class MyAgendaActivity extends OConnectBaseActivity {
         ivRightToolbarIcon.setVisibility(View.VISIBLE);
         ivSearch.setVisibility(GONE);
 
+        lvMyAgendaList = (ListView) findViewById(R.id.lvMyAgendaList);
+
+        DataSyncManager.dialog = ProgressDialog.show(MyAgendaActivity.this, null, "Downloading Events ... Please wait.");
+        DataSyncManager.shouldSyncAll = false;
+        DataSyncManager.initDataSyncManager(getApplicationContext(), MyAgendaActivity.this);
+        DataSyncManager.dataSyncSessions();
+        DataSyncManager.dataSyncEvents();
+        DataSyncManager.dialog.hide();
+
         getListViewData();
 
         adapter = new MyAgendaListViewAdapter(MyAgendaActivity.this, mData);
-
-        lvMyAgendaList = (ListView) findViewById(R.id.lvMyAgendaList);
 
         lvMyAgendaList.setAdapter(adapter);
     }
@@ -74,6 +86,9 @@ public class MyAgendaActivity extends OConnectBaseActivity {
         mData = new ArrayList<Event>();
 
         mData.addAll(myEventsResults);
+    }
+
+    public void onDataSyncFinish() {
 
     }
 }

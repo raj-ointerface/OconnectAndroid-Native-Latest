@@ -51,7 +51,7 @@
         android:iconifiedByDefault="false"
         android:background="@color/colorOconnectDefault"
         />
-    <ExpandableListView
+    <ListView
         android:id="@+id/elvSchedule"
         android:layout_below="@+id/scheduleSearch"
         android:layout_width="match_parent"
@@ -60,5 +60,5 @@
         android:dividerHeight="0dp"
         android:groupIndicator="@null">
 
-    </ExpandableListView>
+    </ListView>
 </RelativeLayout>

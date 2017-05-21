@@ -5,12 +5,14 @@ import java.util.Date;
 import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
+import io.realm.annotations.Required;
 
 /**
  * Created by AnthonyDoan on 4/16/17.
  */
 
 public class Event extends RealmObject {
+    @Required
     @PrimaryKey
     private String objectId = "";
     private boolean isNonTimedEvent = false;
@@ -22,6 +24,15 @@ public class Event extends RealmObject {
     private Date updatedAt = null;
     private String location = "";
     private RealmList<Speaker> speakers = new RealmList<Speaker>();
+    private String info = "";
+
+    public String getInfo() {
+        return info;
+    }
+
+    public void setInfo(String info) {
+        this.info = info;
+    }
 
     public RealmList<Speaker> getSpeakers() {
         return speakers;

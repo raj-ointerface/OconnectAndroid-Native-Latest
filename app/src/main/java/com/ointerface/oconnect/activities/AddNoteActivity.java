@@ -86,13 +86,13 @@ public class AddNoteActivity extends OConnectBaseActivity {
 
                             realm.beginTransaction();
 
-                            MyNote myNote = realm.createObject(MyNote.class);
+                            MyNote myNote = realm.createObject(MyNote.class, noteObject.getObjectId());
 
                             myNote.setUser(currentPerson.getObjectId());
                             myNote.setConference(selectedConference.getObjectId());
                             myNote.setTitle(etTitle.getText().toString());
                             myNote.setContent(etNote.getText().toString());
-                            myNote.setObjectId(noteObject.getObjectId());
+                            // myNote.setObjectId(noteObject.getObjectId());
                             myNote.setCreatedAt(noteObject.getCreatedAt());
 
                             realm.commitTransaction();

@@ -30,6 +30,7 @@ public class CustomSplashActivity extends AppCompatActivity {
             // Goto Conference List View
             gotoConferenceListView();
             finish();
+            return;
         }
 
         setContentView(R.layout.activity_custom_splash);

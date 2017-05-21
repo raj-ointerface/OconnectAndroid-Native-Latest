@@ -140,6 +140,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/border_gray_bottom"
                 android:padding="10dp"
+                android:onClick="alertsClicked"
                 >
                 <ImageView
                     android:id="@+id/ivAlerts"
@@ -164,6 +165,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/border_gray_bottom_left"
                 android:padding="10dp"
+                android:onClick="addANoteClicked"
                 >
                 <ImageView
                     android:id="@+id/ivAddANote"
@@ -197,7 +199,8 @@
                 android:layout_height="80dp"
                 android:layout_weight="1"
                 android:background="@drawable/border_gray_right"
-                android:padding="10dp"
+                android:padding="5dp"
+                android:onClick="myAgendaClicked"
                 >
                 <ImageView
                     android:id="@+id/ivMyAgenda"
@@ -221,7 +224,8 @@
                 android:layout_height="80dp"
                 android:layout_weight="1"
                 android:background="@drawable/no_border_background"
-                android:padding="10dp"
+                android:padding="5dp"
+                android:onClick="makeConnectionsClicked"
                 >
                 <ImageView
                     android:id="@+id/ivMakeConnections"
@@ -231,7 +235,7 @@
                     android:scaleType="fitCenter"
                     android:background="@drawable/icon_make_connections"/>
                 <TextView
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="0dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
@@ -246,7 +250,8 @@
                 android:layout_height="80dp"
                 android:layout_weight="1"
                 android:background="@drawable/border_gray_left"
-                android:padding="10dp"
+                android:padding="5dp"
+                android:onClick="infoClicked"
                 >
                 <ImageView
                     android:id="@+id/ivInfo"

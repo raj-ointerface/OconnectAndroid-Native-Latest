@@ -4,12 +4,14 @@ import java.util.Date;
 
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
+import io.realm.annotations.Required;
 
 /**
  * Created by AnthonyDoan on 4/19/17.
  */
 
 public class MasterNotification extends RealmObject {
+    @Required
     @PrimaryKey
     private String objectId = "";
     private Date createdAt = null;

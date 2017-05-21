@@ -7,12 +7,19 @@ import android.os.AsyncTask;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.ointerface.oconnect.data.DataSyncManager;
 import com.ointerface.oconnect.data.IDataSyncListener;
+import com.ointerface.oconnect.data.SpeakerEventCache;
+import com.ointerface.oconnect.service.BackgroundService;
+import com.ointerface.oconnect.util.AppUtil;
 
 import java.util.Calendar;
 import java.util.Date;
+
+import io.realm.Realm;
+import io.realm.RealmResults;
 
 public class MainSplashActivity extends AppCompatActivity implements IDataSyncListener {
 
@@ -21,14 +28,29 @@ public class MainSplashActivity extends AppCompatActivity implements IDataSyncLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_splash);
 
+        /*
         DataSyncManager.dialog = ProgressDialog.show((Context)this, null, "Initializing Data ... Please wait.");
 
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
+                DataSyncManager.shouldSyncAll = true;
                 DataSyncManager.beginDataSync(getApplicationContext(), MainSplashActivity.this);
             }
         });
+        */
+
+        // startService(new Intent(this, BackgroundService.class));
+
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                // Goto CustomSplashActivity after 4 seconds
+                Intent i = new Intent(MainSplashActivity.this, CustomSplashActivity.class);
+                startActivity(i);
+            }
+        }, 4000);
     }
 
     public void onDataSyncFinish() {

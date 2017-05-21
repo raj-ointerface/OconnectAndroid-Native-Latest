@@ -19,21 +19,28 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.facebook.FacebookSdk;
+import com.ointerface.oconnect.App;
 import com.ointerface.oconnect.ConferenceListViewActivity;
 import com.ointerface.oconnect.CustomSplashActivity;
 import com.ointerface.oconnect.MainSplashActivity;
 import com.ointerface.oconnect.R;
+import com.ointerface.oconnect.data.Attendee;
 import com.ointerface.oconnect.data.DataSyncManager;
 import com.ointerface.oconnect.data.Person;
+import com.ointerface.oconnect.data.Speaker;
 import com.ointerface.oconnect.util.AppConfig;
 import com.ointerface.oconnect.util.AppUtil;
 import com.ointerface.oconnect.util.HTTPPostHandler;
+import com.parse.GetCallback;
 import com.parse.LogInCallback;
+import com.parse.Parse;
+import com.parse.ParseACL;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.RequestPasswordResetCallback;
+import com.parse.SaveCallback;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
 import com.twitter.sdk.android.core.TwitterException;
@@ -44,6 +51,8 @@ import org.json.JSONException;
 
 import java.util.List;
 
+import io.realm.Realm;
+
 public class SignInActivity2 extends AppCompatActivity {
     enum SignInType { Normal,Twitter,Facebook, LinkedIn}
 
@@ -51,6 +60,10 @@ public class SignInActivity2 extends AppCompatActivity {
 
     private EditText username;
     private EditText password;
+
+    private Button btnCreateAccount;
+    private Button btnForgotPassword;
+    private Button btnSignIn;
 
     ProgressDialog dialog;
 
@@ -76,6 +89,14 @@ public class SignInActivity2 extends AppCompatActivity {
 
         username = (EditText) findViewById(R.id.etEmail);
         password = (EditText) findViewById(R.id.etPassword);
+
+        btnCreateAccount = (Button) findViewById(R.id.btnCreateAccount);
+        btnForgotPassword = (Button) findViewById(R.id.btnForgotPassword);
+        btnSignIn = (Button) findViewById(R.id.btnSignIn);
+
+        btnCreateAccount.setTextColor(AppUtil.getPrimaryThemColorAsInt());
+        btnForgotPassword.setTextColor(AppUtil.getPrimaryThemColorAsInt());
+        btnSignIn.setBackgroundColor(AppUtil.getPrimaryThemColorAsInt());
     }
 
     public void createAccountClicked(View sender) {
@@ -116,6 +137,10 @@ public class SignInActivity2 extends AppCompatActivity {
     }
 
     public void twitterLoginClicked(View sender) {
+        AppUtil.displayNotImplementedDialog(SignInActivity2.this);
+        return;
+
+        /*
         TwitterAuthClient twitterAuthClient = new TwitterAuthClient();
         twitterAuthClient.authorize(SignInActivity2.this, new Callback<TwitterSession>() {
             @Override
@@ -156,28 +181,29 @@ public class SignInActivity2 extends AppCompatActivity {
                 alertDialog.show();
             }
         });
+        */
     }
 
     public void facebookLoginClicked(View sender) {
-
+        AppUtil.displayNotImplementedDialog(SignInActivity2.this);
     }
 
     public void linkedInLoginClicked(View sender) {
-
+        AppUtil.displayNotImplementedDialog(SignInActivity2.this);
     }
 
     public void signInClicked(View sender) {
         final String usernametxt = username.getText().toString();
         String passwordtxt = password.getText().toString();
 
-        dialog = ProgressDialog.show((Context)this, null, "Refreshing Data ...");
+        dialog = ProgressDialog.show((Context)this, null, "Logging In ...");
 
         // Send data to Parse.com for verification
         ParseUser.logInInBackground(usernametxt, passwordtxt,
                 new LogInCallback() {
                     public void done(ParseUser user, ParseException e) {
                         if (user != null) {
-                            OConnectBaseActivity.currentPerson = Person.saveFromParseUser(user);
+                            OConnectBaseActivity.currentPerson = Person.saveFromParseUser(user, false);
                             AppUtil.setIsSignedIn(SignInActivity2.this, true);
                             AppUtil.setSignedInUserID(SignInActivity2.this, user.getObjectId());
 
@@ -207,18 +233,61 @@ public class SignInActivity2 extends AppCompatActivity {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
                                             try {
+                                                // Realm realm = AppUtil.getRealmInstance(App.getInstance());
+
+                                                /*
+                                                ParseQuery<ParseObject> attendeeQuery = ParseQuery.getQuery("Attendee");
+                                                ParseQuery<ParseObject> speakerQuery = ParseQuery.getQuery("Speaker");
+
+                                                speakerQuery.whereEqualTo("IOS_code", input.getText().toString()).getFirstInBackground(new GetCallback<ParseObject>() {
+                                                    @Override
+                                                    public void done(ParseObject object, ParseException e) {
+                                                        if (e == null) {
+
+                                                        } else {
+                                                            Log.d("APD", e.getMessage());
+                                                        }
+                                                    }
+                                                });
+
+                                                attendeeQuery.whereEqualTo("IOS_code", input.getText().toString()).getFirstInBackground(new GetCallback<ParseObject>() {
+                                                    @Override
+                                                    public void done(ParseObject object, ParseException e) {
+                                                        if (e == null) {
+
+                                                        } else {
+                                                            Log.d("APD", e.getMessage());
+                                                        }
+                                                    }
+                                                });
+                                                */
+
                                                 List<ParseObject> speakerList = ParseQuery.getQuery("Speaker").whereEqualTo("IOS_code", input.getText().toString()).find();
                                                 List<ParseObject> attendeeList = ParseQuery.getQuery("Attendee").whereEqualTo("IOS_code", input.getText().toString()).find();
 
                                                 boolean bUserLinked = false;
 
                                                 if (speakerList.size() > 0) {
-                                                    ParseObject speakerObj = speakerList.get(0);
-                                                    speakerObj.put("UserLink", finalUser.getObjectId());
-                                                    speakerObj.save();
+                                                    ParseObject speakerObj = speakerList.get(0).fetchIfNeeded();
+
+                                                    speakerObj.fetchIfNeededInBackground(new GetCallback<ParseObject>() {
+                                                        @Override
+                                                        public void done(ParseObject object, ParseException e) {
+                                                            if (e == null) {
+                                                                object.put("UserLink", finalUser.getObjectId());
+
+                                                                try {
+                                                                    object.save();
+                                                                } catch (Exception ex) {
+                                                                    Log.d("APD", "Error saving Speaker: " + ex.getMessage());
+                                                                }
+                                                            }
+                                                        }
+                                                    });
+
                                                     bUserLinked = true;
                                                 } else if (attendeeList.size() > 0) {
-                                                    ParseObject attendeeObj = attendeeList.get(0);
+                                                    ParseObject attendeeObj = attendeeList.get(0).fetchIfNeeded();
                                                     attendeeObj.put("UserLink", finalUser.getObjectId());
                                                     attendeeObj.save();
                                                     bUserLinked = true;
@@ -245,6 +314,7 @@ public class SignInActivity2 extends AppCompatActivity {
                                                             });
                                                     alertDialog.show();
                                                 }
+
                                             } catch (Exception ex) {
                                                 Log.d("SignIn2", ex.getMessage());
                                             }
@@ -335,6 +405,11 @@ public class SignInActivity2 extends AppCompatActivity {
                                     overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up );
                                 }
                             } catch (Exception ex) {
+                                SignInActivity2.this.finish();
+                                Intent i = new Intent(SignInActivity2.this, DashboardActivity.class);
+                                startActivity(i);
+                                overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up );
+
                                 Log.d("SignIn2", ex.getMessage());
                             }
 
@@ -353,6 +428,10 @@ public class SignInActivity2 extends AppCompatActivity {
                                         }
                                     });
                             alertDialog.show();
+
+                            if (e != null) {
+                                Log.d("APD", "Parse Login Error: " + e.getMessage());
+                            }
                         }
                     }
                 });
