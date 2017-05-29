@@ -194,8 +194,6 @@ public class CreateAccountActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(
                 CreateAccountActivity.this);
 
-
-
         // builder.setCustomTitle(title);
 
         // builder.setTitle("Add Photo!");

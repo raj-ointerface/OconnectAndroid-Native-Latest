@@ -258,7 +258,9 @@ public class OConnectBaseActivity extends AppCompatActivity
         ivAccountEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AppUtil.displayNotImplementedDialog(OConnectBaseActivity.this);
+                Intent i = new Intent(OConnectBaseActivity.this, EditAccountActivity.class);
+                startActivity(i);
+                overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up );
             }
         });
 

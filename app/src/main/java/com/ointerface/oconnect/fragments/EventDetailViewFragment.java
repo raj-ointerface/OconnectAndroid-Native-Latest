@@ -51,7 +51,7 @@ import static android.view.View.GONE;
  */
 public class EventDetailViewFragment extends Fragment {
 
-    static public int pageNumber = 0;
+    public int pageNumber = 0;
 
     static public EventDetailViewActivity activity;
 
@@ -80,7 +80,12 @@ public class EventDetailViewFragment extends Fragment {
 
         activity = activityArg;
 
-        pageNumber = pageNumberArg;
+        // pageNumber = pageNumberArg;
+
+        Bundle bundle = new Bundle();
+        bundle.putInt("PAGE_NUMBER", pageNumberArg);
+
+        fragment.setArguments(bundle);
 
         mItems = mItemsArg;
 
@@ -106,6 +111,10 @@ public class EventDetailViewFragment extends Fragment {
         rlMiscItems.setClipChildren(false);
 
         Realm realm = AppUtil.getRealmInstance(App.getInstance());
+
+        Bundle bundle = getArguments();
+
+        pageNumber = bundle.getInt("PAGE_NUMBER");
 
         Event event = (Event) mItems.get(pageNumber);
 

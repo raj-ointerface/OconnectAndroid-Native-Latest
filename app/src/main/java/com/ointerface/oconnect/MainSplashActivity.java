@@ -28,7 +28,7 @@ public class MainSplashActivity extends AppCompatActivity implements IDataSyncLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_splash);
 
-        /*
+
         DataSyncManager.dialog = ProgressDialog.show((Context)this, null, "Initializing Data ... Please wait.");
 
         AsyncTask.execute(new Runnable() {
@@ -38,11 +38,12 @@ public class MainSplashActivity extends AppCompatActivity implements IDataSyncLi
                 DataSyncManager.beginDataSync(getApplicationContext(), MainSplashActivity.this);
             }
         });
-        */
+
 
         // startService(new Intent(this, BackgroundService.class));
 
 
+        /*
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             public void run() {
@@ -51,6 +52,7 @@ public class MainSplashActivity extends AppCompatActivity implements IDataSyncLi
                 startActivity(i);
             }
         }, 4000);
+        */
     }
 
     public void onDataSyncFinish() {

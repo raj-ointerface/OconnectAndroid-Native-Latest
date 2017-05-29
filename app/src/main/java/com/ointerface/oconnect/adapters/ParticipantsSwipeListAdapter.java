@@ -159,6 +159,8 @@ public class ParticipantsSwipeListAdapter extends BaseSwipeAdapter {
                 ivPicture.setImageBitmap(bmp);
 
                 // ivPicture.setBackground(d);
+            } else {
+                ivPicture.setImageResource(R.drawable.icon_silhouette);
             }
 
             TextView tvName = (TextView) convertView.findViewById(R.id.tvParticipantName);
@@ -319,6 +321,8 @@ public class ParticipantsSwipeListAdapter extends BaseSwipeAdapter {
                 Bitmap bmp = BitmapFactory.decodeByteArray(attendee.getImage(), 0, attendee.getImage().length);
                 Drawable d = new BitmapDrawable(context.getResources(), bmp);
                 ivPicture.setBackground(d);
+            } else {
+                ivPicture.setBackgroundResource(R.drawable.icon_silhouette);
             }
 
             TextView tvName = (TextView) convertView.findViewById(R.id.tvParticipantName);

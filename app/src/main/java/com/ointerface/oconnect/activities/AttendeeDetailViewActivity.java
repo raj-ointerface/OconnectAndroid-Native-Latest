@@ -90,14 +90,18 @@ public class AttendeeDetailViewActivity extends OConnectBaseActivity {
             super(fm);
         }
 
+        public int getItemPosition(Object object) {
+            return POSITION_NONE;
+        }
+
         @Override
         public Fragment getItem(int position) {
-            return AttendeeDetailViewFragment.newInstance(position, AttendeeDetailViewActivity.this, mItems, currentAttendeeNumber);
+            return AttendeeDetailViewFragment.newInstance(position, AttendeeDetailViewActivity.this, AttendeeDetailViewActivity.mItems, currentAttendeeNumber);
         }
 
         @Override
         public int getCount() {
-            return mItems.size();
+            return AttendeeDetailViewActivity.mItems.size();
         }
     }
 }

@@ -4,6 +4,8 @@ package com.ointerface.oconnect.fragments;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -22,6 +24,7 @@ import com.ointerface.oconnect.R;
 import com.ointerface.oconnect.activities.AttendeeDetailViewActivity;
 import com.ointerface.oconnect.activities.OConnectBaseActivity;
 import com.ointerface.oconnect.activities.SpeakerDetailViewActivity;
+import com.ointerface.oconnect.adapters.AttendeeDetailExpandableListView;
 import com.ointerface.oconnect.adapters.SpeakerDetailExpandableListViewAdapter;
 import com.ointerface.oconnect.data.Attendee;
 import com.ointerface.oconnect.data.Event;
@@ -56,7 +59,7 @@ import io.realm.RealmResults;
  */
 public class AttendeeDetailViewFragment extends Fragment {
 
-    static public int pageNumber = 0;
+    public int pageNumber = 0;
 
     static public AttendeeDetailViewActivity activity;
 
@@ -65,7 +68,7 @@ public class AttendeeDetailViewFragment extends Fragment {
     static private int currentAttendeeNumber;
 
     private ExpandableListView elvAttendeeDetailInfo;
-    private SpeakerDetailExpandableListViewAdapter adapter;
+    private AttendeeDetailExpandableListView adapter;
 
     private List<String> _listDataHeader;
     private List<Integer> _listHeaderNumber;
@@ -87,7 +90,12 @@ public class AttendeeDetailViewFragment extends Fragment {
 
         activity = activityArg;
 
-        pageNumber = pageNumberArg;
+        // pageNumber = pageNumberArg;
+
+        Bundle bundle = new Bundle();
+        bundle.putInt("PAGE_NUMBER", pageNumberArg);
+
+        fragment.setArguments(bundle);
 
         mItems = mItemsArg;
 
@@ -114,6 +122,10 @@ public class AttendeeDetailViewFragment extends Fragment {
 
         Realm realm = AppUtil.getRealmInstance(App.getInstance());
 
+        Bundle bundle = getArguments();
+
+        pageNumber = bundle.getInt("PAGE_NUMBER");
+
         Attendee attendee = (Attendee) mItems.get(pageNumber);
 
         Person person = realm.where(Person.class).equalTo("objectId", attendee.getUserLink()).findFirst();
@@ -134,8 +146,9 @@ public class AttendeeDetailViewFragment extends Fragment {
 
         tvMessage.setTextColor(AppUtil.getPrimaryThemColorAsInt());
 
-        final ImageView ivProfile = (ImageView) rootView.findViewById(R.id.ivProfile);
+        ImageView ivProfile = (ImageView) rootView.findViewById(R.id.ivProfile);
 
+        /*
         if (person != null && person.getPictureURL() != null && !person.getPictureURL().equalsIgnoreCase("")) {
             final String pictureURL = person.getPictureURL();
 
@@ -164,6 +177,17 @@ public class AttendeeDetailViewFragment extends Fragment {
 
             ivProfile.setImageBitmap(bm2);
         }
+        */
+
+        if (attendee.getImage() != null) {
+            Bitmap bmp = BitmapFactory.decodeByteArray(attendee.getImage(), 0, attendee.getImage().length);
+            Drawable d = new BitmapDrawable(activity.getResources(), bmp);
+            ivProfile.setBackground(d);
+
+            // Bitmap bm2 = BitmapFactory.decodeByteArray(attendee.getImage(), 0, attendee.getImage().length);
+
+            // ivProfile.setImageBitmap(bm2);
+        }
 
         TextView tvAttendeeName = (TextView) rootView.findViewById(R.id.tvAttendeeName);
         tvAttendeeName.setText(attendee.getName());
@@ -188,13 +212,17 @@ public class AttendeeDetailViewFragment extends Fragment {
         _listChildCount = new HashMap<Integer, Integer>();
         _listChildItems = new HashMap<Integer, ArrayList<String>>();
 
-        Speaker speaker = (Speaker) mItems.get(pageNumber);
+        Bundle bundle = getArguments();
+
+        pageNumber = bundle.getInt("PAGE_NUMBER");
+
+        Attendee attendee = (Attendee) mItems.get(pageNumber);
 
         int groupNum = 0;
 
-        if (speaker.getJob() != null && !speaker.getJob().equalsIgnoreCase("") ||
-                speaker.getOrganization() != null && !speaker.getOrganization().equalsIgnoreCase("") ||
-                speaker.getLocation() != null && !speaker.getLocation().equalsIgnoreCase("")) {
+        if (attendee.getJob() != null && !attendee.getJob().equalsIgnoreCase("") ||
+                attendee.getOrganization() != null && !attendee.getOrganization().equalsIgnoreCase("") ||
+                attendee.getLocation() != null && !attendee.getLocation().equalsIgnoreCase("")) {
             _listDataHeader.add("About");
             _listHeaderNumber.add(groupNum);
             _listGroupHasListView.add(false);
@@ -202,8 +230,8 @@ public class AttendeeDetailViewFragment extends Fragment {
             ++groupNum;
         }
 
-        adapter = new SpeakerDetailExpandableListViewAdapter(activity, _listDataHeader, _listHeaderNumber, _listChildCount,
-                _listGroupHasListView, _listChildItems, speaker);
+        adapter = new AttendeeDetailExpandableListView(activity, _listDataHeader, _listHeaderNumber, _listChildCount,
+                _listGroupHasListView, _listChildItems, attendee);
     }
 
     @Override

@@ -105,6 +105,24 @@ public class App extends Application {
                     // realm.getSchema().get("Speaker").setRequired("objectId", true);
                     // realm.getSchema().get("SpeakerEventCache").setRequired("objectId", true);
                     // realm.getSchema().get("Sponsor").setRequired("objectId", true);
+
+                    realm.getSchema().get("Speaker").removeField("eventsList");
+                    realm.getSchema().get("Attendee").removeField("eventsList");
+                    realm.getSchema().get("Speaker").removeField("updatedAt");
+                    realm.getSchema().get("Attendee").removeField("updatedAt");
+
+                    realm.getSchema().create("TravelBusiness");
+                    realm.getSchema().get("TravelBusiness").addField("objectId", String.class);
+                    realm.getSchema().get("TravelBusiness").addPrimaryKey("objectId").setRequired("objectId", true);
+                    realm.getSchema().get("TravelBusiness").addField("businessName", String.class);
+                    realm.getSchema().get("TravelBusiness").addField("otherDetails", String.class);
+                    realm.getSchema().get("TravelBusiness").addField("rates", String.class);
+                    realm.getSchema().get("TravelBusiness").addField("address", String.class);
+                    realm.getSchema().get("TravelBusiness").addField("businessType", String.class);
+                    realm.getSchema().get("TravelBusiness").addField("website", String.class);
+                    realm.getSchema().get("TravelBusiness").addField("conference", String.class);
+                    realm.getSchema().get("TravelBusiness").addField("key", String.class);
+
                 }
             };
 

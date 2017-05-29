@@ -1,5 +1,6 @@
 package com.ointerface.oconnect.data;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -13,7 +14,7 @@ import io.realm.annotations.Required;
  * Created by AnthonyDoan on 4/19/17.
  */
 
-public class Attendee extends RealmObject {
+public class Attendee extends RealmObject implements Serializable {
     @Required
     @PrimaryKey
     private String objectId = "";
@@ -21,8 +22,11 @@ public class Attendee extends RealmObject {
     private String UserLink = "";
     private boolean allowCheckIn = false;
     private String IOS_code = "";
-    private RealmList<Event> eventsList = new RealmList<Event>();
-    private Date updatedAt = null;
+
+    // private RealmList<Event> eventsList = new RealmList<Event>();
+
+    // private Date updatedAt = null;
+
     private String organization = "";
     private String location = "";
     private boolean isContactable = true;
@@ -78,6 +82,7 @@ public class Attendee extends RealmObject {
         isContactable = contactable;
     }
 
+    /*
     public RealmList<Event> getEventsList() {
         return eventsList;
     }
@@ -85,7 +90,9 @@ public class Attendee extends RealmObject {
     public void setEventsList(RealmList<Event> eventsList) {
         this.eventsList = eventsList;
     }
+    */
 
+    /*
     public Date getUpdatedAt() {
         return updatedAt;
     }
@@ -93,6 +100,7 @@ public class Attendee extends RealmObject {
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
     }
+    */
 
     public String getObjectId() {
         return objectId;

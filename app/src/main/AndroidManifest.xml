@@ -20,7 +20,7 @@
         android:largeHeap="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         tools:replace="android:icon">
         <meta-data
             android:name="com.parse.SERVER_URL"
@@ -174,11 +174,23 @@
         <activity
             android:name=".activities.SpeakerDetailViewActivity"
             android:label="@string/title_activity_speaker_detail_view"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.AttendeeDetailViewActivity"
             android:label="@string/title_activity_attendee_detail_view"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.EditAccountActivity"
+            android:label="@string/title_activity_edit_account"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.TravelViewActivity"
+            android:label="@string/title_activity_travel_view"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
     </application>
 
 </manifest>

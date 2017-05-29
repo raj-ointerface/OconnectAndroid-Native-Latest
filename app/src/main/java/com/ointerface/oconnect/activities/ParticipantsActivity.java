@@ -145,14 +145,16 @@ public class ParticipantsActivity extends OConnectBaseActivity {
 
                     Intent i = new Intent(ParticipantsActivity.this, SpeakerDetailViewActivity.class);
                     i.putExtra("SPEAKER_NUMBER", position);
+                    // i.putExtra("SPEAKER_LIST", adapter.mSpeakers);
                     startActivity(i);
                 } else {
-                    SpeakerDetailViewActivity.mItems = new ArrayList<RealmObject>();
+                    AttendeeDetailViewActivity.mItems = new ArrayList<RealmObject>();
 
-                    SpeakerDetailViewActivity.mItems.addAll(adapter.mAttendees);
+                    AttendeeDetailViewActivity.mItems.addAll(adapter.mAttendees);
 
                     Intent i = new Intent(ParticipantsActivity.this, AttendeeDetailViewActivity.class);
                     i.putExtra("ATTENDEE_NUMBER", position);
+                    // i.putExtra("ATTENDEE_LIST", adapter.mAttendees);
                     startActivity(i);
                 }
 
@@ -297,13 +299,19 @@ public class ParticipantsActivity extends OConnectBaseActivity {
     };
 
     public void displaySpeakers() {
+        getListViewData();
+
         adapter.showingSpeakers = true;
-        adapter.notifyDataSetChanged();
+
+        lvParticipantsList.setAdapter(adapter);
     }
 
     public void displayAttendees() {
+        getListViewData();
+
         adapter.showingSpeakers = false;
-        adapter.notifyDataSetChanged();
+
+        lvParticipantsList.setAdapter(adapter);
     }
 
     public void getListViewData() {

@@ -26,6 +26,7 @@ public class AppConfig {
     // Default UI values
     static public int defaultThemeColor = 0xFF5595D0;
     static public int whiteColor = 0xFFFFFFFF;
+    static public int blueColor = 0xFF0000FF;
     static public int lightGreyColor = 0xFFE2E2E0;
     static public int hiddenGreyBackgroundColor = 0xFF6D7177;
 }

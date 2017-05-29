@@ -40,6 +40,8 @@ public class SpeakerDetailViewActivity extends OConnectBaseActivity {
         setContentView(R.layout.activity_speaker_detail_view);
         super.onCreateDrawer();
 
+        // mItems = (ArrayList<RealmObject>) getIntent().getSerializableExtra("SPEAKER_LIST");
+
         tvToolbarTitle.setText("Speaker");
 
         ivProfileLanyard.setVisibility(GONE);
@@ -83,6 +85,7 @@ public class SpeakerDetailViewActivity extends OConnectBaseActivity {
         mPagerAdapter = new SpeakerDetailViewActivity.ScreenSlidePagerAdapter(getSupportFragmentManager());
         mPager.setAdapter(mPagerAdapter);
         mPager.setCurrentItem(currentSpeakerNumber);
+
     }
 
     private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
@@ -90,14 +93,18 @@ public class SpeakerDetailViewActivity extends OConnectBaseActivity {
             super(fm);
         }
 
+        public int getItemPosition(Object object) {
+            return POSITION_NONE;
+        }
+
         @Override
         public Fragment getItem(int position) {
-            return SpeakerDetailViewFragment.newInstance(position, SpeakerDetailViewActivity.this, mItems, currentSpeakerNumber);
+            return SpeakerDetailViewFragment.newInstance(position, SpeakerDetailViewActivity.this, SpeakerDetailViewActivity.mItems, currentSpeakerNumber);
         }
 
         @Override
         public int getCount() {
-            return mItems.size();
+            return SpeakerDetailViewActivity.mItems.size();
         }
     }
 }

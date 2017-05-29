@@ -109,7 +109,8 @@ public class InfoActivity extends OConnectBaseActivity {
     }
 
     public void travelClicked (View view) {
-        AppUtil.displayNotImplementedDialog(InfoActivity.this);
+        Intent i = new Intent(InfoActivity.this, TravelViewActivity.class);
+        startActivity(i);
     }
 
     public void contactUsClicked (View view) {

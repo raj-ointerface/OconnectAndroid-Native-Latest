@@ -74,4 +74,6 @@
     <string name="title_activity_event_detail_view">EventDetailViewActivity</string>
     <string name="title_activity_speaker_detail_view">SpeakerDetailViewActivity</string>
     <string name="title_activity_attendee_detail_view">AttendeeDetailViewActivity</string>
+    <string name="title_activity_edit_account">EditAccountActivity</string>
+    <string name="title_activity_travel_view">TravelViewActivity</string>
 </resources>

@@ -293,7 +293,7 @@ public class ScheduleActivity extends OConnectBaseActivity {
                     }
 
                     Intent i = new Intent(ScheduleActivity.this, EventDetailViewActivity.class);
-                    i.putExtra("EVENT_NUMBER", newPosition - 1);
+                    i.putExtra("EVENT_NUMBER", newPosition);
                     startActivity(i);
                 }
             }

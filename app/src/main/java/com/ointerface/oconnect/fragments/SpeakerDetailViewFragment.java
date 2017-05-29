@@ -58,7 +58,7 @@ import io.realm.RealmResults;
  */
 public class SpeakerDetailViewFragment extends Fragment {
 
-    static public int pageNumber = 0;
+    public int pageNumber = 0;
 
     static public SpeakerDetailViewActivity activity;
 
@@ -78,9 +78,12 @@ public class SpeakerDetailViewFragment extends Fragment {
 
     private Bitmap bmp;
 
+    private boolean bOnload = true;
+
     public SpeakerDetailViewFragment() {
-        // Required empty public constructor
+
     }
+
 
     public static SpeakerDetailViewFragment newInstance(int pageNumberArg, SpeakerDetailViewActivity activityArg,
                                                       ArrayList<RealmObject> mItemsArg,
@@ -89,7 +92,12 @@ public class SpeakerDetailViewFragment extends Fragment {
 
         activity = activityArg;
 
-        pageNumber = pageNumberArg;
+        // pageNumber = pageNumberArg;
+
+        Bundle bundle = new Bundle();
+        bundle.putInt("PAGE_NUMBER", pageNumberArg);
+
+        fragment.setArguments(bundle);
 
         mItems = mItemsArg;
 
@@ -104,6 +112,10 @@ public class SpeakerDetailViewFragment extends Fragment {
         ViewGroup rootView = (ViewGroup) inflater.inflate(
                 R.layout.fragment_speaker_detail_view, container, false);
 
+        Bundle bundle = getArguments();
+
+        pageNumber = bundle.getInt("PAGE_NUMBER");
+
         RelativeLayout mainContainer = (RelativeLayout) rootView.findViewById(R.id.main_container);
         LinearLayout llMain = (LinearLayout) rootView.findViewById(R.id.llMain);
         RelativeLayout rlTopSection = (RelativeLayout) rootView.findViewById(R.id.rlTopSection);
@@ -116,7 +128,9 @@ public class SpeakerDetailViewFragment extends Fragment {
 
         Realm realm = AppUtil.getRealmInstance(App.getInstance());
 
-        Speaker speaker = (Speaker) mItems.get(pageNumber);
+        Speaker speaker;
+
+        speaker = (Speaker) mItems.get(pageNumber);
 
         Person person = realm.where(Person.class).equalTo("objectId", speaker.getUserLink()).findFirst();
 
@@ -230,7 +244,19 @@ public class SpeakerDetailViewFragment extends Fragment {
 
         RealmResults<SpeakerEventCache> eventsResult = realm.where(SpeakerEventCache.class).equalTo("speakerID", speaker.getObjectId()).findAll();
 
-        if (eventsResult != null && eventsResult.size() > 0) {
+        boolean bHasEvent = false;
+
+        for (int i = 0; i < eventsResult.size(); ++i) {
+            SpeakerEventCache speakerEvent = eventsResult.get(i);
+
+            Event event = realm.where(Event.class).equalTo("objectId", speakerEvent.getEventID()).findFirst();
+
+            if (event != null) {
+                bHasEvent = true;
+            }
+        }
+
+        if (bHasEvent == true) {
             _listDataHeader.add("Talks");
             _listHeaderNumber.add(groupNum);
             _listGroupHasListView.add(true);

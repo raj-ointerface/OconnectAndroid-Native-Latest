@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.ointerface.oconnect.App;
 import com.ointerface.oconnect.R;
+import com.ointerface.oconnect.data.Attendee;
 import com.ointerface.oconnect.data.Person;
 import com.ointerface.oconnect.data.Speaker;
 import com.ointerface.oconnect.util.AppUtil;
@@ -34,14 +35,14 @@ public class AttendeeDetailExpandableListView  extends BaseExpandableListAdapter
     private List<Boolean> _listGroupHasListView;
     private HashMap<Integer, Integer> _listChildCount;
     private HashMap<Integer, ArrayList<String>> _listChildItems;
-    private Speaker _listAttendee;
+    private Attendee _listAttendee;
 
     public AttendeeDetailExpandableListView(Context context, List<String> listDataHeader,
                                                   List<Integer> listHeaderNumber,
                                                   HashMap<Integer, Integer> listChildCount,
                                                   List<Boolean> listGroupHasListView,
                                                   HashMap<Integer, ArrayList<String>> listChildItems,
-                                                  Speaker listAttendee) {
+                                                  Attendee listAttendee) {
         this._context = context;
         this._listDataHeader = listDataHeader;
         this._listHeaderNumber = listHeaderNumber;
@@ -102,7 +103,9 @@ public class AttendeeDetailExpandableListView  extends BaseExpandableListAdapter
 
         LayoutInflater infalInflater = (LayoutInflater) this._context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
         if (groupItemStr.equalsIgnoreCase("About")) {
+
             convertView = infalInflater.inflate(R.layout.attendee_detail_about_list_view_item, null);
 
             ImageView ivInfo = (ImageView) convertView.findViewById(R.id.ivParticipantJobTitle);

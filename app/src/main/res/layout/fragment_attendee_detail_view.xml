@@ -36,6 +36,7 @@
                         android:layout_height="80dp"
                         android:layout_marginLeft="20dp"
                         android:layout_marginTop="-30dp"
+                        android:src="@drawable/icon_silhouette"
                         android:background="@color/colorWhite"/>
                     <LinearLayout
                         android:id="@+id/llConnect"

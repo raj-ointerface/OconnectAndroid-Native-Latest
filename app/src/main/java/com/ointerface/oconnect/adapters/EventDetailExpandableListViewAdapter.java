@@ -133,12 +133,13 @@ public class EventDetailExpandableListViewAdapter extends BaseExpandableListAdap
                 lvSpeakers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        SpeakerDetailViewActivity.mItems = new ArrayList<RealmObject>();
+                        // SpeakerDetailViewActivity.mItems = new ArrayList<RealmObject>();
 
-                        SpeakerDetailViewActivity.mItems.addAll(speakersList);
+                        // SpeakerDetailViewActivity.mItems.addAll(speakersList);
 
                         Intent i = new Intent(_context, SpeakerDetailViewActivity.class);
                         i.putExtra("SPEAKER_NUMBER", position);
+                        i.putExtra("SPEAKER_LIST", speakersList);
                         _context.startActivity(i);
                     }
                 });

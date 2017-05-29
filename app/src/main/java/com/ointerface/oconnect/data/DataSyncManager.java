@@ -914,7 +914,8 @@ public class DataSyncManager {
                             speaker.setName(parseObject.getString("name"));
                             speaker.setAllowCheckIn(parseObject.getBoolean("allowCheckIn"));
                             speaker.setIOS_code(parseObject.getString("IOS_code"));
-                            speaker.setUpdatedAt(parseObject.getUpdatedAt());
+
+                            // speaker.setUpdatedAt(parseObject.getUpdatedAt());
 
                             speaker.setLocation(parseObject.getString("location"));
                             speaker.setOrganization(parseObject.getString("organization"));
@@ -1078,7 +1079,8 @@ public class DataSyncManager {
                             result.setName(parseObject.getString("name"));
                             result.setAllowCheckIn(parseObject.getBoolean("allowCheckIn"));
                             result.setIOS_code(parseObject.getString("IOS_code"));
-                            result.setUpdatedAt(parseObject.getUpdatedAt());
+
+                            // result.setUpdatedAt(parseObject.getUpdatedAt());
 
                             result.setLocation(parseObject.getString("location"));
                             result.setOrganization(parseObject.getString("organization"));
@@ -1199,11 +1201,10 @@ public class DataSyncManager {
                                 }
                             }
 
+                            /*
                             ParseRelation<ParseObject> eventsRelation = parseObject.getRelation("event");
 
                             ParseQuery<ParseObject> eventsQuery = eventsRelation.getQuery();
-
-
 
                             try {
                                 eventsQuery.findInBackground(new FindCallback<ParseObject>() {
@@ -1232,6 +1233,7 @@ public class DataSyncManager {
                             } catch (Exception ex) {
                                 Log.d("DataSyncManager", "Line 754: " + ex.getMessage());
                             }
+                            */
 
                         }
                     }
@@ -1320,7 +1322,8 @@ public class DataSyncManager {
                             attendee.setName(parseObject.getString("name"));
                             attendee.setAllowCheckIn(parseObject.getBoolean("allowCheckIn"));
                             attendee.setIOS_code(parseObject.getString("IOS_code"));
-                            attendee.setUpdatedAt(parseObject.getUpdatedAt());
+
+                            // attendee.setUpdatedAt(parseObject.getUpdatedAt());
 
                             attendee.setLocation(parseObject.getString("location"));
                             attendee.setOrganization(parseObject.getString("organization"));
@@ -1374,7 +1377,8 @@ public class DataSyncManager {
                             result.setName(parseObject.getString("name"));
                             result.setAllowCheckIn(parseObject.getBoolean("allowCheckIn"));
                             result.setIOS_code(parseObject.getString("IOS_code"));
-                            result.setUpdatedAt(parseObject.getUpdatedAt());
+
+                            // result.setUpdatedAt(parseObject.getUpdatedAt());
 
                             result.setLocation(parseObject.getString("location"));
                             result.setOrganization(parseObject.getString("organization"));
@@ -1851,10 +1855,84 @@ public class DataSyncManager {
                 }
                 */
 
-                callback.onDataSyncFinish();
+                dataSyncTravelBusiness();
+                // callback.onDataSyncFinish();
             // }});
     }
 
+    static public void dataSyncTravelBusiness() {
+
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("TravelBusiness").whereNotEqualTo("isDeleted", true).setLimit(1000);
+
+        Date date = getLastSyncDate();
+
+        if (date != null) {
+            // query.whereGreaterThanOrEqualTo("updatedAt", date);
+        }
+
+        Log.d("DataSyncManager", "Begin Parse Query For TravelBusiness");
+
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, com.parse.ParseException e) {
+                if (e == null) {
+                    Log.d("DataSyncManager", "Start Processing TravelBusiness Records: " + objects.size() + " objects");
+
+                    Realm realm = AppUtil.getRealmInstance(App.getInstance());
+                    realm.beginTransaction();
+
+                    for (ParseObject parseObject:
+                         objects) {
+                        TravelBusiness result = realm.where(TravelBusiness.class).equalTo("objectId", parseObject.getObjectId()).findFirst();
+
+                        if (result == null) {
+
+                            // Create an object
+                            TravelBusiness travelBusiness = realm.createObject(TravelBusiness.class, parseObject.getObjectId());
+
+                            ParseObject confObj = parseObject.getParseObject("conference");
+
+                            if (confObj != null) {
+                                travelBusiness.setConference(confObj.getObjectId());
+                            }
+
+                            travelBusiness.setAddress(parseObject.getString("address"));
+                            travelBusiness.setBusinessName(parseObject.getString("businessName"));
+                            travelBusiness.setBusinessType(parseObject.getString("businessType"));
+                            travelBusiness.setKey(parseObject.getString("key"));
+                            travelBusiness.setOtherDetails(parseObject.getString("otherDetails"));
+                            travelBusiness.setRates(parseObject.getString("rates"));
+                            travelBusiness.setWebsite(parseObject.getString("website"));
+
+                        } else {
+
+
+                            ParseObject confObj = parseObject.getParseObject("conference");
+
+                            if (confObj != null) {
+                                result.setConference(confObj.getObjectId());
+                            }
+
+                            result.setAddress(parseObject.getString("address"));
+                            result.setBusinessName(parseObject.getString("businessName"));
+                            result.setBusinessType(parseObject.getString("businessType"));
+                            result.setKey(parseObject.getString("key"));
+                            result.setOtherDetails(parseObject.getString("otherDetails"));
+                            result.setRates(parseObject.getString("rates"));
+                            result.setWebsite(parseObject.getString("website"));
+
+                        }
+                    }
+
+                    realm.commitTransaction();
+                    realm.close();
+
+                    callback.onDataSyncFinish();
+                }
+            }
+        });
+
+    }
 
     static public void setLastSyncDate(Date syncDate) {
         DateFormat df = new SimpleDateFormat(AppConfig.defaultDateTimeFormat);

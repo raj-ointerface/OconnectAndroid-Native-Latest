@@ -1,5 +1,6 @@
 package com.ointerface.oconnect.data;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import io.realm.RealmList;
@@ -11,7 +12,7 @@ import io.realm.annotations.Required;
  * Created by AnthonyDoan on 4/16/17.
  */
 
-public class Event extends RealmObject {
+public class Event extends RealmObject implements Serializable {
     @Required
     @PrimaryKey
     private String objectId = "";

@@ -91,6 +91,10 @@ public class EventDetailViewActivity extends OConnectBaseActivity {
             super(fm);
         }
 
+        public int getItemPosition(Object object) {
+            return POSITION_NONE;
+        }
+
         @Override
         public Fragment getItem(int position) {
             return EventDetailViewFragment.newInstance(position, EventDetailViewActivity.this, mItems, currentEventNumber);

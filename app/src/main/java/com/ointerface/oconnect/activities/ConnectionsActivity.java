@@ -315,6 +315,9 @@ public class ConnectionsActivity extends OConnectBaseActivity {
             holder.mItemViewBinding.ivParticipantInterests.setBackground(AppUtil.changeDrawableColor(context, R.drawable.icon_participants_light_bulb, AppUtil.getPrimaryThemColorAsInt()));
             holder.mItemViewBinding.ivParticipantLocation.setBackground(AppUtil.changeDrawableColor(context, R.drawable.icon_participants_house, AppUtil.getPrimaryThemColorAsInt()));
 
+            holder.mItemViewBinding.ivMessage.setBackground(AppUtil.changeDrawableColor(context, R.drawable.icon_envelop, AppUtil.getPrimaryThemColorAsInt()));
+
+            holder.mItemViewBinding.tvMessage.setTextColor(AppUtil.getPrimaryThemColorAsInt());
 
             if (currentObj instanceof Speaker) {
                 Speaker currentSpeaker = (Speaker) currentObj;
