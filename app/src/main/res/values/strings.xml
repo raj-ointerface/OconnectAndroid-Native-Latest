@@ -52,6 +52,8 @@
     <string name="label_attendees">Attendees</string>
     <string name="label_my_connections">My Connections</string>
     <string name="label_suggestions">Suggestions</string>
+    <string name="label_by_location">Sort by Location</string>
+    <string name="label_by_name">Sort by Name</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -76,4 +78,5 @@
     <string name="title_activity_attendee_detail_view">AttendeeDetailViewActivity</string>
     <string name="title_activity_edit_account">EditAccountActivity</string>
     <string name="title_activity_travel_view">TravelViewActivity</string>
+    <string name="title_activity_nteschedule">NTEScheduleActivity</string>
 </resources>

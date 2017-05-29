@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_by_name"
+        android:title="@string/label_by_name" />
+
+    <item
+        android:id="@+id/navigation_by_location"
+        android:title="@string/label_by_location" />
+
+</menu>

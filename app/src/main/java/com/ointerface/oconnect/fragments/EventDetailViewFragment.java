@@ -157,18 +157,24 @@ public class EventDetailViewFragment extends Fragment {
         TextView tvEventTitle = (TextView) rootView.findViewById(R.id.tvEventTitle);
         tvEventTitle.setText(event.getName());
 
-        DateFormat dfTime = new SimpleDateFormat("h:mm a");
-        DateFormat dfDate = new SimpleDateFormat("MMM d");
-
-        dfTime.setTimeZone(java.util.TimeZone.getTimeZone("GMT"));
-        dfDate.setTimeZone(java.util.TimeZone.getTimeZone("GMT"));
-
-        String startTime = dfTime.format(event.getStartTime());
-        String endTime = dfTime.format(event.getEndTime());
-
         TextView tvTimeRange = (TextView) rootView.findViewById(R.id.tvEventDateRange);
 
-        tvTimeRange.setText(startTime + " - " + endTime + " on " + dfDate.format(event.getStartTime()));
+        if (!event.isNonTimedEvent()) {
+            DateFormat dfTime = new SimpleDateFormat("h:mm a");
+            DateFormat dfDate = new SimpleDateFormat("MMM d");
+
+            dfTime.setTimeZone(java.util.TimeZone.getTimeZone("GMT"));
+            dfDate.setTimeZone(java.util.TimeZone.getTimeZone("GMT"));
+
+            String startTime = dfTime.format(event.getStartTime());
+            String endTime = dfTime.format(event.getEndTime());
+
+            tvTimeRange.setText(startTime + " - " + endTime + " on " + dfDate.format(event.getStartTime()));
+
+            tvTimeRange.setVisibility(View.VISIBLE);
+        } else {
+            tvTimeRange.setVisibility(GONE);
+        }
 
         elvEventDetailInfo = (ExpandableListView) rootView.findViewById(R.id.elvEventInfo);
 

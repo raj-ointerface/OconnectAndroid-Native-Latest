@@ -455,6 +455,10 @@ public class OConnectBaseActivity extends AppCompatActivity
                         i = new Intent(OConnectBaseActivity.this, ScheduleActivity.class);
                         startActivity(i);
                         break;
+                    case R.drawable.icon_non_timed_event_2:
+                        i = new Intent(OConnectBaseActivity.this, NTEScheduleActivity.class);
+                        startActivity(i);
+                        break;
                     case R.drawable.icon_announcements:
                         if (AppUtil.getIsSignedIn(OConnectBaseActivity.this) == false) {
                             AppUtil.displayPleaseSignInDialog(OConnectBaseActivity.this);

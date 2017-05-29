@@ -190,6 +190,11 @@
             android:name=".activities.TravelViewActivity"
             android:label="@string/title_activity_travel_view"
             android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".activities.NTEScheduleActivity"
+            android:label="@string/title_activity_nteschedule"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
     </application>
 
