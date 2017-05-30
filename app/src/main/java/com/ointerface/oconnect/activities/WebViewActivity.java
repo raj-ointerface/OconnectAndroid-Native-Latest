@@ -38,6 +38,7 @@ public class WebViewActivity extends OConnectBaseActivity {
     static final int MIN_DISTANCE = 150;
 
     private boolean isEventBriteRegistration = false;
+    private boolean isSurvey = false;
 
     private String globalUrl;
 
@@ -53,10 +54,11 @@ public class WebViewActivity extends OConnectBaseActivity {
         ivSearch.setVisibility(GONE);
 
         isEventBriteRegistration = getIntent().getBooleanExtra("isRegistration", false);
+        isSurvey = getIntent().getBooleanExtra("isSurvey", false);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
-        if (isEventBriteRegistration == true) {
+        if (isEventBriteRegistration == true || isSurvey == true) {
             ivHelp.setVisibility(View.VISIBLE);
             ivRightToolbarIcon.setVisibility(View.VISIBLE);
 
