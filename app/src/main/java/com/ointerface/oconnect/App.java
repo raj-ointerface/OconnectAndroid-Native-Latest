@@ -123,6 +123,32 @@ public class App extends Application {
                     realm.getSchema().get("TravelBusiness").addField("conference", String.class);
                     realm.getSchema().get("TravelBusiness").addField("key", String.class);
 
+                    realm.getSchema().create("SurveyQuestion");
+                    realm.getSchema().get("SurveyQuestion").addField("objectId", String.class);
+                    realm.getSchema().get("SurveyQuestion").addPrimaryKey("objectId").setRequired("objectId", true);
+                    realm.getSchema().get("SurveyQuestion").addField("question", String.class);
+                    realm.getSchema().get("SurveyQuestion").addField("order", Integer.class);
+                    realm.getSchema().get("SurveyQuestion").addField("conference", String.class);
+
+                    realm.getSchema().create("SurveyQuestionAnswer");
+                    realm.getSchema().get("SurveyQuestionAnswer").addField("objectId", String.class);
+                    realm.getSchema().get("SurveyQuestionAnswer").addPrimaryKey("objectId").setRequired("objectId", true);
+                    realm.getSchema().get("SurveyQuestionAnswer").addField("title", String.class);
+
+                    realm.getSchema().create("SurveyQuestionAnswerRelation");
+                    realm.getSchema().get("SurveyQuestionAnswerRelation").addField("objectId", String.class);
+                    realm.getSchema().get("SurveyQuestionAnswerRelation").addPrimaryKey("objectId").setRequired("objectId", true);
+                    realm.getSchema().get("SurveyQuestionAnswerRelation").addField("surveyQuestion", String.class);
+                    realm.getSchema().get("SurveyQuestionAnswerRelation").addField("surveyQuestionAnswer", String.class);
+
+                    realm.getSchema().create("UserSurveyAnswer");
+                    realm.getSchema().get("UserSurveyAnswer").addField("objectId", String.class);
+                    realm.getSchema().get("UserSurveyAnswer").addPrimaryKey("objectId").setRequired("objectId", true);
+                    realm.getSchema().get("UserSurveyAnswer").addField("questionId", String.class);
+                    realm.getSchema().get("UserSurveyAnswer").addField("questionAnswerIds", String.class);
+                    realm.getSchema().get("UserSurveyAnswer").addField("userId", String.class);
+
+                    realm.getSchema().get("Attendee").addField("isCheckedIn", Boolean.class);
                 }
             };
 

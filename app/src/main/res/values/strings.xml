@@ -79,4 +79,5 @@
     <string name="title_activity_edit_account">EditAccountActivity</string>
     <string name="title_activity_travel_view">TravelViewActivity</string>
     <string name="title_activity_nteschedule">NTEScheduleActivity</string>
+    <string name="title_activity_analytics_survey">AnalyticsSurveyActivity</string>
 </resources>

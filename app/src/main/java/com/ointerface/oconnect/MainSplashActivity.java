@@ -42,7 +42,6 @@ public class MainSplashActivity extends AppCompatActivity implements IDataSyncLi
 
         // startService(new Intent(this, BackgroundService.class));
 
-
         /*
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {

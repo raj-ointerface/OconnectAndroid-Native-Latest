@@ -183,6 +183,20 @@
                 android:textColor="@color/colorBlack"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/tvCheckIn"
+                android:layout_below="@id/tvParticipantLocation"
+                android:layout_toRightOf="@id/ivParticipantLocation"
+                android:layout_marginTop="5dp"
+                android:textSize="14sp"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginBottom="5dp"
+                android:textColor="@android:color/holo_blue_bright"
+                android:text="Check-In"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"/>
         </RelativeLayout>
     </RelativeLayout>
 </com.daimajia.swipe.SwipeLayout>

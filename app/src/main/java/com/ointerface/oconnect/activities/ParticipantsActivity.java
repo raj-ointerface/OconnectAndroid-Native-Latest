@@ -33,9 +33,12 @@ import com.ointerface.oconnect.data.Session;
 import com.ointerface.oconnect.data.Speaker;
 import com.ointerface.oconnect.util.AppConfig;
 import com.ointerface.oconnect.util.AppUtil;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmObject;
@@ -51,6 +54,8 @@ public class ParticipantsActivity extends OConnectBaseActivity {
     private SearchView participantsSearch;
 
     private BottomNavigationView navigation;
+
+    public Speaker currentSpeaker = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,6 +135,14 @@ public class ParticipantsActivity extends OConnectBaseActivity {
         }
 
         lvParticipantsList = (ListView) findViewById(R.id.lvParticipants);
+
+        Realm realm = AppUtil.getRealmInstance(App.getInstance());
+
+        Speaker result = realm.where(Speaker.class).equalTo("UserLink", currentPerson.getObjectId()).findFirst();
+
+        if (result != null) {
+            currentSpeaker = result;
+        }
 
         getListViewData();
 
@@ -317,7 +330,7 @@ public class ParticipantsActivity extends OConnectBaseActivity {
     public void getListViewData() {
         Realm realm = AppUtil.getRealmInstance(App.getInstance());
 
-        adapter = new ParticipantsSwipeListAdapter(this);
+        adapter = new ParticipantsSwipeListAdapter(this, this);
 
         RealmResults<Speaker> speakerResults;
 

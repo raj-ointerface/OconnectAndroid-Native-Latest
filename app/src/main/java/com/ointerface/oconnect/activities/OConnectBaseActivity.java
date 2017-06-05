@@ -548,6 +548,10 @@ public class OConnectBaseActivity extends AppCompatActivity
                         startActivity(i);
                         break;
                     case R.drawable.icon_survey:
+                        i = new Intent(OConnectBaseActivity.this, AnalyticsSurveyActivity.class);
+                        startActivity(i);
+
+                        /*
                         i = new Intent(OConnectBaseActivity.this, WebViewActivity.class);
 
                         if (selectedConference.getToolbarLabelSurvey() != null &&
@@ -561,6 +565,7 @@ public class OConnectBaseActivity extends AppCompatActivity
                         i.putExtra("OPEN", "");
                         i.putExtra("isSurvey", true);
                         startActivity(i);
+                        */
 
                         return false;
                         /*

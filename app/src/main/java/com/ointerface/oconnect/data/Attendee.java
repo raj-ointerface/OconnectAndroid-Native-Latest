@@ -34,6 +34,16 @@ public class Attendee extends RealmObject implements Serializable {
     private String job = "";
     private byte[] image = null;
 
+    private Boolean isCheckedIn = false;
+
+    public Boolean getCheckedIn() {
+        return isCheckedIn;
+    }
+
+    public void setCheckedIn(Boolean checkedIn) {
+        isCheckedIn = checkedIn;
+    }
+
     public byte[] getImage() {
         return image;
     }

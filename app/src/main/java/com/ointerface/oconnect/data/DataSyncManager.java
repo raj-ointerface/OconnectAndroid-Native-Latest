@@ -1927,6 +1927,190 @@ public class DataSyncManager {
                     realm.commitTransaction();
                     realm.close();
 
+                    dataSyncSurveyQuestion();
+                }
+            }
+        });
+
+    }
+
+    static public void dataSyncSurveyQuestion() {
+
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("SurveyQuestion").whereNotEqualTo("isDeleted", true).setLimit(1000);
+
+        Date date = getLastSyncDate();
+
+        if (date != null) {
+            // query.whereGreaterThanOrEqualTo("updatedAt", date);
+        }
+
+        Log.d("DataSyncManager", "Begin Parse Query For SurveyQuestion");
+
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, com.parse.ParseException e) {
+                if (e == null) {
+                    Log.d("DataSyncManager", "Start Processing SurveyQuestion Records: " + objects.size() + " objects");
+
+                    Realm realm = AppUtil.getRealmInstance(App.getInstance());
+                    realm.beginTransaction();
+
+                    for (ParseObject parseObject:
+                            objects) {
+                        SurveyQuestion result = realm.where(SurveyQuestion.class).equalTo("objectId", parseObject.getObjectId()).findFirst();
+
+                        if (result == null) {
+
+                            // Create an object
+                            SurveyQuestion surveyQuestion = realm.createObject(SurveyQuestion.class, parseObject.getObjectId());
+
+                            ParseObject confObj = parseObject.getParseObject("conference");
+
+                            if (confObj != null) {
+                                surveyQuestion.setConference(confObj.getObjectId());
+                            }
+
+                            surveyQuestion.setOrder(parseObject.getInt("order"));
+                            surveyQuestion.setQuestion(parseObject.getString("question"));
+
+                        } else {
+
+
+                            ParseObject confObj = parseObject.getParseObject("conference");
+
+                            if (confObj != null) {
+                                result.setConference(confObj.getObjectId());
+                            }
+
+                            result.setOrder(parseObject.getInt("order"));
+                            result.setQuestion(parseObject.getString("question"));
+
+                        }
+                    }
+
+                    realm.commitTransaction();
+                    realm.close();
+
+                    dataSyncSurveyQuestionAnswer();
+                }
+            }
+        });
+
+    }
+
+    static public void dataSyncSurveyQuestionAnswer() {
+
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("SurveyQuestionAnswer").whereNotEqualTo("isDeleted", true).setLimit(1000);
+
+        Date date = getLastSyncDate();
+
+        if (date != null) {
+            // query.whereGreaterThanOrEqualTo("updatedAt", date);
+        }
+
+        Log.d("DataSyncManager", "Begin Parse Query For SurveyQuestionAnswer");
+
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, com.parse.ParseException e) {
+                if (e == null) {
+                    Log.d("DataSyncManager", "Start Processing SurveyQuestionAnswer Records: " + objects.size() + " objects");
+
+                    Realm realm = AppUtil.getRealmInstance(App.getInstance());
+                    realm.beginTransaction();
+
+                    for (ParseObject parseObject:
+                            objects) {
+                        SurveyQuestionAnswer result = realm.where(SurveyQuestionAnswer.class).equalTo("objectId", parseObject.getObjectId()).findFirst();
+
+                        if (result == null) {
+
+                            // Create an object
+                            SurveyQuestionAnswer surveyQuestionAnswer = realm.createObject(SurveyQuestionAnswer.class, parseObject.getObjectId());
+
+                            surveyQuestionAnswer.setTitle(parseObject.getString("title"));
+
+                        } else {
+
+
+                            result.setTitle(parseObject.getString("title"));
+
+                        }
+                    }
+
+                    realm.commitTransaction();
+                    realm.close();
+
+                    dataSyncSurveyQuestionAnswerRelation();
+                }
+            }
+        });
+
+    }
+
+    static public void dataSyncSurveyQuestionAnswerRelation() {
+
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("SurveyQuestionAnswerRelation").whereNotEqualTo("isDeleted", true).setLimit(1000);
+
+        Date date = getLastSyncDate();
+
+        if (date != null) {
+            // query.whereGreaterThanOrEqualTo("updatedAt", date);
+        }
+
+        Log.d("DataSyncManager", "Begin Parse Query For SurveyQuestionAnswerRelation");
+
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, com.parse.ParseException e) {
+                if (e == null) {
+                    Log.d("DataSyncManager", "Start Processing SurveyQuestionAnswerRelation Records: " + objects.size() + " objects");
+
+                    Realm realm = AppUtil.getRealmInstance(App.getInstance());
+                    realm.beginTransaction();
+
+                    for (ParseObject parseObject:
+                            objects) {
+                        SurveyQuestionAnswerRelation result = realm.where(SurveyQuestionAnswerRelation.class).equalTo("objectId", parseObject.getObjectId()).findFirst();
+
+                        if (result == null) {
+
+                            // Create an object
+                            SurveyQuestionAnswerRelation surveyQuestionRelation = realm.createObject(SurveyQuestionAnswerRelation.class, parseObject.getObjectId());
+
+                            ParseObject questionObj = parseObject.getParseObject("surveyQuestion");
+
+                            if (questionObj != null) {
+                                surveyQuestionRelation.setSurveyQuestion(questionObj.getObjectId());
+                            }
+
+
+                            ParseObject answerObj = parseObject.getParseObject("surveyQuestionAnswer");
+
+                            if (answerObj != null) {
+                                surveyQuestionRelation.setSurveyQuestionAnswer(answerObj.getObjectId());
+                            }
+                        } else {
+
+
+                            ParseObject questionObj = parseObject.getParseObject("surveyQuestion");
+
+                            if (questionObj != null) {
+                                result.setSurveyQuestion(questionObj.getObjectId());
+                            }
+
+
+                            ParseObject answerObj = parseObject.getParseObject("surveyQuestionAnswer");
+
+                            if (answerObj != null) {
+                                result.setSurveyQuestionAnswer(answerObj.getObjectId());
+                            }
+                        }
+                    }
+
+                    realm.commitTransaction();
+                    realm.close();
+
                     callback.onDataSyncFinish();
                 }
             }

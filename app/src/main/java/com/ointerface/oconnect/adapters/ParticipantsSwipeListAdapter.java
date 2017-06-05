@@ -1,5 +1,6 @@
 package com.ointerface.oconnect.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -20,6 +21,7 @@ import com.daimajia.swipe.adapters.BaseSwipeAdapter;
 import com.ointerface.oconnect.App;
 import com.ointerface.oconnect.R;
 import com.ointerface.oconnect.activities.OConnectBaseActivity;
+import com.ointerface.oconnect.activities.ParticipantsActivity;
 import com.ointerface.oconnect.data.Attendee;
 import com.ointerface.oconnect.data.Event;
 import com.ointerface.oconnect.data.Speaker;
@@ -45,6 +47,8 @@ import static android.view.View.GONE;
 public class ParticipantsSwipeListAdapter extends BaseSwipeAdapter {
     public Context context;
 
+    public ParticipantsActivity activity;
+
     private LayoutInflater mInflater;
 
     public boolean showingSpeakers = true;
@@ -56,9 +60,10 @@ public class ParticipantsSwipeListAdapter extends BaseSwipeAdapter {
     public TreeSet<Integer> connectedPositionsByUser = new TreeSet<Integer>();
     public TreeSet<Integer> connectedPositionsAttendeeByUser = new TreeSet<Integer>();
 
-    public ParticipantsSwipeListAdapter(Context context) {
+    public ParticipantsSwipeListAdapter(Context context, ParticipantsActivity activity) {
         super();
         this.context = context;
+        this.activity = activity;
         this.mSpeakers = new ArrayList<Speaker>();
         this.mAttendees = new ArrayList<Attendee>();
         hiddenPositionsByUser = new TreeSet<Integer>();
@@ -365,6 +370,39 @@ public class ParticipantsSwipeListAdapter extends BaseSwipeAdapter {
             final SwipeLayout swipeMain = (SwipeLayout) convertView.findViewById(R.id.swipeMain);
             TextView tvConnect = (TextView) convertView.findViewById(R.id.tvConnect);
             TextView tvHide = (TextView) convertView.findViewById(R.id.tvHide);
+            final TextView tvCheckIn = (TextView) convertView.findViewById(R.id.tvCheckIn);
+
+            if (attendee.getCheckedIn() == true) {
+                tvCheckIn.setVisibility(View.VISIBLE);
+                tvCheckIn.setText("Checked In");
+            }
+
+            if (activity.currentSpeaker != null &&
+                    activity.currentSpeaker.isAllowCheckIn() == true) {
+                tvCheckIn.setVisibility(View.VISIBLE);
+
+                tvCheckIn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Realm realm = AppUtil.getRealmInstance(App.getInstance());
+                        realm.beginTransaction();
+                        attendee.setCheckedIn(true);
+                        realm.commitTransaction();
+
+                        try {
+                            ParseObject parseAttendee = ParseQuery.getQuery("Attendee").get(attendee.getObjectId());
+                            if (parseAttendee != null) {
+                                parseAttendee.put("isCheckedIn", true);
+                                parseAttendee.save();
+                            }
+                        } catch (Exception ex) {
+                            Log.d("Participants", ex.getMessage());
+                        }
+
+                        tvCheckIn.setText("Checked In");
+                    }
+                });
+            }
 
             tvHide.setTextColor(AppUtil.getPrimaryThemColorAsInt());
 
