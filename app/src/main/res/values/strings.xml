@@ -80,4 +80,14 @@
     <string name="title_activity_travel_view">TravelViewActivity</string>
     <string name="title_activity_nteschedule">NTEScheduleActivity</string>
     <string name="title_activity_analytics_survey">AnalyticsSurveyActivity</string>
+
+    <string name="label_tap_continue">"Tap to Continue"</string>
+    <string name="label_dont_show_again">"Don't Show Again"</string>
+    <string name="participants_overlay_text_1">"Swipe left to right on participants to add them as connections or to send them messages."</string>
+    <string name="participants_overlay_text_2">"Swipe right to left on participants to hide/unhide them from the participants view."</string>
+    <string name="schedule_overlay_1_text_1">"Swipe left to right on events to add them to your custom agenda."</string>
+    <string name="schedule_overlay_1_text_2">"Swipe right to left on events to hide/unhide them from the schedule view."</string>
+    <string name="schedule_overlay_2_text">"Select this button to sign in and view your connections."</string>
+    <string name="schedule_overlay_3_text">"Select this button to view the tool bar. Here you will find your notes, customized agenda, speaker bios &amp; much more."</string>
+    <string name="schedule_overlay_4_text">"Select this button to traverse between the participants and the schedule."</string>
 </resources>

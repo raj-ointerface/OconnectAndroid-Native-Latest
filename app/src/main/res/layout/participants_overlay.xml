@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/CustomDialog"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#33333333">
+
+    <RelativeLayout
+        android:id="@+id/top_layer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        >
+
+        <TextView
+            android:id="@+id/tvText1"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="50dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:textColor="@color/colorWhite"
+            android:textSize="18sp"
+            android:text="@string/participants_overlay_text_1"/>
+
+        <ImageView
+            android:id="@+id/ivArrowRight"
+            android:layout_below="@+id/tvText1"
+            android:layout_marginTop="25dp"
+            android:layout_centerHorizontal="true"
+            android:layout_width="150dp"
+            android:layout_height="125dp"
+            android:src="@drawable/arrow_right" />
+
+        <TextView
+            android:id="@+id/tvText2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="35dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_below="@+id/ivArrowRight"
+            android:textColor="@color/colorWhite"
+            android:textSize="18sp"
+            android:textAlignment="center"
+            android:text="@string/participants_overlay_text_2"/>
+
+        <ImageView
+            android:id="@+id/ivArrowLeft"
+            android:layout_below="@+id/tvText2"
+            android:layout_marginTop="25dp"
+            android:layout_centerHorizontal="true"
+            android:layout_width="150dp"
+            android:layout_height="125dp"
+            android:src="@drawable/arrow_left" />
+
+    </RelativeLayout>
+
+    <CheckBox
+        android:id="@+id/cbDontShowAgain"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginBottom="20dp"
+        android:layout_width="25dp"
+        android:layout_height="25dp" />
+
+    <TextView
+        android:id="@+id/tvDontShowAgain"
+        android:layout_toRightOf="@+id/cbDontShowAgain"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:textSize="16sp"
+        android:textColor="@color/colorWhite"
+        android:text="@string/label_dont_show_again" />
+
+    <TextView
+        android:id="@+id/tvTapContinue"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:textColor="@color/colorWhite"
+        android:text="@string/label_tap_continue" />
+
+
+</RelativeLayout>

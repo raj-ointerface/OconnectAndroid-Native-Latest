@@ -8,6 +8,8 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
@@ -31,6 +33,7 @@ import com.ointerface.oconnect.adapters.ParticipantsSwipeListAdapter;
 import com.ointerface.oconnect.data.Attendee;
 import com.ointerface.oconnect.data.Session;
 import com.ointerface.oconnect.data.Speaker;
+import com.ointerface.oconnect.fragments.OverlayDialogFragment;
 import com.ointerface.oconnect.util.AppConfig;
 import com.ointerface.oconnect.util.AppUtil;
 import com.parse.ParseObject;
@@ -177,6 +180,11 @@ public class ParticipantsActivity extends OConnectBaseActivity {
         navigation.setSelectedItemId(R.id.navigation_speakers);
 
         displaySpeakers();
+
+        FragmentManager fm = getSupportFragmentManager();
+        OverlayDialogFragment dialogFragment = OverlayDialogFragment.newInstance(this, OverlayDialogFragment.OverlayType.Partificpants1);
+        dialogFragment.setStyle(DialogFragment.STYLE_NO_FRAME, R.style.CustomDialog);
+        dialogFragment.show(fm, OverlayDialogFragment.OverlayType.Partificpants1.name());
     }
 
     public void initSearchView() {

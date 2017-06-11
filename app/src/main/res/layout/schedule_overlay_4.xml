@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/CustomDialog"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#33333333">
+
+    <RelativeLayout
+        android:id="@+id/top_layer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        >
+
+        <ImageView
+            android:id="@+id/ivAnchorIcon"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:scaleType="fitCenter"
+            android:background="@drawable/icon_profile_lanyard" />
+
+        <ImageView
+            android:layout_width="175dp"
+            android:layout_height="175dp"
+            android:layout_below="@+id/ivAnchorIcon"
+            android:layout_toRightOf="@+id/ivAnchorIcon"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="-30dp"
+            android:scaleType="fitCenter"
+            android:background="@drawable/ic_arrow_left_pointer" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tvText1"
+        android:layout_below="@+id/top_layer"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        android:textColor="@color/colorWhite"
+        android:text="@string/schedule_overlay_4_text" />
+
+    <CheckBox
+        android:id="@+id/cbDontShowAgain"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginBottom="20dp"
+        android:layout_width="25dp"
+        android:layout_height="25dp" />
+
+    <TextView
+        android:id="@+id/tvDontShowAgain"
+        android:layout_toRightOf="@+id/cbDontShowAgain"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:textSize="16sp"
+        android:textColor="@color/colorWhite"
+        android:text="@string/label_dont_show_again" />
+
+    <TextView
+        android:id="@+id/tvTapContinue"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:textColor="@color/colorWhite"
+        android:text="@string/label_tap_continue" />
+
+</RelativeLayout>

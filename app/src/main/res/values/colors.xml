@@ -20,4 +20,5 @@
     <color name="dashboardSchedulePreviewHeaderBackgroundColor">#005F68</color>
     <color name="colorTurquoise">#40E0D0</color>
     <color name="hiddenBacgroundGray">#6D7177</color>
+    <color name="dialogBacgroundColor">#306D7177</color>
 </resources>

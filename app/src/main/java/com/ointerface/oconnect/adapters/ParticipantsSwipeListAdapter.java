@@ -174,6 +174,9 @@ public class ParticipantsSwipeListAdapter extends BaseSwipeAdapter {
             TextView tvInterests = (TextView) convertView.findViewById(R.id.tvParticipantInterests);
             TextView tvLocation = (TextView) convertView.findViewById(R.id.tvParticipantLocation);
 
+            final TextView tvCheckIn = (TextView) convertView.findViewById(R.id.tvCheckIn);
+            tvCheckIn.setVisibility(GONE);
+
             tvName.setText(speaker.getName());
 
             if (speaker.getJob() != null && !speaker.getJob().equalsIgnoreCase("")) {
@@ -371,6 +374,7 @@ public class ParticipantsSwipeListAdapter extends BaseSwipeAdapter {
             TextView tvConnect = (TextView) convertView.findViewById(R.id.tvConnect);
             TextView tvHide = (TextView) convertView.findViewById(R.id.tvHide);
             final TextView tvCheckIn = (TextView) convertView.findViewById(R.id.tvCheckIn);
+            tvCheckIn.setVisibility(GONE);
 
             if (attendee.getCheckedIn() == true) {
                 tvCheckIn.setVisibility(View.VISIBLE);
