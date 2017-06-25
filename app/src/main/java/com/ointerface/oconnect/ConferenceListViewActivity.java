@@ -65,7 +65,7 @@ public class ConferenceListViewActivity extends AppCompatActivity {
     private TextView tvCancel;
     private TextView tvTitle;
 
-    static public int customColor = AppConfig.defaultThemeColor;
+    static public int customColor = AppUtil.getPrimaryThemColorAsInt();
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -239,7 +239,7 @@ public class ConferenceListViewActivity extends AppCompatActivity {
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-        navigation.setBackgroundColor(AppConfig.defaultThemeColor);
+        navigation.setBackgroundColor(AppUtil.getPrimaryThemColorAsInt());
 
         int[][] states = new int[][] {
                 new int[] { android.R.attr.state_enabled}, // enabled

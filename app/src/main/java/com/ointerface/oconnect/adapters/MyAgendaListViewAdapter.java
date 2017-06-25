@@ -36,7 +36,7 @@ import io.realm.RealmList;
 import static android.view.View.GONE;
 
 import com.daimajia.swipe.SwipeLayout;
-import com.nineoldandroids.view.ViewHelper;
+// import com.nineoldandroids.view.ViewHelper;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseRelation;

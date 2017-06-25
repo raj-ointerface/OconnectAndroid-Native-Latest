@@ -8,9 +8,10 @@
 
     <RelativeLayout
         android:id="@+id/top_layer"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
         >
 
@@ -21,21 +22,23 @@
             android:scaleType="fitCenter"
             android:background="@drawable/icon_profile_lanyard" />
 
-        <ImageView
-            android:layout_width="175dp"
-            android:layout_height="175dp"
-            android:layout_below="@+id/ivAnchorIcon"
-            android:layout_toLeftOf="@+id/ivAnchorIcon"
-            android:layout_marginTop="5dp"
-            android:layout_marginRight="5dp"
-            android:scaleType="fitCenter"
-            android:background="@drawable/ic_arrow_right_pointer" />
-
     </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/ivArrowPointer"
+        android:layout_width="175dp"
+        android:layout_height="175dp"
+        android:layout_below="@+id/top_layer"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="5dp"
+        android:scaleType="fitCenter"
+        android:background="@drawable/ic_arrow_right_pointer" />
 
     <TextView
         android:id="@+id/tvText1"
-        android:layout_below="@+id/top_layer"
+        android:layout_below="@+id/ivArrowPointer"
         android:layout_marginTop="20dp"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"

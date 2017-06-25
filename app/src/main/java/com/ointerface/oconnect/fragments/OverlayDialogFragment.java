@@ -187,7 +187,7 @@ public class OverlayDialogFragment extends DialogFragment {
                 final int[] textViewScreenPosition = new int[2];
                 currentAnchorView.getLocationOnScreen(textViewScreenPosition);
                 float textX = textViewScreenPosition[0];
-                float textY = textViewScreenPosition[1] - statusBarHeight;
+                float textY = textViewScreenPosition[1] - AppUtil.convertDPToPXInt(activity, 20);
 
                 rlViewToMove.setX(textX);
                 rlViewToMove.setY(textY);

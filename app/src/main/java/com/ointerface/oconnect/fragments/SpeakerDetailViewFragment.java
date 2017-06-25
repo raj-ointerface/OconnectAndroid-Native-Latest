@@ -2,6 +2,7 @@ package com.ointerface.oconnect.fragments;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -37,6 +38,7 @@ import com.ointerface.oconnect.data.SpeakerFile;
 import com.ointerface.oconnect.data.SpeakerJournal;
 import com.ointerface.oconnect.data.SpeakerLink;
 import com.ointerface.oconnect.data.SpeakerMisc;
+import com.ointerface.oconnect.messaging.MessagingActivity;
 import com.ointerface.oconnect.util.AppUtil;
 
 import java.io.InputStream;
@@ -153,6 +155,17 @@ public class SpeakerDetailViewFragment extends Fragment {
         TextView tvMessage = (TextView) rootView.findViewById(R.id.tvMessage);
 
         tvMessage.setTextColor(AppUtil.getPrimaryThemColorAsInt());
+
+        tvMessage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(activity, MessagingActivity.class);
+
+                MessagingActivity.recipientIDStr = "info@swabimobile.com";
+
+                activity.startActivity(intent);
+            }
+        });
 
         TextView tvAddNote = (TextView) rootView.findViewById(R.id.tvAddNote);
 

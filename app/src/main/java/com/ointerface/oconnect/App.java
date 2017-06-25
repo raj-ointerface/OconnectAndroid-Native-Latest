@@ -1,19 +1,44 @@
 package com.ointerface.oconnect;
 
 import android.app.Application;
+import android.content.ComponentName;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.net.Uri;
+import android.os.IBinder;
+import android.support.multidex.MultiDexApplication;
+import android.util.Log;
+import android.widget.Toast;
 
+import com.ointerface.oconnect.activities.OConnectBaseActivity;
 import com.ointerface.oconnect.data.MyNote;
+import com.ointerface.oconnect.data.Person;
+import com.ointerface.oconnect.data.SinchMessage;
+import com.ointerface.oconnect.messaging.SinchService;
 import com.ointerface.oconnect.util.AppUtil;
 import com.parse.Parse;
 import com.parse.ParseACL;
 import com.parse.ParseInstallation;
 import com.parse.ParseUser;
+import com.sinch.android.rtc.PushPair;
+import com.sinch.android.rtc.Sinch;
+import com.sinch.android.rtc.SinchClient;
+import com.sinch.android.rtc.messaging.Message;
+import com.sinch.android.rtc.messaging.MessageClient;
+import com.sinch.android.rtc.messaging.MessageClientListener;
+import com.sinch.android.rtc.messaging.MessageDeliveryInfo;
+import com.sinch.android.rtc.messaging.MessageFailureInfo;
+import com.twitter.sdk.android.core.DefaultLogger;
+import com.twitter.sdk.android.core.Twitter;
+import com.twitter.sdk.android.core.TwitterAuthConfig;
+import com.twitter.sdk.android.core.TwitterConfig;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Date;
+import java.util.List;
 
 import io.realm.DynamicRealm;
 import io.realm.FieldAttribute;
@@ -28,8 +53,10 @@ import io.realm.internal.Table;
  * Created by AnthonyDoan on 4/11/17.
  */
 
-public class App extends Application {
+public class App extends MultiDexApplication implements ServiceConnection, MessageClientListener {
     private static App instance;
+
+    public SinchService.SinchServiceInterface mSinchServiceInterface;
 
     @Override
     public void onCreate() {
@@ -149,6 +176,13 @@ public class App extends Application {
                     realm.getSchema().get("UserSurveyAnswer").addField("userId", String.class);
 
                     realm.getSchema().get("Attendee").addField("isCheckedIn", Boolean.class);
+
+                    realm.getSchema().create("SinchMessage");
+                    realm.getSchema().get("SinchMessage").addField("messageString", String.class);
+                    realm.getSchema().get("SinchMessage").addField("messageDateTime", Date.class);
+                    realm.getSchema().get("SinchMessage").addField("currentUserID", String.class);
+                    realm.getSchema().get("SinchMessage").addField("connectedUserID", String.class);
+
                 }
             };
 
@@ -181,9 +215,128 @@ public class App extends Application {
 
         Realm.setDefaultConfiguration(AppUtil.realmConfiguration);
         */
+
+        TwitterConfig config = new TwitterConfig.Builder(this)
+                .logger(new DefaultLogger(Log.DEBUG))
+                .twitterAuthConfig(new TwitterAuthConfig(getString(R.string.twitter_consumer_key), getString(R.string.twitter_consumer_secret)))
+                .debug(true)
+                .build();
+        Twitter.initialize(config);
+
+        getApplicationContext().bindService(new Intent(this, SinchService.class), this,
+                BIND_AUTO_CREATE);
+
+    }
+
+    public static void initSinchClient(String userID) {
+        SinchClient sinchClient = Sinch.getSinchClientBuilder().context(instance.getApplicationContext())
+                .applicationKey("57168fac-8abd-4317-820c-3e67ca5e225b")
+                .applicationSecret("HLPZ7cYRuk2OfcV+yYar9g==")
+                .environmentHost("sandbox.sinch.com")
+                .userId(userID)
+                .build();
     }
 
     public static App getInstance() {
         return instance;
+    }
+
+    @Override
+    public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+        if (SinchService.class.getName().equals(componentName.getClassName())) {
+            mSinchServiceInterface = (SinchService.SinchServiceInterface) iBinder;
+
+            if (AppUtil.getIsSignedIn(getApplicationContext()) == true) {
+                Realm realm = AppUtil.getRealmInstance(App.getInstance());
+                OConnectBaseActivity.currentPerson = realm.where(Person.class).equalTo("objectId", AppUtil.getSignedInUserID(getApplicationContext())).findFirst();
+            }
+
+            if (OConnectBaseActivity.currentPerson != null) {
+                if (!mSinchServiceInterface.isStarted()) {
+                    mSinchServiceInterface.startClient("eLd3wgDMIJ");
+                }
+            }
+
+            mSinchServiceInterface.addMessageClientListener(this);
+            onServiceConnected();
+
+        }
+    }
+
+    @Override
+    public void onServiceDisconnected(ComponentName componentName) {
+        if (SinchService.class.getName().equals(componentName.getClassName())) {
+            mSinchServiceInterface = null;
+            onServiceDisconnected();
+        }
+    }
+
+    protected void onServiceConnected() {
+        // for subclasses
+    }
+
+    protected void onServiceDisconnected() {
+        // for subclasses
+    }
+
+    protected SinchService.SinchServiceInterface getSinchServiceInterface() {
+        return mSinchServiceInterface;
+    }
+
+    @Override
+    public void onIncomingMessage(MessageClient client, Message message) {
+        Realm realm = AppUtil.getRealmInstance(App.getInstance());
+
+        realm.beginTransaction();
+
+        SinchMessage sinchMessage = realm.createObject(SinchMessage.class);
+
+        sinchMessage.setMessageString(message.getTextBody());
+
+        sinchMessage.setCurrentUserID(message.getRecipientIds().get(0));
+
+        sinchMessage.setConnectedUserID(message.getSenderId());
+        sinchMessage.setMessageDateTime(message.getTimestamp());
+
+        realm.commitTransaction();
+        realm.close();
+    }
+
+    @Override
+    public void onMessageSent(MessageClient client, Message message, String recipientId) {
+        Realm realm = AppUtil.getRealmInstance(App.getInstance());
+
+        realm.beginTransaction();
+
+        SinchMessage sinchMessage = realm.createObject(SinchMessage.class);
+
+        sinchMessage.setMessageString(message.getTextBody());
+        sinchMessage.setCurrentUserID(message.getSenderId());
+        sinchMessage.setConnectedUserID(recipientId);
+        sinchMessage.setMessageDateTime(message.getTimestamp());
+
+        realm.commitTransaction();
+        realm.close();
+    }
+
+    @Override
+    public void onShouldSendPushData(MessageClient client, Message message, List<PushPair> pushPairs) {
+        // Left blank intentionally
+    }
+
+    @Override
+    public void onMessageFailed(MessageClient client, Message message,
+                                MessageFailureInfo failureInfo) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Sending failed: ")
+                .append(failureInfo.getSinchError().getMessage());
+
+        Toast.makeText(this, sb.toString(), Toast.LENGTH_LONG).show();
+        Log.d("OConnectBase", sb.toString());
+    }
+
+    @Override
+    public void onMessageDelivered(MessageClient client, MessageDeliveryInfo deliveryInfo) {
+        Log.d("OConnectBase", "onDelivered");
     }
 }

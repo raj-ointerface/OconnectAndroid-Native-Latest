@@ -1,10 +1,14 @@
 package com.ointerface.oconnect.data;
 
+import com.ointerface.oconnect.App;
+import com.ointerface.oconnect.util.AppUtil;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
@@ -37,6 +41,13 @@ public class Attendee extends RealmObject implements Serializable {
     private Boolean isCheckedIn = false;
 
     public Boolean getCheckedIn() {
+        if (isCheckedIn == null) {
+            Realm realm = AppUtil.getRealmInstance(App.getInstance());
+
+            realm.beginTransaction();
+            isCheckedIn = false;
+            realm.commitTransaction();
+        }
         return isCheckedIn;
     }
 

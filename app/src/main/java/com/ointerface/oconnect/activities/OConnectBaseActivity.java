@@ -2,8 +2,10 @@ package com.ointerface.oconnect.activities;
 
 import android.app.FragmentManager;
 import android.app.ProgressDialog;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -16,6 +18,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentActivity;
@@ -43,6 +46,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ointerface.oconnect.App;
 import com.ointerface.oconnect.ConferenceListViewActivity;
@@ -55,10 +59,22 @@ import com.ointerface.oconnect.data.Conference;
 import com.ointerface.oconnect.data.DataSyncManager;
 import com.ointerface.oconnect.data.IDataSyncListener;
 import com.ointerface.oconnect.data.MasterNotification;
+import com.ointerface.oconnect.data.Organization;
 import com.ointerface.oconnect.data.Person;
+import com.ointerface.oconnect.data.SinchMessage;
 import com.ointerface.oconnect.fragments.SearchDialogFragment;
+import com.ointerface.oconnect.messaging.MessageAdapter;
+import com.ointerface.oconnect.messaging.MessagingActivity;
+import com.ointerface.oconnect.messaging.MessagingListActivity;
+import com.ointerface.oconnect.messaging.SinchService;
 import com.ointerface.oconnect.util.AppUtil;
 import com.parse.ParseUser;
+import com.sinch.android.rtc.PushPair;
+import com.sinch.android.rtc.messaging.Message;
+import com.sinch.android.rtc.messaging.MessageClient;
+import com.sinch.android.rtc.messaging.MessageClientListener;
+import com.sinch.android.rtc.messaging.MessageDeliveryInfo;
+import com.sinch.android.rtc.messaging.MessageFailureInfo;
 
 import java.io.InputStream;
 import java.net.URL;
@@ -77,7 +93,10 @@ import static android.view.View.GONE;
 
 
 public class OConnectBaseActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, IDataSyncListener {
+        implements NavigationView.OnNavigationItemSelectedListener, IDataSyncListener, ServiceConnection,
+        MessageClientListener {
+
+    private SinchService.SinchServiceInterface mSinchServiceInterface;
 
     NavExpandableListViewAdapter listAdapter;
     ExpandableListView expListView;
@@ -112,9 +131,12 @@ public class OConnectBaseActivity extends AppCompatActivity
 
     public Bitmap bmp;
     public Button btnConnections;
+    public Button btnMessaging;
     public TextView tvSignOut;
     public ImageView ivSignOut;
     public ImageView ivAccountEdit;
+
+    public static boolean bIsSinchStarted = false;
 
     protected void onCreateDrawer() {
         // super.onCreate(savedInstanceState);
@@ -126,6 +148,15 @@ public class OConnectBaseActivity extends AppCompatActivity
         if (AppUtil.getIsSignedIn(OConnectBaseActivity.this) == true) {
             currentPerson = realm.where(Person.class).equalTo("objectId", AppUtil.getSignedInUserID(OConnectBaseActivity.this)).findFirst();
         }
+
+        /*
+        if (bIsSinchStarted == false) {
+            getApplicationContext().bindService(new Intent(this, SinchService.class), this,
+                    BIND_AUTO_CREATE);
+
+            bIsSinchStarted = true;
+        }
+        */
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -236,22 +267,36 @@ public class OConnectBaseActivity extends AppCompatActivity
         switchContactable = (Switch) navigationViewRight.findViewById(R.id.switchAccountContactable);
         tvRightNavHeader = (TextView) navigationViewRight.findViewById(R.id.tvMyAccount);
         btnConnections = (Button) navigationViewRight.findViewById(R.id.btnConnections);
+        btnMessaging = (Button) navigationViewRight.findViewById(R.id.btnMessaging);
         ivSignOut = (ImageView) navigationViewRight.findViewById(R.id.ivSignOut);
         tvSignOut = (TextView) navigationViewRight.findViewById(R.id.tvSignOut);
         ivAccountEdit = (ImageView) navigationViewRight.findViewById(R.id.ivAccountEdit);
 
         tvRightNavHeader.setBackgroundColor(AppUtil.getPrimaryThemColorAsInt());
         btnConnections.setBackgroundColor(AppUtil.getPrimaryThemColorAsInt());
+        btnMessaging.setBackgroundColor(AppUtil.getPrimaryThemColorAsInt());
         ivSignOut.setBackground(AppUtil.changeDrawableColor(OConnectBaseActivity.this,R.drawable.icon_sign_out, AppUtil.getPrimaryThemColorAsInt()));
         tvSignOut.setTextColor(AppUtil.getPrimaryThemColorAsInt());
 
         btnConnections.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // AppUtil.displayNotImplementedDialog(OConnectBaseActivity.this);
-
                 Intent i = new Intent(OConnectBaseActivity.this, ConnectionsActivity.class);
                 startActivity(i);
+            }
+        });
+
+        btnMessaging.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(OConnectBaseActivity.this, MessagingActivity.class);
+
+                MessagingActivity.recipientIDStr = "Hk17CJJSDc";
+
+                startActivity(intent);
+
+                //Intent i = new Intent(OConnectBaseActivity.this, MessagingListActivity.class);
+                //startActivity(i);
             }
         });
 
@@ -268,6 +313,10 @@ public class OConnectBaseActivity extends AppCompatActivity
             tvName.setText(currentPerson.getFirstName() + " " + currentPerson.getLastName());
 
             try {
+                if (!getSinchServiceInterface().isStarted()) {
+                    getSinchServiceInterface().startClient("eLd3wgDMIJ");
+                }
+
                 if (currentPerson.getPictureURL() != null
                         && !currentPerson.getPictureURL().equalsIgnoreCase("")) {
 
@@ -854,5 +903,90 @@ public class OConnectBaseActivity extends AppCompatActivity
     @Override
     public void onResume() {
         super.onResume();
+    }
+
+    @Override
+    public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+        if (SinchService.class.getName().equals(componentName.getClassName())) {
+            mSinchServiceInterface = (SinchService.SinchServiceInterface) iBinder;
+            mSinchServiceInterface.addMessageClientListener(this);
+            onServiceConnected();
+
+        }
+    }
+
+    @Override
+    public void onServiceDisconnected(ComponentName componentName) {
+        if (SinchService.class.getName().equals(componentName.getClassName())) {
+            mSinchServiceInterface = null;
+            onServiceDisconnected();
+        }
+    }
+
+    protected void onServiceConnected() {
+        // for subclasses
+    }
+
+    protected void onServiceDisconnected() {
+        // for subclasses
+    }
+
+    protected SinchService.SinchServiceInterface getSinchServiceInterface() {
+        return mSinchServiceInterface;
+    }
+
+    @Override
+    public void onIncomingMessage(MessageClient client, Message message) {
+        Realm realm = AppUtil.getRealmInstance(App.getInstance());
+
+        realm.beginTransaction();
+
+        SinchMessage sinchMessage = realm.createObject(SinchMessage.class);
+
+        sinchMessage.setMessageString(message.getTextBody());
+        sinchMessage.setCurrentUserID(currentPerson.getUsername());
+        sinchMessage.setConnectedUserID(message.getSenderId());
+        sinchMessage.setMessageDateTime(message.getTimestamp());
+
+        realm.commitTransaction();
+        realm.close();
+    }
+
+    @Override
+    public void onMessageSent(MessageClient client, Message message, String recipientId) {
+        Realm realm = AppUtil.getRealmInstance(App.getInstance());
+
+        realm.beginTransaction();
+
+        SinchMessage sinchMessage = realm.createObject(SinchMessage.class);
+
+        sinchMessage.setMessageString(message.getTextBody());
+        sinchMessage.setCurrentUserID(message.getSenderId());
+        sinchMessage.setConnectedUserID(recipientId);
+        sinchMessage.setMessageDateTime(message.getTimestamp());
+
+        realm.commitTransaction();
+        realm.close();
+    }
+
+    @Override
+    public void onShouldSendPushData(MessageClient client, Message message, List<PushPair> pushPairs) {
+        // Left blank intentionally
+    }
+
+    @Override
+    public void onMessageFailed(MessageClient client, Message message,
+                                MessageFailureInfo failureInfo) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Sending failed: ")
+                .append(failureInfo.getSinchError().getMessage());
+
+        Toast.makeText(this, sb.toString(), Toast.LENGTH_LONG).show();
+        Log.d("OConnectBase", sb.toString());
+    }
+
+    @Override
+    public void onMessageDelivered(MessageClient client, MessageDeliveryInfo deliveryInfo) {
+        Log.d("OConnectBase", "onDelivered");
     }
 }

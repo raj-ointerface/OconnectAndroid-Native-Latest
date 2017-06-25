@@ -3,10 +3,8 @@ package com.ointerface.oconnect.network;
 import android.app.DownloadManager;
 import android.os.AsyncTask;
 
-import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.internal.oauth.OAuth2Token;
 import com.twitter.sdk.android.core.models.Tweet;
-import com.twitter.sdk.android.BuildConfig;
 
 import java.util.ArrayList;
 

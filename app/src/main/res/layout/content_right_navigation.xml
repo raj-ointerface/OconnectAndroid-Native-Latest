@@ -63,9 +63,24 @@
         android:layout_marginRight="30dp"
         android:layout_marginLeft="30dp"
         />
+    <Button
+        android:id="@+id/btnMessaging"
+        android:layout_below="@+id/btnConnections"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:text="Messaging"
+        android:textColor="@color/colorWhite"
+        android:textSize="18sp"
+        android:textAllCaps="false"
+        android:background="@drawable/green_rounded_button"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginLeft="30dp"
+        />
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_below="@id/btnConnections"
+        android:layout_below="@id/btnMessaging"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginTop="15dp"

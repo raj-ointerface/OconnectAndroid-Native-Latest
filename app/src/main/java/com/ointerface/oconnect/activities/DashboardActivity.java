@@ -1,5 +1,6 @@
 package com.ointerface.oconnect.activities;
 
+import android.app.DownloadManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.linkedin.platform.AccessToken;
 import com.ointerface.oconnect.App;
 import com.ointerface.oconnect.ConferenceListViewActivity;
 import com.ointerface.oconnect.ConferenceListViewAdapter;
@@ -28,6 +30,18 @@ import com.ointerface.oconnect.data.Event;
 import com.ointerface.oconnect.data.Organization;
 import com.ointerface.oconnect.data.Session;
 import com.ointerface.oconnect.util.AppUtil;
+import com.twitter.sdk.android.core.Callback;
+import com.twitter.sdk.android.core.Result;
+import com.twitter.sdk.android.core.Twitter;
+import com.twitter.sdk.android.core.TwitterApiClient;
+import com.twitter.sdk.android.core.TwitterCore;
+import com.twitter.sdk.android.core.TwitterException;
+import com.twitter.sdk.android.core.models.Tweet;
+import com.twitter.sdk.android.core.models.User;
+import com.twitter.sdk.android.core.services.StatusesService;
+import com.twitter.sdk.android.tweetui.SearchTimeline;
+import com.twitter.sdk.android.tweetui.TimelineResult;
+import com.twitter.sdk.android.tweetui.TweetTimelineListAdapter;
 
 import org.w3c.dom.Text;
 
@@ -38,10 +52,14 @@ import java.util.Date;
 import io.realm.Realm;
 import io.realm.RealmResults;
 import io.realm.Sort;
+import retrofit2.http.Query;
+
+import static android.view.View.GONE;
 
 public class DashboardActivity extends OConnectBaseActivity {
 
     private TextView tvTwitterText;
+    private ImageView ivTwitter;
     private TextView tvConferenceTitle;
 
     private ArrayList<Event> eventsArr;
@@ -87,6 +105,15 @@ public class DashboardActivity extends OConnectBaseActivity {
         tvTwitterText = (TextView) findViewById(R.id.tvTwitterText);
 
         tvTwitterText.getBackground().setAlpha(60);
+
+        ivTwitter = (ImageView) findViewById(R.id.ivTwitter);
+
+        if (selectedConference != null && selectedConference.getHashtag() != null && !selectedConference.getHashtag().equalsIgnoreCase("#")) {
+            getLatestTweetForHashTag(selectedConference.getHashtag());
+        } else {
+            tvTwitterText.setVisibility(GONE);
+            ivTwitter.setVisibility(GONE);
+        }
 
         llMessageSpeakers = (LinearLayout) findViewById(R.id.llMessageSpeakers);
 
@@ -225,5 +252,33 @@ public class DashboardActivity extends OConnectBaseActivity {
     public void threeDotsClicked(View view) {
         Intent i = new Intent(DashboardActivity.this, ScheduleActivity.class);
         startActivity(i);
+    }
+
+    public void getLatestTweetForHashTag(String hashTag) {
+        final SearchTimeline searchTimeline = new SearchTimeline.Builder()
+                .query(hashTag)
+                .build();
+
+        searchTimeline.next(null, new Callback<TimelineResult<Tweet>>() {
+            @Override
+            public void success(Result<TimelineResult<Tweet>> result) {
+                if (result.data.items.size() > 0) {
+                    tvTwitterText.setText(result.data.items.get(0).text);
+                    tvTwitterText.setVisibility(View.VISIBLE);
+                    ivTwitter.setVisibility(View.VISIBLE);
+                } else {
+                    tvTwitterText.setVisibility(GONE);
+                    ivTwitter.setVisibility(GONE);
+                }
+            }
+
+            @Override
+            public void failure(TwitterException exception) {
+                Log.d("APD", exception.getMessage());
+                tvTwitterText.setVisibility(GONE);
+                ivTwitter.setVisibility(GONE);
+            }
+        });
+
     }
 }

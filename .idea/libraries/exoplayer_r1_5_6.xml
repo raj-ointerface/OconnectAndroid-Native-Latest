@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="exoplayer-r1.5.6">
+    <CLASSES>
+      <root url="file://$USER_HOME$/.android/build-cache/c2fb0660f08e3b82cd0810a8d150fd2b942978a5/output/res" />
+      <root url="jar://$USER_HOME$/.android/build-cache/c2fb0660f08e3b82cd0810a8d150fd2b942978a5/output/jars/classes.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.android.exoplayer/exoplayer/r1.5.6/7336ba9613e58211dca8b960ffa0701bf1c4e1e1/exoplayer-r1.5.6-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

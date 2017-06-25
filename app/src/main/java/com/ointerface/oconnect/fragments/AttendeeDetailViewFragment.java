@@ -2,6 +2,7 @@ package com.ointerface.oconnect.fragments;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -40,6 +41,7 @@ import com.ointerface.oconnect.data.SpeakerFile;
 import com.ointerface.oconnect.data.SpeakerJournal;
 import com.ointerface.oconnect.data.SpeakerLink;
 import com.ointerface.oconnect.data.SpeakerMisc;
+import com.ointerface.oconnect.messaging.MessagingActivity;
 import com.ointerface.oconnect.util.AppUtil;
 
 import java.io.InputStream;
@@ -126,7 +128,7 @@ public class AttendeeDetailViewFragment extends Fragment {
 
         pageNumber = bundle.getInt("PAGE_NUMBER");
 
-        Attendee attendee = (Attendee) mItems.get(pageNumber);
+        final Attendee attendee = (Attendee) mItems.get(pageNumber);
 
         Person person = realm.where(Person.class).equalTo("objectId", attendee.getUserLink()).findFirst();
 
@@ -145,6 +147,17 @@ public class AttendeeDetailViewFragment extends Fragment {
         TextView tvMessage = (TextView) rootView.findViewById(R.id.tvMessage);
 
         tvMessage.setTextColor(AppUtil.getPrimaryThemColorAsInt());
+
+        tvMessage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(activity, MessagingActivity.class);
+
+                MessagingActivity.recipientIDStr = "info@swabimobile.com";
+
+                activity.startActivity(intent);
+            }
+        });
 
         ImageView ivProfile = (ImageView) rootView.findViewById(R.id.ivProfile);
 
