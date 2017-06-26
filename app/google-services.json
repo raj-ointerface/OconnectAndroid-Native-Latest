@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "581260068477",
+    "firebase_url": "https://oconnect-65c56.firebaseio.com",
+    "project_id": "oconnect-65c56",
+    "storage_bucket": "oconnect-65c56.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:581260068477:android:ac2e306d99a57355",
+        "android_client_info": {
+          "package_name": "com.ointerface.oconnect"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "581260068477-k8e10ll9oelq77svd07g6ngvodgi95kt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBUiWzPVq70hWbg32Vexq-bGEDrfcSa0tA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

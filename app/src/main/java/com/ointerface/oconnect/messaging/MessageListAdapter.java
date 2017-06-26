@@ -8,13 +8,19 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.ointerface.oconnect.App;
 import com.ointerface.oconnect.R;
+import com.ointerface.oconnect.activities.OConnectBaseActivity;
+import com.ointerface.oconnect.data.Person;
 import com.ointerface.oconnect.data.SinchMessage;
+import com.ointerface.oconnect.util.AppUtil;
 import com.sinch.android.rtc.messaging.Message;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+
+import io.realm.Realm;
 
 /**
  * Created by AnthonyDoan on 6/24/17.
@@ -31,7 +37,7 @@ public class MessageListAdapter extends BaseAdapter {
     public MessageListAdapter(Activity activity) {
         mInflater = activity.getLayoutInflater();
         mMessages = new ArrayList<SinchMessage>();
-        mFormatter = new SimpleDateFormat("HH:mm");
+        mFormatter = new SimpleDateFormat("EEE, HH:mm");
     }
 
     public void addMessage(SinchMessage message) {
@@ -80,7 +86,15 @@ public class MessageListAdapter extends BaseAdapter {
         TextView txtMessage = (TextView) convertView.findViewById(R.id.txtMessage);
         TextView txtDate = (TextView) convertView.findViewById(R.id.txtDate);
 
-        txtSender.setText(message.getConnectedUserID());
+        Realm realm = AppUtil.getRealmInstance(App.getInstance());
+        Person recipientPerson = realm.where(Person.class).equalTo("objectId", message.getConnectedUserID()).findFirst();
+
+        if (recipientPerson != null) {
+            txtSender.setText(recipientPerson.getFirstName() + " " + recipientPerson.getLastName());
+        } else {
+            txtSender.setText("");
+        }
+
         txtMessage.setText(message.getMessageString());
         txtDate.setText(mFormatter.format(message.getMessageDateTime()));
 

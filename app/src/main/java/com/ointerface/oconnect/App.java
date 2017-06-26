@@ -182,6 +182,7 @@ public class App extends MultiDexApplication implements ServiceConnection, Messa
                     realm.getSchema().get("SinchMessage").addField("messageDateTime", Date.class);
                     realm.getSchema().get("SinchMessage").addField("currentUserID", String.class);
                     realm.getSchema().get("SinchMessage").addField("connectedUserID", String.class);
+                    realm.getSchema().get("SinchMessage").addField("isIncoming", Boolean.class);
 
                 }
             };
@@ -253,7 +254,7 @@ public class App extends MultiDexApplication implements ServiceConnection, Messa
 
             if (OConnectBaseActivity.currentPerson != null) {
                 if (!mSinchServiceInterface.isStarted()) {
-                    mSinchServiceInterface.startClient("eLd3wgDMIJ");
+                    mSinchServiceInterface.startClient(OConnectBaseActivity.currentPerson.getObjectId());
                 }
             }
 
@@ -293,6 +294,7 @@ public class App extends MultiDexApplication implements ServiceConnection, Messa
 
         sinchMessage.setMessageString(message.getTextBody());
 
+        sinchMessage.setIncoming(true);
         sinchMessage.setCurrentUserID(message.getRecipientIds().get(0));
 
         sinchMessage.setConnectedUserID(message.getSenderId());
@@ -313,6 +315,7 @@ public class App extends MultiDexApplication implements ServiceConnection, Messa
         sinchMessage.setMessageString(message.getTextBody());
         sinchMessage.setCurrentUserID(message.getSenderId());
         sinchMessage.setConnectedUserID(recipientId);
+        sinchMessage.setIncoming(false);
         sinchMessage.setMessageDateTime(message.getTimestamp());
 
         realm.commitTransaction();

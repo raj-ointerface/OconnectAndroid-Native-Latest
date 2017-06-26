@@ -194,10 +194,10 @@ public class SignInActivity2 extends AppCompatActivity {
     public void callTwitterImportAPI(ParseUser user) {
         new TwitterImportTask().execute(user);
 
-        OConnectBaseActivity.currentPerson = Person.saveFromParseUser(user, false);
+        // OConnectBaseActivity.currentPerson = Person.saveFromParseUser(user, false);
 
-        Intent i = new Intent(SignInActivity2.this, DashboardActivity.class);
-        startActivity(i);
+        // Intent i = new Intent(SignInActivity2.this, DashboardActivity.class);
+        // startActivity(i);
     }
 
     public void facebookLoginClicked(View sender) {
@@ -227,10 +227,10 @@ public class SignInActivity2 extends AppCompatActivity {
     public void callFacebookImportAPI(ParseUser user) {
         new FacebookImportTask().execute(user);
 
-        OConnectBaseActivity.currentPerson = Person.saveFromParseUser(user, false);
+        // OConnectBaseActivity.currentPerson = Person.saveFromParseUser(user, false);
 
-        Intent i = new Intent(SignInActivity2.this, DashboardActivity.class);
-        startActivity(i);
+        // Intent i = new Intent(SignInActivity2.this, DashboardActivity.class);
+        // startActivity(i);
     }
 
     public void linkedInLoginClicked(View sender) {

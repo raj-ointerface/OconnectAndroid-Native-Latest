@@ -16,6 +16,15 @@ public class SinchMessage  extends RealmObject {
     private Date messageDateTime = null;
     private String currentUserID = "";
     private String connectedUserID = "";
+    private Boolean isIncoming = true;
+
+    public Boolean getIncoming() {
+        return isIncoming;
+    }
+
+    public void setIncoming(Boolean incoming) {
+        isIncoming = incoming;
+    }
 
     public String getMessageString() {
         return messageString;

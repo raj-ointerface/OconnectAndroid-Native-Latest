@@ -29,4 +29,5 @@ public class AppConfig {
     static public int blueColor = 0xFF0000FF;
     static public int lightGreyColor = 0xFFE2E2E0;
     static public int hiddenGreyBackgroundColor = 0xFF6D7177;
+    static public int messagingBackgroundColor = 0xFF0289F7;
 }

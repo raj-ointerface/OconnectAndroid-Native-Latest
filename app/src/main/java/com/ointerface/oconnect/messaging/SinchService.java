@@ -106,15 +106,17 @@ public class SinchService extends Service {
                     .build();
 
             mSinchClient.setSupportMessaging(true);
-            mSinchClient.startListeningOnActiveConnection();
-
-            mSinchClient.addSinchClientListener(new MySinchClientListener());
 
             try {
                 mSinchClient.setSupportManagedPush(true);
             } catch (Exception ex) {
                 Log.d("APD", "setSupportManagedPush exception: " + ex.getMessage());
             }
+
+            mSinchClient.startListeningOnActiveConnection();
+
+            mSinchClient.addSinchClientListener(new MySinchClientListener());
+
             mSinchClient.start();
 
             staticSinchClient = mSinchClient;

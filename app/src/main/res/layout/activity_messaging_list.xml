@@ -4,6 +4,7 @@
     >
 
     <android.support.design.widget.AppBarLayout
+        android:id="@+id/abAppBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay"
@@ -13,6 +14,7 @@
 
     <ListView
         android:id="@+id/lstMessages"
+        android:layout_below="@+id/abAppBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:transcriptMode="alwaysScroll"

@@ -289,14 +289,17 @@ public class OConnectBaseActivity extends AppCompatActivity
         btnMessaging.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                /*
                 Intent intent = new Intent(OConnectBaseActivity.this, MessagingActivity.class);
 
                 MessagingActivity.recipientIDStr = "Hk17CJJSDc";
 
                 startActivity(intent);
+                */
 
-                //Intent i = new Intent(OConnectBaseActivity.this, MessagingListActivity.class);
-                //startActivity(i);
+                Intent i = new Intent(OConnectBaseActivity.this, MessagingListActivity.class);
+                startActivity(i);
             }
         });
 

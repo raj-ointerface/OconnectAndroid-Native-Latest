@@ -1,16 +1,24 @@
 package com.ointerface.oconnect.messaging;
 
 import com.ointerface.oconnect.App;
+import com.ointerface.oconnect.R;
 import com.sinch.android.rtc.NotificationResult;
 import com.sinch.android.rtc.SinchClient;
 import com.sinch.android.rtc.SinchHelpers;
 
 import android.app.IntentService;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
+import android.support.v4.app.NotificationCompat;
+import android.util.Log;
+
+import static android.support.v4.app.NotificationCompat.PRIORITY_MAX;
 
 public class GcmIntentService extends IntentService implements ServiceConnection {
 
@@ -42,9 +50,32 @@ public class GcmIntentService extends IntentService implements ServiceConnection
 
         if (SinchHelpers.isSinchPushIntent(mIntent)) {
             SinchService.SinchServiceInterface sinchService = (SinchService.SinchServiceInterface) iBinder;
-            if (sinchService != null && SinchService.staticSinchClient !=null) {
+
+            Log.d("APD", "APD - Push Notification Received.");
+
+            if (sinchService != null && SinchService.staticSinchClient != null) {
                 NotificationResult result = SinchService.staticSinchClient.relayRemotePushNotificationPayload(mIntent);
                 // handle result, e.g. show a notification or similar
+
+                try {
+                    Log.d("APD", "APD Start Display of PN");
+                    NotificationManager mNotificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+                    PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
+                            new Intent(this, MessagingListActivity.class), 0);
+
+                    NotificationCompat.Builder mBuilder =
+                            new NotificationCompat.Builder(this)
+                                    .setSmallIcon(R.drawable.oconnect_logo)
+                                    .setContentTitle("OConnect")
+                                    .setContentText("You have a new message from the OConnect App")
+                                    .setShowWhen(true)
+                                    .setPriority(PRIORITY_MAX)
+                                    .setContentIntent(contentIntent);
+
+                    mNotificationManager.notify(0, mBuilder.build());
+                } catch (Exception ex) {
+                    Log.d("APD", "APD PN Exception: " + ex.getMessage());
+                }
             }
         }
 

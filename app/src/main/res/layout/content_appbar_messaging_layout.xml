@@ -23,7 +23,7 @@
                 android:foregroundGravity="center_vertical"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:visibility="gone"
+                android:visibility="visible"
                 android:background="@drawable/icon_back"/>
             <TextView
                 android:id="@+id/tvHeaderBack"
@@ -36,7 +36,7 @@
                 android:foregroundGravity="center_vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Messages"
+                android:text="Back"
                 android:visibility="visible" />
         </RelativeLayout>
     </android.support.v7.widget.Toolbar>
@@ -50,5 +50,5 @@
         android:ellipsize="end"
         android:textColor="@color/colorWhite"
         android:textSize="18sp"
-        android:text="Name"/>
+        android:text="Messages"/>
 </RelativeLayout>
