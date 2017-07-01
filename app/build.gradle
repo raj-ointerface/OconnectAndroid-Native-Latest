@@ -1,9 +1,16 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.android.databinding'
 
+
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
+    useLibrary 'org.apache.http.legacy'
+
+    dexOptions {
+        jumboMode = true
+    }
+
     defaultConfig {
         applicationId "com.ointerface.oconnect"
         minSdkVersion 16
@@ -12,12 +19,16 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
+        multiDexEnabled true
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+    configurations.all {
+        resolutionStrategy.force 'com.google.code.findbugs:jsr305:1.3.9'
     }
 }
 
@@ -37,23 +48,40 @@ apply plugin: 'io.fabric'
 
 apply plugin: 'realm-android'
 
+// apply plugin: 'com.google.gms.google-services'
+
 repositories {
     mavenCentral()
     maven { url 'https://maven.fabric.io/public' }
+    flatDir {
+        dirs 'libs'
+    }
 }
 
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
-    compile('com.twitter.sdk.android:twitter:2.3.2@aar') {
-        transitive = true
-    }
 
+    // androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    //    exclude group: 'com.android.support', module: 'support-annotations'
+    // })
+    // compile('com.twitter.sdk.android:twitter:2.3.2@aar') {
+    //    transitive = true
+    // }
+
+    compile 'com.android.support:multidex:1.0.1'
+
+    compile project(':linkedin-sdk')
+    compile(name: 'sinch-android-rtc', version: '+', ext: 'aar')
     // compile 'com.parse:parse-android:1.14.1'
     // compile 'io.realm:realm-android:0.84.1'
+    // compile 'com.google.http-client:google-http-client-android:+'
+    // compile 'com.google.api-client:google-api-client-android:+'
+    // compile 'com.google.api-client:google-api-client-gson:+'
+    // compile 'com.google.android.gms:play-services:8.3.0'
+    compile 'com.twitter.sdk.android:twitter-core:3.0.0'
+    compile 'com.twitter.sdk.android:twitter-mopub:3.0.0'
+    compile('com.twitter.sdk.android:tweet-ui:2.3.1@aar')
     compile 'com.journeyapps:zxing-android-embedded:3.5.0'
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
@@ -67,8 +95,12 @@ dependencies {
     compile 'com.daimajia.easing:library:1.0.0@aar'
     compile 'com.daimajia.androidanimations:library:1.1.2@aar'
     compile 'com.daimajia.swipelayout:library:1.2.0@aar'
-    compile 'com.nineoldandroids:library:2.4.0'
+
+    // compile 'com.nineoldandroids:library:2.4.0'
+
     compile 'de.hdodenhof:circleimageview:2.1.0'
     compile 'com.azoft.carousellayoutmanager:carousel:1.2.1'
-    testCompile 'junit:junit:4.12'
+    compile 'com.google.android.gms:play-services:10.2.1'
 }
+
+

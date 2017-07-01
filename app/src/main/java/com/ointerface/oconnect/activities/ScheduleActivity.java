@@ -30,6 +30,8 @@ import com.ointerface.oconnect.adapters.ScheduleExpandableListViewAdapter;
 import com.ointerface.oconnect.adapters.ScheduleSwipeListAdapter;
 import com.ointerface.oconnect.data.Event;
 import com.ointerface.oconnect.data.Session;
+import com.ointerface.oconnect.data.Speaker;
+import com.ointerface.oconnect.data.SpeakerEventCache;
 import com.ointerface.oconnect.fragments.EventDetailViewFragment;
 import com.ointerface.oconnect.fragments.OverlayDialogFragment;
 import com.ointerface.oconnect.util.AppUtil;
@@ -314,6 +316,21 @@ public class ScheduleActivity extends OConnectBaseActivity {
         OverlayDialogFragment dialogFragment = OverlayDialogFragment.newInstance(this, OverlayDialogFragment.OverlayType.Schedule1);
         dialogFragment.setStyle(DialogFragment.STYLE_NO_FRAME, R.style.CustomDialog);
         dialogFragment.show(fm, OverlayDialogFragment.OverlayType.Schedule1.name());
+
+        scheduleSearch = (SearchView) findViewById(R.id.scheduleSearch);
+
+        scheduleSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                performSearch(newText);
+                return false;
+            }
+        });
     }
 
     public void getListViewData(Date newSelectedDate) {
@@ -373,6 +390,7 @@ public class ScheduleActivity extends OConnectBaseActivity {
             RealmResults<Event> eventResults = realm.where(Event.class).equalTo("session", currentSession.getObjectId()).findAllSorted("startTime", Sort.ASCENDING);
 
             for (int j = 0; j < eventResults.size(); ++j) {
+
                 Event currentEvent = eventResults.get(j);
 
                 adapter.addItem(currentEvent);
@@ -382,6 +400,110 @@ public class ScheduleActivity extends OConnectBaseActivity {
                     adapter.addItem(currentEvent);
                 }
                 */
+
+                for (int c = 0; c < myAgendaList.size(); ++c) {
+                    Event agendaEvent = myAgendaList.get(c);
+
+                    if (agendaEvent.getObjectId().equalsIgnoreCase(currentEvent.getObjectId())) {
+                        adapter.myEventsPositionsByUser.add(adapter.mData.size() - 1);
+                    }
+                }
+            }
+
+            for (int k = 0; k < adapter.mData.size(); ++k) {
+                adapter.mIsExpandedArray.add(true);
+            }
+
+        }
+    }
+
+    public void performSearch(String searchText) {
+        searchText = searchText.toLowerCase();
+
+        Realm realm = AppUtil.getRealmInstance(App.getInstance());
+
+        RealmResults<Session> sessionResults;
+
+        if (currentScheduleDate != null) {
+            sessionResults = realm.where(Session.class).equalTo("conference", AppUtil.getSelectedConferenceID(ScheduleActivity.this)).findAllSorted("startTime", Sort.ASCENDING);
+        } else {
+            sessionResults = realm.where(Session.class).equalTo("conference", AppUtil.getSelectedConferenceID(ScheduleActivity.this)).findAllSorted("startTime", Sort.ASCENDING);
+        }
+
+        adapter = new ScheduleSwipeListAdapter(ScheduleActivity.this);
+
+        currentScheduleDate = AppUtil.setTime(currentScheduleDate, 12, 0, 0, 0);
+
+        SimpleDateFormat df = new SimpleDateFormat("EEEE, MMMM d");
+
+        if (isEventType == true) {
+            df = new SimpleDateFormat("MMMM");
+        }
+
+        tvCurrentDay = (TextView) findViewById(R.id.tvCurrentDay);
+
+        tvCurrentDay.setText(df.format(currentScheduleDate));
+
+        RealmList<Event> myAgendaList = currentPerson.getFavoriteEvents();
+
+        for (int i = 0; i < sessionResults.size(); ++i) {
+            List<Event> currentEventsList = new ArrayList<Event>();
+
+            Session currentSession = sessionResults.get(i);
+
+            Calendar cal1 = Calendar.getInstance();
+            Calendar cal2 = Calendar.getInstance();
+            cal1.setTime(currentScheduleDate);
+            cal2.setTime(currentSession.getStartTime());
+            boolean sameDay = cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) &&
+                    cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR);
+
+            boolean sameMonth = cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) &&
+                    cal1.get(Calendar.MONTH) == cal2.get(Calendar.MONTH);
+
+            if (isEventType == true) {
+                if (sameMonth == false) {
+                    continue;
+                }
+            } else {
+                if (sameDay == false) {
+                    continue;
+                }
+            }
+
+            adapter.addSectionHeaderItem(currentSession);
+
+            RealmResults<Event> eventResults = realm.where(Event.class).equalTo("session", currentSession.getObjectId()).findAllSorted("startTime", Sort.ASCENDING);
+
+            for (int j = 0; j < eventResults.size(); ++j) {
+                boolean bIncludeInResults = false;
+
+                Event currentEvent = eventResults.get(j);
+
+                RealmResults<SpeakerEventCache> speakerEventCache = realm.where(SpeakerEventCache.class).equalTo("eventID", currentEvent.getObjectId()).findAll();
+
+                for (int l = 0; l < speakerEventCache.size(); ++l) {
+                    SpeakerEventCache speakerEvent = speakerEventCache.get(l);
+
+                    RealmResults<Speaker> speakers = realm.where(Speaker.class).equalTo("objectId", speakerEvent.getSpeakerID()).findAll();
+
+                    for (int m = 0; m < speakers.size(); ++m) {
+                        Speaker speaker = speakers.get(m);
+                        if (speaker.getName().toLowerCase().contains(searchText)) {
+                            bIncludeInResults = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (currentEvent.getName().toLowerCase().contains(searchText) ||
+                        currentEvent.getLocation().toLowerCase().contains(searchText)) {
+                    bIncludeInResults = true;
+                }
+
+                if (bIncludeInResults == true) {
+                    adapter.addItem(currentEvent);
+                }
 
                 for (int c = 0; c < myAgendaList.size(); ++c) {
                     Event agendaEvent = myAgendaList.get(c);

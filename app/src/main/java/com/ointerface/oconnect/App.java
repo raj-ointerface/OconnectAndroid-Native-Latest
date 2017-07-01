@@ -18,8 +18,11 @@ import com.ointerface.oconnect.messaging.SinchService;
 import com.ointerface.oconnect.util.AppUtil;
 import com.parse.Parse;
 import com.parse.ParseACL;
+import com.parse.ParseException;
 import com.parse.ParseInstallation;
+import com.parse.ParsePush;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 import com.sinch.android.rtc.PushPair;
 import com.sinch.android.rtc.Sinch;
 import com.sinch.android.rtc.SinchClient;
@@ -80,6 +83,16 @@ public class App extends MultiDexApplication implements ServiceConnection, Messa
 
         ParseInstallation.getCurrentInstallation().saveInBackground();
 
+        ParsePush.subscribeInBackground("", new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e == null) {
+                    Log.d("com.parse.push", "successfully subscribed to the broadcast channel.");
+                } else {
+                    Log.e("com.parse.push", "failed to subscribe for push", e);
+                }
+            }
+        });
 
         if (AppUtil.getDefaultRealmLoaded(getApplicationContext()) == false) {
             Uri path = Uri.parse("file:///android_asset/default.realm");

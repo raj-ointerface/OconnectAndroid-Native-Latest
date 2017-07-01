@@ -272,6 +272,18 @@ public class ParticipantsActivity extends OConnectBaseActivity {
             }
         });
 
+        participantsSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                performSearch(newText);
+                return false;
+            }
+        });
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -354,6 +366,39 @@ public class ParticipantsActivity extends OConnectBaseActivity {
 
         for (int i = 0; i < attendeeResults.size(); ++i) {
             adapter.addAttendee(attendeeResults.get(i));
+        }
+    }
+
+    public void performSearch(String searchText) {
+
+        searchText = searchText.toLowerCase();
+
+        Realm realm = AppUtil.getRealmInstance(App.getInstance());
+
+        adapter = new ParticipantsSwipeListAdapter(this, this);
+
+        RealmResults<Speaker> speakerResults;
+
+        speakerResults = realm.where(Speaker.class).equalTo("conference", AppUtil.getSelectedConferenceID(ParticipantsActivity.this)).findAllSorted("name", Sort.ASCENDING);
+
+        for (int i = 0; i < speakerResults.size(); ++i) {
+            Speaker speaker = speakerResults.get(i);
+
+            if (speaker.getName().toLowerCase().contains(searchText)) {
+                adapter.addSpeaker(speaker);
+            }
+        }
+
+        RealmResults<Attendee> attendeeResults;
+
+        attendeeResults = realm.where(Attendee.class).equalTo("conference", AppUtil.getSelectedConferenceID(ParticipantsActivity.this)).findAllSorted("name", Sort.ASCENDING);
+
+        for (int i = 0; i < attendeeResults.size(); ++i) {
+            Attendee attendee = attendeeResults.get(i);
+
+            if (attendee.getName().toLowerCase().contains(searchText)) {
+                adapter.addAttendee(attendee);
+            }
         }
     }
 }
