@@ -473,7 +473,14 @@ public class NTEScheduleActivity extends OConnectBaseActivity {
     }
 
     public void performSearch(String searchText) {
+
+        if (searchText == null || searchText.length() == 0) {
+            return;
+
+        }
         searchText = searchText.toLowerCase();
+
+        String[] searchArr = searchText.split(" ");
 
         Realm realm = AppUtil.getRealmInstance(App.getInstance());
 
@@ -550,16 +557,21 @@ public class NTEScheduleActivity extends OConnectBaseActivity {
 
                     for (int m = 0; m < speakers.size(); ++m) {
                         Speaker speaker = speakers.get(m);
-                        if (speaker.getName().toLowerCase().contains(searchText)) {
-                            bIncludeInResults = true;
-                            break;
+
+                        for (String value : searchArr) {
+                            if (speaker.getName().toLowerCase().contains(value)) {
+                                bIncludeInResults = true;
+                                break;
+                            }
                         }
                     }
                 }
 
-                if (currentEvent.getName().toLowerCase().contains(searchText) ||
-                        currentEvent.getLocation().toLowerCase().contains(searchText)) {
-                    bIncludeInResults = true;
+                for (String value : searchArr) {
+                    if ((currentEvent.getName() != null && currentEvent.getName().toLowerCase().contains(value)) ||
+                            (currentEvent.getLocation() != null && currentEvent.getLocation().toLowerCase().contains(value))) {
+                        bIncludeInResults = true;
+                    }
                 }
 
                 if (bIncludeInResults == true) {

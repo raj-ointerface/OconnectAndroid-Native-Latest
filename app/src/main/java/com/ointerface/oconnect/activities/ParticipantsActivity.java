@@ -371,7 +371,15 @@ public class ParticipantsActivity extends OConnectBaseActivity {
 
     public void performSearch(String searchText) {
 
+        if (searchText == null || searchText.length() == 0) {
+            return;
+        }
+
+        // ArrayList<String> searchArr = new ArrayList<String>();
+
         searchText = searchText.toLowerCase();
+
+        String[] searchArr = searchText.split(" ");
 
         Realm realm = AppUtil.getRealmInstance(App.getInstance());
 
@@ -384,8 +392,11 @@ public class ParticipantsActivity extends OConnectBaseActivity {
         for (int i = 0; i < speakerResults.size(); ++i) {
             Speaker speaker = speakerResults.get(i);
 
-            if (speaker.getName().toLowerCase().contains(searchText)) {
-                adapter.addSpeaker(speaker);
+            for (String value : searchArr) {
+                if (speaker.getName().toLowerCase().contains(value)) {
+                    adapter.addSpeaker(speaker);
+                    break;
+                }
             }
         }
 
@@ -396,8 +407,11 @@ public class ParticipantsActivity extends OConnectBaseActivity {
         for (int i = 0; i < attendeeResults.size(); ++i) {
             Attendee attendee = attendeeResults.get(i);
 
-            if (attendee.getName().toLowerCase().contains(searchText)) {
-                adapter.addAttendee(attendee);
+            for (String value : searchArr) {
+                if (attendee.getName().toLowerCase().contains(value)) {
+                    adapter.addAttendee(attendee);
+                    break;
+                }
             }
         }
     }

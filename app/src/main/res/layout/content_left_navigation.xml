@@ -18,6 +18,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/search"
-        android:layout_marginTop="-35dp">
+        android:layout_marginTop="-35dp"
+        android:visibility="visible">
+    </ExpandableListView>
+
+    <ExpandableListView
+        android:id="@+id/elvSearchItems"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/search"
+        android:layout_marginTop="0dp"
+        android:visibility="gone">
     </ExpandableListView>
 </RelativeLayout>

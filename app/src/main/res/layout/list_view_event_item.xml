@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="8dp"
+    android:background="@color/navBarBackgroundGray">
+
+    <TextView
+        android:id="@+id/tvCircle"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:textColor="@color/colorWhite"
+        android:background="@drawable/ic_circle"
+        android:textSize="22sp"
+        android:text="TD"/>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:layout_gravity="center_vertical">
+    <TextView
+        android:id="@+id/tvEventTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:textSize="18sp"
+        android:text="Event Title"
+        android:textColor="@color/colorWhite"
+        />
+        <TextView
+            android:id="@+id/tvEventTime"
+            android:layout_below="@+id/tvEventTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:textSize="14sp"
+            android:text="Event Time"
+            android:textColor="@color/dashboardTextGrey"
+            />
+    </RelativeLayout>
+</LinearLayout>

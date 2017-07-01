@@ -54,14 +54,21 @@ import com.ointerface.oconnect.CustomSplashActivity;
 import com.ointerface.oconnect.MainSplashActivity;
 import com.ointerface.oconnect.R;
 import com.ointerface.oconnect.adapters.NavExpandableListViewAdapter;
+import com.ointerface.oconnect.adapters.ScheduleSwipeListAdapter;
+import com.ointerface.oconnect.adapters.SearchExpandableListViewAdapter;
 import com.ointerface.oconnect.containers.MenuItemHolder;
+import com.ointerface.oconnect.data.Attendee;
 import com.ointerface.oconnect.data.Conference;
 import com.ointerface.oconnect.data.DataSyncManager;
+import com.ointerface.oconnect.data.Event;
 import com.ointerface.oconnect.data.IDataSyncListener;
 import com.ointerface.oconnect.data.MasterNotification;
 import com.ointerface.oconnect.data.Organization;
 import com.ointerface.oconnect.data.Person;
+import com.ointerface.oconnect.data.Session;
 import com.ointerface.oconnect.data.SinchMessage;
+import com.ointerface.oconnect.data.Speaker;
+import com.ointerface.oconnect.data.SpeakerEventCache;
 import com.ointerface.oconnect.fragments.SearchDialogFragment;
 import com.ointerface.oconnect.messaging.MessageAdapter;
 import com.ointerface.oconnect.messaging.MessagingActivity;
@@ -78,6 +85,7 @@ import com.sinch.android.rtc.messaging.MessageFailureInfo;
 
 import java.io.InputStream;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -87,7 +95,9 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Realm;
 import io.realm.RealmList;
+import io.realm.RealmObject;
 import io.realm.RealmResults;
+import io.realm.Sort;
 
 import static android.view.View.GONE;
 
@@ -99,7 +109,10 @@ public class OConnectBaseActivity extends AppCompatActivity
     private SinchService.SinchServiceInterface mSinchServiceInterface;
 
     NavExpandableListViewAdapter listAdapter;
+    SearchExpandableListViewAdapter searchAdapter;
     ExpandableListView expListView;
+    ExpandableListView expSearchView;
+
     List<String> listDataHeader;
     HashMap<String, List<MenuItemHolder>> listDataChild;
 
@@ -317,7 +330,7 @@ public class OConnectBaseActivity extends AppCompatActivity
 
             try {
                 if (!getSinchServiceInterface().isStarted()) {
-                    getSinchServiceInterface().startClient("eLd3wgDMIJ");
+                    getSinchServiceInterface().startClient(currentPerson.getObjectId());
                 }
 
                 if (currentPerson.getPictureURL() != null
@@ -391,6 +404,57 @@ public class OConnectBaseActivity extends AppCompatActivity
         // get the listview
         // View headerView = navigationView.getHeaderView(0);
         expListView = (ExpandableListView) navigationView.findViewById(R.id.elvLeftNavItems);
+
+        expSearchView = (ExpandableListView) navigationView.findViewById(R.id.elvSearchItems);
+
+        expSearchView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+                RealmObject obj = (RealmObject) searchAdapter.getChild(groupPosition, childPosition);
+
+                if (obj instanceof Event) {
+                    Event event = (Event) obj;
+
+                    // Goto Event Detail View
+                    EventDetailViewActivity.mItems = new ArrayList<RealmObject>();
+
+                    EventDetailViewActivity.mItems.add(obj);
+
+                    int newPosition = 0;
+
+                    Intent i = new Intent(OConnectBaseActivity.this, EventDetailViewActivity.class);
+                    i.putExtra("EVENT_NUMBER", newPosition);
+                    startActivity(i);
+                } else if (obj instanceof Speaker) {
+                    Speaker speaker = (Speaker) obj;
+
+                    SpeakerDetailViewActivity.mItems = new ArrayList<RealmObject>();
+
+                    SpeakerDetailViewActivity.mItems.add(speaker);
+
+                    Intent i = new Intent(OConnectBaseActivity.this, SpeakerDetailViewActivity.class);
+
+                    i.putExtra("SPEAKER_NUMBER", 0);
+
+                    startActivity(i);
+
+                } else if (obj instanceof Attendee) {
+                    Attendee attendee = (Attendee) obj;
+
+                    AttendeeDetailViewActivity.mItems = new ArrayList<RealmObject>();
+
+                    AttendeeDetailViewActivity.mItems.add(attendee);
+
+                    Intent i = new Intent(OConnectBaseActivity.this, AttendeeDetailViewActivity.class);
+
+                    i.putExtra("ATTENDEE_NUMBER", 0);
+
+                    startActivity(i);
+                }
+
+                return false;
+            }
+        });
 
         navSearch = (SearchView) navigationView.findViewById(R.id.search);
 
@@ -656,6 +720,138 @@ public class OConnectBaseActivity extends AppCompatActivity
         expListView.expandGroup(2);
 
         expListView.setDividerHeight(0);
+
+        navSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                navSearch.clearFocus();
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if (newText == null || newText.equalsIgnoreCase("")) {
+                    navSearch.clearFocus();
+                }
+                performSearch(newText);
+                return false;
+            }
+        });
+    }
+
+    public void performSearch(String searchText) {
+        if (searchText == null || searchText.equalsIgnoreCase("")) {
+            expListView.setVisibility(View.VISIBLE);
+            expSearchView.setVisibility(GONE);
+            return;
+        }
+
+        expListView.setVisibility(GONE);
+        expSearchView.setVisibility(View.VISIBLE);
+
+        searchText = searchText.toLowerCase();
+
+        String[] searchArr = searchText.split(" ");
+
+        Realm realm = AppUtil.getRealmInstance(App.getInstance());
+
+        RealmResults<Session> sessionResults;
+
+        sessionResults = realm.where(Session.class).equalTo("conference", AppUtil.getSelectedConferenceID(OConnectBaseActivity.this)).findAllSorted("startTime", Sort.ASCENDING);
+
+        RealmResults<Event> eventResults;
+        RealmResults<RealmObject> personResults;
+
+        ArrayList<RealmObject> eventsList = new ArrayList<RealmObject>();
+        ArrayList<RealmObject> personsList = new ArrayList<RealmObject>();
+
+        for (int i = 0; i < sessionResults.size(); ++i) {
+
+            Session currentSession = sessionResults.get(i);
+
+            eventResults = realm.where(Event.class).equalTo("session", currentSession.getObjectId()).findAllSorted("startTime", Sort.ASCENDING);
+
+            for (int j = 0; j < eventResults.size(); ++j) {
+                boolean bIncludeInResults = false;
+
+                Event currentEvent = eventResults.get(j);
+
+                RealmResults<SpeakerEventCache> speakerEventCache = realm.where(SpeakerEventCache.class).equalTo("eventID", currentEvent.getObjectId()).findAll();
+
+                for (int l = 0; l < speakerEventCache.size(); ++l) {
+                    SpeakerEventCache speakerEvent = speakerEventCache.get(l);
+
+                    RealmResults<Speaker> speakers = realm.where(Speaker.class).equalTo("objectId", speakerEvent.getSpeakerID()).findAll();
+
+                    for (int m = 0; m < speakers.size(); ++m) {
+                        Speaker speaker = speakers.get(m);
+
+                        for (String value : searchArr) {
+                            if (speaker.getName().toLowerCase().contains(value)) {
+                                bIncludeInResults = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                for (String value : searchArr) {
+                    if ((currentEvent.getName() != null && currentEvent.getName().toLowerCase().contains(value)) ||
+                            (currentEvent.getLocation() != null && currentEvent.getLocation().toLowerCase().contains(value))) {
+                        bIncludeInResults = true;
+                    }
+                }
+
+                if (bIncludeInResults == true) {
+                    eventsList.add(currentEvent);
+                }
+            }
+        }
+
+        RealmResults<Speaker> speakerResults;
+
+        speakerResults = realm.where(Speaker.class).equalTo("conference", AppUtil.getSelectedConferenceID(OConnectBaseActivity.this)).findAllSorted("name", Sort.ASCENDING);
+
+        for (int i = 0; i < speakerResults.size(); ++i) {
+            Speaker speaker = speakerResults.get(i);
+
+            for (String value : searchArr) {
+                if (speaker.getName().toLowerCase().contains(value)) {
+                    personsList.add(speaker);
+                    break;
+                }
+            }
+        }
+
+        RealmResults<Attendee> attendeeResults;
+
+        attendeeResults = realm.where(Attendee.class).equalTo("conference", AppUtil.getSelectedConferenceID(OConnectBaseActivity.this)).findAllSorted("name", Sort.ASCENDING);
+
+        for (int i = 0; i < attendeeResults.size(); ++i) {
+            Attendee attendee = attendeeResults.get(i);
+
+            for (String value : searchArr) {
+                if (attendee.getName().toLowerCase().contains(value)) {
+                    personsList.add(attendee);
+                    break;
+                }
+            }
+        }
+
+        ArrayList<String> headers = new ArrayList<String>();
+        headers.add("Event");
+        headers.add("Attendee");
+        HashMap<String, ArrayList<RealmObject>> map = new HashMap<String, ArrayList<RealmObject>>();
+
+        map.put("Event", eventsList);
+        map.put("Attendee", personsList);
+
+        searchAdapter = new SearchExpandableListViewAdapter(OConnectBaseActivity.this, headers, map);
+
+        expSearchView.setAdapter(searchAdapter);
+
+        expSearchView.expandGroup(0);
+        expSearchView.expandGroup(1);
     }
 
     public void removeFirstHeaderInNav() {
