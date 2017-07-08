@@ -9,6 +9,8 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/linkedin-sdk" />
+            <option value="$PROJECT_DIR$/sinch-android-rtc-3.11.1" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

@@ -3,6 +3,7 @@ package com.ointerface.oconnect.adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,12 +13,16 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.ointerface.oconnect.App;
 import com.ointerface.oconnect.R;
 import com.ointerface.oconnect.activities.ParticipantsActivity;
 import com.ointerface.oconnect.activities.SpeakerDetailViewActivity;
 import com.ointerface.oconnect.data.Event;
+import com.ointerface.oconnect.data.EventLink;
 import com.ointerface.oconnect.data.Session;
 import com.ointerface.oconnect.data.Speaker;
+import com.ointerface.oconnect.data.SpeakerLink;
+import com.ointerface.oconnect.util.AppUtil;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -25,8 +30,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmObject;
+import io.realm.RealmResults;
 
 import static android.view.View.GONE;
 
@@ -102,6 +109,8 @@ public class EventDetailExpandableListViewAdapter extends BaseExpandableListAdap
     public View getChildView(int groupPosition, final int childPosition,
                              boolean isLastChild, View convertView, ViewGroup parent) {
 
+        final Realm realm = AppUtil.getRealmInstance(App.getInstance());
+
         String groupItemStr = (String) getGroup(groupPosition);
 
         if (convertView == null) {
@@ -141,6 +150,36 @@ public class EventDetailExpandableListViewAdapter extends BaseExpandableListAdap
                         i.putExtra("SPEAKER_NUMBER", position);
                         i.putExtra("SPEAKER_LIST", speakersList);
                         _context.startActivity(i);
+                    }
+                });
+            }else if (groupItemStr.equalsIgnoreCase("Links")) {
+                RealmResults<EventLink> linksResult = realm.where(EventLink.class).equalTo("eventID", _listEvent.getObjectId()).findAll();
+
+                convertView = infalInflater.inflate(R.layout.speaker_detail_item_list_view, null);
+
+                ArrayList<String> links = new ArrayList<String>();
+                ArrayList<String> urls = new ArrayList<String>();
+
+                for (int i = 0; i < linksResult.size(); ++i) {
+                    EventLink link = linksResult.get(i);
+
+                    links.add(link.getLabel());
+                    urls.add(link.getLink());
+                }
+
+                ListView lvItems = (ListView) convertView.findViewById(R.id.lvItems);
+
+                LinksListViewAdapter linksAdapter = new LinksListViewAdapter(_context, links, urls);
+
+                lvItems.setAdapter(linksAdapter);
+
+                final ArrayList<String> finalUrls = urls;
+
+                lvItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(finalUrls.get(position)));
+                        _context.startActivity(browserIntent);
                     }
                 });
             }

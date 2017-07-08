@@ -142,7 +142,7 @@ public class OConnectBaseActivity extends AppCompatActivity
     public Switch switchContactable;
     public TextView tvRightNavHeader;
 
-    public Bitmap bmp;
+    // public Bitmap bmp;
     public Button btnConnections;
     public Button btnMessaging;
     public TextView tvSignOut;
@@ -329,16 +329,15 @@ public class OConnectBaseActivity extends AppCompatActivity
             tvName.setText(currentPerson.getFirstName() + " " + currentPerson.getLastName());
 
             try {
-                if (!getSinchServiceInterface().isStarted()) {
-                    getSinchServiceInterface().startClient(currentPerson.getObjectId());
-                }
-
                 if (currentPerson.getPictureURL() != null
                         && !currentPerson.getPictureURL().equalsIgnoreCase("")) {
 
                     final String pictureURL = currentPerson.getPictureURL();
 
+                    Log.d("APD", "currentPerson.getPictureURL(): " + currentPerson.getPictureURL());
+
                     new AsyncTask<Void, Void, Void>() {
+                        public Bitmap bmp;
                         @Override
                         protected Void doInBackground(Void... params) {
                             try {
@@ -352,12 +351,21 @@ public class OConnectBaseActivity extends AppCompatActivity
 
                         @Override
                         protected void onPostExecute(Void result) {
+                            Log.d("APD", "pictureURL BITMAP: " + bmp);
+
                             if (bmp != null) {
-                                ivProfilePicture.setImageBitmap(bmp);
+                                Drawable d = new BitmapDrawable(OConnectBaseActivity.this.getResources(), bmp);
+
+                                ivProfilePicture.setImageDrawable(d);
+
                             }
                         }
 
                     }.execute();
+                }
+
+                if (!getSinchServiceInterface().isStarted()) {
+                    getSinchServiceInterface().startClient(currentPerson.getObjectId());
                 }
             } catch (Exception ex) {
                 if (ex.getMessage() != null) {

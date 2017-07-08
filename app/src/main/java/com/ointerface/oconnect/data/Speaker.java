@@ -35,6 +35,15 @@ public class Speaker extends RealmObject implements Serializable {
     private byte[] image = null;
     private String speakerLabel = "Speakers";
     private String bio = "";
+    private String email = "";
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     public String getBio() {
         return bio;

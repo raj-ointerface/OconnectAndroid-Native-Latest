@@ -189,6 +189,7 @@ public class App extends MultiDexApplication implements ServiceConnection, Messa
                     realm.getSchema().get("UserSurveyAnswer").addField("userId", String.class);
 
                     realm.getSchema().get("Attendee").addField("isCheckedIn", Boolean.class);
+                    realm.getSchema().get("Attendee").addField("email", String.class);
 
                     realm.getSchema().create("SinchMessage");
                     realm.getSchema().get("SinchMessage").addField("messageString", String.class);
@@ -196,6 +197,8 @@ public class App extends MultiDexApplication implements ServiceConnection, Messa
                     realm.getSchema().get("SinchMessage").addField("currentUserID", String.class);
                     realm.getSchema().get("SinchMessage").addField("connectedUserID", String.class);
                     realm.getSchema().get("SinchMessage").addField("isIncoming", Boolean.class);
+
+                    realm.getSchema().get("Speaker").addField("email", String.class);
 
                 }
             };

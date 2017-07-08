@@ -77,6 +77,7 @@ public class SpeakerDetailViewFragment extends Fragment {
     private HashMap<Integer, Integer> _listChildCount;
     private HashMap<Integer, ArrayList<String>> _listChildItems;
     private Speaker _listSpeaker;
+    private int _listQAPosition = 0;
 
     private Bitmap bmp;
 
@@ -118,106 +119,20 @@ public class SpeakerDetailViewFragment extends Fragment {
 
         pageNumber = bundle.getInt("PAGE_NUMBER");
 
-        RelativeLayout mainContainer = (RelativeLayout) rootView.findViewById(R.id.main_container);
-        LinearLayout llMain = (LinearLayout) rootView.findViewById(R.id.llMain);
-        RelativeLayout rlTopSection = (RelativeLayout) rootView.findViewById(R.id.rlTopSection);
-        RelativeLayout rlMiscItems = (RelativeLayout) rootView.findViewById(R.id.rlMiscItems);
-
-        mainContainer.setClipChildren(false);
-        llMain.setClipChildren(false);
-        rlTopSection.setClipChildren(false);
-        rlMiscItems.setClipChildren(false);
-
-        Realm realm = AppUtil.getRealmInstance(App.getInstance());
-
-        Speaker speaker;
-
-        speaker = (Speaker) mItems.get(pageNumber);
-
-        Person person = realm.where(Person.class).equalTo("objectId", speaker.getUserLink()).findFirst();
-
-        ImageView ivConnect = (ImageView) rootView.findViewById(R.id.ivConnect);
-
-        ivConnect.setBackground(AppUtil.changeDrawableColor(activity, R.drawable.icon_blue_star_empty, AppUtil.getPrimaryThemColorAsInt()));
-
-        ImageView ivMessage = (ImageView) rootView.findViewById(R.id.ivMessage);
-
-        ivMessage.setBackground(AppUtil.changeDrawableColor(activity, R.drawable.icon_envelop, AppUtil.getPrimaryThemColorAsInt()));
-
-        ImageView ivAddNote = (ImageView) rootView.findViewById(R.id.ivAddANote);
-
-        ivAddNote.setBackground(AppUtil.changeDrawableColor(activity, R.drawable.icon_add_a_note, AppUtil.getPrimaryThemColorAsInt()));
-
-        TextView tvConnect = (TextView) rootView.findViewById(R.id.tvConnect);
-
-        tvConnect.setTextColor(AppUtil.getPrimaryThemColorAsInt());
-
-        TextView tvMessage = (TextView) rootView.findViewById(R.id.tvMessage);
-
-        tvMessage.setTextColor(AppUtil.getPrimaryThemColorAsInt());
-
-        tvMessage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(activity, MessagingActivity.class);
-
-                MessagingActivity.recipientIDStr = "info@swabimobile.com";
-
-                activity.startActivity(intent);
-            }
-        });
-
-        TextView tvAddNote = (TextView) rootView.findViewById(R.id.tvAddNote);
-
-        tvAddNote.setTextColor(AppUtil.getPrimaryThemColorAsInt());
-
-        TextView tvQA = (TextView) rootView.findViewById(R.id.tvQA);
-
-        tvQA.setTextColor(AppUtil.getPrimaryThemColorAsInt());
-
-        final ImageView ivProfile = (ImageView) rootView.findViewById(R.id.ivProfile);
-
-        if (person != null && person.getPictureURL() != null && !person.getPictureURL().equalsIgnoreCase("")) {
-            final String pictureURL = person.getPictureURL();
-
-            new AsyncTask<Void, Void, Void>() {
-                @Override
-                protected Void doInBackground(Void... params) {
-                    try {
-                        InputStream in = new URL(pictureURL).openStream();
-                        bmp = BitmapFactory.decodeStream(in);
-                    } catch (Exception e) {
-                        Log.d("APD", e.getMessage());
-                    }
-                    return null;
-                }
-
-                @Override
-                protected void onPostExecute(Void result) {
-                    if (bmp != null) {
-                        ivProfile.setImageBitmap(bmp);
-                    }
-                }
-
-            }.execute();
-        } else if (speaker.getImage() != null) {
-            Bitmap bm2 = BitmapFactory.decodeByteArray(speaker.getImage(), 0, speaker.getImage().length);
-
-            ivProfile.setImageBitmap(bm2);
-        }
-
-        TextView tvSpeakerName = (TextView) rootView.findViewById(R.id.tvSpeakerName);
-        tvSpeakerName.setText(speaker.getName());
-
         elvSpeakerDetailInfo = (ExpandableListView) rootView.findViewById(R.id.elvSpeakerInfo);
 
         getSpeakerDetailListData();
 
         elvSpeakerDetailInfo.setAdapter(adapter);
 
+        adapter.elvSpeakerDetails = elvSpeakerDetailInfo;
+        adapter.listQAPosition = _listQAPosition;
+
         for (int i = 0; i < adapter.getGroupCount(); ++i) {
             elvSpeakerDetailInfo.expandGroup(i);
         }
+
+        removeFirstHeader();
 
         return rootView;
     }
@@ -232,6 +147,12 @@ public class SpeakerDetailViewFragment extends Fragment {
         Speaker speaker = (Speaker) mItems.get(pageNumber);
 
         int groupNum = 0;
+
+        _listDataHeader.add("");
+        _listHeaderNumber.add(groupNum);
+        _listGroupHasListView.add(false);
+        _listChildCount.put(groupNum,1);
+        ++groupNum;
 
         if (speaker.getJob() != null && !speaker.getJob().equalsIgnoreCase("") ||
                 speaker.getOrganization() != null && !speaker.getOrganization().equalsIgnoreCase("") ||
@@ -298,6 +219,7 @@ public class SpeakerDetailViewFragment extends Fragment {
             _listHeaderNumber.add(groupNum);
             _listGroupHasListView.add(true);
             _listChildCount.put(groupNum,1);
+            _listQAPosition = groupNum * 2;
             ++groupNum;
         }
 
@@ -341,6 +263,21 @@ public class SpeakerDetailViewFragment extends Fragment {
 
         adapter = new SpeakerDetailExpandableListViewAdapter(activity, _listDataHeader, _listHeaderNumber, _listChildCount,
                 _listGroupHasListView, _listChildItems, speaker);
+
+    }
+
+    public void removeFirstHeader() {
+        if (adapter.section1Header != null) {
+            ViewGroup.LayoutParams params = adapter.section1Header.getLayoutParams();
+            params.height = 0;
+
+            adapter.section1Header.setLayoutParams(params);
+
+            adapter.section1Header.requestLayout();
+
+            // expListView.removeHeaderView(listAdapter.section1Header);
+            // expListView.deferNotifyDataSetChanged();
+        }
     }
 
     @Override

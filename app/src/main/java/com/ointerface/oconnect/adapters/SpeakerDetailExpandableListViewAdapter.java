@@ -5,13 +5,18 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.EditText;
+import android.widget.ExpandableListView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -19,7 +24,12 @@ import android.widget.TextView;
 import com.ointerface.oconnect.App;
 import com.ointerface.oconnect.R;
 import com.ointerface.oconnect.activities.EventDetailViewActivity;
+import com.ointerface.oconnect.activities.MyNotesActivity;
+import com.ointerface.oconnect.activities.OConnectBaseActivity;
+import com.ointerface.oconnect.activities.QRCodeScannerActivity;
 import com.ointerface.oconnect.activities.ScheduleActivity;
+import com.ointerface.oconnect.activities.WebViewActivity;
+import com.ointerface.oconnect.data.Attendee;
 import com.ointerface.oconnect.data.Event;
 import com.ointerface.oconnect.data.EventAbstract;
 import com.ointerface.oconnect.data.EventFile;
@@ -34,8 +44,16 @@ import com.ointerface.oconnect.data.SpeakerFile;
 import com.ointerface.oconnect.data.SpeakerJournal;
 import com.ointerface.oconnect.data.SpeakerLink;
 import com.ointerface.oconnect.data.SpeakerMisc;
+import com.ointerface.oconnect.messaging.MessagingActivity;
+import com.ointerface.oconnect.util.AppConfig;
 import com.ointerface.oconnect.util.AppUtil;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.ParseRelation;
+import com.parse.ParseUser;
 
+import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -43,6 +61,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import io.realm.Realm;
+import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.RealmResults;
 
@@ -60,6 +79,10 @@ public class SpeakerDetailExpandableListViewAdapter extends BaseExpandableListAd
     private HashMap<Integer, Integer> _listChildCount;
     private HashMap<Integer, ArrayList<String>> _listChildItems;
     private Speaker _listSpeaker;
+    public ExpandableListView elvSpeakerDetails;
+
+    public View section1Header;
+    public int listQAPosition = 0;
 
     public SpeakerDetailExpandableListViewAdapter(Context context, List<String> listDataHeader,
                                                 List<Integer> listHeaderNumber,
@@ -119,15 +142,288 @@ public class SpeakerDetailExpandableListViewAdapter extends BaseExpandableListAd
     @Override
     public View getChildView(int groupPosition, final int childPosition,
                              boolean isLastChild, View convertView, ViewGroup parent) {
-        Realm realm = AppUtil.getRealmInstance(App.getInstance());
+        final Realm realm = AppUtil.getRealmInstance(App.getInstance());
 
-        Person person = realm.where(Person.class).equalTo("objectId", _listSpeaker.getUserLink()).findFirst();
+        final Person person = realm.where(Person.class).equalTo("objectId", _listSpeaker.getUserLink()).findFirst();
 
         String groupItemStr = (String) getGroup(groupPosition);
 
         LayoutInflater infalInflater = (LayoutInflater) this._context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        if (groupItemStr.equalsIgnoreCase("About")) {
+        if (groupPosition == 0 && childPosition == 0) {
+            convertView = infalInflater.inflate(R.layout.speaker_detail_top_section_list_view_item, null);
+
+            RelativeLayout mainContainer = (RelativeLayout) convertView.findViewById(R.id.main_container);
+            LinearLayout llMain = (LinearLayout) convertView.findViewById(R.id.llMain);
+            RelativeLayout rlTopSection = (RelativeLayout) convertView.findViewById(R.id.rlTopSection);
+            RelativeLayout rlMiscItems = (RelativeLayout) convertView.findViewById(R.id.rlMiscItems);
+
+            mainContainer.setClipChildren(false);
+            llMain.setClipChildren(false);
+            rlTopSection.setClipChildren(false);
+            rlMiscItems.setClipChildren(false);
+
+            llMain.bringToFront();
+
+            final Speaker speaker = _listSpeaker;
+
+            final ImageView ivConnect = (ImageView) convertView.findViewById(R.id.ivConnect);
+
+            ivConnect.setBackground(AppUtil.changeDrawableColor(_context, R.drawable.icon_blue_star_empty, AppUtil.getPrimaryThemColorAsInt()));
+
+            ImageView ivMessage = (ImageView) convertView.findViewById(R.id.ivMessage);
+
+            ivMessage.setBackground(AppUtil.changeDrawableColor(_context, R.drawable.icon_envelop, AppUtil.getPrimaryThemColorAsInt()));
+
+            ImageView ivAddNote = (ImageView) convertView.findViewById(R.id.ivAddANote);
+
+            ivAddNote.setBackground(AppUtil.changeDrawableColor(_context, R.drawable.icon_add_a_note, AppUtil.getPrimaryThemColorAsInt()));
+
+            TextView tvConnect = (TextView) convertView.findViewById(R.id.tvConnect);
+
+            tvConnect.setTextColor(AppUtil.getPrimaryThemColorAsInt());
+
+            TextView tvMessage = (TextView) convertView.findViewById(R.id.tvMessage);
+
+            tvMessage.setTextColor(AppUtil.getPrimaryThemColorAsInt());
+
+            tvMessage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        Person user = realm.where(Person.class).equalTo("objectId", speaker.getUserLink()).findFirst();
+
+                        if (user != null) {
+                            Intent intent = new Intent(_context, MessagingActivity.class);
+
+                            MessagingActivity.recipientIDStr = user.getObjectId();
+
+                            _context.startActivity(intent);
+                        } else {
+                            AppUtil.displayPersonNotAvailable(_context);
+                        }
+                    } catch (Exception ex) {
+                        AppUtil.displayPersonNotAvailable(_context);
+                        Log.d("SpeakerDetail", ex.getMessage());
+                    }
+                }
+            });
+
+            ivMessage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        Person user = realm.where(Person.class).equalTo("objectId", speaker.getUserLink()).findFirst();
+
+                        if (user != null) {
+                            Intent intent = new Intent(_context, MessagingActivity.class);
+
+                            MessagingActivity.recipientIDStr = user.getObjectId();
+
+                            _context.startActivity(intent);
+                        } else {
+                            AppUtil.displayPersonNotAvailable(_context);
+                        }
+                    } catch (Exception ex) {
+                        AppUtil.displayPersonNotAvailable(_context);
+                        Log.d("SpeakerDetail", ex.getMessage());
+                    }
+                }
+            });
+
+            try {
+                Person user = realm.where(Person.class).equalTo("objectId", speaker.getUserLink()).findFirst();
+
+                if (user != null && user.isContactable() == false) {
+                    ivMessage.setBackground(AppUtil.changeDrawableColor(_context, R.drawable.icon_envelop, AppConfig.hiddenGreyBackgroundColor));
+                    tvMessage.setTextColor(AppConfig.hiddenGreyBackgroundColor);
+                    tvMessage.setOnClickListener(null);
+                    ivMessage.setOnClickListener(null);
+                }
+
+                RealmList<Person> connectedUsers = OConnectBaseActivity.currentPerson.getFavoriteUsers();
+                RealmList<Speaker> connectedSpeaker = OConnectBaseActivity.currentPerson.getFavoriteSpeakers();
+                if (connectedUsers.contains(user) == true || connectedSpeaker.contains(speaker) == true) {
+                    ivConnect.setBackground(AppUtil.changeDrawableColor(_context, R.drawable.icon_blue_star_filled, AppUtil.getPrimaryThemColorAsInt()));
+                }
+            } catch (Exception ex) {
+                Log.d("SpeakerDetail", ex.getMessage());
+            }
+
+            TextView tvAddNote = (TextView) convertView.findViewById(R.id.tvAddNote);
+
+            tvAddNote.setTextColor(AppUtil.getPrimaryThemColorAsInt());
+
+            tvAddNote.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(_context, MyNotesActivity.class);
+                    _context.startActivity(i);
+                }
+            });
+
+            ivAddNote.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(_context, MyNotesActivity.class);
+                    _context.startActivity(i);
+                }
+            });
+
+            TextView tvQA = (TextView) convertView.findViewById(R.id.tvQA);
+
+            tvQA.setTextColor(AppUtil.getPrimaryThemColorAsInt());
+
+            tvQA.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    elvSpeakerDetails.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            elvSpeakerDetails.setSelection(listQAPosition);
+                        }
+                    });
+                }
+            });
+
+            final ImageView ivProfile = (ImageView) convertView.findViewById(R.id.ivProfile);
+
+            if (person != null && person.getPictureURL() != null && !person.getPictureURL().equalsIgnoreCase("")) {
+                final String pictureURL = person.getPictureURL();
+
+                new AsyncTask<Void, Void, Void>() {
+                    Bitmap bmp;
+                    @Override
+                    protected Void doInBackground(Void... params) {
+                        try {
+                            InputStream in = new URL(pictureURL).openStream();
+                            bmp = BitmapFactory.decodeStream(in);
+                        } catch (Exception e) {
+                            Log.d("APD", e.getMessage());
+                        }
+                        return null;
+                    }
+
+                    @Override
+                    protected void onPostExecute(Void result) {
+                        if (bmp != null) {
+                            ivProfile.setImageBitmap(bmp);
+                        }
+                    }
+
+                }.execute();
+            } else if (speaker.getImage() != null) {
+                Bitmap bm2 = BitmapFactory.decodeByteArray(speaker.getImage(), 0, speaker.getImage().length);
+
+                ivProfile.setImageBitmap(bm2);
+            }
+
+            TextView tvSpeakerName = (TextView) convertView.findViewById(R.id.tvSpeakerName);
+            tvSpeakerName.setText(speaker.getName());
+
+                ivConnect.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        try {
+                            ivConnect.setBackground(AppUtil.changeDrawableColor(_context, R.drawable.icon_blue_star_filled, AppUtil.getPrimaryThemColorAsInt()));
+
+                            realm.beginTransaction();
+                            RealmList<Person> realmFavoriteUsers = new RealmList<Person>();
+
+                            ParseUser parseObject = ParseUser.getQuery().get(OConnectBaseActivity.currentPerson.getObjectId());
+
+                            ParseRelation<ParseObject> usersRelation = parseObject.getRelation("favoriteUsersRelation");
+
+                            ParseQuery<ParseObject> usersQuery = usersRelation.getQuery();
+
+                            List<ParseObject> usersList = usersQuery.find();
+
+                            Person user = realm.where(Person.class).equalTo("objectId", speaker.getUserLink()).findFirst();
+
+                            ParseUser parseSpeaker = ParseUser.getQuery().get(speaker.getUserLink());
+
+                            RealmList<Speaker> connectedSpeaker = OConnectBaseActivity.currentPerson.getFavoriteSpeakers();
+
+                            connectedSpeaker.add(speaker);
+
+                            OConnectBaseActivity.currentPerson.setFavoriteSpeakers(connectedSpeaker);
+
+                            if (user != null) {
+                                RealmList<Person> connectedUsers = OConnectBaseActivity.currentPerson.getFavoriteUsers();
+
+                                connectedUsers.add(user);
+
+                                OConnectBaseActivity.currentPerson.setFavoriteUsers(connectedUsers);
+                            }
+
+                            realm.commitTransaction();
+
+                            if (parseSpeaker != null) {
+                                usersRelation.add(parseSpeaker);
+
+                                parseObject.put("favoriteUsersRelation", usersRelation);
+
+                                parseObject.save();
+                            }
+
+                        } catch (Exception ex) {
+                            Log.d("SpeakerDetail", "Exception: " + ex.getMessage());
+                        }
+                    }
+                });
+
+                tvConnect.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        try {
+                            ivConnect.setBackground(AppUtil.changeDrawableColor(_context, R.drawable.icon_blue_star_filled, AppUtil.getPrimaryThemColorAsInt()));
+
+                            realm.beginTransaction();
+                            RealmList<Person> realmFavoriteUsers = new RealmList<Person>();
+
+                            ParseUser parseObject = ParseUser.getQuery().get(OConnectBaseActivity.currentPerson.getObjectId());
+
+                            ParseRelation<ParseObject> usersRelation = parseObject.getRelation("favoriteUsersRelation");
+
+                            ParseQuery<ParseObject> usersQuery = usersRelation.getQuery();
+
+                            List<ParseObject> usersList = usersQuery.find();
+
+                            Person user = realm.where(Person.class).equalTo("objectId", speaker.getUserLink()).findFirst();
+
+                            ParseUser parseSpeaker = ParseUser.getQuery().get(speaker.getUserLink());
+
+                            RealmList<Speaker> connectedSpeaker = OConnectBaseActivity.currentPerson.getFavoriteSpeakers();
+
+                            connectedSpeaker.add(speaker);
+
+                            OConnectBaseActivity.currentPerson.setFavoriteSpeakers(connectedSpeaker);
+
+                            if (user != null) {
+                                RealmList<Person> connectedUsers = OConnectBaseActivity.currentPerson.getFavoriteUsers();
+
+                                connectedUsers.add(user);
+
+                                OConnectBaseActivity.currentPerson.setFavoriteUsers(connectedUsers);
+                            }
+
+                            realm.commitTransaction();
+
+                            if (parseSpeaker != null) {
+                                usersRelation.add(parseSpeaker);
+
+                                parseObject.put("favoriteUsersRelation", usersRelation);
+
+                                parseObject.save();
+                            }
+
+                        } catch (Exception ex) {
+                            Log.d("SpeakerDetail", "Exception: " + ex.getMessage());
+                        }
+                    }
+                });
+
+        } else if (groupItemStr.equalsIgnoreCase("About")) {
             convertView = infalInflater.inflate(R.layout.speaker_detail_about_list_view_item, null);
 
             ImageView ivInfo = (ImageView) convertView.findViewById(R.id.ivParticipantJobTitle);
@@ -274,6 +570,27 @@ public class SpeakerDetailExpandableListViewAdapter extends BaseExpandableListAd
             }
         } else if (groupItemStr.equalsIgnoreCase("Send Question")) {
             convertView = infalInflater.inflate(R.layout.speaker_detail_list_send_question, null);
+
+            final EditText etSendQuestion = (EditText) convertView.findViewById(R.id.etSendQuestion);
+
+            TextView tvSend = (TextView) convertView.findViewById(R.id.tvSend);
+
+            tvSend.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Person user = realm.where(Person.class).equalTo("objectId", _listSpeaker.getUserLink()).findFirst();
+
+                    if (user != null) {
+                        Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
+                                "mailto", user.getContact_email(), null));
+                        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Conference");
+                        emailIntent.putExtra(Intent.EXTRA_TEXT, etSendQuestion.getText().toString());
+                        _context.startActivity(Intent.createChooser(emailIntent, "Send email..."));
+                    } else {
+                        AppUtil.displayPersonNotAvailable(_context);
+                    }
+                }
+            });
         } else if (groupItemStr.equalsIgnoreCase("Files")) {
             RealmResults<SpeakerEventCache> eventsResult = realm.where(SpeakerEventCache.class).equalTo("speakerID", _listSpeaker.getObjectId()).findAll();
 
@@ -364,8 +681,19 @@ public class SpeakerDetailExpandableListViewAdapter extends BaseExpandableListAd
             lvItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                    /*
+                    Intent i = new Intent(_context, WebViewActivity.class);
+                    i.putExtra("TITLE", "File");
+                    i.putExtra("URL", finalUrls.get(position));
+                    i.putExtra("BACK_TEXT", "Back");
+                    i.putExtra("OPEN", "Open In Browser");
+                    _context.startActivity(i);
+                    */
+
                     Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(finalUrls.get(position)));
                     _context.startActivity(browserIntent);
+
                 }
             });
         }
@@ -424,6 +752,18 @@ public class SpeakerDetailExpandableListViewAdapter extends BaseExpandableListAd
             tvArrow.setRotation(90);
         } else {
             tvArrow.setRotation(0);
+        }
+
+        // We hide the first header.
+        if (groupPosition == 0) {
+            tvSpeakerDetailName.setVisibility(GONE);
+            tvArrow.setVisibility(GONE);
+            convertView.setVisibility(GONE);
+            section1Header = convertView;
+        } else {
+            tvSpeakerDetailName.setVisibility(View.VISIBLE);
+            tvArrow.setVisibility(View.VISIBLE);
+            convertView.setVisibility(View.VISIBLE);
         }
 
         return convertView;

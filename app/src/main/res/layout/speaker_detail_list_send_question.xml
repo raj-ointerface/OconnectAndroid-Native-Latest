@@ -19,20 +19,25 @@
         android:id="@+id/etSendQuestion"
         android:layout_below="@+id/tvSendQuestion"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="130dp"
         android:textSize="14sp"
         android:layout_marginTop="10dp"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
+        android:gravity="top"
+        android:foregroundGravity="top"
         android:hint="This will email the speaker your question"
         />
     <TextView
         android:id="@+id/tvSend"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginRight="15dp"
+        android:layout_below="@+id/etSendQuestion"
+        android:layout_marginRight="25dp"
         android:layout_marginBottom="15dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textSize="18sp"
         android:text="Send"/>
 </RelativeLayout>

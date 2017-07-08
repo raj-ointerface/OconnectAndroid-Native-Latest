@@ -926,6 +926,8 @@ public class DataSyncManager {
 
                             speaker.setSpeakerLabel(parseObject.getString("speakerLabel"));
 
+                            speaker.setEmail(parseObject.getString("email"));
+
                             ParseObject conferenceObj = parseObject.getParseObject("conference");
 
                             if (conferenceObj != null) {
@@ -1090,6 +1092,8 @@ public class DataSyncManager {
                             result.setBio(parseObject.getString("bio"));
 
                             result.setSpeakerLabel(parseObject.getString("speakerLabel"));
+
+                            result.setEmail(parseObject.getString("email"));
 
                             ParseObject conferenceObj = parseObject.getParseObject("conference");
 
@@ -1331,6 +1335,8 @@ public class DataSyncManager {
 
                             attendee.setJob(parseObject.getString("job"));
 
+                            attendee.setEmail(parseObject.getString("email"));
+
                             ParseObject conferenceObj = parseObject.getParseObject("conference");
 
                             if (conferenceObj != null) {
@@ -1385,6 +1391,8 @@ public class DataSyncManager {
                             result.setContactable(parseObject.getBoolean("isContactable"));
 
                             result.setJob(parseObject.getString("job"));
+
+                            result.setEmail(parseObject.getString("email"));
 
                             ParseObject conferenceObj = parseObject.getParseObject("conference");
 

@@ -593,6 +593,8 @@ public class NTEScheduleActivity extends OConnectBaseActivity {
             }
 
         }
+
+        adapter.notifyDataSetChanged();
     }
 
     public void leftArrowClicked(View view) {

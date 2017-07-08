@@ -60,6 +60,8 @@ public class ParticipantsActivity extends OConnectBaseActivity {
 
     public Speaker currentSpeaker = null;
 
+    private boolean bIsSpeakerView = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -316,12 +318,15 @@ public class ParticipantsActivity extends OConnectBaseActivity {
 
                     attendeesView.setBackgroundColor(AppUtil.getPrimaryThemColorAsInt());
 
+                    bIsSpeakerView = true;
                     displaySpeakers();
                     return true;
                 case R.id.navigation_attendees:
                     speakersView.setBackgroundColor(AppUtil.getPrimaryThemColorAsInt());
 
                     attendeesView.setBackgroundColor(AppConfig.lightGreyColor);
+
+                    bIsSpeakerView = false;
 
                     displayAttendees();
                     return true;
@@ -371,7 +376,7 @@ public class ParticipantsActivity extends OConnectBaseActivity {
 
     public void performSearch(String searchText) {
 
-        if (searchText == null || searchText.length() == 0) {
+        if (searchText == null || searchText.equalsIgnoreCase("")) {
             return;
         }
 
@@ -414,5 +419,9 @@ public class ParticipantsActivity extends OConnectBaseActivity {
                 }
             }
         }
+
+        adapter.showingSpeakers = bIsSpeakerView;
+
+        lvParticipantsList.setAdapter(adapter);
     }
 }

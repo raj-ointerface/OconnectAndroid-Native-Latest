@@ -20,6 +20,9 @@ public class AppConfig {
     static public String getSharedPrefsPinPromptSkippedConferenceList = "com.ointerface.oconnect.sharedprefs.pinPromptSkippedConferenceList";
     static public String getSharedPrefsNavItemPasswordEntered = "com.ointerface.oconnect.sharedprefs.navItemPasswordEntered";
     static public String getSharedPrefsDefaultRealmLoaded = "com.ointerface.oconnect.sharedprefs.defaultRealmLoaded";
+    static public String getSharedPrefsFacebookLoggedIn = "com.ointerface.oconnect.sharedprefs.facebookLoggedIn";
+    static public String getSharedPrefsTwitterLoggedIn = "com.ointerface.oconnect.sharedprefs.twitterLoggedIn";
+    static public String getSharedPrefsLinkedInLoggedIn = "com.ointerface.oconnect.sharedprefs.linkedInLoggedIn";
 
     static public String defaultDateTimeFormat = "yyyy-MM-dd'T'HH:mm:ss";
 

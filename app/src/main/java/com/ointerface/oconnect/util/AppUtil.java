@@ -34,9 +34,13 @@ import com.ointerface.oconnect.activities.ParticipantsActivity;
 import com.ointerface.oconnect.activities.SignInActivity1;
 import com.ointerface.oconnect.activities.SurveyActivity;
 import com.ointerface.oconnect.data.Conference;
+import com.ointerface.oconnect.data.Person;
 import com.parse.GetDataCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseObject;
+import com.parse.ParseRelation;
+import com.parse.ParseUser;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -51,6 +55,7 @@ import java.util.TreeSet;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
+import io.realm.RealmList;
 import io.realm.exceptions.RealmMigrationNeededException;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -322,6 +327,19 @@ public class AppUtil {
         alertDialog.show();
     }
 
+    public static void displayPersonNotAvailable(Context context) {
+        AlertDialog alertDialog = new AlertDialog.Builder(context).create();
+        alertDialog.setTitle("Message");
+        alertDialog.setMessage("This person has not created an account for the conference and cannot be sent messages.");
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+        alertDialog.show();
+    }
+
     static public boolean getDefaultRealmLoaded (Context context) {
         SharedPreferences prefs = context.getSharedPreferences(AppConfig.sharedPrefsName, MODE_PRIVATE);
         boolean value = prefs.getBoolean(AppConfig.getSharedPrefsDefaultRealmLoaded, false);
@@ -332,5 +350,58 @@ public class AppUtil {
         SharedPreferences.Editor editor = context.getSharedPreferences(AppConfig.sharedPrefsName, MODE_PRIVATE).edit();
         editor.putBoolean(AppConfig.getSharedPrefsDefaultRealmLoaded, value);
         editor.commit();
+    }
+
+    static public boolean getFacebookLoggedIn (Context context) {
+        SharedPreferences prefs = context.getSharedPreferences(AppConfig.sharedPrefsName, MODE_PRIVATE);
+        boolean value = prefs.getBoolean(AppConfig.getSharedPrefsFacebookLoggedIn, false);
+        return value;
+    }
+
+    static public void setFacebookLoggedIn (Context context, boolean value) {
+        SharedPreferences.Editor editor = context.getSharedPreferences(AppConfig.sharedPrefsName, MODE_PRIVATE).edit();
+        editor.putBoolean(AppConfig.getSharedPrefsFacebookLoggedIn, value);
+        editor.commit();
+    }
+
+    static public boolean getTwitterLoggedIn (Context context) {
+        SharedPreferences prefs = context.getSharedPreferences(AppConfig.sharedPrefsName, MODE_PRIVATE);
+        boolean value = prefs.getBoolean(AppConfig.getSharedPrefsTwitterLoggedIn, false);
+        return value;
+    }
+
+    static public void setTwitterLoggedIn (Context context, boolean value) {
+        SharedPreferences.Editor editor = context.getSharedPreferences(AppConfig.sharedPrefsName, MODE_PRIVATE).edit();
+        editor.putBoolean(AppConfig.getSharedPrefsTwitterLoggedIn, value);
+        editor.commit();
+    }
+
+    static public boolean getLinkedInLoggedIn (Context context) {
+        SharedPreferences prefs = context.getSharedPreferences(AppConfig.sharedPrefsName, MODE_PRIVATE);
+        boolean value = prefs.getBoolean(AppConfig.getSharedPrefsLinkedInLoggedIn, false);
+        return value;
+    }
+
+    static public void setLinkedInLoggedIn (Context context, boolean value) {
+        SharedPreferences.Editor editor = context.getSharedPreferences(AppConfig.sharedPrefsName, MODE_PRIVATE).edit();
+        editor.putBoolean(AppConfig.getSharedPrefsLinkedInLoggedIn, value);
+        editor.commit();
+    }
+
+    static public boolean isConnectedToUser(Person user) {
+        try {
+            RealmList<Person> connectedUsers = OConnectBaseActivity.currentPerson.getFavoriteUsers();
+
+            if (connectedUsers != null) {
+                if (connectedUsers.contains(user) == true) {
+                    return true;
+                }
+            }
+        } catch (Exception ex) {
+            Log.d("AppUtil", ex.getMessage());
+            return false;
+        }
+
+        return false;
     }
 }

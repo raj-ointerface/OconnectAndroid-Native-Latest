@@ -40,6 +40,16 @@ public class Attendee extends RealmObject implements Serializable {
 
     private Boolean isCheckedIn = false;
 
+    private String email = "";
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public Boolean getCheckedIn() {
         if (isCheckedIn == null) {
             Realm realm = AppUtil.getRealmInstance(App.getInstance());

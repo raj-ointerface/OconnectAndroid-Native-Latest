@@ -530,6 +530,8 @@ public class ScheduleActivity extends OConnectBaseActivity {
             }
 
         }
+
+        lvEvents.setAdapter(adapter);
     }
 
     public void leftArrowClicked(View view) {

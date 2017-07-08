@@ -24,6 +24,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Switch;
@@ -137,6 +138,31 @@ public class EditAccountActivity extends OConnectBaseActivity {
         switchTwitter = (Switch) findViewById(R.id.switchTwitter);
         switchFacebook = (Switch) findViewById(R.id.switchFacebook);
         switchLinkedIn = (Switch) findViewById(R.id.switchLinkedIn);
+
+        switchTwitter.setChecked(AppUtil.getTwitterLoggedIn(EditAccountActivity.this));
+        switchFacebook.setChecked(AppUtil.getFacebookLoggedIn(EditAccountActivity.this));
+        switchLinkedIn.setChecked(AppUtil.getLinkedInLoggedIn(EditAccountActivity.this));
+
+        switchTwitter.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                AppUtil.setTwitterLoggedIn(EditAccountActivity.this, isChecked);
+            }
+        });
+
+        switchFacebook.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                AppUtil.setFacebookLoggedIn(EditAccountActivity.this, isChecked);
+            }
+        });
+
+        switchLinkedIn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                AppUtil.setLinkedInLoggedIn(EditAccountActivity.this, isChecked);
+            }
+        });
 
         if (currentPerson != null) {
             if (currentPerson.getPictureURL() != null && !currentPerson.getPictureURL().equalsIgnoreCase("")) {

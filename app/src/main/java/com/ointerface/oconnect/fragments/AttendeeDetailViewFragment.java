@@ -42,7 +42,12 @@ import com.ointerface.oconnect.data.SpeakerJournal;
 import com.ointerface.oconnect.data.SpeakerLink;
 import com.ointerface.oconnect.data.SpeakerMisc;
 import com.ointerface.oconnect.messaging.MessagingActivity;
+import com.ointerface.oconnect.util.AppConfig;
 import com.ointerface.oconnect.util.AppUtil;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.ParseRelation;
+import com.parse.ParseUser;
 
 import java.io.InputStream;
 import java.net.URL;
@@ -53,6 +58,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import io.realm.Realm;
+import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.RealmResults;
 
@@ -109,6 +115,7 @@ public class AttendeeDetailViewFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         ViewGroup rootView = (ViewGroup) inflater.inflate(
                 R.layout.fragment_attendee_detail_view, container, false);
 
@@ -122,7 +129,7 @@ public class AttendeeDetailViewFragment extends Fragment {
         rlTopSection.setClipChildren(false);
         rlMiscItems.setClipChildren(false);
 
-        Realm realm = AppUtil.getRealmInstance(App.getInstance());
+        final Realm realm = AppUtil.getRealmInstance(App.getInstance());
 
         Bundle bundle = getArguments();
 
@@ -130,9 +137,9 @@ public class AttendeeDetailViewFragment extends Fragment {
 
         final Attendee attendee = (Attendee) mItems.get(pageNumber);
 
-        Person person = realm.where(Person.class).equalTo("objectId", attendee.getUserLink()).findFirst();
+        final Person person = realm.where(Person.class).equalTo("objectId", attendee.getUserLink()).findFirst();
 
-        ImageView ivConnect = (ImageView) rootView.findViewById(R.id.ivConnect);
+        final ImageView ivConnect = (ImageView) rootView.findViewById(R.id.ivConnect);
 
         ivConnect.setBackground(AppUtil.changeDrawableColor(activity, R.drawable.icon_blue_star_empty, AppUtil.getPrimaryThemColorAsInt()));
 
@@ -140,22 +147,166 @@ public class AttendeeDetailViewFragment extends Fragment {
 
         ivMessage.setBackground(AppUtil.changeDrawableColor(activity, R.drawable.icon_envelop, AppUtil.getPrimaryThemColorAsInt()));
 
-        TextView tvConnect = (TextView) rootView.findViewById(R.id.tvConnect);
-
-        tvConnect.setTextColor(AppUtil.getPrimaryThemColorAsInt());
-
         TextView tvMessage = (TextView) rootView.findViewById(R.id.tvMessage);
 
         tvMessage.setTextColor(AppUtil.getPrimaryThemColorAsInt());
 
+        TextView tvConnect = (TextView) rootView.findViewById(R.id.tvConnect);
+
+        tvConnect.setTextColor(AppUtil.getPrimaryThemColorAsInt());
+
+        try {
+            Person user = realm.where(Person.class).equalTo("objectId", attendee.getUserLink()).findFirst();
+
+            if (user != null && user.isContactable() == false) {
+                ivMessage.setBackground(AppUtil.changeDrawableColor(activity, R.drawable.icon_envelop, AppConfig.hiddenGreyBackgroundColor));
+                tvMessage.setTextColor(AppConfig.hiddenGreyBackgroundColor);
+                tvMessage.setOnClickListener(null);
+                ivMessage.setOnClickListener(null);
+            }
+
+            RealmList<Person> connectedUsers = OConnectBaseActivity.currentPerson.getFavoriteUsers();
+            RealmList<Attendee> connectedAttendees = OConnectBaseActivity.currentPerson.getFavoriteAttendees();
+            if (connectedUsers.contains(user) == true || connectedAttendees.contains(attendee) == true) {
+                ivConnect.setBackground(AppUtil.changeDrawableColor(activity, R.drawable.icon_blue_star_filled, AppUtil.getPrimaryThemColorAsInt()));
+            }
+        } catch (Exception ex) {
+            Log.d("SpeakerDetail", ex.getMessage());
+        }
+
+        tvConnect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    ivConnect.setBackground(AppUtil.changeDrawableColor(activity, R.drawable.icon_blue_star_filled, AppUtil.getPrimaryThemColorAsInt()));
+
+                    realm.beginTransaction();
+                    RealmList<Person> realmFavoriteUsers = new RealmList<Person>();
+
+                    ParseUser parseObject = ParseUser.getQuery().get(OConnectBaseActivity.currentPerson.getObjectId());
+
+                    ParseRelation<ParseObject> usersRelation = parseObject.getRelation("favoriteUsersRelation");
+
+                    ParseQuery<ParseObject> usersQuery = usersRelation.getQuery();
+
+                    List<ParseObject> usersList = usersQuery.find();
+
+                    Person user = realm.where(Person.class).equalTo("objectId", attendee.getUserLink()).findFirst();
+
+                    ParseUser parseAttendee = ParseUser.getQuery().get(attendee.getUserLink());
+
+                    RealmList<Attendee> connectedAttendees = OConnectBaseActivity.currentPerson.getFavoriteAttendees();
+
+                    connectedAttendees.add(attendee);
+
+                    OConnectBaseActivity.currentPerson.setFavoriteAttendees(connectedAttendees);
+
+                    if (user != null) {
+                        RealmList<Person> connectedUsers = OConnectBaseActivity.currentPerson.getFavoriteUsers();
+
+                        connectedUsers.add(user);
+
+                        OConnectBaseActivity.currentPerson.setFavoriteUsers(connectedUsers);
+                    }
+
+                    realm.commitTransaction();
+
+                    if (parseAttendee != null) {
+                        usersRelation.add(parseAttendee);
+
+                        parseObject.put("favoriteUsersRelation", usersRelation);
+
+                        parseObject.save();
+                    }
+
+                } catch (Exception ex) {
+                    Log.d("AttendeeDetail", "Exception: " + ex.getMessage());
+                }
+            }
+        });
+
+        ivConnect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    ivConnect.setBackground(AppUtil.changeDrawableColor(activity, R.drawable.icon_blue_star_filled, AppUtil.getPrimaryThemColorAsInt()));
+
+                    realm.beginTransaction();
+                    RealmList<Person> realmFavoriteUsers = new RealmList<Person>();
+
+                    ParseUser parseObject = ParseUser.getQuery().get(OConnectBaseActivity.currentPerson.getObjectId());
+
+                    ParseRelation<ParseObject> usersRelation = parseObject.getRelation("favoriteUsersRelation");
+
+                    ParseQuery<ParseObject> usersQuery = usersRelation.getQuery();
+
+                    List<ParseObject> usersList = usersQuery.find();
+
+                    Person user = realm.where(Person.class).equalTo("objectId", attendee.getUserLink()).findFirst();
+
+                    ParseUser parseSpeaker = ParseUser.getQuery().get(attendee.getUserLink());
+
+                    RealmList<Attendee> connectedAttendees = OConnectBaseActivity.currentPerson.getFavoriteAttendees();
+
+                    connectedAttendees.add(attendee);
+
+                    OConnectBaseActivity.currentPerson.setFavoriteAttendees(connectedAttendees);
+
+                    if (user != null) {
+                        RealmList<Person> connectedUsers = OConnectBaseActivity.currentPerson.getFavoriteUsers();
+
+                        connectedUsers.add(user);
+
+                        OConnectBaseActivity.currentPerson.setFavoriteUsers(connectedUsers);
+                    }
+
+                    realm.commitTransaction();
+
+                    if (parseSpeaker != null) {
+                        usersRelation.add(parseSpeaker);
+
+                        parseObject.put("favoriteUsersRelation", usersRelation);
+
+                        parseObject.save();
+                    }
+
+                } catch (Exception ex) {
+                    Log.d("AttendeeDetail", "Exception: " + ex.getMessage());
+                }
+            }
+        });
+
         tvMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(activity, MessagingActivity.class);
+                Person user = realm.where(Person.class).equalTo("objectId", attendee.getUserLink()).findFirst();
 
-                MessagingActivity.recipientIDStr = "info@swabimobile.com";
+                if (user != null) {
+                    Intent intent = new Intent(activity, MessagingActivity.class);
 
-                activity.startActivity(intent);
+                    MessagingActivity.recipientIDStr = user.getObjectId();
+
+                    activity.startActivity(intent);
+                } else {
+                    AppUtil.displayPersonNotAvailable(activity);
+                }
+            }
+        });
+
+        ivMessage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Person user = realm.where(Person.class).equalTo("objectId", attendee.getUserLink()).findFirst();
+
+                if (user != null) {
+                    Intent intent = new Intent(activity, MessagingActivity.class);
+
+                    MessagingActivity.recipientIDStr = user.getObjectId();
+
+                    activity.startActivity(intent);
+                } else {
+                    AppUtil.displayPersonNotAvailable(activity);
+                }
             }
         });
 

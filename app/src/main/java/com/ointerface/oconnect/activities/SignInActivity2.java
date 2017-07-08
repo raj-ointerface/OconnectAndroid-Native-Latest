@@ -181,6 +181,8 @@ public class SignInActivity2 extends AppCompatActivity {
                         user.saveInBackground();
                     }
 
+                    AppUtil.setTwitterLoggedIn(SignInActivity2.this, true);
+
                     OConnectBaseActivity.currentPerson = Person.saveFromParseUser(user, false);
                     callTwitterImportAPI(user);
 
@@ -212,6 +214,8 @@ public class SignInActivity2 extends AppCompatActivity {
                                 user.put("userType", "app");
                                 user.saveInBackground();
                             }
+
+                            AppUtil.setFacebookLoggedIn(SignInActivity2.this, true);
 
                             OConnectBaseActivity.currentPerson = Person.saveFromParseUser(user, false);
                             callFacebookImportAPI(user);
@@ -247,6 +251,8 @@ public class SignInActivity2 extends AppCompatActivity {
                 apiHelper.getRequest(SignInActivity2.this, url, new ApiListener() {
                     @Override
                     public void onApiSuccess(ApiResponse apiResponse) {
+                        AppUtil.setLinkedInLoggedIn(SignInActivity2.this, true);
+
                         // Success!
                         Log.d("APD", "linkedin response for data: " + apiResponse.getResponseDataAsJson().toString());
 

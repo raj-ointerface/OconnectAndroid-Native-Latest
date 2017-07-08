@@ -1,6 +1,7 @@
 package com.ointerface.oconnect.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +15,9 @@ import com.ointerface.oconnect.App;
 import com.ointerface.oconnect.ConferenceListViewAdapter;
 import com.ointerface.oconnect.R;
 import com.ointerface.oconnect.activities.DashboardActivity;
+import com.ointerface.oconnect.activities.EventDetailViewActivity;
 import com.ointerface.oconnect.activities.OConnectBaseActivity;
+import com.ointerface.oconnect.activities.ScheduleActivity;
 import com.ointerface.oconnect.containers.MenuItemHolder;
 import com.ointerface.oconnect.data.Conference;
 import com.ointerface.oconnect.data.Event;
@@ -33,6 +36,7 @@ import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmList;
+import io.realm.RealmObject;
 
 /**
  * Created by AnthonyDoan on 4/17/17.
@@ -103,6 +107,41 @@ public class DashboardEventListViewAdapter extends BaseAdapter {
         TextView tvSessionName = (TextView) convertView.findViewById(R.id.tvSessionName);
 
         tvSessionName.setText(sessionName);
+
+        tvEventName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gotoEventDetail(event);
+            }
+        });
+
+        tvDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gotoEventDetail(event);
+            }
+        });
+
+        tvTimeStart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gotoEventDetail(event);
+            }
+        });
+
+        tvTimeEnd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gotoEventDetail(event);
+            }
+        });
+
+        tvSessionName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gotoEventDetail(event);
+            }
+        });
 
         final ImageView ivStar = (ImageView) convertView.findViewById(R.id.ivStar);
 
@@ -231,5 +270,18 @@ public class DashboardEventListViewAdapter extends BaseAdapter {
         });
 
         return convertView;
+    }
+
+    public void gotoEventDetail(Event event) {
+        // Goto Event Detail View
+        EventDetailViewActivity.mItems = new ArrayList<RealmObject>();
+
+        int newPosition = 0;
+
+        EventDetailViewActivity.mItems.add(event);
+
+        Intent i = new Intent(context, EventDetailViewActivity.class);
+        i.putExtra("EVENT_NUMBER", newPosition);
+        context.startActivity(i);
     }
 }

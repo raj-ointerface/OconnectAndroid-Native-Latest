@@ -2,6 +2,9 @@ package com.ointerface.oconnect.fragments;
 
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -15,17 +18,22 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.daimajia.easing.linear.Linear;
 import com.ointerface.oconnect.App;
 import com.ointerface.oconnect.R;
+import com.ointerface.oconnect.activities.AddNoteActivity;
 import com.ointerface.oconnect.activities.EventDetailViewActivity;
 import com.ointerface.oconnect.activities.HelpViewPagerActivity;
 import com.ointerface.oconnect.activities.InfoActivity;
+import com.ointerface.oconnect.activities.MyNotesActivity;
 import com.ointerface.oconnect.activities.OConnectBaseActivity;
 import com.ointerface.oconnect.activities.ScheduleActivity;
 import com.ointerface.oconnect.adapters.EventDetailExpandableListViewAdapter;
+import com.ointerface.oconnect.data.Attendee;
 import com.ointerface.oconnect.data.Event;
+import com.ointerface.oconnect.data.Person;
 import com.ointerface.oconnect.data.Session;
 import com.ointerface.oconnect.data.Speaker;
 import com.ointerface.oconnect.data.SpeakerEventCache;
@@ -40,6 +48,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import io.realm.Realm;
+import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.RealmResults;
 import io.realm.Sort;
@@ -110,17 +119,23 @@ public class EventDetailViewFragment extends Fragment {
         rlTopSection.setClipChildren(false);
         rlMiscItems.setClipChildren(false);
 
-        Realm realm = AppUtil.getRealmInstance(App.getInstance());
+        final Realm realm = AppUtil.getRealmInstance(App.getInstance());
 
         Bundle bundle = getArguments();
 
         pageNumber = bundle.getInt("PAGE_NUMBER");
 
-        Event event = (Event) mItems.get(pageNumber);
+        final Event event = (Event) mItems.get(pageNumber);
 
-        ImageView ivMyAgenda = (ImageView) rootView.findViewById(R.id.ivMyAgenda);
+        final ImageView ivMyAgenda = (ImageView) rootView.findViewById(R.id.ivMyAgenda);
 
         ivMyAgenda.setBackground(AppUtil.changeDrawableColor(activity, R.drawable.icon_blue_star_empty, AppUtil.getPrimaryThemColorAsInt()));
+
+        RealmList<Event> myAgendaList = OConnectBaseActivity.currentPerson.getFavoriteEvents();
+
+        if (myAgendaList.contains(event) == true) {
+            ivMyAgenda.setBackground(AppUtil.changeDrawableColor(activity, R.drawable.icon_blue_star_filled, AppUtil.getPrimaryThemColorAsInt()));
+        }
 
         ImageView ivTweet = (ImageView) rootView.findViewById(R.id.ivTweet);
 
@@ -134,17 +149,119 @@ public class EventDetailViewFragment extends Fragment {
 
         tvMyAgenda.setTextColor(AppUtil.getPrimaryThemColorAsInt());
 
+        tvMyAgenda.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                realm.beginTransaction();
+                OConnectBaseActivity.currentPerson.getFavoriteEvents().add(event);
+                realm.commitTransaction();
+
+                ivMyAgenda.setBackground(AppUtil.changeDrawableColor(activity, R.drawable.icon_blue_star_filled, AppUtil.getPrimaryThemColorAsInt()));
+            }
+        });
+
+        ivMyAgenda.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                realm.beginTransaction();
+                OConnectBaseActivity.currentPerson.getFavoriteEvents().add(event);
+                realm.commitTransaction();
+
+                ivMyAgenda.setBackground(AppUtil.changeDrawableColor(activity, R.drawable.icon_blue_star_filled, AppUtil.getPrimaryThemColorAsInt()));
+            }
+        });
+
         TextView tvTweet = (TextView) rootView.findViewById(R.id.tvTweet);
 
         tvTweet.setTextColor(AppUtil.getPrimaryThemColorAsInt());
+
+        ivTweet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent tweetIntent = new Intent(Intent.ACTION_SEND);
+                tweetIntent.putExtra(Intent.EXTRA_TEXT, "Attending \"" + OConnectBaseActivity.selectedConference.getName() + "\"" + " #oconnectapp");
+                tweetIntent.setType("text/plain");
+
+                PackageManager packManager = activity.getPackageManager();
+                List<ResolveInfo> resolvedInfoList = packManager.queryIntentActivities(tweetIntent,  PackageManager.MATCH_DEFAULT_ONLY);
+
+                boolean resolved = false;
+                for(ResolveInfo resolveInfo: resolvedInfoList){
+                    if(resolveInfo.activityInfo.packageName.startsWith("com.twitter.android")){
+                        tweetIntent.setClassName(
+                                resolveInfo.activityInfo.packageName,
+                                resolveInfo.activityInfo.name );
+                        resolved = true;
+                        break;
+                    }
+                }
+                if(resolved){
+                    startActivity(tweetIntent);
+                }else{
+                    Toast.makeText(activity, "Twitter app isn't found.", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        tvTweet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent tweetIntent = new Intent(Intent.ACTION_SEND);
+                tweetIntent.putExtra(Intent.EXTRA_TEXT, "Attending \"" + OConnectBaseActivity.selectedConference.getName() + "\"" + " #oconnectapp");
+                tweetIntent.setType("text/plain");
+
+                PackageManager packManager = activity.getPackageManager();
+                List<ResolveInfo> resolvedInfoList = packManager.queryIntentActivities(tweetIntent,  PackageManager.MATCH_DEFAULT_ONLY);
+
+                boolean resolved = false;
+                for(ResolveInfo resolveInfo: resolvedInfoList){
+                    if(resolveInfo.activityInfo.packageName.startsWith("com.twitter.android")){
+                        tweetIntent.setClassName(
+                                resolveInfo.activityInfo.packageName,
+                                resolveInfo.activityInfo.name );
+                        resolved = true;
+                        break;
+                    }
+                }
+                if(resolved){
+                    startActivity(tweetIntent);
+                }else{
+                    Toast.makeText(activity, "Twitter app isn't found.", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
 
         TextView tvAddNote = (TextView) rootView.findViewById(R.id.tvAddNote);
 
         tvAddNote.setTextColor(AppUtil.getPrimaryThemColorAsInt());
 
+        ivAddNote.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(activity, AddNoteActivity.class);
+                startActivity(i);
+                activity.overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up );
+            }
+        });
+
+        tvAddNote.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(activity, AddNoteActivity.class);
+                startActivity(i);
+                activity.overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up );
+            }
+        });
+
         TextView tvQA = (TextView) rootView.findViewById(R.id.tvQA);
 
         tvQA.setTextColor(AppUtil.getPrimaryThemColorAsInt());
+
+        if (OConnectBaseActivity.selectedConference.isShowQuestions() == true) {
+            tvQA.setVisibility(View.VISIBLE);
+        } else {
+            tvQA.setVisibility(GONE);
+        }
 
         ImageView ivOrganizationLogo = (ImageView) rootView.findViewById(R.id.ivOrganizationLogo);
 
