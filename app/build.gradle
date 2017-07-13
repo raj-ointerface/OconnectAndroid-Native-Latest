@@ -69,7 +69,8 @@ dependencies {
     //    transitive = true
     // }
 
-    compile 'com.android.support:multidex:1.0.1'
+    
+
 
     compile project(':linkedin-sdk')
     compile(name: 'sinch-android-rtc', version: '+', ext: 'aar')
@@ -79,9 +80,13 @@ dependencies {
     // compile 'com.google.api-client:google-api-client-android:+'
     // compile 'com.google.api-client:google-api-client-gson:+'
     // compile 'com.google.android.gms:play-services:8.3.0'
+    
+    // compile 'com.nineoldandroids:library:2.4.0'
+
+    compile 'com.android.support:multidex:1.0.1'
     compile 'com.twitter.sdk.android:twitter-core:3.0.0'
     compile 'com.twitter.sdk.android:twitter-mopub:3.0.0'
-    compile('com.twitter.sdk.android:tweet-ui:2.3.1@aar')
+    compile 'com.twitter.sdk.android:tweet-ui:2.3.1@aar'
     compile 'com.journeyapps:zxing-android-embedded:3.5.0'
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
@@ -95,9 +100,6 @@ dependencies {
     compile 'com.daimajia.easing:library:1.0.0@aar'
     compile 'com.daimajia.androidanimations:library:1.1.2@aar'
     compile 'com.daimajia.swipelayout:library:1.2.0@aar'
-
-    // compile 'com.nineoldandroids:library:2.4.0'
-
     compile 'de.hdodenhof:circleimageview:2.1.0'
     compile 'com.azoft.carousellayoutmanager:carousel:1.2.1'
     compile 'com.google.android.gms:play-services:10.2.1'

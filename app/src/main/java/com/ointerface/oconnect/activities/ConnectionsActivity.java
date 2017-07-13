@@ -1,6 +1,7 @@
 package com.ointerface.oconnect.activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -30,12 +31,14 @@ import com.ointerface.oconnect.data.Attendee;
 import com.ointerface.oconnect.data.Person;
 import com.ointerface.oconnect.databinding.RolodexItemViewBinding;
 import com.ointerface.oconnect.data.Speaker;
+import com.ointerface.oconnect.messaging.MessagingActivity;
 import com.ointerface.oconnect.util.AppConfig;
 import com.ointerface.oconnect.util.AppUtil;
 
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Comparator;
 
 import io.realm.Realm;
 import io.realm.RealmList;
@@ -51,6 +54,9 @@ public class ConnectionsActivity extends OConnectBaseActivity {
     private RecyclerView recyclerView;
 
     public Bitmap bmp;
+
+    private TextView tvEditProfile;
+    private TextView tvInterests;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,6 +132,26 @@ public class ConnectionsActivity extends OConnectBaseActivity {
         navigation.setSelectedItemId(R.id.navigation_my_connections);
 
         // displayConnections();
+
+        tvEditProfile = (TextView) findViewById(R.id.tvEditProfile);
+        tvInterests = (TextView) findViewById(R.id.tvInterests);
+
+        tvEditProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(ConnectionsActivity.this, EditAccountActivity.class);
+                startActivity(i);
+                overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up );
+            }
+        });
+
+        tvInterests.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(ConnectionsActivity.this, AnalyticsSurveyActivity.class);
+                startActivity(i);
+            }
+        });
     }
 
     private void initRecyclerView(final RecyclerView recyclerView, final CarouselLayoutManager layoutManager, final RolodexAdapter adapter) {
@@ -335,6 +361,9 @@ public class ConnectionsActivity extends OConnectBaseActivity {
 
                 holder.mItemViewBinding.tvParticipantName.setText(currentSpeaker.getName());
 
+                holder.mItemViewBinding.tvMessage.setVisibility(GONE);
+                holder.mItemViewBinding.ivMessage.setVisibility(GONE);
+
                 if (currentSpeaker.getJob() != null && !currentSpeaker.getJob().equalsIgnoreCase("")) {
                     holder.mItemViewBinding.tvParticipantJobTitle.setText(currentSpeaker.getJob());
                     holder.mItemViewBinding.tvParticipantJobTitle.setVisibility(View.VISIBLE);
@@ -382,6 +411,9 @@ public class ConnectionsActivity extends OConnectBaseActivity {
 
                 holder.mItemViewBinding.tvParticipantName.setText(currentAttendee.getName());
 
+                holder.mItemViewBinding.tvMessage.setVisibility(GONE);
+                holder.mItemViewBinding.ivMessage.setVisibility(GONE);
+
                 if (currentAttendee.getJob() != null && !currentAttendee.getJob().equalsIgnoreCase("")) {
                     holder.mItemViewBinding.tvParticipantJobTitle.setText(currentAttendee.getJob());
                     holder.mItemViewBinding.tvParticipantJobTitle.setVisibility(View.VISIBLE);
@@ -413,7 +445,7 @@ public class ConnectionsActivity extends OConnectBaseActivity {
                     holder.mItemViewBinding.ivParticipantLocation.setVisibility(GONE);
                 }
             } else if (currentObj instanceof Person) {
-                Person currentPerson = (Person) currentObj;
+                final Person currentPerson = (Person) currentObj;
 
                 try {
                     if (currentPerson.getPictureURL() != null
@@ -450,6 +482,31 @@ public class ConnectionsActivity extends OConnectBaseActivity {
                 }
 
                 holder.mItemViewBinding.tvParticipantName.setText(currentPerson.getFirstName() + " " + currentPerson.getLastName());
+
+                holder.mItemViewBinding.tvMessage.setVisibility(View.VISIBLE);
+                holder.mItemViewBinding.ivMessage.setVisibility(View.VISIBLE);
+
+                holder.mItemViewBinding.tvMessage.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(context, MessagingActivity.class);
+
+                        MessagingActivity.recipientIDStr = currentPerson.getObjectId();
+
+                        context.startActivity(intent);
+                    }
+                });
+
+                holder.mItemViewBinding.ivMessage.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(context, MessagingActivity.class);
+
+                        MessagingActivity.recipientIDStr = currentPerson.getObjectId();
+
+                        context.startActivity(intent);
+                    }
+                });
 
                 if (currentPerson.getJob() != null && !currentPerson.getJob().equalsIgnoreCase("")) {
                     holder.mItemViewBinding.tvParticipantJobTitle.setText(currentPerson.getJob());

@@ -1,5 +1,6 @@
 package com.ointerface.oconnect.activities;
 
+import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.ComponentName;
@@ -48,6 +49,14 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.linkedin.platform.APIHelper;
+import com.linkedin.platform.LISessionManager;
+import com.linkedin.platform.errors.LIApiError;
+import com.linkedin.platform.errors.LIAuthError;
+import com.linkedin.platform.listeners.ApiListener;
+import com.linkedin.platform.listeners.ApiResponse;
+import com.linkedin.platform.listeners.AuthListener;
+import com.linkedin.platform.utils.Scope;
 import com.ointerface.oconnect.App;
 import com.ointerface.oconnect.ConferenceListViewActivity;
 import com.ointerface.oconnect.CustomSplashActivity;
@@ -75,7 +84,14 @@ import com.ointerface.oconnect.messaging.MessagingActivity;
 import com.ointerface.oconnect.messaging.MessagingListActivity;
 import com.ointerface.oconnect.messaging.SinchService;
 import com.ointerface.oconnect.util.AppUtil;
+import com.parse.FindCallback;
+import com.parse.LogInCallback;
+import com.parse.ParseException;
+import com.parse.ParseFacebookUtils;
+import com.parse.ParseQuery;
+import com.parse.ParseTwitterUtils;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 import com.sinch.android.rtc.PushPair;
 import com.sinch.android.rtc.messaging.Message;
 import com.sinch.android.rtc.messaging.MessageClient;
@@ -83,10 +99,13 @@ import com.sinch.android.rtc.messaging.MessageClientListener;
 import com.sinch.android.rtc.messaging.MessageDeliveryInfo;
 import com.sinch.android.rtc.messaging.MessageFailureInfo;
 
+import org.json.JSONObject;
+
 import java.io.InputStream;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -150,6 +169,10 @@ public class OConnectBaseActivity extends AppCompatActivity
     public ImageView ivAccountEdit;
 
     public static boolean bIsSinchStarted = false;
+
+    private Switch switchTwitter;
+    private Switch switchFacebook;
+    private Switch switchLinkedIn;
 
     protected void onCreateDrawer() {
         // super.onCreate(savedInstanceState);
@@ -672,10 +695,6 @@ public class OConnectBaseActivity extends AppCompatActivity
                         startActivity(i);
                         break;
                     case R.drawable.icon_survey:
-                        i = new Intent(OConnectBaseActivity.this, AnalyticsSurveyActivity.class);
-                        startActivity(i);
-
-                        /*
                         i = new Intent(OConnectBaseActivity.this, WebViewActivity.class);
 
                         if (selectedConference.getToolbarLabelSurvey() != null &&
@@ -689,7 +708,7 @@ public class OConnectBaseActivity extends AppCompatActivity
                         i.putExtra("OPEN", "");
                         i.putExtra("isSurvey", true);
                         startActivity(i);
-                        */
+
 
                         return false;
                         /*
@@ -745,6 +764,205 @@ public class OConnectBaseActivity extends AppCompatActivity
                 return false;
             }
         });
+
+        switchTwitter = (Switch) findViewById(R.id.switchTwitter);
+        switchFacebook = (Switch) findViewById(R.id.switchFacebook);
+        switchLinkedIn = (Switch) findViewById(R.id.switchLinkedIn);
+
+        switchTwitter.setChecked(AppUtil.getTwitterLoggedIn(OConnectBaseActivity.this));
+        switchFacebook.setChecked(AppUtil.getFacebookLoggedIn(OConnectBaseActivity.this));
+        switchLinkedIn.setChecked(AppUtil.getLinkedInLoggedIn(OConnectBaseActivity.this));
+
+        switchTwitter.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                AppUtil.setTwitterLoggedIn(OConnectBaseActivity.this, isChecked);
+
+                if (isChecked == true) {
+                    ParseTwitterUtils.logIn(OConnectBaseActivity.this, new LogInCallback() {
+                        @Override
+                        public void done(ParseUser user, ParseException err) {
+                            if (user == null) {
+                                Toast.makeText(OConnectBaseActivity.this,"Error during Twitter Login!",Toast.LENGTH_LONG).show();
+                            } else {
+                                if (user.isNew()) {
+                                    user.put("userType", "app");
+                                    user.saveInBackground();
+                                }
+
+                                AppUtil.setTwitterLoggedIn(OConnectBaseActivity.this, true);
+
+                                OConnectBaseActivity.currentPerson = Person.saveFromParseUser(user, false);
+                                callTwitterImportAPI(user);
+
+                            }
+                        }
+                    });
+                }
+            }
+        });
+
+        switchFacebook.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                AppUtil.setFacebookLoggedIn(OConnectBaseActivity.this, isChecked);
+
+                if (isChecked == true) {
+                    ParseFacebookUtils.logInWithReadPermissionsInBackground(OConnectBaseActivity.this, Arrays.asList("email", "user_photos", "public_profile", "user_friends")
+                            , new LogInCallback() {
+                                @Override
+                                public void done(ParseUser user, ParseException err) {
+                                    if (user == null) {
+                                        Toast.makeText(OConnectBaseActivity.this,"Error during Facebook Login!",Toast.LENGTH_LONG).show();
+                                    } else {
+                                        if (user.isNew()) {
+                                            user.put("userType", "app");
+                                            user.saveInBackground();
+                                        }
+
+                                        AppUtil.setFacebookLoggedIn(OConnectBaseActivity.this, true);
+
+                                        OConnectBaseActivity.currentPerson = Person.saveFromParseUser(user, false);
+                                        callFacebookImportAPI(user);
+
+                                    }
+                                }
+
+                            });
+                }
+            }
+        });
+
+        switchLinkedIn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                AppUtil.setLinkedInLoggedIn(OConnectBaseActivity.this, isChecked);
+
+                if (isChecked == true) {
+                    final Activity thisActivity = OConnectBaseActivity.this;
+
+                    LISessionManager.getInstance(getApplicationContext()).init(thisActivity, buildScope(), new AuthListener() {
+                        @Override
+                        public void onAuthSuccess() {
+                            // Authentication was successful.  You can now do
+                            // other calls with the SDK.
+                            String url = "https://api.linkedin.com/v1/people/~:(id,first-name,last-name,email-address)";
+
+                            APIHelper apiHelper = APIHelper.getInstance(getApplicationContext());
+                            apiHelper.getRequest(OConnectBaseActivity.this, url, new ApiListener() {
+                                @Override
+                                public void onApiSuccess(ApiResponse apiResponse) {
+                                    AppUtil.setLinkedInLoggedIn(OConnectBaseActivity.this, true);
+
+                                    // Success!
+                                    Log.d("APD", "linkedin response for data: " + apiResponse.getResponseDataAsJson().toString());
+
+                                    final JSONObject obj = apiResponse.getResponseDataAsJson();
+
+                                    String firstName = "";
+                                    String lastName = "";
+                                    String emailAddress = "";
+
+                                    try {
+                                        if (obj.has("firstName")) {
+                                            firstName = obj.getString("firstName");
+                                        }
+
+                                        if (obj.has("lastName")) {
+                                            lastName = obj.getString("lastName");
+                                        }
+
+                                        if (obj.has("emailAddress")) {
+                                            emailAddress = obj.getString("emailAddress");
+                                        }
+                                    } catch (Exception ex) {
+                                        Log.d("APD", ex.getMessage());
+                                    }
+
+                                    final String finalEmailAddress = emailAddress;
+                                    final String finalFirstName = firstName;
+                                    final String finalLastName = lastName;
+
+                                    final String token = LISessionManager.getInstance(getApplicationContext()).getSession().getAccessToken().toString();
+
+                                    ParseQuery<ParseUser> query = ParseUser.getQuery();
+                                    query.whereEqualTo("username", emailAddress);
+                                    query.findInBackground(new FindCallback<ParseUser>() {
+                                        public void done(List<ParseUser> objects, ParseException e) {
+                                            if (e == null) {
+                                                ParseUser parseUser = null;
+                                                if (objects.size() > 0) {
+                                                    final ParseUser user = objects.get(0);
+
+                                                    user.setUsername(finalEmailAddress);
+                                                    user.setEmail(finalEmailAddress);
+                                                    user.put("firstName", finalFirstName);
+                                                    user.put("lastName", finalLastName);
+
+                                                    user.saveInBackground(new SaveCallback() {
+                                                        @Override
+                                                        public void done(ParseException e) {
+                                                            SignInActivity2 tempAct = new SignInActivity2();
+                                                            SignInActivity2.LinkedInImportTask task = tempAct.new LinkedInImportTask();
+                                                            task.execute(user.getObjectId(), token);
+                                                        }
+                                                    });
+
+                                                    parseUser = user;
+                                                } else {
+                                                    final ParseUser user = new ParseUser();
+
+                                                    user.setUsername(finalEmailAddress);
+                                                    user.setEmail(finalEmailAddress);
+                                                    user.put("firstName", finalFirstName);
+                                                    user.put("lastName", finalLastName);
+
+                                                    user.saveInBackground(new SaveCallback() {
+                                                        @Override
+                                                        public void done(ParseException e) {
+                                                            SignInActivity2 tempAct = new SignInActivity2();
+                                                            SignInActivity2.LinkedInImportTask task = tempAct.new LinkedInImportTask();
+                                                            task.execute(user.getObjectId(), token);
+                                                        }
+                                                    });
+
+                                                    parseUser = user;
+                                                }
+
+                                                OConnectBaseActivity.currentPerson = Person.saveFromParseUser(parseUser, false);
+
+                                            }
+                                        }
+                                    });
+                                }
+
+                                @Override
+                                public void onApiError(LIApiError liApiError) {
+                                    // Error making GET request!
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void onAuthError(LIAuthError error) {
+                            // Handle authentication errors
+                        }
+                    }, true);
+                }
+            }
+        });
+
+        ImageView ivTwitter = (ImageView) findViewById(R.id.ivTwitter);
+        ivTwitter.setBackground(AppUtil.changeDrawableColor(this, R.drawable.twitter_icon, AppUtil.getPrimaryThemColorAsInt()));
+        ImageView ivFacebook = (ImageView) findViewById(R.id.ivFacebook);
+        ivFacebook.setBackground(AppUtil.changeDrawableColor(this, R.drawable.social_facebook, AppUtil.getPrimaryThemColorAsInt()));
+        ImageView ivLinkedIn = (ImageView) findViewById(R.id.ivLinkedIn);
+        ivLinkedIn.setBackground(AppUtil.changeDrawableColor(this, R.drawable.social_linkedin, AppUtil.getPrimaryThemColorAsInt()));
+    }
+
+    // Build the list of member permissions our LinkedIn session requires
+    private static Scope buildScope() {
+        return Scope.build(Scope.R_BASICPROFILE, Scope.W_SHARE);
     }
 
     public void performSearch(String searchText) {
@@ -1195,5 +1413,17 @@ public class OConnectBaseActivity extends AppCompatActivity
     @Override
     public void onMessageDelivered(MessageClient client, MessageDeliveryInfo deliveryInfo) {
         Log.d("OConnectBase", "onDelivered");
+    }
+
+    public void callTwitterImportAPI(ParseUser user) {
+        SignInActivity2 tempAct = new SignInActivity2();
+        SignInActivity2.TwitterImportTask task = tempAct.new TwitterImportTask();
+        task.execute(user);
+    }
+
+    public void callFacebookImportAPI(ParseUser user) {
+        SignInActivity2 tempAct = new SignInActivity2();
+        SignInActivity2.FacebookImportTask task = tempAct.new FacebookImportTask();
+        task.execute(user);
     }
 }

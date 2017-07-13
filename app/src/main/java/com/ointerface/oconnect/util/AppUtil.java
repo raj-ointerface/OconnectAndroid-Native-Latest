@@ -234,6 +234,19 @@ public class AppUtil {
         alertDialog.show();
     }
 
+    public static void displayPostingMessageDialog(Context context) {
+        AlertDialog alertDialog = new AlertDialog.Builder(context).create();
+        alertDialog.setTitle("Posting Message");
+        alertDialog.setMessage("Your message is being posted.");
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+        alertDialog.show();
+    }
+
     public static int getPrimaryThemColorAsInt() {
         if (OConnectBaseActivity.selectedConference != null &&
                 OConnectBaseActivity.selectedConference.getColor() != null &&

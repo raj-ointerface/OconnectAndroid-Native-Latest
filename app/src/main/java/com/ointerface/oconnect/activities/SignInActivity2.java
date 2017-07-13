@@ -652,7 +652,7 @@ public class SignInActivity2 extends AppCompatActivity {
         LISessionManager.getInstance(getApplicationContext()).onActivityResult(this, requestCode, resultCode, data);
     }
 
-    private class FacebookImportTask extends AsyncTask<ParseUser, Void, String> {
+    public class FacebookImportTask extends AsyncTask<ParseUser, Void, String> {
 
         @Override
         protected String doInBackground(ParseUser... args) {
@@ -719,7 +719,7 @@ public class SignInActivity2 extends AppCompatActivity {
         protected void onProgressUpdate(Void... values) {}
     }
 
-    private class TwitterImportTask extends AsyncTask<ParseUser, Void, String> {
+    public class TwitterImportTask extends AsyncTask<ParseUser, Void, String> {
 
         @Override
         protected String doInBackground(ParseUser... args) {
@@ -779,7 +779,7 @@ public class SignInActivity2 extends AppCompatActivity {
         protected void onProgressUpdate(Void... values) {}
     }
 
-    private class LinkedInImportTask extends AsyncTask<String, Void, String> {
+    public class LinkedInImportTask extends AsyncTask<String, Void, String> {
 
         @Override
         protected String doInBackground(String... args) {

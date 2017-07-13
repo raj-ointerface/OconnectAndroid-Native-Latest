@@ -22,7 +22,7 @@
         android:layout_below="@+id/tvMyAccount"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="15dp"
         android:layout_centerHorizontal="true"
         app:civ_border_width="2dp"
         app:civ_border_color="#FF000000"
@@ -32,7 +32,7 @@
         android:layout_below="@+id/ivAccountProfilePicture"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="-25dp"
+        android:layout_marginTop="-35dp"
         android:layout_marginRight="80dp"
         android:layout_width="25dp"
         android:layout_height="25dp"
@@ -42,7 +42,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/ivAccountProfilePicture"
-        android:layout_marginTop="35dp"
+        android:layout_marginTop="15dp"
         android:layout_centerHorizontal="true"
         android:gravity="center_horizontal"
         android:textColor="@color/colorBlack"
@@ -59,7 +59,7 @@
         android:textAllCaps="false"
         android:background="@drawable/green_rounded_button"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="15dp"
         android:layout_marginRight="30dp"
         android:layout_marginLeft="30dp"
         />
@@ -74,16 +74,17 @@
         android:textAllCaps="false"
         android:background="@drawable/green_rounded_button"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="15dp"
         android:layout_marginRight="30dp"
         android:layout_marginLeft="30dp"
         />
     <LinearLayout
+        android:id="@+id/llContactable"
         android:layout_width="match_parent"
         android:layout_below="@id/btnMessaging"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="5dp"
         android:gravity="center_horizontal">
         <TextView
             android:layout_width="wrap_content"
@@ -129,4 +130,97 @@
                 android:onClick="signOutClicked"/>
         </RelativeLayout>
     </LinearLayout>
+    <RelativeLayout
+        android:id="@+id/llSocialSection"
+        android:layout_below="@+id/llContactable"
+        android:layout_marginTop="0dp"
+        android:layout_centerHorizontal="true"
+        android:gravity="center_horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/ivTwitter"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="15dp"
+            android:background="@drawable/twitter_icon" />
+        <TextView
+            android:id="@+id/tvTwitter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvSocial"
+            android:layout_toRightOf="@+id/ivTwitter"
+            android:layout_marginTop="13dp"
+            android:layout_marginLeft="15dp"
+            android:textSize="16sp"
+            android:text="Twitter"/>
+        <Switch
+            android:id="@+id/switchTwitter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvSocial"
+            android:layout_toRightOf="@+id/tvTwitter"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="31dp"/>
+        <ImageView
+            android:id="@+id/ivFacebook"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_below="@+id/ivTwitter"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="15dp"
+            android:background="@drawable/social_facebook" />
+        <TextView
+            android:id="@+id/tvFacebook"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvTwitter"
+            android:layout_toRightOf="@+id/ivFacebook"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="15dp"
+            android:textSize="16sp"
+            android:text="Facebook"/>
+        <Switch
+            android:id="@+id/switchFacebook"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvTwitter"
+            android:layout_toRightOf="@+id/tvFacebook"
+            android:layout_marginTop="16dp"
+            android:layout_marginLeft="12dp"/>
+        <ImageView
+            android:id="@+id/ivLinkedIn"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_below="@+id/ivFacebook"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="15dp"
+            android:background="@drawable/social_linkedin" />
+        <TextView
+            android:id="@+id/tvLinkedIn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvFacebook"
+            android:layout_toRightOf="@+id/ivLinkedIn"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="15dp"
+            android:textSize="16sp"
+            android:text="LinkedIn"/>
+        <Switch
+            android:id="@+id/switchLinkedIn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/switchFacebook"
+            android:layout_toRightOf="@+id/tvLinkedIn"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="22dp"/>
+    </RelativeLayout>
 </RelativeLayout>

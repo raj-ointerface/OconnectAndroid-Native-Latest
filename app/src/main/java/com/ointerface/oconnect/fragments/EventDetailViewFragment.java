@@ -32,11 +32,21 @@ import com.ointerface.oconnect.activities.OConnectBaseActivity;
 import com.ointerface.oconnect.activities.ScheduleActivity;
 import com.ointerface.oconnect.adapters.EventDetailExpandableListViewAdapter;
 import com.ointerface.oconnect.data.Attendee;
+import com.ointerface.oconnect.data.DBQuestion;
 import com.ointerface.oconnect.data.Event;
+import com.ointerface.oconnect.data.EventAbstract;
+import com.ointerface.oconnect.data.EventFile;
+import com.ointerface.oconnect.data.EventJournal;
+import com.ointerface.oconnect.data.EventLink;
+import com.ointerface.oconnect.data.EventMisc;
 import com.ointerface.oconnect.data.Person;
 import com.ointerface.oconnect.data.Session;
 import com.ointerface.oconnect.data.Speaker;
+import com.ointerface.oconnect.data.SpeakerAbstract;
 import com.ointerface.oconnect.data.SpeakerEventCache;
+import com.ointerface.oconnect.data.SpeakerFile;
+import com.ointerface.oconnect.data.SpeakerJournal;
+import com.ointerface.oconnect.data.SpeakerMisc;
 import com.ointerface.oconnect.util.AppUtil;
 
 import java.text.DateFormat;
@@ -109,16 +119,6 @@ public class EventDetailViewFragment extends Fragment {
         ViewGroup rootView = (ViewGroup) inflater.inflate(
                 R.layout.fragment_event_detail_layout, container, false);
 
-        RelativeLayout mainContainer = (RelativeLayout) rootView.findViewById(R.id.main_container);
-        LinearLayout llMain = (LinearLayout) rootView.findViewById(R.id.llMain);
-        RelativeLayout rlTopSection = (RelativeLayout) rootView.findViewById(R.id.rlTopSection);
-        RelativeLayout rlMiscItems = (RelativeLayout) rootView.findViewById(R.id.rlMiscItems);
-
-        mainContainer.setClipChildren(false);
-        llMain.setClipChildren(false);
-        rlTopSection.setClipChildren(false);
-        rlMiscItems.setClipChildren(false);
-
         final Realm realm = AppUtil.getRealmInstance(App.getInstance());
 
         Bundle bundle = getArguments();
@@ -126,172 +126,6 @@ public class EventDetailViewFragment extends Fragment {
         pageNumber = bundle.getInt("PAGE_NUMBER");
 
         final Event event = (Event) mItems.get(pageNumber);
-
-        final ImageView ivMyAgenda = (ImageView) rootView.findViewById(R.id.ivMyAgenda);
-
-        ivMyAgenda.setBackground(AppUtil.changeDrawableColor(activity, R.drawable.icon_blue_star_empty, AppUtil.getPrimaryThemColorAsInt()));
-
-        RealmList<Event> myAgendaList = OConnectBaseActivity.currentPerson.getFavoriteEvents();
-
-        if (myAgendaList.contains(event) == true) {
-            ivMyAgenda.setBackground(AppUtil.changeDrawableColor(activity, R.drawable.icon_blue_star_filled, AppUtil.getPrimaryThemColorAsInt()));
-        }
-
-        ImageView ivTweet = (ImageView) rootView.findViewById(R.id.ivTweet);
-
-        ivTweet.setBackground(AppUtil.changeDrawableColor(activity, R.drawable.twitter_icon, AppUtil.getPrimaryThemColorAsInt()));
-
-        ImageView ivAddNote = (ImageView) rootView.findViewById(R.id.ivAddANote);
-
-        ivAddNote.setBackground(AppUtil.changeDrawableColor(activity, R.drawable.icon_add_a_note, AppUtil.getPrimaryThemColorAsInt()));
-
-        TextView tvMyAgenda = (TextView) rootView.findViewById(R.id.tvMyAgenda);
-
-        tvMyAgenda.setTextColor(AppUtil.getPrimaryThemColorAsInt());
-
-        tvMyAgenda.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                realm.beginTransaction();
-                OConnectBaseActivity.currentPerson.getFavoriteEvents().add(event);
-                realm.commitTransaction();
-
-                ivMyAgenda.setBackground(AppUtil.changeDrawableColor(activity, R.drawable.icon_blue_star_filled, AppUtil.getPrimaryThemColorAsInt()));
-            }
-        });
-
-        ivMyAgenda.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                realm.beginTransaction();
-                OConnectBaseActivity.currentPerson.getFavoriteEvents().add(event);
-                realm.commitTransaction();
-
-                ivMyAgenda.setBackground(AppUtil.changeDrawableColor(activity, R.drawable.icon_blue_star_filled, AppUtil.getPrimaryThemColorAsInt()));
-            }
-        });
-
-        TextView tvTweet = (TextView) rootView.findViewById(R.id.tvTweet);
-
-        tvTweet.setTextColor(AppUtil.getPrimaryThemColorAsInt());
-
-        ivTweet.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent tweetIntent = new Intent(Intent.ACTION_SEND);
-                tweetIntent.putExtra(Intent.EXTRA_TEXT, "Attending \"" + OConnectBaseActivity.selectedConference.getName() + "\"" + " #oconnectapp");
-                tweetIntent.setType("text/plain");
-
-                PackageManager packManager = activity.getPackageManager();
-                List<ResolveInfo> resolvedInfoList = packManager.queryIntentActivities(tweetIntent,  PackageManager.MATCH_DEFAULT_ONLY);
-
-                boolean resolved = false;
-                for(ResolveInfo resolveInfo: resolvedInfoList){
-                    if(resolveInfo.activityInfo.packageName.startsWith("com.twitter.android")){
-                        tweetIntent.setClassName(
-                                resolveInfo.activityInfo.packageName,
-                                resolveInfo.activityInfo.name );
-                        resolved = true;
-                        break;
-                    }
-                }
-                if(resolved){
-                    startActivity(tweetIntent);
-                }else{
-                    Toast.makeText(activity, "Twitter app isn't found.", Toast.LENGTH_LONG).show();
-                }
-            }
-        });
-
-        tvTweet.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent tweetIntent = new Intent(Intent.ACTION_SEND);
-                tweetIntent.putExtra(Intent.EXTRA_TEXT, "Attending \"" + OConnectBaseActivity.selectedConference.getName() + "\"" + " #oconnectapp");
-                tweetIntent.setType("text/plain");
-
-                PackageManager packManager = activity.getPackageManager();
-                List<ResolveInfo> resolvedInfoList = packManager.queryIntentActivities(tweetIntent,  PackageManager.MATCH_DEFAULT_ONLY);
-
-                boolean resolved = false;
-                for(ResolveInfo resolveInfo: resolvedInfoList){
-                    if(resolveInfo.activityInfo.packageName.startsWith("com.twitter.android")){
-                        tweetIntent.setClassName(
-                                resolveInfo.activityInfo.packageName,
-                                resolveInfo.activityInfo.name );
-                        resolved = true;
-                        break;
-                    }
-                }
-                if(resolved){
-                    startActivity(tweetIntent);
-                }else{
-                    Toast.makeText(activity, "Twitter app isn't found.", Toast.LENGTH_LONG).show();
-                }
-            }
-        });
-
-        TextView tvAddNote = (TextView) rootView.findViewById(R.id.tvAddNote);
-
-        tvAddNote.setTextColor(AppUtil.getPrimaryThemColorAsInt());
-
-        ivAddNote.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(activity, AddNoteActivity.class);
-                startActivity(i);
-                activity.overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up );
-            }
-        });
-
-        tvAddNote.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(activity, AddNoteActivity.class);
-                startActivity(i);
-                activity.overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up );
-            }
-        });
-
-        TextView tvQA = (TextView) rootView.findViewById(R.id.tvQA);
-
-        tvQA.setTextColor(AppUtil.getPrimaryThemColorAsInt());
-
-        if (OConnectBaseActivity.selectedConference.isShowQuestions() == true) {
-            tvQA.setVisibility(View.VISIBLE);
-        } else {
-            tvQA.setVisibility(GONE);
-        }
-
-        ImageView ivOrganizationLogo = (ImageView) rootView.findViewById(R.id.ivOrganizationLogo);
-
-        if (OConnectBaseActivity.selectedConference.getImage() != null) {
-            Bitmap bm = BitmapFactory.decodeByteArray(OConnectBaseActivity.selectedConference.getImage(), 0, OConnectBaseActivity.selectedConference.getImage().length);
-
-            ivOrganizationLogo.setImageBitmap(bm);
-        }
-
-        TextView tvEventTitle = (TextView) rootView.findViewById(R.id.tvEventTitle);
-        tvEventTitle.setText(event.getName());
-
-        TextView tvTimeRange = (TextView) rootView.findViewById(R.id.tvEventDateRange);
-
-        if (!event.isNonTimedEvent()) {
-            DateFormat dfTime = new SimpleDateFormat("h:mm a");
-            DateFormat dfDate = new SimpleDateFormat("MMM d");
-
-            dfTime.setTimeZone(java.util.TimeZone.getTimeZone("GMT"));
-            dfDate.setTimeZone(java.util.TimeZone.getTimeZone("GMT"));
-
-            String startTime = dfTime.format(event.getStartTime());
-            String endTime = dfTime.format(event.getEndTime());
-
-            tvTimeRange.setText(startTime + " - " + endTime + " on " + dfDate.format(event.getStartTime()));
-
-            tvTimeRange.setVisibility(View.VISIBLE);
-        } else {
-            tvTimeRange.setVisibility(GONE);
-        }
 
         elvEventDetailInfo = (ExpandableListView) rootView.findViewById(R.id.elvEventInfo);
 
@@ -315,11 +149,16 @@ public class EventDetailViewFragment extends Fragment {
 
         Event event = (Event) mItems.get(pageNumber);
 
+        _listDataHeader.add("");
+        _listHeaderNumber.add(0);
+        _listGroupIsSpeaker.add(false);
+        _listChildCount.put(0,1);
+
         if (event.getInfo() != null && !event.getInfo().equalsIgnoreCase("")) {
             _listDataHeader.add("Info");
-            _listHeaderNumber.add(0);
+            _listHeaderNumber.add(1);
             _listGroupIsSpeaker.add(false);
-            _listChildCount.put(0,1);
+            _listChildCount.put(1,1);
         }
 
         Realm realm = AppUtil.getRealmInstance(App.getInstance());
@@ -379,8 +218,54 @@ public class EventDetailViewFragment extends Fragment {
             }
         }
 
+        RealmResults<EventLink> linksResult = realm.where(EventLink.class).equalTo("eventID", event.getObjectId()).findAll();
+
+        if (linksResult.size() > 0) {
+            _listDataHeader.add("Links");
+            _listHeaderNumber.add(headerNumber);
+            _listGroupIsSpeaker.add(false);
+            _listChildCount.put(headerNumber++,1);
+        }
+
+        RealmResults<DBQuestion> questionsResult = realm.where(DBQuestion.class).equalTo("event", event.getObjectId()).findAll();
+
+        if (questionsResult.size() > 0) {
+            _listDataHeader.add("Discussion Board");
+            _listHeaderNumber.add(headerNumber);
+            _listGroupIsSpeaker.add(false);
+            _listChildCount.put(headerNumber++,1);
+        }
+
+        if (OConnectBaseActivity.selectedConference.isShowQuestions() == true) {
+            _listDataHeader.add("Post Questions & Comments");
+            _listHeaderNumber.add(headerNumber);
+            _listGroupIsSpeaker.add(false);
+            _listChildCount.put(headerNumber++,1);
+        }
+
+        boolean bHasFile = false;
+
+        RealmResults<EventAbstract> abstractResult = realm.where(EventAbstract.class).equalTo("eventID", event.getObjectId()).findAll();
+        RealmResults<EventMisc> miscResult = realm.where(EventMisc.class).equalTo("eventID", event.getObjectId()).findAll();
+        RealmResults<EventJournal> journalResult = realm.where(EventJournal.class).equalTo("eventID", event.getObjectId()).findAll();
+        RealmResults<EventFile> fileResult = realm.where(EventFile.class).equalTo("eventID", event.getObjectId()).findAll();
+
+        if (abstractResult != null && abstractResult.size() > 0 ||
+                miscResult != null && miscResult.size() > 0 ||
+                journalResult != null && journalResult.size() > 0 ||
+                fileResult != null && fileResult.size() > 0) {
+            bHasFile = true;
+        }
+
+        if (bHasFile == true) {
+            _listDataHeader.add("Files");
+            _listHeaderNumber.add(headerNumber);
+            _listGroupIsSpeaker.add(false);
+            _listChildCount.put(headerNumber++,1);
+        }
+
         adapter = new EventDetailExpandableListViewAdapter(activity, _listDataHeader, _listHeaderNumber, _listChildCount,
-                _listGroupIsSpeaker, _listChildSpeaker, event);
+                _listGroupIsSpeaker, _listChildSpeaker, event, activity);
     }
 
     @Override

@@ -9,6 +9,7 @@ import android.widget.Toast;
 import com.ointerface.oconnect.util.AppConfig;
 import com.ointerface.oconnect.util.AppUtil;
 import com.parse.FindCallback;
+import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
@@ -2113,6 +2114,297 @@ public class DataSyncManager {
                             if (answerObj != null) {
                                 result.setSurveyQuestionAnswer(answerObj.getObjectId());
                             }
+                        }
+                    }
+
+                    realm.commitTransaction();
+                    realm.close();
+
+                    // callback.onDataSyncFinish();
+
+                    dataSyncDiscussionBoard();
+                }
+            }
+        });
+
+    }
+
+    static public void dataSyncDiscussionBoard() {
+
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("DiscussionBoard").whereNotEqualTo("isDeleted", true).setLimit(1000);
+
+        Date date = getLastSyncDate();
+
+        if (date != null) {
+            // query.whereGreaterThanOrEqualTo("updatedAt", date).whereNotEqualTo("isDeleted", true);
+        }
+
+
+        Log.d("DataSyncManager", "Start Query for Parse DiscussionBoard ");
+
+        List<ParseObject> allObjects = new ArrayList<ParseObject>();
+
+        int countSkip = 0, loopCloseCount = 0;
+        do {
+            query.setLimit(1000);
+            query.setSkip(countSkip);
+            List<ParseObject> objects = null;
+            try {
+                objects = query.find();
+                loopCloseCount = objects.size();
+                countSkip += objects.size();
+                if (loopCloseCount > 0) {
+                    allObjects.addAll(objects);
+                }
+            } catch (com.parse.ParseException e) {
+                e.printStackTrace();
+                loopCloseCount = 0;
+            }
+        } while (loopCloseCount > 0);
+
+        Log.d("DataSyncManager", "Begin Parse Query For DiscussionBoard");
+
+        /*
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, com.parse.ParseException e) {
+                if (e == null) {
+                */
+                    Log.d("DataSyncManager", "Start Processing DiscussionBoard Records: " + allObjects.size() + " objects");
+
+                    Realm realm = AppUtil.getRealmInstance(App.getInstance());
+                    realm.beginTransaction();
+
+                    for (ParseObject parseObject:
+                            allObjects) {
+                        DiscussionBoard result = realm.where(DiscussionBoard.class).equalTo("objectId", parseObject.getObjectId()).findFirst();
+
+                        if (result == null) {
+
+                            // Create an object
+                            result = realm.createObject(DiscussionBoard.class, parseObject.getObjectId());
+
+                            result.setUpdatedAt(parseObject.getUpdatedAt());
+
+                            ParseObject conference = parseObject.getParseObject("conference");
+
+                            if (conference != null) {
+                                result.setConference(conference.getObjectId());
+                            }
+
+                            ParseObject event = parseObject.getParseObject("event");
+
+                            if (event != null) {
+                                result.setEvent(event.getObjectId());
+                            }
+
+                            result.setHasQuestions(parseObject.getBoolean("hasQuestions"));
+
+                            result.setModeratorName(parseObject.getString("moderatorName"));
+
+                        } else {
+
+                            result.setUpdatedAt(parseObject.getUpdatedAt());
+
+                            ParseObject conference = parseObject.getParseObject("conference");
+
+                            if (conference != null) {
+                                result.setConference(conference.getObjectId());
+                            }
+
+                            ParseObject event = parseObject.getParseObject("event");
+
+                            if (event != null) {
+                                result.setEvent(event.getObjectId());
+                            }
+
+                            result.setHasQuestions(parseObject.getBoolean("hasQuestions"));
+
+                            result.setModeratorName(parseObject.getString("moderatorName"));
+
+                        }
+                    }
+
+                    realm.commitTransaction();
+                    realm.close();
+
+                    // callback.onDataSyncFinish();
+
+                    dataSyncDBQuestion();
+        /*        }
+            }
+        });
+        */
+
+    }
+
+    static public void dataSyncDBQuestion() {
+
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("DBQuestion").whereNotEqualTo("isDeleted", true).setLimit(1000);
+
+        Date date = getLastSyncDate();
+
+        if (date != null) {
+            // query.whereGreaterThanOrEqualTo("updatedAt", date);
+        }
+
+        Log.d("DataSyncManager", "Begin Parse Query For DBQuestion");
+
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, com.parse.ParseException e) {
+                if (e == null) {
+                    Log.d("DataSyncManager", "Start Processing DBQuestion Records: " + objects.size() + " objects");
+
+                    Realm realm = AppUtil.getRealmInstance(App.getInstance());
+                    realm.beginTransaction();
+
+                    for (ParseObject parseObject:
+                            objects) {
+                        DBQuestion result = realm.where(DBQuestion.class).equalTo("objectId", parseObject.getObjectId()).findFirst();
+
+                        if (result == null) {
+
+                            // Create an object
+                            result = realm.createObject(DBQuestion.class, parseObject.getObjectId());
+
+                            result.setUpdatedAt(parseObject.getUpdatedAt());
+
+                            ParseObject conference = parseObject.getParseObject("conference");
+
+                            if (conference != null) {
+                                result.setConference(conference.getObjectId());
+                            }
+
+                            ParseObject event = parseObject.getParseObject("event");
+
+                            if (event != null) {
+                                result.setEvent(event.getObjectId());
+                            }
+
+                            ParseObject discussionBoard = parseObject.getParseObject("discussionBoard");
+
+                            if (discussionBoard != null) {
+                                result.setDiscussionBoard(discussionBoard.getObjectId());
+                            }
+
+                            result.setQuestion(parseObject.getString("question"));
+
+                            result.setResolved(parseObject.getBoolean("isResolved"));
+
+                            result.setUser_email(parseObject.getString("user_email"));
+
+                            result.setVotes(parseObject.getInt("votes"));
+
+                        } else {
+
+
+                            result.setUpdatedAt(parseObject.getUpdatedAt());
+
+                            ParseObject conference = parseObject.getParseObject("conference");
+
+                            if (conference != null) {
+                                result.setConference(conference.getObjectId());
+                            }
+
+                            ParseObject event = parseObject.getParseObject("event");
+
+                            if (event != null) {
+                                result.setEvent(event.getObjectId());
+                            }
+
+                            ParseObject discussionBoard = parseObject.getParseObject("discussionBoard");
+
+                            if (discussionBoard != null) {
+                                result.setDiscussionBoard(discussionBoard.getObjectId());
+                            }
+
+                            result.setQuestion(parseObject.getString("question"));
+
+                            result.setResolved(parseObject.getBoolean("isResolved"));
+
+                            result.setUser_email(parseObject.getString("user_email"));
+
+                            result.setVotes(parseObject.getInt("votes"));
+                        }
+                    }
+
+                    realm.commitTransaction();
+                    realm.close();
+
+                    // callback.onDataSyncFinish();
+
+                    dataSyncVotes();
+                }
+            }
+        });
+
+    }
+
+    static public void dataSyncVotes() {
+
+        final ParseQuery<ParseObject> query = ParseQuery.getQuery("Votes").whereNotEqualTo("isDeleted", true).setLimit(1000);
+
+        Date date = getLastSyncDate();
+
+        if (date != null) {
+            // query.whereGreaterThanOrEqualTo("updatedAt", date);
+        }
+
+        Log.d("DataSyncManager", "Begin Parse Query For Votes");
+
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, com.parse.ParseException e) {
+                if (e == null) {
+                    Log.d("DataSyncManager", "Start Processing Votes Records: " + objects.size() + " objects");
+
+                    Realm realm = AppUtil.getRealmInstance(App.getInstance());
+                    realm.beginTransaction();
+
+                    for (ParseObject parseObject:
+                            objects) {
+                        Votes result = realm.where(Votes.class).equalTo("objectId", parseObject.getObjectId()).findFirst();
+
+                        if (result == null) {
+
+                            // Create an object
+                            result = realm.createObject(Votes.class, parseObject.getObjectId());
+
+                            result.setUpdatedAt(parseObject.getUpdatedAt());
+
+                            ParseObject question = parseObject.getParseObject("question");
+
+                            if (question != null) {
+                                result.setQuestion(question.getObjectId());
+                            }
+
+                            ParseObject user = parseObject.getParseUser("user");
+
+                            if (user != null) {
+                                result.setUser(user.getObjectId());
+                            }
+
+                            result.setType(parseObject.getString("type"));
+
+                        } else {
+
+                            result.setUpdatedAt(parseObject.getUpdatedAt());
+
+                            ParseObject question = parseObject.getParseObject("question");
+
+                            if (question != null) {
+                                result.setQuestion(question.getObjectId());
+                            }
+
+                            ParseObject user = parseObject.getParseUser("user");
+
+                            if (user != null) {
+                                result.setUser(user.getObjectId());
+                            }
+
+                            result.setType(parseObject.getString("type"));
+
                         }
                     }
 

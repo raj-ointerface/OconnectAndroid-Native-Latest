@@ -200,6 +200,36 @@ public class App extends MultiDexApplication implements ServiceConnection, Messa
 
                     realm.getSchema().get("Speaker").addField("email", String.class);
 
+                    realm.getSchema().create("DiscussionBoard");
+                    realm.getSchema().get("DiscussionBoard").addField("objectId", String.class);
+                    realm.getSchema().get("DiscussionBoard").addPrimaryKey("objectId").setRequired("objectId", true);
+                    realm.getSchema().get("DiscussionBoard").addField("updatedAt", Date.class);
+                    realm.getSchema().get("DiscussionBoard").addField("moderatorName", String.class);
+                    realm.getSchema().get("DiscussionBoard").addField("hasQuestions", Boolean.class);
+                    realm.getSchema().get("DiscussionBoard").addField("event", String.class);
+                    realm.getSchema().get("DiscussionBoard").addField("conference", String.class);
+
+                    realm.getSchema().create("DBQuestion");
+                    realm.getSchema().get("DBQuestion").addField("objectId", String.class);
+                    realm.getSchema().get("DBQuestion").addPrimaryKey("objectId").setRequired("objectId", true);
+                    realm.getSchema().get("DBQuestion").addField("updatedAt", Date.class);
+                    realm.getSchema().get("DBQuestion").addField("isResolved", Boolean.class);
+                    realm.getSchema().get("DBQuestion").addField("votes", Integer.class);
+                    realm.getSchema().get("DBQuestion").addField("user_email", String.class);
+                    realm.getSchema().get("DBQuestion").addField("question", String.class);
+                    realm.getSchema().get("DBQuestion").addField("event", String.class);
+                    realm.getSchema().get("DBQuestion").addField("conference", String.class);
+                    realm.getSchema().get("DBQuestion").addField("discussionBoard", String.class);
+
+                    realm.getSchema().create("Votes");
+                    realm.getSchema().get("Votes").addField("objectId", String.class);
+                    realm.getSchema().get("Votes").addPrimaryKey("objectId").setRequired("objectId", true);
+                    realm.getSchema().get("Votes").addField("updatedAt", Date.class);
+                    realm.getSchema().get("Votes").addField("type", String.class);
+                    realm.getSchema().get("Votes").addField("question", String.class);
+                    realm.getSchema().get("Votes").addField("user", String.class);
+                    realm.getSchema().get("Votes").addField("lastVoteIsUp", Boolean.class);
+
                 }
             };
 

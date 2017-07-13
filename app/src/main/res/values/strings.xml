@@ -101,4 +101,5 @@
     <string name="schedule_overlay_3_text">"Select this button to view the tool bar. Here you will find your notes, customized agenda, speaker bios &amp; much more."</string>
     <string name="schedule_overlay_4_text">"Select this button to traverse between the participants and the schedule."</string>
     <string name="title_activity_messaging_list">MessagingListActivity</string>
+    <string name="title_activity_discussion_board">DiscussionBoardActivity</string>
 </resources>
