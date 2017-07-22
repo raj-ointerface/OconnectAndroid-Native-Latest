@@ -29,6 +29,7 @@ import com.ointerface.oconnect.adapters.DashboardEventListViewAdapter;
 import com.ointerface.oconnect.data.Event;
 import com.ointerface.oconnect.data.Organization;
 import com.ointerface.oconnect.data.Session;
+import com.ointerface.oconnect.util.AppConfig;
 import com.ointerface.oconnect.util.AppUtil;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
@@ -174,6 +175,11 @@ public class DashboardActivity extends OConnectBaseActivity {
                     lvEvents.setSelection(adapter.eventsList.size() - 1);
                 }
             }
+        }
+
+        if (AppUtil.getSurveyShown(this) == false) {
+            AppUtil.displaySurveyOption(this);
+            AppUtil.setSurveyShown(this, true);
         }
     }
 

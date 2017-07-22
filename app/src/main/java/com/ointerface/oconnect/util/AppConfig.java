@@ -23,6 +23,9 @@ public class AppConfig {
     static public String getSharedPrefsFacebookLoggedIn = "com.ointerface.oconnect.sharedprefs.facebookLoggedIn";
     static public String getSharedPrefsTwitterLoggedIn = "com.ointerface.oconnect.sharedprefs.twitterLoggedIn";
     static public String getSharedPrefsLinkedInLoggedIn = "com.ointerface.oconnect.sharedprefs.linkedInLoggedIn";
+    static public String getSharedPrefsSurveyShown = "com.ointerface.oconnect.sharedprefs.surveyShown";
+    static public String getSharedPrefsParticipantsTutorialShown = "com.ointerface.oconnect.sharedprefs.participantsTutorialShown";
+    static public String getSharedPrefsScheduleTutorialShown = "com.ointerface.oconnect.sharedprefs.scheduleTutorialShown";
 
     static public String defaultDateTimeFormat = "yyyy-MM-dd'T'HH:mm:ss";
 
@@ -33,4 +36,8 @@ public class AppConfig {
     static public int lightGreyColor = 0xFFE2E2E0;
     static public int hiddenGreyBackgroundColor = 0xFF6D7177;
     static public int messagingBackgroundColor = 0xFF0289F7;
+
+    static public boolean bSurveyShown = false;
+    static public boolean bParticipantsTutorialShown = false;
+    static public boolean bScheduleTutorialShown = false;
 }

@@ -370,7 +370,7 @@ public class Person extends RealmObject {
         if (!skipPredAnalyticsSync) {
             ParseQuery<ParseObject> query = ParseQuery.getQuery("PredAnalyticsMatches").setLimit(1000);
 
-            query.whereEqualTo("id1", parseObject.getObjectId()).addDescendingOrder("score");
+            query.whereEqualTo("id1", parseObject.getObjectId()).whereNotEqualTo("isAccepted", true).whereNotEqualTo("isRejected", true).addDescendingOrder("score");
 
             try {
                 List<ParseObject> suggestedConnectionsList = query.find();

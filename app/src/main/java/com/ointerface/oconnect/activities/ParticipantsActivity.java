@@ -159,19 +159,45 @@ public class ParticipantsActivity extends OConnectBaseActivity {
                 if (adapter.showingSpeakers) {
                     SpeakerDetailViewActivity.mItems = new ArrayList<RealmObject>();
 
-                    SpeakerDetailViewActivity.mItems.addAll(adapter.mSpeakers);
+                    if (adapter.mSpeakers.size() < 11) {
+                        SpeakerDetailViewActivity.mItems.addAll(adapter.mSpeakers);
+                    } else {
+                        int index = position;
+                        for (int i = 0; i < 10 && index < adapter.mSpeakers.size(); ++i) {
+                            SpeakerDetailViewActivity.mItems.add(adapter.mSpeakers.get(index++));
+                        }
+                    }
 
                     Intent i = new Intent(ParticipantsActivity.this, SpeakerDetailViewActivity.class);
-                    i.putExtra("SPEAKER_NUMBER", position);
+
+                    if (adapter.mSpeakers.size() < 11) {
+                        i.putExtra("SPEAKER_NUMBER", position);
+                    } else {
+                        i.putExtra("SPEAKER_NUMBER", 0);
+                    }
+
                     // i.putExtra("SPEAKER_LIST", adapter.mSpeakers);
                     startActivity(i);
                 } else {
                     AttendeeDetailViewActivity.mItems = new ArrayList<RealmObject>();
 
-                    AttendeeDetailViewActivity.mItems.addAll(adapter.mAttendees);
+                    if (adapter.mAttendees.size() < 11) {
+                        AttendeeDetailViewActivity.mItems.addAll(adapter.mAttendees);
+                    } else {
+                        int index = position;
+                        for (int i = 0; i < 10 && index < adapter.mAttendees.size(); ++i) {
+                            AttendeeDetailViewActivity.mItems.add(adapter.mAttendees.get(index++));
+                        }
+                    }
 
                     Intent i = new Intent(ParticipantsActivity.this, AttendeeDetailViewActivity.class);
-                    i.putExtra("ATTENDEE_NUMBER", position);
+
+                    if (adapter.mAttendees.size() < 11) {
+                        i.putExtra("ATTENDEE_NUMBER", position);
+                    } else {
+                        i.putExtra("ATTENDEE_NUMBER", 0);
+                    }
+
                     // i.putExtra("ATTENDEE_LIST", adapter.mAttendees);
                     startActivity(i);
                 }
@@ -183,10 +209,13 @@ public class ParticipantsActivity extends OConnectBaseActivity {
 
         displaySpeakers();
 
-        FragmentManager fm = getSupportFragmentManager();
-        OverlayDialogFragment dialogFragment = OverlayDialogFragment.newInstance(this, OverlayDialogFragment.OverlayType.Partificpants1);
-        dialogFragment.setStyle(DialogFragment.STYLE_NO_FRAME, R.style.CustomDialog);
-        dialogFragment.show(fm, OverlayDialogFragment.OverlayType.Partificpants1.name());
+        if (AppUtil.getParticipantsTutorialShown(this) == false && AppConfig.bParticipantsTutorialShown == false) {
+            FragmentManager fm = getSupportFragmentManager();
+            OverlayDialogFragment dialogFragment = OverlayDialogFragment.newInstance(this, OverlayDialogFragment.OverlayType.Partificpants1);
+            dialogFragment.setStyle(DialogFragment.STYLE_NO_FRAME, R.style.CustomDialog);
+            dialogFragment.show(fm, OverlayDialogFragment.OverlayType.Partificpants1.name());
+            AppConfig.bParticipantsTutorialShown = true;
+        }
     }
 
     public void initSearchView() {

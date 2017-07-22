@@ -15,7 +15,7 @@
     <!-- Staging -->
     <string name="parse_app_id">OxZLwjHXEjFjuFExxotUrwvOlxdT2efPN8pv06JI</string>
     <string name="parse_server_url">http://45.55.255.189:8080/parse/</string>
-
+    
     <string name="twitter_consumer_key">"5R9U8Hl5gvEYfZdkmPHzuc7zU"</string>
     <string name="twitter_consumer_secret">"h31e1Qx1pjXVNOwv8mgh96NzC6HpJu9BctPek8mI2On9XD6Qun"</string>
     <string name="twitter_access_token">"4822480146-xgFzAYofW3RZm7dF7PIbHjis5uFjhv1idYi3PSx"</string>

@@ -12,6 +12,8 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
 import android.icu.text.IDNA;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
@@ -19,13 +21,17 @@ import android.support.v7.app.AlertDialog;
 import android.text.InputType;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.LayoutInflater;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.ointerface.oconnect.App;
 import com.ointerface.oconnect.ConferenceListViewActivity;
 import com.ointerface.oconnect.R;
+import com.ointerface.oconnect.activities.AnalyticsSurveyActivity;
+import com.ointerface.oconnect.activities.ConnectionsActivity;
 import com.ointerface.oconnect.activities.DashboardActivity;
 import com.ointerface.oconnect.activities.InfoActivity;
 import com.ointerface.oconnect.activities.MapsListActivity;
@@ -353,6 +359,27 @@ public class AppUtil {
         alertDialog.show();
     }
 
+    public static void displaySurveyOption(final Context context) {
+        AlertDialog alertDialog = new AlertDialog.Builder(context).create();
+        alertDialog.setTitle("Make Better Connections");
+        alertDialog.setMessage("Help Us Help You Connect Better With Other Attendees...");
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Start",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent i = new Intent(context, AnalyticsSurveyActivity.class);
+                        context.startActivity(i);
+                    }
+                });
+        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "No, Thanks", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        alertDialog.show();
+    }
+
     static public boolean getDefaultRealmLoaded (Context context) {
         SharedPreferences prefs = context.getSharedPreferences(AppConfig.sharedPrefsName, MODE_PRIVATE);
         boolean value = prefs.getBoolean(AppConfig.getSharedPrefsDefaultRealmLoaded, false);
@@ -374,6 +401,18 @@ public class AppUtil {
     static public void setFacebookLoggedIn (Context context, boolean value) {
         SharedPreferences.Editor editor = context.getSharedPreferences(AppConfig.sharedPrefsName, MODE_PRIVATE).edit();
         editor.putBoolean(AppConfig.getSharedPrefsFacebookLoggedIn, value);
+        editor.commit();
+    }
+
+    static public boolean getSurveyShown (Context context) {
+        SharedPreferences prefs = context.getSharedPreferences(AppConfig.sharedPrefsName, MODE_PRIVATE);
+        boolean value = prefs.getBoolean(AppConfig.getSharedPrefsSurveyShown, false);
+        return value;
+    }
+
+    static public void setSurveyShown (Context context, boolean value) {
+        SharedPreferences.Editor editor = context.getSharedPreferences(AppConfig.sharedPrefsName, MODE_PRIVATE).edit();
+        editor.putBoolean(AppConfig.getSharedPrefsSurveyShown, value);
         editor.commit();
     }
 
@@ -401,6 +440,30 @@ public class AppUtil {
         editor.commit();
     }
 
+    static public boolean getParticipantsTutorialShown (Context context) {
+        SharedPreferences prefs = context.getSharedPreferences(AppConfig.sharedPrefsName, MODE_PRIVATE);
+        boolean value = prefs.getBoolean(AppConfig.getSharedPrefsParticipantsTutorialShown, false);
+        return value;
+    }
+
+    static public void setParticipantsTutorialShown (Context context, boolean value) {
+        SharedPreferences.Editor editor = context.getSharedPreferences(AppConfig.sharedPrefsName, MODE_PRIVATE).edit();
+        editor.putBoolean(AppConfig.getSharedPrefsParticipantsTutorialShown, value);
+        editor.commit();
+    }
+
+    static public boolean getScheduleTutorialShown (Context context) {
+        SharedPreferences prefs = context.getSharedPreferences(AppConfig.sharedPrefsName, MODE_PRIVATE);
+        boolean value = prefs.getBoolean(AppConfig.getSharedPrefsScheduleTutorialShown, false);
+        return value;
+    }
+
+    static public void setScheduleTutorialShow (Context context, boolean value) {
+        SharedPreferences.Editor editor = context.getSharedPreferences(AppConfig.sharedPrefsName, MODE_PRIVATE).edit();
+        editor.putBoolean(AppConfig.getSharedPrefsScheduleTutorialShown, value);
+        editor.commit();
+    }
+
     static public boolean isConnectedToUser(Person user) {
         try {
             RealmList<Person> connectedUsers = OConnectBaseActivity.currentPerson.getFavoriteUsers();
@@ -416,5 +479,12 @@ public class AppUtil {
         }
 
         return false;
+    }
+
+    public static boolean isNetworkAvailable(Context context) {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 }

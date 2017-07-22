@@ -26,6 +26,7 @@
             android:textAlignment="center"
             android:textColor="@color/colorWhite"
             android:textSize="18sp"
+            android:textStyle="bold"
             android:text="@string/participants_overlay_text_1"/>
 
         <ImageView
@@ -48,6 +49,7 @@
             android:textColor="@color/colorWhite"
             android:textSize="18sp"
             android:textAlignment="center"
+            android:textStyle="bold"
             android:text="@string/participants_overlay_text_2"/>
 
         <ImageView
@@ -80,6 +82,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
         android:textSize="16sp"
+        android:textStyle="bold"
         android:textColor="@color/colorWhite"
         android:text="@string/label_dont_show_again" />
 
@@ -95,6 +98,5 @@
         android:textSize="16sp"
         android:textColor="@color/colorWhite"
         android:text="@string/label_tap_continue" />
-
 
 </RelativeLayout>

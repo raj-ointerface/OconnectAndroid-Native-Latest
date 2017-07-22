@@ -29,11 +29,14 @@ import com.ointerface.oconnect.App;
 import com.ointerface.oconnect.R;
 import com.ointerface.oconnect.data.Attendee;
 import com.ointerface.oconnect.data.Person;
+import com.ointerface.oconnect.data.PredAnalyticsMatches;
 import com.ointerface.oconnect.databinding.RolodexItemViewBinding;
 import com.ointerface.oconnect.data.Speaker;
 import com.ointerface.oconnect.messaging.MessagingActivity;
 import com.ointerface.oconnect.util.AppConfig;
 import com.ointerface.oconnect.util.AppUtil;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 
 import java.io.InputStream;
 import java.net.URL;
@@ -152,6 +155,12 @@ public class ConnectionsActivity extends OConnectBaseActivity {
                 startActivity(i);
             }
         });
+
+        if (AppConfig.bSurveyShown == false) {
+            AppUtil.displaySurveyOption(this);
+            AppUtil.setSurveyShown(this, true);
+            AppConfig.bSurveyShown = true;
+        }
     }
 
     private void initRecyclerView(final RecyclerView recyclerView, final CarouselLayoutManager layoutManager, final RolodexAdapter adapter) {
@@ -291,8 +300,10 @@ public class ConnectionsActivity extends OConnectBaseActivity {
         public ArrayList<RealmObject> mDataSuggestedConnections = null;
 
         public Context context;
+        RolodexAdapter adapter;
 
         RolodexAdapter(Context context) {
+            adapter = this;
             this.context = context;
             mData = new ArrayList<RealmObject>();
             mDataSuggestedConnections = new ArrayList<RealmObject>();
@@ -320,6 +331,11 @@ public class ConnectionsActivity extends OConnectBaseActivity {
             } else {
                 currentObj = mData.get(position);
             }
+
+            holder.mItemViewBinding.ivMessage.setBackground(AppUtil.changeDrawableColor(context, R.drawable.icon_envelop, AppUtil.getPrimaryThemColorAsInt()));
+
+            holder.mItemViewBinding.tvDiscardContact.setVisibility(GONE);
+            holder.mItemViewBinding.tvConnectionStrength.setVisibility(GONE);
 
             if (holder.mItemViewBinding.rlContainer.getParent() != null) {
                 ViewParent view = holder.mItemViewBinding.rlContainer.getParent();
@@ -486,27 +502,109 @@ public class ConnectionsActivity extends OConnectBaseActivity {
                 holder.mItemViewBinding.tvMessage.setVisibility(View.VISIBLE);
                 holder.mItemViewBinding.ivMessage.setVisibility(View.VISIBLE);
 
-                holder.mItemViewBinding.tvMessage.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(context, MessagingActivity.class);
+                if (showingMyConnections == true) {
 
-                        MessagingActivity.recipientIDStr = currentPerson.getObjectId();
+                    holder.mItemViewBinding.tvMessage.setText("Message");
 
-                        context.startActivity(intent);
+                    holder.mItemViewBinding.tvMessage.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(context, MessagingActivity.class);
+
+                            MessagingActivity.recipientIDStr = currentPerson.getObjectId();
+
+                            context.startActivity(intent);
+                        }
+                    });
+
+                    holder.mItemViewBinding.ivMessage.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(context, MessagingActivity.class);
+
+                            MessagingActivity.recipientIDStr = currentPerson.getObjectId();
+
+                            context.startActivity(intent);
+                        }
+                    });
+                } else {
+                    final Realm realm = AppUtil.getRealmInstance(context);
+                    final PredAnalyticsMatches matchObj = realm.where(PredAnalyticsMatches.class).equalTo("id1", OConnectBaseActivity.currentPerson.getObjectId()).equalTo("id2", currentPerson.getObjectId()).findFirst();
+
+                    holder.mItemViewBinding.ivMessage.setBackground(AppUtil.changeDrawableColor(context, R.drawable.ic_add_profile, AppUtil.getPrimaryThemColorAsInt()));
+
+                    holder.mItemViewBinding.tvMessage.setText("Add Contact");
+                    holder.mItemViewBinding.tvDiscardContact.setVisibility(View.VISIBLE);
+                    holder.mItemViewBinding.tvDiscardContact.setText("Discard Contact");
+                    holder.mItemViewBinding.tvConnectionStrength.setVisibility(View.VISIBLE);
+
+                    if (matchObj != null) {
+                        String connectionStrength = "Your Connection Strength: " + String.format("%.0f%%", matchObj.getScore());
+
+                        holder.mItemViewBinding.tvConnectionStrength.setText(connectionStrength);
                     }
-                });
 
-                holder.mItemViewBinding.ivMessage.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(context, MessagingActivity.class);
 
-                        MessagingActivity.recipientIDStr = currentPerson.getObjectId();
+                    holder.mItemViewBinding.tvMessage.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (matchObj == null) {
+                                return;
+                            }
+                            OConnectBaseActivity.currentPerson.getFavoriteUsers().add(currentPerson);
 
-                        context.startActivity(intent);
-                    }
-                });
+                            realm.beginTransaction();
+                            matchObj.setAccepted(true);
+                            realm.commitTransaction();
+
+                            mDataSuggestedConnections.remove(currentPerson);
+
+                            try {
+                                ParseObject parseMatchObj = ParseQuery.getQuery("PredAnalyticsMatches").whereEqualTo("objectId", matchObj.getObjectId()).getFirst();
+
+                                parseMatchObj.put("isAccepted", true);
+
+                                parseMatchObj.save();
+
+                                adapter.notifyDataSetChanged();
+                            } catch (Exception ex) {
+                                Log.d("APD", ex.getMessage());
+                            }
+                        }
+                    });
+
+                    holder.mItemViewBinding.tvDiscardContact.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (matchObj == null) {
+                                return;
+                            }
+
+                            if (OConnectBaseActivity.currentPerson.getFavoriteUsers().contains(currentPerson)) {
+                                OConnectBaseActivity.currentPerson.getFavoriteUsers().remove(currentPerson);
+                            }
+
+                            realm.beginTransaction();
+                            matchObj.setRejected(true);
+                            realm.commitTransaction();
+
+                            mDataSuggestedConnections.remove(currentPerson);
+
+                            try {
+                                ParseObject parseMatchObj = ParseQuery.getQuery("PredAnalyticsMatches").whereEqualTo("objectId", matchObj.getObjectId()).getFirst();
+
+                                parseMatchObj.put("isRejected", true);
+
+                                parseMatchObj.save();
+
+                                adapter.notifyDataSetChanged();
+                            } catch (Exception ex) {
+                                Log.d("APD", ex.getMessage());
+                            }
+                        }
+                    });
+
+                }
 
                 if (currentPerson.getJob() != null && !currentPerson.getJob().equalsIgnoreCase("")) {
                     holder.mItemViewBinding.tvParticipantJobTitle.setText(currentPerson.getJob());

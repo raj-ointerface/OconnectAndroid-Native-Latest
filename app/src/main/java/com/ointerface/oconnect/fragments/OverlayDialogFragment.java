@@ -93,6 +93,13 @@ public class OverlayDialogFragment extends DialogFragment {
 
         cbDontShowAgain = (CheckBox) rootView.findViewById(R.id.cbDontShowAgain);
 
+        if (overlayType == OverlayType.Schedule1 ||
+                overlayType == OverlayType.Schedule2 ||
+                overlayType == OverlayType.Schedule3 ||
+                overlayType == OverlayType.Schedule4) {
+            cbDontShowAgain.setChecked(AppUtil.getScheduleTutorialShown(activity));
+        }
+
         tvDontShowAgain = (TextView) rootView.findViewById(R.id.tvDontShowAgain);
 
         tvDontShowAgain.setOnClickListener(new View.OnClickListener() {
@@ -110,9 +117,11 @@ public class OverlayDialogFragment extends DialogFragment {
                 switch (overlayType)
                 {
                     case Partificpants1:
+                        AppUtil.setParticipantsTutorialShown(activity, cbDontShowAgain.isChecked());
                         dismiss();
                         break;
                     case Schedule1:
+                        AppUtil.setScheduleTutorialShow(activity, cbDontShowAgain.isChecked());
                         dismiss();
                         FragmentManager fm = ((ScheduleActivity)activity).getSupportFragmentManager();
                         OverlayDialogFragment dialogFragment = newInstance(activity, OverlayType.Schedule2);
@@ -120,6 +129,7 @@ public class OverlayDialogFragment extends DialogFragment {
                         dialogFragment.show(fm, OverlayType.Schedule2.name());
                         break;
                     case Schedule2:
+                        AppUtil.setScheduleTutorialShow(activity, cbDontShowAgain.isChecked());
                         dismiss();
                         FragmentManager fm2 = ((ScheduleActivity)activity).getSupportFragmentManager();
                         OverlayDialogFragment dialogFragment2 = newInstance(activity, OverlayType.Schedule3);
@@ -127,6 +137,7 @@ public class OverlayDialogFragment extends DialogFragment {
                         dialogFragment2.show(fm2, OverlayType.Schedule3.name());
                         break;
                     case Schedule3:
+                        AppUtil.setScheduleTutorialShow(activity, cbDontShowAgain.isChecked());
                         dismiss();
                         FragmentManager fm3 = ((ScheduleActivity)activity).getSupportFragmentManager();
                         OverlayDialogFragment dialogFragment3 = newInstance(activity, OverlayType.Schedule4);
@@ -134,6 +145,7 @@ public class OverlayDialogFragment extends DialogFragment {
                         dialogFragment3.show(fm3, OverlayType.Schedule4.name());
                         break;
                     case Schedule4:
+                        AppUtil.setScheduleTutorialShow(activity, cbDontShowAgain.isChecked());
                         dismiss();
                         break;
                 }

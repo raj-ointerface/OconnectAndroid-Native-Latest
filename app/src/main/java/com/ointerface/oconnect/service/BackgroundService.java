@@ -12,6 +12,7 @@ import com.ointerface.oconnect.MainSplashActivity;
 import com.ointerface.oconnect.R;
 import com.ointerface.oconnect.data.DataSyncManager;
 import com.ointerface.oconnect.data.IDataSyncListener;
+import com.ointerface.oconnect.util.AppUtil;
 import com.parse.Parse;
 import com.parse.ParseACL;
 import com.parse.ParseInstallation;
@@ -37,6 +38,7 @@ public class BackgroundService extends Service {
     @Override
     public void onCreate() {
         handler = new Handler();
+        context = this;
         new DataSyncTask().execute();
     }
 
@@ -60,7 +62,8 @@ public class BackgroundService extends Service {
             try {
                 runnable = new Runnable() {
                     public void run() {
-                        if (BackgroundService.isDataSyncing == false) {
+                        if (BackgroundService.isDataSyncing == false &&
+                                AppUtil.isNetworkAvailable(context) == true) {
 
                             BackgroundService.isDataSyncing = true;
                             DataSyncManager.shouldSyncAll = true;

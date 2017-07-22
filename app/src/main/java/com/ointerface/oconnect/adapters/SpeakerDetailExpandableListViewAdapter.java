@@ -288,14 +288,21 @@ public class SpeakerDetailExpandableListViewAdapter extends BaseExpandableListAd
 
             final ImageView ivProfile = (ImageView) convertView.findViewById(R.id.ivProfile);
 
+            if (ivProfile.getDrawingCache() != null) {
+                ivProfile.getDrawingCache().recycle();
+            }
+
             if (person != null && person.getPictureURL() != null && !person.getPictureURL().equalsIgnoreCase("")) {
                 final String pictureURL = person.getPictureURL();
 
                 new AsyncTask<Void, Void, Void>() {
-                    Bitmap bmp;
+                    Bitmap bmp = null;
                     @Override
                     protected Void doInBackground(Void... params) {
                         try {
+                            if (bmp != null) {
+                                bmp.recycle();
+                            }
                             InputStream in = new URL(pictureURL).openStream();
                             bmp = BitmapFactory.decodeStream(in);
                         } catch (Exception e) {

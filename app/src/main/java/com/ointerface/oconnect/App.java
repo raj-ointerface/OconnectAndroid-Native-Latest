@@ -4,13 +4,19 @@ import android.app.Application;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.net.Uri;
 import android.os.IBinder;
 import android.support.multidex.MultiDexApplication;
+import android.util.Base64;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.facebook.FacebookSdk;
 import com.ointerface.oconnect.activities.OConnectBaseActivity;
+import com.ointerface.oconnect.activities.SignInActivity2;
 import com.ointerface.oconnect.data.MyNote;
 import com.ointerface.oconnect.data.Person;
 import com.ointerface.oconnect.data.SinchMessage;
@@ -19,8 +25,10 @@ import com.ointerface.oconnect.util.AppUtil;
 import com.parse.Parse;
 import com.parse.ParseACL;
 import com.parse.ParseException;
+import com.parse.ParseFacebookUtils;
 import com.parse.ParseInstallation;
 import com.parse.ParsePush;
+import com.parse.ParseTwitterUtils;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.sinch.android.rtc.PushPair;
@@ -40,6 +48,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.List;
 
@@ -146,11 +156,14 @@ public class App extends MultiDexApplication implements ServiceConnection, Messa
                     // realm.getSchema().get("SpeakerEventCache").setRequired("objectId", true);
                     // realm.getSchema().get("Sponsor").setRequired("objectId", true);
 
+                    /*
                     realm.getSchema().get("Speaker").removeField("eventsList");
                     realm.getSchema().get("Attendee").removeField("eventsList");
                     realm.getSchema().get("Speaker").removeField("updatedAt");
                     realm.getSchema().get("Attendee").removeField("updatedAt");
+                    */
 
+                    /*
                     realm.getSchema().create("TravelBusiness");
                     realm.getSchema().get("TravelBusiness").addField("objectId", String.class);
                     realm.getSchema().get("TravelBusiness").addPrimaryKey("objectId").setRequired("objectId", true);
@@ -162,44 +175,58 @@ public class App extends MultiDexApplication implements ServiceConnection, Messa
                     realm.getSchema().get("TravelBusiness").addField("website", String.class);
                     realm.getSchema().get("TravelBusiness").addField("conference", String.class);
                     realm.getSchema().get("TravelBusiness").addField("key", String.class);
+                    */
 
+                    /*
                     realm.getSchema().create("SurveyQuestion");
                     realm.getSchema().get("SurveyQuestion").addField("objectId", String.class);
                     realm.getSchema().get("SurveyQuestion").addPrimaryKey("objectId").setRequired("objectId", true);
                     realm.getSchema().get("SurveyQuestion").addField("question", String.class);
                     realm.getSchema().get("SurveyQuestion").addField("order", Integer.class);
                     realm.getSchema().get("SurveyQuestion").addField("conference", String.class);
+                    */
 
+                    /*
                     realm.getSchema().create("SurveyQuestionAnswer");
                     realm.getSchema().get("SurveyQuestionAnswer").addField("objectId", String.class);
                     realm.getSchema().get("SurveyQuestionAnswer").addPrimaryKey("objectId").setRequired("objectId", true);
                     realm.getSchema().get("SurveyQuestionAnswer").addField("title", String.class);
+                    */
 
+                    /*
                     realm.getSchema().create("SurveyQuestionAnswerRelation");
                     realm.getSchema().get("SurveyQuestionAnswerRelation").addField("objectId", String.class);
                     realm.getSchema().get("SurveyQuestionAnswerRelation").addPrimaryKey("objectId").setRequired("objectId", true);
                     realm.getSchema().get("SurveyQuestionAnswerRelation").addField("surveyQuestion", String.class);
                     realm.getSchema().get("SurveyQuestionAnswerRelation").addField("surveyQuestionAnswer", String.class);
+                    */
 
+                    /*
                     realm.getSchema().create("UserSurveyAnswer");
                     realm.getSchema().get("UserSurveyAnswer").addField("objectId", String.class);
                     realm.getSchema().get("UserSurveyAnswer").addPrimaryKey("objectId").setRequired("objectId", true);
                     realm.getSchema().get("UserSurveyAnswer").addField("questionId", String.class);
                     realm.getSchema().get("UserSurveyAnswer").addField("questionAnswerIds", String.class);
                     realm.getSchema().get("UserSurveyAnswer").addField("userId", String.class);
+                    */
 
+                    /*
                     realm.getSchema().get("Attendee").addField("isCheckedIn", Boolean.class);
                     realm.getSchema().get("Attendee").addField("email", String.class);
+                    */
 
+                    /*
                     realm.getSchema().create("SinchMessage");
                     realm.getSchema().get("SinchMessage").addField("messageString", String.class);
                     realm.getSchema().get("SinchMessage").addField("messageDateTime", Date.class);
                     realm.getSchema().get("SinchMessage").addField("currentUserID", String.class);
                     realm.getSchema().get("SinchMessage").addField("connectedUserID", String.class);
                     realm.getSchema().get("SinchMessage").addField("isIncoming", Boolean.class);
+                    */
 
-                    realm.getSchema().get("Speaker").addField("email", String.class);
+                    // realm.getSchema().get("Speaker").addField("email", String.class);
 
+                    /*
                     realm.getSchema().create("DiscussionBoard");
                     realm.getSchema().get("DiscussionBoard").addField("objectId", String.class);
                     realm.getSchema().get("DiscussionBoard").addPrimaryKey("objectId").setRequired("objectId", true);
@@ -208,7 +235,9 @@ public class App extends MultiDexApplication implements ServiceConnection, Messa
                     realm.getSchema().get("DiscussionBoard").addField("hasQuestions", Boolean.class);
                     realm.getSchema().get("DiscussionBoard").addField("event", String.class);
                     realm.getSchema().get("DiscussionBoard").addField("conference", String.class);
+                    */
 
+                    /*
                     realm.getSchema().create("DBQuestion");
                     realm.getSchema().get("DBQuestion").addField("objectId", String.class);
                     realm.getSchema().get("DBQuestion").addPrimaryKey("objectId").setRequired("objectId", true);
@@ -220,7 +249,10 @@ public class App extends MultiDexApplication implements ServiceConnection, Messa
                     realm.getSchema().get("DBQuestion").addField("event", String.class);
                     realm.getSchema().get("DBQuestion").addField("conference", String.class);
                     realm.getSchema().get("DBQuestion").addField("discussionBoard", String.class);
+                    */
 
+
+                    /*
                     realm.getSchema().create("Votes");
                     realm.getSchema().get("Votes").addField("objectId", String.class);
                     realm.getSchema().get("Votes").addPrimaryKey("objectId").setRequired("objectId", true);
@@ -229,7 +261,7 @@ public class App extends MultiDexApplication implements ServiceConnection, Messa
                     realm.getSchema().get("Votes").addField("question", String.class);
                     realm.getSchema().get("Votes").addField("user", String.class);
                     realm.getSchema().get("Votes").addField("lastVoteIsUp", Boolean.class);
-
+                    */
                 }
             };
 
@@ -265,7 +297,8 @@ public class App extends MultiDexApplication implements ServiceConnection, Messa
 
         TwitterConfig config = new TwitterConfig.Builder(this)
                 .logger(new DefaultLogger(Log.DEBUG))
-                .twitterAuthConfig(new TwitterAuthConfig(getString(R.string.twitter_consumer_key), getString(R.string.twitter_consumer_secret)))
+                //.twitterAuthConfig(new TwitterAuthConfig(getString(R.string.twitter_consumer_key), getString(R.string.twitter_consumer_secret)))
+                .twitterAuthConfig(new TwitterAuthConfig("0ZV9x1zOTs5nXcaFRS3eIengI", "zrsg7kCincIM0fqig4CJk0laliX5tUpsrSmgMyQdjqBcHhZtY4"))
                 .debug(true)
                 .build();
         Twitter.initialize(config);
@@ -273,6 +306,11 @@ public class App extends MultiDexApplication implements ServiceConnection, Messa
         getApplicationContext().bindService(new Intent(this, SinchService.class), this,
                 BIND_AUTO_CREATE);
 
+        ParseFacebookUtils.initialize(this);
+
+        ParseTwitterUtils.initialize("0ZV9x1zOTs5nXcaFRS3eIengI", "zrsg7kCincIM0fqig4CJk0laliX5tUpsrSmgMyQdjqBcHhZtY4");
+
+        // generateHashkey();
     }
 
     public static void initSinchClient(String userID) {
@@ -387,5 +425,23 @@ public class App extends MultiDexApplication implements ServiceConnection, Messa
     @Override
     public void onMessageDelivered(MessageClient client, MessageDeliveryInfo deliveryInfo) {
         Log.d("OConnectBase", "onDelivered");
+    }
+
+    public void generateHashkey(){
+        try {
+            PackageInfo info = getPackageManager().getPackageInfo(
+                    "com.ointerface.oconnect",
+                    PackageManager.GET_SIGNATURES);
+            for (Signature signature : info.signatures) {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+
+                Log.d("KeyHash:", "APD " + Base64.encodeToString(md.digest(), Base64.DEFAULT));
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            Log.d("APD", e.getMessage(), e);
+        } catch (NoSuchAlgorithmException e) {
+            Log.d("APD", e.getMessage(), e);
+        }
     }
 }

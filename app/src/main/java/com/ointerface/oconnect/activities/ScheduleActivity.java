@@ -34,6 +34,7 @@ import com.ointerface.oconnect.data.Speaker;
 import com.ointerface.oconnect.data.SpeakerEventCache;
 import com.ointerface.oconnect.fragments.EventDetailViewFragment;
 import com.ointerface.oconnect.fragments.OverlayDialogFragment;
+import com.ointerface.oconnect.util.AppConfig;
 import com.ointerface.oconnect.util.AppUtil;
 
 import java.text.SimpleDateFormat;
@@ -148,7 +149,7 @@ public class ScheduleActivity extends OConnectBaseActivity {
             }
         });
 
-        ImageView closeButton = (ImageView)scheduleSearch.findViewById(R.id.search_close_btn);
+        ImageView closeButton = (ImageView) scheduleSearch.findViewById(R.id.search_close_btn);
 
         // Set on click listener
         closeButton.setOnClickListener(new View.OnClickListener() {
@@ -224,7 +225,7 @@ public class ScheduleActivity extends OConnectBaseActivity {
             currentScheduleDate = now;
 
             // we set the schedule date to the start of day so that entire day is displayed
-            currentScheduleDate = AppUtil.setTime(currentScheduleDate, 0, 0, 0, 0 );
+            currentScheduleDate = AppUtil.setTime(currentScheduleDate, 0, 0, 0, 0);
         }
 
         getListViewData(currentScheduleDate);
@@ -243,7 +244,7 @@ public class ScheduleActivity extends OConnectBaseActivity {
                         for (int i = position + 1; i < adapter.mData.size() &&
                                 adapter.getItemViewType(i) != ScheduleSwipeListAdapter.TYPE_SEPARATOR;
                              ++i) {
-                            if (adapter.hiddenPositions.contains(i) ==  false) {
+                            if (adapter.hiddenPositions.contains(i) == false) {
                                 adapter.hiddenPositions.add(i);
                                 adapter.mIsExpandedArray.set(i, false);
                             }
@@ -256,7 +257,7 @@ public class ScheduleActivity extends OConnectBaseActivity {
                         for (int i = position + 1; i < adapter.mData.size() &&
                                 adapter.getItemViewType(i) != ScheduleSwipeListAdapter.TYPE_SEPARATOR;
                              ++i) {
-                                itemsToAddBack.add(i);
+                            itemsToAddBack.add(i);
                         }
 
                         for (int d = itemsToAddBack.size() - 1; d >= 0; --d) {
@@ -312,10 +313,13 @@ public class ScheduleActivity extends OConnectBaseActivity {
         OverlayDialogFragment.schedule3AnchorView = getToolbarNavigationIcon((Toolbar) findViewById(R.id.toolbar));
         OverlayDialogFragment.schedule4AnchorView = ivProfileLanyard;
 
-        FragmentManager fm = getSupportFragmentManager();
-        OverlayDialogFragment dialogFragment = OverlayDialogFragment.newInstance(this, OverlayDialogFragment.OverlayType.Schedule1);
-        dialogFragment.setStyle(DialogFragment.STYLE_NO_FRAME, R.style.CustomDialog);
-        dialogFragment.show(fm, OverlayDialogFragment.OverlayType.Schedule1.name());
+        if (AppUtil.getScheduleTutorialShown(this) == false && AppConfig.bScheduleTutorialShown == false) {
+            FragmentManager fm = getSupportFragmentManager();
+            OverlayDialogFragment dialogFragment = OverlayDialogFragment.newInstance(this, OverlayDialogFragment.OverlayType.Schedule1);
+            dialogFragment.setStyle(DialogFragment.STYLE_NO_FRAME, R.style.CustomDialog);
+            dialogFragment.show(fm, OverlayDialogFragment.OverlayType.Schedule1.name());
+            AppConfig.bScheduleTutorialShown = true;
+        }
 
         scheduleSearch = (SearchView) findViewById(R.id.scheduleSearch);
 

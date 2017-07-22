@@ -17,6 +17,7 @@ import android.text.InputType;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
@@ -24,6 +25,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.ointerface.oconnect.activities.*;
 
@@ -73,14 +75,33 @@ public class ConferenceListViewActivity extends AppCompatActivity {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
+            int marginPx = AppUtil.convertDPToPXInt(ConferenceListViewActivity.this, 3);
+
             BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
 
             View view1 = navigation.findViewById(R.id.navigation_coming_soon);
 
+            RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+            // RelativeLayout.LayoutParams lp = (ViewGroup.LayoutParams) view1.getLayoutParams();
+
+            lp.setMargins(marginPx, marginPx, marginPx, marginPx);
+
+            view1.setLayoutParams(lp);
+
             View view2 = navigation.findViewById(R.id.navigation_all_upcoming);
+
+            // LinearLayout.LayoutParams lp2 = (LinearLayout.LayoutParams) view2.getLayoutParams();
+            // lp2.setMargins(marginPx, marginPx, marginPx, marginPx);
+
+            view2.setLayoutParams(lp);
 
             View view3 = navigation.findViewById(R.id.navigation_past);
 
+            // LinearLayout.LayoutParams lp3 = (LinearLayout.LayoutParams) view3.getLayoutParams();
+            // lp3.setMargins(marginPx, marginPx, marginPx, marginPx);
+
+            view3.setLayoutParams(lp);
 
             switch (item.getItemId()) {
                 case R.id.navigation_coming_soon:
@@ -239,7 +260,8 @@ public class ConferenceListViewActivity extends AppCompatActivity {
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-        navigation.setBackgroundColor(AppUtil.getPrimaryThemColorAsInt());
+
+        // navigation.setBackgroundColor(AppUtil.getPrimaryThemColorAsInt());
 
         int[][] states = new int[][] {
                 new int[] { android.R.attr.state_enabled}, // enabled
@@ -250,8 +272,8 @@ public class ConferenceListViewActivity extends AppCompatActivity {
         };
 
         int[] colors = new int[] {
-                Color.BLACK,
-                Color.BLACK,
+                Color.WHITE,
+                Color.WHITE,
                 Color.WHITE,
                 Color.WHITE,
                 Color.WHITE

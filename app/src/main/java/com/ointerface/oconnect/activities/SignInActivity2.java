@@ -5,9 +5,12 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.StrictMode;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -96,7 +99,9 @@ public class SignInActivity2 extends AppCompatActivity {
     private Button btnForgotPassword;
     private Button btnSignIn;
 
-    ProgressDialog dialog;
+    public static ProgressDialog dialog;
+
+    public static int FACEBOOK_RESULT_CODE = 12;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,7 +109,9 @@ public class SignInActivity2 extends AppCompatActivity {
 
         // FacebookSdk.sdkInitialize(this);
 
-        ParseTwitterUtils.initialize(getString(R.string.twitter_consumer_key), getString(R.string.twitter_consumer_secret));
+        // ParseFacebookUtils.initialize(this);
+
+        // ParseTwitterUtils.initialize(getString(R.string.twitter_consumer_key), getString(R.string.twitter_consumer_secret));
 
         setContentView(R.layout.activity_sign_in_2);
 
@@ -130,6 +137,11 @@ public class SignInActivity2 extends AppCompatActivity {
         btnCreateAccount.setTextColor(AppUtil.getPrimaryThemColorAsInt());
         btnForgotPassword.setTextColor(AppUtil.getPrimaryThemColorAsInt());
         btnSignIn.setBackgroundColor(AppUtil.getPrimaryThemColorAsInt());
+
+        if (android.os.Build.VERSION.SDK_INT > 9) {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+        }
     }
 
     public void createAccountClicked(View sender) {
@@ -170,24 +182,31 @@ public class SignInActivity2 extends AppCompatActivity {
     }
 
     public void twitterLoginClicked(View sender) {
+
         ParseTwitterUtils.logIn(this, new LogInCallback() {
             @Override
             public void done(ParseUser user, ParseException err) {
                 if (user == null) {
+                    Log.d("APD", "ParseTwitterUtils.logIn error: " + err.getMessage());
                     Toast.makeText(SignInActivity2.this,"Error during Twitter Login!",Toast.LENGTH_LONG).show();
                 } else {
+                    dialog = ProgressDialog.show((Context)SignInActivity2.this, null, "Initializing Data ... Please wait.");
                     if (user.isNew()) {
                         user.put("userType", "app");
                         user.saveInBackground();
                     }
 
                     AppUtil.setTwitterLoggedIn(SignInActivity2.this, true);
+                    AppUtil.setIsSignedIn(SignInActivity2.this, true);
+                    AppUtil.setSignedInUserID(SignInActivity2.this, user.getObjectId());
 
                     OConnectBaseActivity.currentPerson = Person.saveFromParseUser(user, false);
                     callTwitterImportAPI(user);
 
+                    // dialog.dismiss();
+
                     Intent i = new Intent(SignInActivity2.this, DashboardActivity.class);
-                    startActivity(i);
+                    SignInActivity2.this.startActivity(i);
                 }
             }
         });
@@ -203,25 +222,33 @@ public class SignInActivity2 extends AppCompatActivity {
     }
 
     public void facebookLoginClicked(View sender) {
-        ParseFacebookUtils.logInWithReadPermissionsInBackground(this, Arrays.asList("email", "user_photos", "public_profile", "user_friends")
+        // ParseFacebookUtils.initialize(this);
+
+        List<String> permissions = Arrays.asList("email", "user_photos", "public_profile", "user_friends");
+        ParseFacebookUtils.logInWithReadPermissionsInBackground(this, permissions
                 , new LogInCallback() {
                     @Override
                     public void done(ParseUser user, ParseException err) {
                         if (user == null) {
                             Toast.makeText(SignInActivity2.this,"Error during Facebook Login!",Toast.LENGTH_LONG).show();
                         } else {
+                            dialog = ProgressDialog.show((Context)SignInActivity2.this, null, "Initializing Data ... Please wait.");
                             if (user.isNew()) {
                                 user.put("userType", "app");
                                 user.saveInBackground();
                             }
 
                             AppUtil.setFacebookLoggedIn(SignInActivity2.this, true);
+                            AppUtil.setIsSignedIn(SignInActivity2.this, true);
+                            AppUtil.setSignedInUserID(SignInActivity2.this, user.getObjectId());
 
                             OConnectBaseActivity.currentPerson = Person.saveFromParseUser(user, false);
                             callFacebookImportAPI(user);
 
+                            // dialog.dismiss();
+
                             Intent i = new Intent(SignInActivity2.this, DashboardActivity.class);
-                            startActivity(i);
+                            SignInActivity2.this.startActivity(i);
                         }
                     }
 
@@ -240,9 +267,22 @@ public class SignInActivity2 extends AppCompatActivity {
     public void linkedInLoginClicked(View sender) {
         final Activity thisActivity = this;
 
-        LISessionManager.getInstance(getApplicationContext()).init(thisActivity, buildScope(), new AuthListener() {
+        if (appInstalledOrNot("com.linkedin.android") == false) {
+
+            try {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + "com.linkedin.android")));
+            } catch (android.content.ActivityNotFoundException anfe) {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + "com.linkedin.android")));
+            }
+
+            return;
+        }
+
+        LISessionManager.getInstance(this).init(this, buildScope(), new AuthListener() {
             @Override
             public void onAuthSuccess() {
+                dialog = ProgressDialog.show((Context)SignInActivity2.this, null, "Initializing Data ... Please wait.");
+
                 // Authentication was successful.  You can now do
                 // other calls with the SDK.
                 String url = "https://api.linkedin.com/v1/people/~:(id,first-name,last-name,email-address)";
@@ -324,12 +364,17 @@ public class SignInActivity2 extends AppCompatActivity {
                                         parseUser = user;
                                     }
 
+                                    AppUtil.setIsSignedIn(SignInActivity2.this, true);
+                                    AppUtil.setSignedInUserID(SignInActivity2.this, parseUser.getObjectId());
+
                                     OConnectBaseActivity.currentPerson = Person.saveFromParseUser(parseUser, false);
 
                                     Intent i = new Intent(SignInActivity2.this, DashboardActivity.class);
                                     startActivity(i);
 
                                 }
+
+                                dialog.dismiss();
                             }
                         });
                     }
@@ -337,6 +382,8 @@ public class SignInActivity2 extends AppCompatActivity {
                     @Override
                     public void onApiError(LIApiError liApiError) {
                         // Error making GET request!
+                        Log.d("APD", "APD " + liApiError.getMessage());
+                        dialog.dismiss();
                     }
                 });
             }
@@ -344,13 +391,14 @@ public class SignInActivity2 extends AppCompatActivity {
             @Override
             public void onAuthError(LIAuthError error) {
                 // Handle authentication errors
+                Log.d("APD", "APD " + error.toString());
             }
-        }, true);
+        }, false);
     }
 
     // Build the list of member permissions our LinkedIn session requires
     private static Scope buildScope() {
-        return Scope.build(Scope.R_BASICPROFILE, Scope.W_SHARE);
+        return Scope.build(Scope.R_BASICPROFILE, Scope.R_EMAILADDRESS, Scope.W_SHARE);
     }
 
     private String getQuery(List<NameValuePair> params) throws UnsupportedEncodingException
@@ -363,12 +411,14 @@ public class SignInActivity2 extends AppCompatActivity {
             if (first)
                 first = false;
             else
-                result.append("&");
+                result.append("&amp;");
 
             result.append(URLEncoder.encode(pair.getName(), "UTF-8"));
             result.append("=");
             result.append(URLEncoder.encode(pair.getValue(), "UTF-8"));
         }
+
+        Log.d("APD", "ARGS for Import: " + result.toString());
 
         return result.toString();
     }
@@ -650,6 +700,8 @@ public class SignInActivity2 extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // Add this line to your existing onActivityResult() method
         LISessionManager.getInstance(getApplicationContext()).onActivityResult(this, requestCode, resultCode, data);
+
+        ParseFacebookUtils.onActivityResult(requestCode, resultCode, data);
     }
 
     public class FacebookImportTask extends AsyncTask<ParseUser, Void, String> {
@@ -667,9 +719,13 @@ public class SignInActivity2 extends AppCompatActivity {
                 tokenStr = token.getToken();
             }
 
-            String urlStr = getString(R.string.oconnect_base_url_production) + "/functions/facebookProfile";
-
             try {
+                List<NameValuePair> params = new ArrayList<NameValuePair>();
+                params.add(new BasicNameValuePair("ocUser", user.getObjectId()));
+                params.add(new BasicNameValuePair("token", tokenStr));
+
+                String urlStr = App.getInstance().getString(R.string.oconnect_base_url_production) + "/functions/facebookProfile";
+
                 URL url = new URL(urlStr);
                 HttpURLConnection client = (HttpURLConnection) url.openConnection();
 
@@ -683,10 +739,6 @@ public class SignInActivity2 extends AppCompatActivity {
                 client.setDoOutput(true);
 
 
-                List<NameValuePair> params = new ArrayList<NameValuePair>();
-                params.add(new BasicNameValuePair("ocUser", user.getObjectId()));
-                params.add(new BasicNameValuePair("token", tokenStr));
-
                 OutputStream os = new BufferedOutputStream(client.getOutputStream());
                 BufferedWriter writer = new BufferedWriter(
                         new OutputStreamWriter(os, "UTF-8"));
@@ -696,9 +748,11 @@ public class SignInActivity2 extends AppCompatActivity {
                 os.close();
 
                 if(client.getResponseCode() == HttpURLConnection.HTTP_OK){
-                    String server_response = readStream(client.getInputStream());
                     Log.d("APD", "Facebook Import Cloud Method Called with Code: " + client.getResponseCode() +
-                            " with Response Message: " + server_response);
+                            " with Response Message: " + client.getResponseMessage());
+                } else {
+                    Log.d("APD", "Facebook Import Cloud Method Called with Code: " + client.getResponseCode() +
+                            " with Response Message: " + client.getResponseMessage());
                 }
             } catch (Exception ex) {
                 Log.d("APD", ex.getMessage());
@@ -728,7 +782,7 @@ public class SignInActivity2 extends AppCompatActivity {
 
             String userIdStr = ParseTwitterUtils.getTwitter().getUserId();
 
-            String urlStr = getString(R.string.oconnect_base_url_production) + "/functions/twitterProfile";
+            String urlStr = App.getInstance().getString(R.string.oconnect_base_url_production) + "/functions/twitterProfile";
 
             try {
                 URL url = new URL(urlStr);
@@ -756,9 +810,11 @@ public class SignInActivity2 extends AppCompatActivity {
                 os.close();
 
                 if(client.getResponseCode() == HttpURLConnection.HTTP_OK){
-                    String server_response = readStream(client.getInputStream());
                     Log.d("APD", "Twitter Import Cloud Method Called with Code: " + client.getResponseCode() +
-                            " with Response Message: " + server_response);
+                            " with Response Message: " + client.getResponseMessage());
+                } else {
+                    Log.d("APD", "Twitter Import Cloud Method Called with Code: " + client.getResponseCode() +
+                            " with Response Message: " + client.getResponseMessage());
                 }
 
             } catch (Exception ex) {
@@ -783,7 +839,7 @@ public class SignInActivity2 extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... args) {
-            String urlStr = getString(R.string.oconnect_base_url_production) + "/functions/linkedInProfile";
+            String urlStr = App.getInstance().getString(R.string.oconnect_base_url_production) + "/functions/linkedInProfile";
 
             try {
                 URL url = new URL(urlStr);
@@ -812,9 +868,11 @@ public class SignInActivity2 extends AppCompatActivity {
                 os.close();
 
                 if (client.getResponseCode() == HttpURLConnection.HTTP_OK) {
-                    String server_response = readStream(client.getInputStream());
                     Log.d("APD", "LinkedIn Import Cloud Method Called with Code: " + client.getResponseCode() +
-                            " with Response Message: " + server_response);
+                            " with Response Message: " + client.getResponseMessage());
+                } else {
+                    Log.d("APD", "LinkedIn Import Cloud Method Called with Code: " + client.getResponseCode() +
+                            " with Response Message: " + client.getResponseMessage());
                 }
             } catch (Exception ex) {
                 Log.d("APD", ex.getMessage());
@@ -855,5 +913,16 @@ public class SignInActivity2 extends AppCompatActivity {
             }
         }
         return response.toString();
+    }
+
+    private boolean appInstalledOrNot(String uri) {
+        PackageManager pm = getPackageManager();
+        try {
+            pm.getPackageInfo(uri, PackageManager.GET_ACTIVITIES);
+            return true;
+        } catch (PackageManager.NameNotFoundException e) {
+        }
+
+        return false;
     }
 }

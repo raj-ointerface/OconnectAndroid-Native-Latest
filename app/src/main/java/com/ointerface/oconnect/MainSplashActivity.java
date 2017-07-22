@@ -12,6 +12,7 @@ import android.util.Log;
 import com.ointerface.oconnect.data.DataSyncManager;
 import com.ointerface.oconnect.data.IDataSyncListener;
 import com.ointerface.oconnect.data.SpeakerEventCache;
+import com.ointerface.oconnect.push.MyParsePNReceiver;
 import com.ointerface.oconnect.service.BackgroundService;
 import com.ointerface.oconnect.util.AppUtil;
 import com.parse.ParseAnalytics;
@@ -24,14 +25,20 @@ import java.util.Date;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
+import com.crashlytics.android.Crashlytics;
+import io.fabric.sdk.android.Fabric;
+
 public class MainSplashActivity extends AppCompatActivity implements IDataSyncListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Fabric.with(this, new Crashlytics());
+
         setContentView(R.layout.activity_main_splash);
 
-
+        /*
         DataSyncManager.dialog = ProgressDialog.show((Context)this, null, "Initializing Data ... Please wait.");
 
         AsyncTask.execute(new Runnable() {
@@ -41,11 +48,12 @@ public class MainSplashActivity extends AppCompatActivity implements IDataSyncLi
                 DataSyncManager.beginDataSync(getApplicationContext(), MainSplashActivity.this);
             }
         });
+        */
 
+        MyParsePNReceiver.setBadge(this, MyParsePNReceiver.getAlertCount(this));
 
-        // startService(new Intent(this, BackgroundService.class));
+        startService(new Intent(this, BackgroundService.class));
 
-        /*
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             public void run() {
@@ -54,7 +62,6 @@ public class MainSplashActivity extends AppCompatActivity implements IDataSyncLi
                 startActivity(i);
             }
         }, 4000);
-        */
     }
 
     public void onDataSyncFinish() {

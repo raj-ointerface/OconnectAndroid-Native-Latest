@@ -349,7 +349,19 @@ public class OConnectBaseActivity extends AppCompatActivity
         });
 
         if (AppUtil.getIsSignedIn(OConnectBaseActivity.this) == true && currentPerson != null) {
-            tvName.setText(currentPerson.getFirstName() + " " + currentPerson.getLastName());
+            String firstName = "";
+            String lastName = "";
+
+            if (currentPerson.getFirstName() != null) {
+                firstName = currentPerson.getFirstName();
+            }
+
+            if (currentPerson.getLastName() != null) {
+                lastName = currentPerson.getLastName();
+            }
+
+
+            tvName.setText(firstName + " " + lastName);
 
             try {
                 if (currentPerson.getPictureURL() != null
@@ -952,11 +964,11 @@ public class OConnectBaseActivity extends AppCompatActivity
             }
         });
 
-        ImageView ivTwitter = (ImageView) findViewById(R.id.ivTwitter);
+        ImageView ivTwitter = (ImageView) navigationViewRight.findViewById(R.id.ivTwitter);
         ivTwitter.setBackground(AppUtil.changeDrawableColor(this, R.drawable.twitter_icon, AppUtil.getPrimaryThemColorAsInt()));
-        ImageView ivFacebook = (ImageView) findViewById(R.id.ivFacebook);
+        ImageView ivFacebook = (ImageView) navigationViewRight.findViewById(R.id.ivFacebook);
         ivFacebook.setBackground(AppUtil.changeDrawableColor(this, R.drawable.social_facebook, AppUtil.getPrimaryThemColorAsInt()));
-        ImageView ivLinkedIn = (ImageView) findViewById(R.id.ivLinkedIn);
+        ImageView ivLinkedIn = (ImageView) navigationViewRight.findViewById(R.id.ivLinkedIn);
         ivLinkedIn.setBackground(AppUtil.changeDrawableColor(this, R.drawable.social_linkedin, AppUtil.getPrimaryThemColorAsInt()));
     }
 

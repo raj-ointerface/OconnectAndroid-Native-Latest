@@ -1338,6 +1338,8 @@ public class DataSyncManager {
 
                             attendee.setEmail(parseObject.getString("email"));
 
+                            attendee.setCheckedIn(parseObject.getBoolean("isCheckedIn"));
+
                             ParseObject conferenceObj = parseObject.getParseObject("conference");
 
                             if (conferenceObj != null) {
@@ -1394,6 +1396,8 @@ public class DataSyncManager {
                             result.setJob(parseObject.getString("job"));
 
                             result.setEmail(parseObject.getString("email"));
+
+                            result.setCheckedIn(parseObject.getBoolean("isCheckedIn"));
 
                             ParseObject conferenceObj = parseObject.getParseObject("conference");
 
@@ -1876,7 +1880,7 @@ public class DataSyncManager {
         Date date = getLastSyncDate();
 
         if (date != null) {
-            // query.whereGreaterThanOrEqualTo("updatedAt", date);
+            query.whereGreaterThanOrEqualTo("updatedAt", date);
         }
 
         Log.d("DataSyncManager", "Begin Parse Query For TravelBusiness");
@@ -1950,7 +1954,7 @@ public class DataSyncManager {
         Date date = getLastSyncDate();
 
         if (date != null) {
-            // query.whereGreaterThanOrEqualTo("updatedAt", date);
+            query.whereGreaterThanOrEqualTo("updatedAt", date);
         }
 
         Log.d("DataSyncManager", "Begin Parse Query For SurveyQuestion");
@@ -2014,7 +2018,7 @@ public class DataSyncManager {
         Date date = getLastSyncDate();
 
         if (date != null) {
-            // query.whereGreaterThanOrEqualTo("updatedAt", date);
+            query.whereGreaterThanOrEqualTo("updatedAt", date);
         }
 
         Log.d("DataSyncManager", "Begin Parse Query For SurveyQuestionAnswer");
@@ -2064,7 +2068,7 @@ public class DataSyncManager {
         Date date = getLastSyncDate();
 
         if (date != null) {
-            // query.whereGreaterThanOrEqualTo("updatedAt", date);
+            query.whereGreaterThanOrEqualTo("updatedAt", date);
         }
 
         Log.d("DataSyncManager", "Begin Parse Query For SurveyQuestionAnswerRelation");
@@ -2136,7 +2140,7 @@ public class DataSyncManager {
         Date date = getLastSyncDate();
 
         if (date != null) {
-            // query.whereGreaterThanOrEqualTo("updatedAt", date).whereNotEqualTo("isDeleted", true);
+            query.whereGreaterThanOrEqualTo("updatedAt", date).whereNotEqualTo("isDeleted", true);
         }
 
 
@@ -2245,7 +2249,7 @@ public class DataSyncManager {
         Date date = getLastSyncDate();
 
         if (date != null) {
-            // query.whereGreaterThanOrEqualTo("updatedAt", date);
+            query.whereGreaterThanOrEqualTo("updatedAt", date);
         }
 
         Log.d("DataSyncManager", "Begin Parse Query For DBQuestion");
@@ -2348,7 +2352,7 @@ public class DataSyncManager {
         Date date = getLastSyncDate();
 
         if (date != null) {
-            // query.whereGreaterThanOrEqualTo("updatedAt", date);
+            query.whereGreaterThanOrEqualTo("updatedAt", date);
         }
 
         Log.d("DataSyncManager", "Begin Parse Query For Votes");
@@ -2430,7 +2434,7 @@ public class DataSyncManager {
 
     static public Date getLastSyncDate() {
         SharedPreferences prefs = context.getSharedPreferences(AppConfig.sharedPrefsName, MODE_PRIVATE);
-        String lastSyncDateStr = prefs.getString(AppConfig.lastSyncDateName, "2017-05-15T17:00:00");
+        String lastSyncDateStr = prefs.getString(AppConfig.lastSyncDateName, "2017-07-14T07:00:00");
 
         SimpleDateFormat isoFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
         isoFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
