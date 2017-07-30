@@ -112,70 +112,6 @@ public class App extends MultiDexApplication implements ServiceConnection, Messa
             RealmMigration migration = new RealmMigration() {
                 @Override
                 public void migrate(DynamicRealm realm, long oldVersion, long newVersion) {
-                    // realm.getSchema().get("Attendee").setRequired("objectId", true);
-                    // realm.getSchema().get("Conference").setRequired("objectId", true);
-                    // realm.getSchema().get("Event").setRequired("objectId", true);
-                    // realm.getSchema().get("Maps").setRequired("objectId", true);
-                    // realm.getSchema().get("MasterNotification").setRequired("objectId", true);
-                    // realm.getSchema().get("MyNote").setRequired("objectId", true);
-                    // realm.getSchema().get("Organization").setRequired("objectId", true);
-                    // realm.getSchema().get("Person").setRequired("objectId", true);
-                    // realm.getSchema().get("Person").addRealmListField("favoriteUsers", realm.getSchema().get("Person"));
-                    // realm.getSchema().get("Person").addRealmListField("favoriteSpeakers", realm.getSchema().get("Speaker"));
-                    // realm.getSchema().get("Person").addRealmListField("favoriteAttendees", realm.getSchema().get("Attendee"));
-                    // realm.getSchema().get("Person").addRealmListField("suggestedConnections", realm.getSchema().get("Person"));
-                    // realm.getSchema().get("Person").removeField("locaton");
-                    // realm.getSchema().get("Person").addField("location", String.class);
-                    // realm.getSchema().create("PredAnalyticsMatches");
-                    // realm.getSchema().get("PredAnalyticsMatches").addField("objectId", String.class);
-                    // realm.getSchema().get("PredAnalyticsMatches").addPrimaryKey("objectId").setRequired("objectId", true);
-                    // realm.getSchema().get("PredAnalyticsMatches").addField("scoreConferences", double.class);
-                    // realm.getSchema().get("PredAnalyticsMatches").addField("scoreLocation", double.class);
-                    // realm.getSchema().get("PredAnalyticsMatches").addField("isRejected", boolean.class);
-                    // realm.getSchema().get("PredAnalyticsMatches").addField("scoreSurveyAnswers", double.class);
-                    // realm.getSchema().get("PredAnalyticsMatches").addField("isDeleted", boolean.class);
-                    // realm.getSchema().get("PredAnalyticsMatches").addField("isAccepted", boolean.class);
-                    // realm.getSchema().get("PredAnalyticsMatches").addField("score", double.class);
-                    // realm.getSchema().get("PredAnalyticsMatches").addField("scoreBio", double.class);
-                    // realm.getSchema().get("PredAnalyticsMatches").addField("id1", String.class);
-                    // realm.getSchema().get("PredAnalyticsMatches").addField("id2", String.class);
-                    // realm.getSchema().get("PredAnalyticsMatches").addField("scoreInterests", double.class);
-
-                    // realm.getSchema().get("Event").addField("info", String.class);
-                    // realm.getSchema().get("Speaker").addField("speakerLabel", String.class);
-
-                    // realm.getSchema().create("EventLink");
-                    // realm.getSchema().get("EventLink").addField("objectId", String.class);
-                    // realm.getSchema().get("EventLink").addPrimaryKey("objectId").setRequired("objectId", true);
-                    // realm.getSchema().get("EventLink").addField("eventID", String.class);
-                    // realm.getSchema().get("EventLink").addField("label", String.class);
-                    // realm.getSchema().get("EventLink").addField("link", String.class);
-
-                    // realm.getSchema().get("Session").setRequired("objectId", true);
-                    // realm.getSchema().get("Speaker").setRequired("objectId", true);
-                    // realm.getSchema().get("SpeakerEventCache").setRequired("objectId", true);
-                    // realm.getSchema().get("Sponsor").setRequired("objectId", true);
-
-                    /*
-                    realm.getSchema().get("Speaker").removeField("eventsList");
-                    realm.getSchema().get("Attendee").removeField("eventsList");
-                    realm.getSchema().get("Speaker").removeField("updatedAt");
-                    realm.getSchema().get("Attendee").removeField("updatedAt");
-                    */
-
-                    /*
-                    realm.getSchema().create("TravelBusiness");
-                    realm.getSchema().get("TravelBusiness").addField("objectId", String.class);
-                    realm.getSchema().get("TravelBusiness").addPrimaryKey("objectId").setRequired("objectId", true);
-                    realm.getSchema().get("TravelBusiness").addField("businessName", String.class);
-                    realm.getSchema().get("TravelBusiness").addField("otherDetails", String.class);
-                    realm.getSchema().get("TravelBusiness").addField("rates", String.class);
-                    realm.getSchema().get("TravelBusiness").addField("address", String.class);
-                    realm.getSchema().get("TravelBusiness").addField("businessType", String.class);
-                    realm.getSchema().get("TravelBusiness").addField("website", String.class);
-                    realm.getSchema().get("TravelBusiness").addField("conference", String.class);
-                    realm.getSchema().get("TravelBusiness").addField("key", String.class);
-                    */
 
                     /*
                     realm.getSchema().create("SurveyQuestion");
@@ -186,82 +122,8 @@ public class App extends MultiDexApplication implements ServiceConnection, Messa
                     realm.getSchema().get("SurveyQuestion").addField("conference", String.class);
                     */
 
-                    /*
-                    realm.getSchema().create("SurveyQuestionAnswer");
-                    realm.getSchema().get("SurveyQuestionAnswer").addField("objectId", String.class);
-                    realm.getSchema().get("SurveyQuestionAnswer").addPrimaryKey("objectId").setRequired("objectId", true);
-                    realm.getSchema().get("SurveyQuestionAnswer").addField("title", String.class);
-                    */
 
-                    /*
-                    realm.getSchema().create("SurveyQuestionAnswerRelation");
-                    realm.getSchema().get("SurveyQuestionAnswerRelation").addField("objectId", String.class);
-                    realm.getSchema().get("SurveyQuestionAnswerRelation").addPrimaryKey("objectId").setRequired("objectId", true);
-                    realm.getSchema().get("SurveyQuestionAnswerRelation").addField("surveyQuestion", String.class);
-                    realm.getSchema().get("SurveyQuestionAnswerRelation").addField("surveyQuestionAnswer", String.class);
-                    */
-
-                    /*
-                    realm.getSchema().create("UserSurveyAnswer");
-                    realm.getSchema().get("UserSurveyAnswer").addField("objectId", String.class);
-                    realm.getSchema().get("UserSurveyAnswer").addPrimaryKey("objectId").setRequired("objectId", true);
-                    realm.getSchema().get("UserSurveyAnswer").addField("questionId", String.class);
-                    realm.getSchema().get("UserSurveyAnswer").addField("questionAnswerIds", String.class);
-                    realm.getSchema().get("UserSurveyAnswer").addField("userId", String.class);
-                    */
-
-                    /*
-                    realm.getSchema().get("Attendee").addField("isCheckedIn", Boolean.class);
-                    realm.getSchema().get("Attendee").addField("email", String.class);
-                    */
-
-                    /*
-                    realm.getSchema().create("SinchMessage");
-                    realm.getSchema().get("SinchMessage").addField("messageString", String.class);
-                    realm.getSchema().get("SinchMessage").addField("messageDateTime", Date.class);
-                    realm.getSchema().get("SinchMessage").addField("currentUserID", String.class);
-                    realm.getSchema().get("SinchMessage").addField("connectedUserID", String.class);
-                    realm.getSchema().get("SinchMessage").addField("isIncoming", Boolean.class);
-                    */
-
-                    // realm.getSchema().get("Speaker").addField("email", String.class);
-
-                    /*
-                    realm.getSchema().create("DiscussionBoard");
-                    realm.getSchema().get("DiscussionBoard").addField("objectId", String.class);
-                    realm.getSchema().get("DiscussionBoard").addPrimaryKey("objectId").setRequired("objectId", true);
-                    realm.getSchema().get("DiscussionBoard").addField("updatedAt", Date.class);
-                    realm.getSchema().get("DiscussionBoard").addField("moderatorName", String.class);
-                    realm.getSchema().get("DiscussionBoard").addField("hasQuestions", Boolean.class);
-                    realm.getSchema().get("DiscussionBoard").addField("event", String.class);
-                    realm.getSchema().get("DiscussionBoard").addField("conference", String.class);
-                    */
-
-                    /*
-                    realm.getSchema().create("DBQuestion");
-                    realm.getSchema().get("DBQuestion").addField("objectId", String.class);
-                    realm.getSchema().get("DBQuestion").addPrimaryKey("objectId").setRequired("objectId", true);
-                    realm.getSchema().get("DBQuestion").addField("updatedAt", Date.class);
-                    realm.getSchema().get("DBQuestion").addField("isResolved", Boolean.class);
-                    realm.getSchema().get("DBQuestion").addField("votes", Integer.class);
-                    realm.getSchema().get("DBQuestion").addField("user_email", String.class);
-                    realm.getSchema().get("DBQuestion").addField("question", String.class);
-                    realm.getSchema().get("DBQuestion").addField("event", String.class);
-                    realm.getSchema().get("DBQuestion").addField("conference", String.class);
-                    realm.getSchema().get("DBQuestion").addField("discussionBoard", String.class);
-                    */
-
-
-                    /*
-                    realm.getSchema().create("Votes");
-                    realm.getSchema().get("Votes").addField("objectId", String.class);
-                    realm.getSchema().get("Votes").addPrimaryKey("objectId").setRequired("objectId", true);
-                    realm.getSchema().get("Votes").addField("updatedAt", Date.class);
-                    realm.getSchema().get("Votes").addField("type", String.class);
-                    realm.getSchema().get("Votes").addField("question", String.class);
-                    realm.getSchema().get("Votes").addField("user", String.class);
-                    realm.getSchema().get("Votes").addField("lastVoteIsUp", Boolean.class);
-                    */
+                    realm.getSchema().get("SinchMessage").addField("isRead", Boolean.class);
                 }
             };
 

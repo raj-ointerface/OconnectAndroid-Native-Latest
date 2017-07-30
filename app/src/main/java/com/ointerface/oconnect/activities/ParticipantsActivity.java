@@ -207,7 +207,7 @@ public class ParticipantsActivity extends OConnectBaseActivity {
 
         navigation.setSelectedItemId(R.id.navigation_speakers);
 
-        displaySpeakers();
+        displayAttendees();
 
         if (AppUtil.getParticipantsTutorialShown(this) == false && AppConfig.bParticipantsTutorialShown == false) {
             FragmentManager fm = getSupportFragmentManager();

@@ -104,6 +104,8 @@ public class ConferenceListViewAdapter extends BaseAdapter {
 
                     SimpleDateFormat sdFormat1 = new SimpleDateFormat("MMMM d");
                     SimpleDateFormat sdFormat2 = new SimpleDateFormat("MMMM d yyyy");
+                    sdFormat1.setTimeZone(java.util.TimeZone.getTimeZone("GMT"));
+                    sdFormat2.setTimeZone(java.util.TimeZone.getTimeZone("GMT"));
 
                     if (conference.getEndTime() == null) {
                         holder.tvConferenceDate.setText(sdFormat2.format(conference.getStartTime()));

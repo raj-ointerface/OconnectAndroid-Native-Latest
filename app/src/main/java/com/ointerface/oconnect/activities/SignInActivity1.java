@@ -54,6 +54,9 @@ public class SignInActivity1 extends AppCompatActivity {
 
         ImageView ivOrgLogo = (ImageView) findViewById(R.id.ivSignInLogo);
 
+        ivOrgLogo.setImageResource(R.drawable.splash_oconnect_logo);
+
+        /*
         Realm realm = AppUtil.getRealmInstance(App.getInstance());
 
         Organization result = realm.where(Organization.class).equalTo("objectId", OConnectBaseActivity.selectedConference.getOrganization()).findFirst();
@@ -65,5 +68,6 @@ public class SignInActivity1 extends AppCompatActivity {
                 ivOrgLogo.setImageBitmap(bm);
             }
         }
+        */
     }
 }

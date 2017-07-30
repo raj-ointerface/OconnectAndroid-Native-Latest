@@ -158,6 +158,7 @@ public class AnalyticsSurveyActivity extends OConnectBaseActivity {
                 saveAnswerToParse();
 
                 if (tvNext.getText().toString().equalsIgnoreCase("Finish")) {
+                    AppUtil.setAnalyticsSurveyFinished(AnalyticsSurveyActivity.this, true);
                     AnalyticsSurveyActivity.this.finish();
                 } else {
                     ++currentQuestionNumber;

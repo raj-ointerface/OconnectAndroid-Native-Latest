@@ -145,7 +145,7 @@ public class AttendeeDetailViewFragment extends Fragment {
 
         ImageView ivMessage = (ImageView) rootView.findViewById(R.id.ivMessage);
 
-        ivMessage.setBackground(AppUtil.changeDrawableColor(activity, R.drawable.icon_envelop, AppUtil.getPrimaryThemColorAsInt()));
+        ivMessage.setBackground(AppUtil.changeDrawableColor(activity, R.drawable.icon_say_hi, AppUtil.getPrimaryThemColorAsInt()));
 
         TextView tvMessage = (TextView) rootView.findViewById(R.id.tvMessage);
 
@@ -159,7 +159,7 @@ public class AttendeeDetailViewFragment extends Fragment {
             Person user = realm.where(Person.class).equalTo("objectId", attendee.getUserLink()).findFirst();
 
             if (user != null && user.isContactable() == false) {
-                ivMessage.setBackground(AppUtil.changeDrawableColor(activity, R.drawable.icon_envelop, AppConfig.hiddenGreyBackgroundColor));
+                ivMessage.setBackground(AppUtil.changeDrawableColor(activity, R.drawable.icon_say_hi, AppConfig.hiddenGreyBackgroundColor));
                 tvMessage.setTextColor(AppConfig.hiddenGreyBackgroundColor);
                 tvMessage.setOnClickListener(null);
                 ivMessage.setOnClickListener(null);

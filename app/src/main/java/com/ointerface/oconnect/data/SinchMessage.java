@@ -17,6 +17,15 @@ public class SinchMessage  extends RealmObject {
     private String currentUserID = "";
     private String connectedUserID = "";
     private Boolean isIncoming = true;
+    private Boolean isRead = false;
+
+    public Boolean getRead() {
+        return isRead;
+    }
+
+    public void setRead(Boolean read) {
+        isRead = read;
+    }
 
     public Boolean getIncoming() {
         return isIncoming;

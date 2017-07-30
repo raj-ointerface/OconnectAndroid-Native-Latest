@@ -29,8 +29,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.ointerface.oconnect.activities.*;
 
+import com.ointerface.oconnect.data.Attendee;
 import com.ointerface.oconnect.data.Conference;
 import com.ointerface.oconnect.data.Person;
+import com.ointerface.oconnect.data.Speaker;
 import com.ointerface.oconnect.util.AppConfig;
 import com.ointerface.oconnect.util.AppUtil;
 import com.parse.ParseObject;
@@ -79,6 +81,8 @@ public class ConferenceListViewActivity extends AppCompatActivity {
 
             BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
 
+            navigation.setBackgroundColor(AppConfig.whiteColor);
+
             View view1 = navigation.findViewById(R.id.navigation_coming_soon);
 
             RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -89,6 +93,8 @@ public class ConferenceListViewActivity extends AppCompatActivity {
 
             view1.setLayoutParams(lp);
 
+            view1.requestLayout();
+
             View view2 = navigation.findViewById(R.id.navigation_all_upcoming);
 
             // LinearLayout.LayoutParams lp2 = (LinearLayout.LayoutParams) view2.getLayoutParams();
@@ -96,12 +102,16 @@ public class ConferenceListViewActivity extends AppCompatActivity {
 
             view2.setLayoutParams(lp);
 
+            view2.requestLayout();
+
             View view3 = navigation.findViewById(R.id.navigation_past);
 
             // LinearLayout.LayoutParams lp3 = (LinearLayout.LayoutParams) view3.getLayoutParams();
             // lp3.setMargins(marginPx, marginPx, marginPx, marginPx);
 
             view3.setLayoutParams(lp);
+
+            view3.requestLayout();
 
             switch (item.getItemId()) {
                 case R.id.navigation_coming_soon:
@@ -287,6 +297,14 @@ public class ConferenceListViewActivity extends AppCompatActivity {
 
         view1.setPadding(0,0,0,30);
 
+        LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        params1.setMargins(0, 0, AppUtil.convertDPToPXInt(this, 3), 0);
+
+        view1.setLayoutParams(params1);
+
+        view1.requestLayout();
+
         View view2 = navigation.findViewById(R.id.navigation_all_upcoming);
 
         view2.setPadding(0,0,0,30);
@@ -294,6 +312,14 @@ public class ConferenceListViewActivity extends AppCompatActivity {
         View view3 = navigation.findViewById(R.id.navigation_past);
 
         view3.setPadding(0,0,0,30);
+
+        LinearLayout.LayoutParams params3 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        params3.setMargins(AppUtil.convertDPToPXInt(this, 3), 0, 0, 0);
+
+        view3.setLayoutParams(params3);
+
+        view3.requestLayout();
 
         search = (SearchView) findViewById(R.id.search);
 
@@ -419,9 +445,34 @@ public class ConferenceListViewActivity extends AppCompatActivity {
 
         String usernametxt = OConnectBaseActivity.currentPerson.getContact_email();
         try {
+            final Realm realm = AppUtil.getRealmInstance(App.getInstance());
+
             List<ParseObject> speakerList = ParseQuery.getQuery("Speaker").whereEqualTo("email", usernametxt).find();
             List<ParseObject> attendeeList = ParseQuery.getQuery("Attendee").whereEqualTo("email", usernametxt).find();
 
+            if (speakerList.size() > 0) {
+                ParseObject speakerObj = speakerList.get(0);
+                speakerObj.put("UserLink", OConnectBaseActivity.currentPerson.getObjectId());
+                speakerObj.save();
+
+                realm.beginTransaction();
+                Speaker speaker = realm.where(Speaker.class).equalTo("objectId", speakerObj.getObjectId()).findFirst();
+                if (speaker != null) {
+                    speaker.setUserLink(OConnectBaseActivity.currentPerson.getObjectId());
+                }
+                realm.commitTransaction();
+            } else if (attendeeList.size() > 0) {
+                ParseObject attendeeObj = attendeeList.get(0);
+                attendeeObj.put("UserLink", OConnectBaseActivity.currentPerson.getObjectId());
+                attendeeObj.save();
+
+                realm.beginTransaction();
+                Attendee attendee = realm.where(Attendee.class).equalTo("objectId", attendeeObj.getObjectId()).findFirst();
+                if (attendee != null) {
+                    attendee.setUserLink(OConnectBaseActivity.currentPerson.getObjectId());
+                }
+                realm.commitTransaction();
+            }
 
             if (speakerList.size() == 0 &&
                     attendeeList.size() == 0 &&
@@ -449,11 +500,27 @@ public class ConferenceListViewActivity extends AppCompatActivity {
                                 ParseObject speakerObj = speakerList.get(0);
                                 speakerObj.put("UserLink", OConnectBaseActivity.currentPerson.getObjectId());
                                 speakerObj.save();
+
+                                realm.beginTransaction();
+                                Speaker speaker = realm.where(Speaker.class).equalTo("objectId", speakerObj.getObjectId()).findFirst();
+                                if (speaker != null) {
+                                    speaker.setUserLink(OConnectBaseActivity.currentPerson.getObjectId());
+                                }
+                                realm.commitTransaction();
+
                                 bUserLinked = true;
                             } else if (attendeeList.size() > 0) {
                                 ParseObject attendeeObj = attendeeList.get(0);
                                 attendeeObj.put("UserLink", OConnectBaseActivity.currentPerson.getObjectId());
                                 attendeeObj.save();
+
+                                realm.beginTransaction();
+                                Attendee attendee = realm.where(Attendee.class).equalTo("objectId", attendeeObj.getObjectId()).findFirst();
+                                if (attendee != null) {
+                                    attendee.setUserLink(OConnectBaseActivity.currentPerson.getObjectId());
+                                }
+                                realm.commitTransaction();
+
                                 bUserLinked = true;
                             }
 
@@ -509,11 +576,27 @@ public class ConferenceListViewActivity extends AppCompatActivity {
                                         ParseObject speakerObj = speakerList.get(0);
                                         speakerObj.put("UserLink", OConnectBaseActivity.currentPerson.getObjectId());
                                         speakerObj.save();
+
+                                        realm.beginTransaction();
+                                        Speaker speaker = realm.where(Speaker.class).equalTo("objectId", speakerObj.getObjectId()).findFirst();
+                                        if (speaker != null) {
+                                            speaker.setUserLink(OConnectBaseActivity.currentPerson.getObjectId());
+                                        }
+                                        realm.commitTransaction();
+
                                         bUserLinked = true;
                                     } else if (attendeeList.size() > 0) {
                                         ParseObject attendeeObj = attendeeList.get(0);
                                         attendeeObj.put("UserLink", OConnectBaseActivity.currentPerson.getObjectId());
                                         attendeeObj.save();
+
+                                        realm.beginTransaction();
+                                        Attendee attendee = realm.where(Attendee.class).equalTo("objectId", attendeeObj.getObjectId()).findFirst();
+                                        if (attendee != null) {
+                                            attendee.setUserLink(OConnectBaseActivity.currentPerson.getObjectId());
+                                        }
+                                        realm.commitTransaction();
+
                                         bUserLinked = true;
                                     }
 
@@ -583,15 +666,21 @@ public class ConferenceListViewActivity extends AppCompatActivity {
 
         Realm realm = AppUtil.getRealmInstance(App.getInstance());
         RealmResults<Conference> results = null;
-        Date dNow = new Date();
+
+        Calendar cNow = new GregorianCalendar();
+        cNow.setTimeZone(java.util.TimeZone.getTimeZone("GMT"));
+
+        Date dNow = cNow.getTime();
 
         String[] sortBy = {"group","startTime", "endTime"};
         Sort[] sortAscending = {Sort.ASCENDING, Sort.DESCENDING, Sort.ASCENDING};
 
         switch (navigation.getSelectedItemId()) {
             case R.id.navigation_coming_soon:
-                Calendar c=new GregorianCalendar();
+                Calendar c = new GregorianCalendar();
                 c.add(Calendar.DATE, 30);
+                c.setTimeZone(java.util.TimeZone.getTimeZone("GMT"));
+
                 Date d30 =c.getTime();
 
                 results = realm.where(Conference.class).lessThan("startTime", d30).greaterThanOrEqualTo("startTime", dNow).findAllSorted(sortBy,sortAscending);

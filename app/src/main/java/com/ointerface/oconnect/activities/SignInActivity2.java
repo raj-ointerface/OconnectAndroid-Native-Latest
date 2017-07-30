@@ -441,10 +441,36 @@ public class SignInActivity2 extends AppCompatActivity {
                             dialog.dismiss();
 
                             try {
+                                final Realm realm = AppUtil.getRealmInstance(App.getInstance());
+
                                 List<ParseObject> speakerList = ParseQuery.getQuery("Speaker").whereEqualTo("email", usernametxt).find();
                                 List<ParseObject> attendeeList = ParseQuery.getQuery("Attendee").whereEqualTo("email", usernametxt).find();
 
                                 final ParseUser finalUser = user;
+
+                                if (speakerList.size() > 0) {
+                                    ParseObject speakerObj = speakerList.get(0);
+                                    speakerObj.put("UserLink", OConnectBaseActivity.currentPerson.getObjectId());
+                                    speakerObj.save();
+
+                                    realm.beginTransaction();
+                                    Speaker speaker = realm.where(Speaker.class).equalTo("objectId", speakerObj.getObjectId()).findFirst();
+                                    if (speaker != null) {
+                                        speaker.setUserLink(OConnectBaseActivity.currentPerson.getObjectId());
+                                    }
+                                    realm.commitTransaction();
+                                } else if (attendeeList.size() > 0) {
+                                    ParseObject attendeeObj = attendeeList.get(0);
+                                    attendeeObj.put("UserLink", OConnectBaseActivity.currentPerson.getObjectId());
+                                    attendeeObj.save();
+
+                                    realm.beginTransaction();
+                                    Attendee attendee = realm.where(Attendee.class).equalTo("objectId", attendeeObj.getObjectId()).findFirst();
+                                    if (attendee != null) {
+                                        attendee.setUserLink(OConnectBaseActivity.currentPerson.getObjectId());
+                                    }
+                                    realm.commitTransaction();
+                                }
 
                                 if (speakerList.size() == 0 &&
                                         attendeeList.size() == 0 &&
@@ -516,11 +542,26 @@ public class SignInActivity2 extends AppCompatActivity {
                                                         }
                                                     });
 
+                                                    realm.beginTransaction();
+                                                    Speaker speaker = realm.where(Speaker.class).equalTo("objectId", speakerObj.getObjectId()).findFirst();
+                                                    if (speaker != null) {
+                                                        speaker.setUserLink(finalUser.getObjectId());
+                                                    }
+                                                    realm.commitTransaction();
+
                                                     bUserLinked = true;
                                                 } else if (attendeeList.size() > 0) {
                                                     ParseObject attendeeObj = attendeeList.get(0).fetchIfNeeded();
                                                     attendeeObj.put("UserLink", finalUser.getObjectId());
                                                     attendeeObj.save();
+
+                                                    realm.beginTransaction();
+                                                    Attendee attendee = realm.where(Attendee.class).equalTo("objectId", attendeeObj.getObjectId()).findFirst();
+                                                    if (attendee != null) {
+                                                        attendee.setUserLink(finalUser.getObjectId());
+                                                    }
+                                                    realm.commitTransaction();
+
                                                     bUserLinked = true;
                                                 }
 
@@ -576,11 +617,27 @@ public class SignInActivity2 extends AppCompatActivity {
                                                             ParseObject speakerObj = speakerList.get(0);
                                                             speakerObj.put("UserLink", finalUser.getObjectId());
                                                             speakerObj.save();
+
+                                                            realm.beginTransaction();
+                                                            Speaker speaker = realm.where(Speaker.class).equalTo("objectId", speakerObj.getObjectId()).findFirst();
+                                                            if (speaker != null) {
+                                                                speaker.setUserLink(finalUser.getObjectId());
+                                                            }
+                                                            realm.commitTransaction();
+
                                                             bUserLinked = true;
                                                         } else if (attendeeList.size() > 0) {
                                                             ParseObject attendeeObj = attendeeList.get(0);
                                                             attendeeObj.put("UserLink", finalUser.getObjectId());
                                                             attendeeObj.save();
+
+                                                            realm.beginTransaction();
+                                                            Attendee attendee = realm.where(Attendee.class).equalTo("objectId", attendeeObj.getObjectId()).findFirst();
+                                                            if (attendee != null) {
+                                                                attendee.setUserLink(finalUser.getObjectId());
+                                                            }
+                                                            realm.commitTransaction();
+
                                                             bUserLinked = true;
                                                         }
 
@@ -924,5 +981,10 @@ public class SignInActivity2 extends AppCompatActivity {
         }
 
         return false;
+    }
+
+    private boolean isFacebookUserIsLoggedIn() {
+        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+        return accessToken != null;
     }
 }

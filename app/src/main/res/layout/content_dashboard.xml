@@ -67,15 +67,15 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_marginLeft="5dp"/>
-        <ImageButton
-            android:id="@+id/ivThreeDots"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:scaleType="fitCenter"
-            android:background="@drawable/icon_three_dots"
+        <TextView
+            android:id="@+id/tvThreeDots"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
             android:layout_marginRight="15dp"
+            android:textColor="@color/colorWhite"
+            android:text="View Full Agenda"
             android:onClick="threeDotsClicked"/>
     </RelativeLayout>
     <ListView
@@ -130,7 +130,7 @@
                     android:layout_gravity="center_horizontal"
                     android:gravity="center_horizontal"
                     android:textColor="@color/colorWhite"
-                    android:text="Message Speakers"/>
+                    android:text="Message Attendees"/>
             </LinearLayout>
             <LinearLayout
                 android:id="@+id/llAlerts"

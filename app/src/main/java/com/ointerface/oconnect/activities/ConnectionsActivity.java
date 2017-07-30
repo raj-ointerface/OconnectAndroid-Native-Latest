@@ -156,6 +156,12 @@ public class ConnectionsActivity extends OConnectBaseActivity {
             }
         });
 
+        if (AppUtil.getAnalyticsSurveyFinished(this) == false) {
+            tvInterests.setVisibility(View.VISIBLE);
+        } else {
+            tvInterests.setVisibility(GONE);
+        }
+
         if (AppConfig.bSurveyShown == false) {
             AppUtil.displaySurveyOption(this);
             AppUtil.setSurveyShown(this, true);
@@ -332,7 +338,7 @@ public class ConnectionsActivity extends OConnectBaseActivity {
                 currentObj = mData.get(position);
             }
 
-            holder.mItemViewBinding.ivMessage.setBackground(AppUtil.changeDrawableColor(context, R.drawable.icon_envelop, AppUtil.getPrimaryThemColorAsInt()));
+            holder.mItemViewBinding.ivMessage.setBackground(AppUtil.changeDrawableColor(context, R.drawable.icon_say_hi, AppUtil.getPrimaryThemColorAsInt()));
 
             holder.mItemViewBinding.tvDiscardContact.setVisibility(GONE);
             holder.mItemViewBinding.tvConnectionStrength.setVisibility(GONE);
@@ -357,7 +363,7 @@ public class ConnectionsActivity extends OConnectBaseActivity {
             holder.mItemViewBinding.ivParticipantInterests.setBackground(AppUtil.changeDrawableColor(context, R.drawable.icon_participants_light_bulb, AppUtil.getPrimaryThemColorAsInt()));
             holder.mItemViewBinding.ivParticipantLocation.setBackground(AppUtil.changeDrawableColor(context, R.drawable.icon_participants_house, AppUtil.getPrimaryThemColorAsInt()));
 
-            holder.mItemViewBinding.ivMessage.setBackground(AppUtil.changeDrawableColor(context, R.drawable.icon_envelop, AppUtil.getPrimaryThemColorAsInt()));
+            holder.mItemViewBinding.ivMessage.setBackground(AppUtil.changeDrawableColor(context, R.drawable.icon_say_hi, AppUtil.getPrimaryThemColorAsInt()));
 
             holder.mItemViewBinding.tvMessage.setTextColor(AppUtil.getPrimaryThemColorAsInt());
 
@@ -504,6 +510,8 @@ public class ConnectionsActivity extends OConnectBaseActivity {
 
                 if (showingMyConnections == true) {
 
+                    holder.mItemViewBinding.btnClose.setVisibility(GONE);
+
                     holder.mItemViewBinding.tvMessage.setText("Message");
 
                     holder.mItemViewBinding.tvMessage.setOnClickListener(new View.OnClickListener() {
@@ -528,18 +536,21 @@ public class ConnectionsActivity extends OConnectBaseActivity {
                         }
                     });
                 } else {
+
+                    holder.mItemViewBinding.btnClose.setVisibility(View.VISIBLE);
+
                     final Realm realm = AppUtil.getRealmInstance(context);
                     final PredAnalyticsMatches matchObj = realm.where(PredAnalyticsMatches.class).equalTo("id1", OConnectBaseActivity.currentPerson.getObjectId()).equalTo("id2", currentPerson.getObjectId()).findFirst();
 
                     holder.mItemViewBinding.ivMessage.setBackground(AppUtil.changeDrawableColor(context, R.drawable.ic_add_profile, AppUtil.getPrimaryThemColorAsInt()));
 
                     holder.mItemViewBinding.tvMessage.setText("Add Contact");
-                    holder.mItemViewBinding.tvDiscardContact.setVisibility(View.VISIBLE);
+                    holder.mItemViewBinding.tvDiscardContact.setVisibility(View.GONE);
                     holder.mItemViewBinding.tvDiscardContact.setText("Discard Contact");
                     holder.mItemViewBinding.tvConnectionStrength.setVisibility(View.VISIBLE);
 
                     if (matchObj != null) {
-                        String connectionStrength = "Your Connection Strength: " + String.format("%.0f%%", matchObj.getScore());
+                        String connectionStrength = "Your Connection Strength: " + getConnectionStrengthString(matchObj.getScore());
 
                         holder.mItemViewBinding.tvConnectionStrength.setText(connectionStrength);
                     }
@@ -563,6 +574,37 @@ public class ConnectionsActivity extends OConnectBaseActivity {
                                 ParseObject parseMatchObj = ParseQuery.getQuery("PredAnalyticsMatches").whereEqualTo("objectId", matchObj.getObjectId()).getFirst();
 
                                 parseMatchObj.put("isAccepted", true);
+
+                                parseMatchObj.save();
+
+                                adapter.notifyDataSetChanged();
+                            } catch (Exception ex) {
+                                Log.d("APD", ex.getMessage());
+                            }
+                        }
+                    });
+
+                    holder.mItemViewBinding.btnClose.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (matchObj == null) {
+                                return;
+                            }
+
+                            if (OConnectBaseActivity.currentPerson.getFavoriteUsers().contains(currentPerson)) {
+                                OConnectBaseActivity.currentPerson.getFavoriteUsers().remove(currentPerson);
+                            }
+
+                            realm.beginTransaction();
+                            matchObj.setRejected(true);
+                            realm.commitTransaction();
+
+                            mDataSuggestedConnections.remove(currentPerson);
+
+                            try {
+                                ParseObject parseMatchObj = ParseQuery.getQuery("PredAnalyticsMatches").whereEqualTo("objectId", matchObj.getObjectId()).getFirst();
+
+                                parseMatchObj.put("isRejected", true);
 
                                 parseMatchObj.save();
 
@@ -658,5 +700,21 @@ public class ConnectionsActivity extends OConnectBaseActivity {
 
             mItemViewBinding = itemViewBinding;
         }
+    }
+
+    public static String getConnectionStrengthString(double score) {
+        if (score >= 1 && score < 2) {
+            return "50%";
+        } else if (score >= 2 && score < 3) {
+            return "60%";
+        } else if (score >= 3 && score < 4) {
+            return "70%";
+        } else if (score >= 4 && score < 5) {
+            return "80%";
+        } else if (score >= 5) {
+            return "90%";
+        }
+
+        return "50%";
     }
 }

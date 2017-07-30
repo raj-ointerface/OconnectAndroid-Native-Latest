@@ -178,7 +178,13 @@ public class AppUtil {
 
     public static Date setTime( final Date date, final int hourOfDay, final int minute, final int second, final int ms )
     {
+
         final GregorianCalendar gc = new GregorianCalendar();
+
+        if (gc == null) {
+            return date;
+        }
+
         gc.setTime( date );
         gc.set( Calendar.HOUR_OF_DAY, hourOfDay );
         gc.set( Calendar.MINUTE, minute );
@@ -231,6 +237,19 @@ public class AppUtil {
         AlertDialog alertDialog = new AlertDialog.Builder(context).create();
         alertDialog.setTitle("Message");
         alertDialog.setMessage("Please sign in to use this feature");
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+        alertDialog.show();
+    }
+
+    public static void displayPleaseSignInForConnectionsDialog(Context context) {
+        AlertDialog alertDialog = new AlertDialog.Builder(context).create();
+        alertDialog.setTitle("Message");
+        alertDialog.setMessage("Please sign in to improve your connection strength.");
         alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
@@ -370,12 +389,6 @@ public class AppUtil {
                         context.startActivity(i);
                     }
                 });
-        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "No, Thanks", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
 
         alertDialog.show();
     }
@@ -461,6 +474,18 @@ public class AppUtil {
     static public void setScheduleTutorialShow (Context context, boolean value) {
         SharedPreferences.Editor editor = context.getSharedPreferences(AppConfig.sharedPrefsName, MODE_PRIVATE).edit();
         editor.putBoolean(AppConfig.getSharedPrefsScheduleTutorialShown, value);
+        editor.commit();
+    }
+
+    static public boolean getAnalyticsSurveyFinished (Context context) {
+        SharedPreferences prefs = context.getSharedPreferences(AppConfig.sharedPrefsName, MODE_PRIVATE);
+        boolean value = prefs.getBoolean(AppConfig.getSharedPrefsAnalyticsSurveyFinished, false);
+        return value;
+    }
+
+    static public void setAnalyticsSurveyFinished (Context context, boolean value) {
+        SharedPreferences.Editor editor = context.getSharedPreferences(AppConfig.sharedPrefsName, MODE_PRIVATE).edit();
+        editor.putBoolean(AppConfig.getSharedPrefsAnalyticsSurveyFinished, value);
         editor.commit();
     }
 

@@ -167,7 +167,11 @@ public class EventDetailExpandableListViewAdapter extends BaseExpandableListAdap
 
                 ivMyAgenda.setBackground(AppUtil.changeDrawableColor(_context, R.drawable.icon_blue_star_empty, AppUtil.getPrimaryThemColorAsInt()));
 
-                RealmList<Event> myAgendaList = OConnectBaseActivity.currentPerson.getFavoriteEvents();
+                RealmList<Event> myAgendaList = new RealmList<Event>();
+
+                if (OConnectBaseActivity.currentPerson != null) {
+                    myAgendaList = OConnectBaseActivity.currentPerson.getFavoriteEvents();
+                }
 
                 if (myAgendaList.contains(_listEvent) == true) {
                     ivMyAgenda.setBackground(AppUtil.changeDrawableColor(_context, R.drawable.icon_blue_star_filled, AppUtil.getPrimaryThemColorAsInt()));
@@ -188,9 +192,11 @@ public class EventDetailExpandableListViewAdapter extends BaseExpandableListAdap
                 tvMyAgenda.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        realm.beginTransaction();
-                        OConnectBaseActivity.currentPerson.getFavoriteEvents().add(_listEvent);
-                        realm.commitTransaction();
+                        if (OConnectBaseActivity.currentPerson != null) {
+                            realm.beginTransaction();
+                            OConnectBaseActivity.currentPerson.getFavoriteEvents().add(_listEvent);
+                            realm.commitTransaction();
+                        }
 
                         ivMyAgenda.setBackground(AppUtil.changeDrawableColor(_context, R.drawable.icon_blue_star_filled, AppUtil.getPrimaryThemColorAsInt()));
                     }
@@ -199,9 +205,11 @@ public class EventDetailExpandableListViewAdapter extends BaseExpandableListAdap
                 ivMyAgenda.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        realm.beginTransaction();
-                        OConnectBaseActivity.currentPerson.getFavoriteEvents().add(_listEvent);
-                        realm.commitTransaction();
+                        if (OConnectBaseActivity.currentPerson != null) {
+                            realm.beginTransaction();
+                            OConnectBaseActivity.currentPerson.getFavoriteEvents().add(_listEvent);
+                            realm.commitTransaction();
+                        }
 
                         ivMyAgenda.setBackground(AppUtil.changeDrawableColor(_context, R.drawable.icon_blue_star_filled, AppUtil.getPrimaryThemColorAsInt()));
                     }
@@ -459,7 +467,11 @@ public class EventDetailExpandableListViewAdapter extends BaseExpandableListAdap
 
                         newParseQuestion.put("question", etSendQuestion.getText().toString());
                         newParseQuestion.put("votes", 0);
-                        newParseQuestion.put("user_email", OConnectBaseActivity.currentPerson.getContact_email());
+
+                        if (OConnectBaseActivity.currentPerson != null) {
+                            newParseQuestion.put("user_email", OConnectBaseActivity.currentPerson.getContact_email());
+                        }
+
                         newParseQuestion.put("isResolved", false);
                         newParseQuestion.put("event", ParseObject.createWithoutData("Event", _listEvent.getObjectId()));
                         newParseQuestion.put("conference", ParseObject.createWithoutData("Conference", OConnectBaseActivity.selectedConference.getObjectId()));
@@ -478,7 +490,11 @@ public class EventDetailExpandableListViewAdapter extends BaseExpandableListAdap
                                 newQuestion.setQuestion(etSendQuestion.getText().toString());
                                 newQuestion.setVotes(0);
                                 newQuestion.setUpdatedAt(newParseQuestion.getUpdatedAt());
-                                newQuestion.setUser_email(OConnectBaseActivity.currentPerson.getContact_email());
+
+                                if (OConnectBaseActivity.currentPerson != null) {
+                                    newQuestion.setUser_email(OConnectBaseActivity.currentPerson.getContact_email());
+                                }
+
                                 newQuestion.setResolved(false);
                                 newQuestion.setConference(OConnectBaseActivity.selectedConference.getObjectId());
 

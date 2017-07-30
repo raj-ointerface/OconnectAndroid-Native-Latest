@@ -142,6 +142,9 @@ public class SpeakerDetailExpandableListViewAdapter extends BaseExpandableListAd
     @Override
     public View getChildView(int groupPosition, final int childPosition,
                              boolean isLastChild, View convertView, ViewGroup parent) {
+
+        System.gc();
+
         final Realm realm = AppUtil.getRealmInstance(App.getInstance());
 
         final Person person = realm.where(Person.class).equalTo("objectId", _listSpeaker.getUserLink()).findFirst();
@@ -587,7 +590,15 @@ public class SpeakerDetailExpandableListViewAdapter extends BaseExpandableListAd
                 public void onClick(View v) {
                     Person user = realm.where(Person.class).equalTo("objectId", _listSpeaker.getUserLink()).findFirst();
 
-                    if (user != null) {
+                    String speakerEmail = _listSpeaker.getEmail();
+
+                    if (speakerEmail != null) {
+                        Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
+                                "mailto", speakerEmail, null));
+                        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Conference");
+                        emailIntent.putExtra(Intent.EXTRA_TEXT, etSendQuestion.getText().toString());
+                        _context.startActivity(Intent.createChooser(emailIntent, "Send email..."));
+                    } else if (user != null) {
                         Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
                                 "mailto", user.getContact_email(), null));
                         emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Conference");

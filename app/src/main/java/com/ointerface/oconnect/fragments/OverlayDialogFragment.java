@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -88,6 +89,15 @@ public class OverlayDialogFragment extends DialogFragment {
                 break;
         }
 
+        Button btnClose = (Button) rootView.findViewById(R.id.btnClose);
+
+        btnClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
+
         rootView.setBackgroundColor(AppConfig.hiddenGreyBackgroundColor);
         rootView.getBackground().setAlpha(150);
 
@@ -114,8 +124,7 @@ public class OverlayDialogFragment extends DialogFragment {
         tvTapContinue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                switch (overlayType)
-                {
+                switch (overlayType) {
                     case Partificpants1:
                         AppUtil.setParticipantsTutorialShown(activity, cbDontShowAgain.isChecked());
                         dismiss();
@@ -123,26 +132,35 @@ public class OverlayDialogFragment extends DialogFragment {
                     case Schedule1:
                         AppUtil.setScheduleTutorialShow(activity, cbDontShowAgain.isChecked());
                         dismiss();
-                        FragmentManager fm = ((ScheduleActivity)activity).getSupportFragmentManager();
-                        OverlayDialogFragment dialogFragment = newInstance(activity, OverlayType.Schedule2);
-                        dialogFragment.setStyle(DialogFragment.STYLE_NO_FRAME, R.style.CustomDialog);
-                        dialogFragment.show(fm, OverlayType.Schedule2.name());
+
+                        if (cbDontShowAgain.isChecked() == false) {
+                            FragmentManager fm = ((ScheduleActivity) activity).getSupportFragmentManager();
+                            OverlayDialogFragment dialogFragment = newInstance(activity, OverlayType.Schedule2);
+                            dialogFragment.setStyle(DialogFragment.STYLE_NO_FRAME, R.style.CustomDialog);
+                            dialogFragment.show(fm, OverlayType.Schedule2.name());
+                        }
                         break;
                     case Schedule2:
                         AppUtil.setScheduleTutorialShow(activity, cbDontShowAgain.isChecked());
                         dismiss();
-                        FragmentManager fm2 = ((ScheduleActivity)activity).getSupportFragmentManager();
-                        OverlayDialogFragment dialogFragment2 = newInstance(activity, OverlayType.Schedule3);
-                        dialogFragment2.setStyle(DialogFragment.STYLE_NO_FRAME, R.style.CustomDialog);
-                        dialogFragment2.show(fm2, OverlayType.Schedule3.name());
+
+                        if (cbDontShowAgain.isChecked() == false) {
+                            FragmentManager fm2 = ((ScheduleActivity) activity).getSupportFragmentManager();
+                            OverlayDialogFragment dialogFragment2 = newInstance(activity, OverlayType.Schedule3);
+                            dialogFragment2.setStyle(DialogFragment.STYLE_NO_FRAME, R.style.CustomDialog);
+                            dialogFragment2.show(fm2, OverlayType.Schedule3.name());
+                        }
                         break;
                     case Schedule3:
                         AppUtil.setScheduleTutorialShow(activity, cbDontShowAgain.isChecked());
                         dismiss();
-                        FragmentManager fm3 = ((ScheduleActivity)activity).getSupportFragmentManager();
-                        OverlayDialogFragment dialogFragment3 = newInstance(activity, OverlayType.Schedule4);
-                        dialogFragment3.setStyle(DialogFragment.STYLE_NO_FRAME, R.style.CustomDialog);
-                        dialogFragment3.show(fm3, OverlayType.Schedule4.name());
+
+                        if (cbDontShowAgain.isChecked() == false) {
+                            FragmentManager fm3 = ((ScheduleActivity) activity).getSupportFragmentManager();
+                            OverlayDialogFragment dialogFragment3 = newInstance(activity, OverlayType.Schedule4);
+                            dialogFragment3.setStyle(DialogFragment.STYLE_NO_FRAME, R.style.CustomDialog);
+                            dialogFragment3.show(fm3, OverlayType.Schedule4.name());
+                        }
                         break;
                     case Schedule4:
                         AppUtil.setScheduleTutorialShow(activity, cbDontShowAgain.isChecked());

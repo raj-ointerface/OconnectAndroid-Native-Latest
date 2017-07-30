@@ -26,6 +26,7 @@ public class AppConfig {
     static public String getSharedPrefsSurveyShown = "com.ointerface.oconnect.sharedprefs.surveyShown";
     static public String getSharedPrefsParticipantsTutorialShown = "com.ointerface.oconnect.sharedprefs.participantsTutorialShown";
     static public String getSharedPrefsScheduleTutorialShown = "com.ointerface.oconnect.sharedprefs.scheduleTutorialShown";
+    static public String getSharedPrefsAnalyticsSurveyFinished = "com.ointerface.oconnect.sharedprefs.analyticsSurveyFinished";
 
     static public String defaultDateTimeFormat = "yyyy-MM-dd'T'HH:mm:ss";
 

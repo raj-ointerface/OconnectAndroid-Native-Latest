@@ -244,7 +244,9 @@ public class DashboardActivity extends OConnectBaseActivity {
     }
 
     public void makeConnectionsClicked (View view) {
-        // AppUtil.displayNotImplementedDialog(DashboardActivity.this);
+        if (AppUtil.getIsSignedIn(this) == false) {
+            AppUtil.displayPleaseSignInForConnectionsDialog(this);
+        }
 
         Intent i = new Intent(DashboardActivity.this, ConnectionsActivity.class);
         startActivity(i);

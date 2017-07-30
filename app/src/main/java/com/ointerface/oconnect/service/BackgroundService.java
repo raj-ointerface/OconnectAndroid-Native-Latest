@@ -82,7 +82,7 @@ public class BackgroundService extends Service {
                         // handler.postDelayed(runnable, 600000);
 
                         final ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(5);
-                        executor.schedule(runnable, 10, TimeUnit.MINUTES);
+                        executor.schedule(runnable, 1, TimeUnit.MINUTES);
                     }
                 };
 

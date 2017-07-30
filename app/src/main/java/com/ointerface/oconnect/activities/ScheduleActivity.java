@@ -89,7 +89,7 @@ public class ScheduleActivity extends OConnectBaseActivity {
         setContentView(R.layout.activity_schedule);
         super.onCreateDrawer();
 
-        if (selectedConference.getType().equalsIgnoreCase("Event")) {
+        if (selectedConference != null && selectedConference.getType().equalsIgnoreCase("Event")) {
             isEventType = true;
         }
 
@@ -362,7 +362,11 @@ public class ScheduleActivity extends OConnectBaseActivity {
 
         tvCurrentDay.setText(df.format(newSelectedDate));
 
-        RealmList<Event> myAgendaList = currentPerson.getFavoriteEvents();
+        RealmList<Event> myAgendaList = new RealmList<Event>();
+
+        if (currentPerson != null) {
+            myAgendaList = currentPerson.getFavoriteEvents();
+        }
 
         for (int i = 0; i < sessionResults.size(); ++i) {
             List<Event> currentEventsList = new ArrayList<Event>();
@@ -454,7 +458,11 @@ public class ScheduleActivity extends OConnectBaseActivity {
 
         tvCurrentDay.setText(df.format(currentScheduleDate));
 
-        RealmList<Event> myAgendaList = currentPerson.getFavoriteEvents();
+        RealmList<Event> myAgendaList = new RealmList<Event>();
+
+        if (currentPerson != null) {
+            myAgendaList = currentPerson.getFavoriteEvents();
+        }
 
         for (int i = 0; i < sessionResults.size(); ++i) {
             List<Event> currentEventsList = new ArrayList<Event>();

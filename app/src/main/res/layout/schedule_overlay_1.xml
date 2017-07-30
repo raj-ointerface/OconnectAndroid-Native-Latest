@@ -4,7 +4,19 @@
     style="@style/CustomDialog"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#33333333">
+    android:background="#df333333">
+
+    <Button
+        android:id="@+id/btnClose"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="X"
+        android:background="@android:color/transparent"
+        style="?android:attr/borderlessButtonStyle"
+        android:textSize="24sp"/>
 
     <RelativeLayout
         android:id="@+id/top_layer"

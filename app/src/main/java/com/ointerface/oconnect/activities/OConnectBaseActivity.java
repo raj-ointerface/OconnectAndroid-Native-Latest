@@ -737,8 +737,18 @@ public class OConnectBaseActivity extends AppCompatActivity
                         break;
                         */
                     case R.drawable.icon_external_link:
-                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(selectedConference.getExternalLink()));
-                        startActivity(browserIntent);
+                        // Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(selectedConference.getExternalLink()));
+                        // startActivity(browserIntent);
+
+                        i = new Intent(OConnectBaseActivity.this, WebViewActivity.class);
+
+                        i.putExtra("TITLE", "");
+
+                        i.putExtra("URL", selectedConference.getExternalLink());
+                        i.putExtra("BACK_TEXT", "");
+                        i.putExtra("OPEN", "");
+                        i.putExtra("isSurvey", false);
+                        startActivity(i);
                         break;
                     default:
                         break;
@@ -1117,18 +1127,17 @@ public class OConnectBaseActivity extends AppCompatActivity
 
         // Adding child data
         List<MenuItemHolder> section1 = new ArrayList<MenuItemHolder>();
-        section1.add(new MenuItemHolder(R.drawable.icon_announcements, "Announcements"));
+
+        if (selectedConference != null && selectedConference.isShowDashboard()) {
+            section1.add(new MenuItemHolder(R.drawable.icon_dashboard, "Dashboard"));
+        }
+
         section1.add(new MenuItemHolder(R.drawable.icon_conferences, "Conferences"));
+        section1.add(new MenuItemHolder(R.drawable.icon_announcements, "Announcements"));
+
 
         List<MenuItemHolder> section2 = new ArrayList<MenuItemHolder>();
 
-        if (selectedConference != null && selectedConference.isShowDashboard()) {
-            section2.add(new MenuItemHolder(R.drawable.icon_dashboard, "Dashboard"));
-        }
-
-        if (selectedConference != null && selectedConference.isShowRegistration()) {
-            section2.add(new MenuItemHolder(R.drawable.icon_registration, "Registration"));
-        }
 
         if (selectedConference != null && selectedConference.isShowInfo()) {
             String infoStr = "Info";
@@ -1141,8 +1150,10 @@ public class OConnectBaseActivity extends AppCompatActivity
             section2.add(new MenuItemHolder(R.drawable.icon_info, infoStr));
         }
 
+        section2.add(new MenuItemHolder(R.drawable.icon_my_agenda, "My Agenda"));
+
         if (selectedConference != null && selectedConference.isShowSchedule()) {
-            String itemStr = "Schedule";
+            String itemStr = "Full Schedule";
 
             if (selectedConference.getToolbarLabelSchedule() != null &&
                     !selectedConference.getToolbarLabelSchedule().equalsIgnoreCase("")) {
@@ -1150,17 +1161,6 @@ public class OConnectBaseActivity extends AppCompatActivity
             }
 
             section2.add(new MenuItemHolder(R.drawable.icon_schedule, itemStr));
-        }
-
-        if (selectedConference != null && selectedConference.isShowNonTimedEvents()) {
-            String itemStr = "Non-Timed Event";
-
-            if (selectedConference.getToolbarLabelNonTimedEvent() != null &&
-                    !selectedConference.getToolbarLabelNonTimedEvent().equalsIgnoreCase("")) {
-                itemStr = selectedConference.getToolbarLabelNonTimedEvent();
-            }
-
-            section2.add(new MenuItemHolder(R.drawable.icon_non_timed_event_2, itemStr));
         }
 
         if (selectedConference != null && selectedConference.isShowParticipants()) {
@@ -1174,19 +1174,16 @@ public class OConnectBaseActivity extends AppCompatActivity
             section2.add(new MenuItemHolder(R.drawable.ic_person, itemStr));
         }
 
-        if (selectedConference != null && selectedConference.isShowMaps()) {
-            String itemStr = "Maps";
+        if (selectedConference != null && selectedConference.isShowNonTimedEvents()) {
+            String itemStr = "Non-Timed Event";
 
-            if (selectedConference.getToolbarLabelMaps() != null &&
-                    !selectedConference.getToolbarLabelMaps().equalsIgnoreCase("")) {
-                itemStr = selectedConference.getToolbarLabelMaps();
+            if (selectedConference.getToolbarLabelNonTimedEvent() != null &&
+                    !selectedConference.getToolbarLabelNonTimedEvent().equalsIgnoreCase("")) {
+                itemStr = selectedConference.getToolbarLabelNonTimedEvent();
             }
 
-            section2.add(new MenuItemHolder(R.drawable.icon_maps, itemStr));
+            section2.add(new MenuItemHolder(R.drawable.icon_non_timed_event_2, itemStr));
         }
-
-        section2.add(new MenuItemHolder(R.drawable.icon_my_agenda, "My Agenda"));
-        section2.add(new MenuItemHolder(R.drawable.icon_my_notes, "My Notes"));
 
         if (selectedConference != null && selectedConference.isShowSponsors()) {
             String itemStr = "Sponsors";
@@ -1199,14 +1196,34 @@ public class OConnectBaseActivity extends AppCompatActivity
             section2.add(new MenuItemHolder(R.drawable.icon_sponsors, itemStr));
         }
 
-        section2.add(new MenuItemHolder(R.drawable.icon_share, "Share"));
-
         List<MenuItemHolder> section3 = new ArrayList<MenuItemHolder>();
 
-        if (selectedConference != null && selectedConference.isShowQRScanner()) {
-            String itemStr = "QR Scanner";
+        if (selectedConference != null && selectedConference.isShowRegistration()) {
+            section3.add(new MenuItemHolder(R.drawable.icon_registration, "Eventbrite Register"));
+        }
 
-            section3.add(new MenuItemHolder(R.drawable.icon_qr_scanner, itemStr));
+        section3.add(new MenuItemHolder(R.drawable.icon_my_notes, "My Notes"));
+
+        if (selectedConference != null && selectedConference.isShowExternalLink()) {
+            String itemStr = "External Link";
+
+            if (selectedConference.getToolbarLabelExternalLink() != null &&
+                    !selectedConference.getToolbarLabelExternalLink().equalsIgnoreCase("")) {
+                itemStr = selectedConference.getToolbarLabelExternalLink();
+            }
+
+            section3.add(new MenuItemHolder(R.drawable.icon_external_link, itemStr));
+        }
+
+        if (selectedConference != null && selectedConference.isShowMaps()) {
+            String itemStr = "Maps";
+
+            if (selectedConference.getToolbarLabelMaps() != null &&
+                    !selectedConference.getToolbarLabelMaps().equalsIgnoreCase("")) {
+                itemStr = selectedConference.getToolbarLabelMaps();
+            }
+
+            section3.add(new MenuItemHolder(R.drawable.icon_maps, itemStr));
         }
 
         if (selectedConference != null && selectedConference.isShowSurvey()) {
@@ -1220,15 +1237,12 @@ public class OConnectBaseActivity extends AppCompatActivity
             section3.add(new MenuItemHolder(R.drawable.icon_survey, itemStr));
         }
 
-        if (selectedConference != null && selectedConference.isShowExternalLink()) {
-            String itemStr = "External Link";
+        section2.add(new MenuItemHolder(R.drawable.icon_share, "Share"));
 
-            if (selectedConference.getToolbarLabelExternalLink() != null &&
-                    !selectedConference.getToolbarLabelExternalLink().equalsIgnoreCase("")) {
-                itemStr = selectedConference.getToolbarLabelExternalLink();
-            }
+        if (selectedConference != null && selectedConference.isShowQRScanner()) {
+            String itemStr = "QR Scanner";
 
-            section3.add(new MenuItemHolder(R.drawable.icon_external_link, itemStr));
+            section3.add(new MenuItemHolder(R.drawable.icon_qr_scanner, itemStr));
         }
 
         section3.add(new MenuItemHolder(R.drawable.icon_about_us, "About Us"));

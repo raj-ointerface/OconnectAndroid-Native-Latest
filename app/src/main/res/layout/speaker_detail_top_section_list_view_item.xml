@@ -74,7 +74,7 @@
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:layout_gravity="center_horizontal"
-                    android:background="@drawable/icon_envelop"
+                    android:background="@drawable/icon_say_hi"
                     android:scaleType="fitCenter"/>
                 <TextView
                     android:id="@+id/tvMessage"
