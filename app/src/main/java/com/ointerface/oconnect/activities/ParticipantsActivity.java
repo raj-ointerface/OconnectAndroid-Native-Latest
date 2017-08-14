@@ -31,6 +31,7 @@ import com.ointerface.oconnect.R;
 import com.ointerface.oconnect.adapters.MyAgendaListViewAdapter;
 import com.ointerface.oconnect.adapters.ParticipantsSwipeListAdapter;
 import com.ointerface.oconnect.data.Attendee;
+import com.ointerface.oconnect.data.Person;
 import com.ointerface.oconnect.data.Session;
 import com.ointerface.oconnect.data.Speaker;
 import com.ointerface.oconnect.fragments.OverlayDialogFragment;
@@ -44,6 +45,7 @@ import java.util.Date;
 import java.util.List;
 
 import io.realm.Realm;
+import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.RealmResults;
 import io.realm.Sort;
@@ -143,10 +145,12 @@ public class ParticipantsActivity extends OConnectBaseActivity {
 
         Realm realm = AppUtil.getRealmInstance(App.getInstance());
 
-        Speaker result = realm.where(Speaker.class).equalTo("UserLink", currentPerson.getObjectId()).findFirst();
+        if (currentPerson != null) {
+            Speaker result = realm.where(Speaker.class).equalTo("UserLink", currentPerson.getObjectId()).findFirst();
 
-        if (result != null) {
-            currentSpeaker = result;
+            if (result != null) {
+                currentSpeaker = result;
+            }
         }
 
         getListViewData();
@@ -205,7 +209,7 @@ public class ParticipantsActivity extends OConnectBaseActivity {
             }
         });
 
-        navigation.setSelectedItemId(R.id.navigation_speakers);
+        navigation.setSelectedItemId(R.id.navigation_attendees);
 
         displayAttendees();
 
@@ -400,6 +404,14 @@ public class ParticipantsActivity extends OConnectBaseActivity {
 
         for (int i = 0; i < attendeeResults.size(); ++i) {
             adapter.addAttendee(attendeeResults.get(i));
+        }
+
+        RealmList<Person> peopleList = OConnectBaseActivity.selectedConference.getPeople();
+
+        if (peopleList != null) {
+            for (int i = 0; i < peopleList.size(); ++i) {
+                adapter.addPerson(peopleList.get(i));
+            }
         }
     }
 

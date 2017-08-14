@@ -143,11 +143,14 @@ public class OConnectBaseActivity extends AppCompatActivity
     public ImageView ivProfileLanyard;
     public ImageView ivSearch;
     public ImageView ivHelp;
-    public ImageView ivRightToolbarIcon;
+    public CircleImageView ivRightToolbarIcon;
+    public ImageView ivRightToolbarIconOverlay;
     public TextView tvToolbarTitle;
     public TextView tvEdit;
     public ImageView ivHeaderBack;
     public TextView tvHeaderBack;
+
+    public View viewRedDot;
 
     public NavigationView navigationView;
     public NavigationView navigationViewRight;
@@ -177,6 +180,9 @@ public class OConnectBaseActivity extends AppCompatActivity
     protected void onCreateDrawer() {
         // super.onCreate(savedInstanceState);
         // setContentView(R.layout.activity_oconnect_base);
+
+        App.getInstance().activity = this;
+
         Realm realm = AppUtil.getRealmInstance(App.getInstance());
 
         selectedConference = realm.where(Conference.class).equalTo("objectId", AppUtil.getSelectedConferenceID(OConnectBaseActivity.this)).findFirst();
@@ -239,7 +245,11 @@ public class OConnectBaseActivity extends AppCompatActivity
 
         ivHelp.setVisibility(GONE);
 
-        ivRightToolbarIcon = (ImageView) toolbar.findViewById(R.id.ivRightToolbarPerson);
+        ivRightToolbarIcon = (CircleImageView) toolbar.findViewById(R.id.ivRightToolbarPerson);
+
+        ivRightToolbarIconOverlay = (ImageView) toolbar.findViewById(R.id.ivRightToolbarPersonOverlay);
+
+        ivRightToolbarIconOverlay.setImageDrawable(AppUtil.changeDrawableColor(OConnectBaseActivity.this, R.drawable.icon_envelop, Color.RED));
 
         ivRightToolbarIcon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -307,6 +317,25 @@ public class OConnectBaseActivity extends AppCompatActivity
         ivSignOut = (ImageView) navigationViewRight.findViewById(R.id.ivSignOut);
         tvSignOut = (TextView) navigationViewRight.findViewById(R.id.tvSignOut);
         ivAccountEdit = (ImageView) navigationViewRight.findViewById(R.id.ivAccountEdit);
+        viewRedDot = (View) navigationViewRight.findViewById(R.id.viewRedDot);
+
+        viewRedDot.bringToFront();
+        viewRedDot.setZ(15);
+
+        if (currentPerson == null) {
+            ivRightToolbarIconOverlay.setVisibility(GONE);
+            viewRedDot.setVisibility(GONE);
+        } else {
+            int messageCount = getUnreadMessagesCount(currentPerson.getObjectId());
+
+            if (messageCount > 0) {
+                ivRightToolbarIconOverlay.setVisibility(View.VISIBLE);
+                viewRedDot.setVisibility(View.VISIBLE);
+            } else {
+                ivRightToolbarIconOverlay.setVisibility(GONE);
+                viewRedDot.setVisibility(GONE);
+            }
+        }
 
         tvRightNavHeader.setBackgroundColor(AppUtil.getPrimaryThemColorAsInt());
         btnConnections.setBackgroundColor(AppUtil.getPrimaryThemColorAsInt());
@@ -392,7 +421,7 @@ public class OConnectBaseActivity extends AppCompatActivity
                                 Drawable d = new BitmapDrawable(OConnectBaseActivity.this.getResources(), bmp);
 
                                 ivProfilePicture.setImageDrawable(d);
-
+                                ivRightToolbarIcon.setImageDrawable(d);
                             }
                         }
 
@@ -1451,5 +1480,17 @@ public class OConnectBaseActivity extends AppCompatActivity
         SignInActivity2 tempAct = new SignInActivity2();
         SignInActivity2.FacebookImportTask task = tempAct.new FacebookImportTask();
         task.execute(user);
+    }
+
+    public int getUnreadMessagesCount(String userID) {
+        Realm realm = AppUtil.getRealmInstance(this);
+
+        RealmResults<SinchMessage> messages = realm.where(SinchMessage.class).equalTo("currentUserID", userID).equalTo("isRead", false).findAll();
+
+        if (messages != null) {
+            return messages.size();
+        }
+
+        return 0;
     }
 }

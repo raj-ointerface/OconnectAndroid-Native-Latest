@@ -48,7 +48,7 @@
                 android:background="@drawable/icon_profile_lanyard"/>
             <ImageView
                 android:id="@+id/ivQuestion"
-                android:layout_toLeftOf="@+id/ivRightToolbarPerson"
+                android:layout_toLeftOf="@+id/flRightToolbarPerson"
                 android:layout_marginRight="15dp"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
@@ -56,22 +56,36 @@
                 android:background="@drawable/icon_question_mark"/>
             <ImageView
                 android:id="@+id/ivSearch"
-                android:layout_toLeftOf="@+id/ivRightToolbarPerson"
+                android:layout_toLeftOf="@+id/flRightToolbarPerson"
                 android:layout_marginRight="15dp"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:scaleType="fitCenter"
                 android:background="@drawable/icon_search_header"/>
-            <ImageView
-                android:id="@+id/ivRightToolbarPerson"
+            <FrameLayout
+                android:id="@+id/flRightToolbarPerson"
                 android:layout_toLeftOf="@+id/tvHeaderEdit"
                 android:layout_marginRight="15dp"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/ivRightToolbarPerson"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
-                android:scaleType="fitCenter"
                 android:background="@drawable/ic_person"/>
+                <ImageView
+                    android:id="@+id/ivRightToolbarPersonOverlay"
+                    android:layout_toLeftOf="@+id/tvHeaderEdit"
+                    android:layout_marginRight="15dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:scaleType="fitCenter"
+                    android:background="@drawable/icon_envelop"/>
+            </FrameLayout>
             <TextView
                 android:id="@+id/tvHeaderEdit"
                 android:text="Edit"

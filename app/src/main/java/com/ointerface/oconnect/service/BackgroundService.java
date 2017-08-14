@@ -81,8 +81,8 @@ public class BackgroundService extends Service {
 
                         // handler.postDelayed(runnable, 600000);
 
-                        final ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(5);
-                        executor.schedule(runnable, 1, TimeUnit.MINUTES);
+                        // final ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(5);
+                        // executor.schedule(runnable, 8, TimeUnit.MINUTES);
                     }
                 };
 

@@ -7,6 +7,17 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.ointerface.oconnect.activities.DashboardActivity"
     tools:showIn="@layout/activity_dashboard">
+    <RelativeLayout
+        android:id="@+id/rlTop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+    <ImageView
+        android:id="@+id/ivConferenceLogo"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:scaleType="fitCenter"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp" />
     <TextView
         android:id="@+id/tvConferenceTitle"
         android:layout_width="match_parent"
@@ -17,9 +28,10 @@
         android:textColor="@color/colorWhite"
         android:layout_marginTop="5dp"
         android:textSize="28sp"/>
+    </RelativeLayout>
     <RelativeLayout
         android:id="@+id/llTwitter"
-        android:layout_below="@+id/tvConferenceTitle"
+        android:layout_below="@+id/rlTop"
         android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">

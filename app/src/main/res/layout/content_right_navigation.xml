@@ -63,9 +63,13 @@
         android:layout_marginRight="30dp"
         android:layout_marginLeft="30dp"
         />
+    <FrameLayout
+        android:id="@+id/flBtnMessaging"
+        android:layout_width="match_parent"
+        android:layout_below="@+id/btnConnections"
+        android:layout_height="wrap_content">
     <Button
         android:id="@+id/btnMessaging"
-        android:layout_below="@+id/btnConnections"
         android:layout_width="match_parent"
         android:layout_height="35dp"
         android:text="Messaging"
@@ -78,10 +82,19 @@
         android:layout_marginRight="30dp"
         android:layout_marginLeft="30dp"
         />
+        <View android:id="@+id/viewRedDot"
+            android:layout_width="5dp"
+            android:layout_height="5dp"
+            android:background="@drawable/red_dot"
+            android:layout_gravity="left|center_vertical"
+            android:layout_marginLeft="45dp"
+            android:layout_marginTop="10dp"
+            />
+    </FrameLayout>
     <LinearLayout
         android:id="@+id/llContactable"
         android:layout_width="match_parent"
-        android:layout_below="@id/btnMessaging"
+        android:layout_below="@id/flBtnMessaging"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginTop="5dp"

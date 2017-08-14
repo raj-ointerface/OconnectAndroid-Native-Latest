@@ -68,7 +68,7 @@ public class AnnouncementsActivity extends OConnectBaseActivity implements IData
 
         lvAnnouncements = (ListView) findViewById(R.id.lvAnnouncements);
 
-        DataSyncManager.dialog = ProgressDialog.show((Context)this, null, "Downloading Announcemennts ... Please wait.");
+        // DataSyncManager.dialog = ProgressDialog.show((Context)this, null, "Downloading Announcemennts ... Please wait.");
 
         DataSyncManager.shouldSyncAll = false;
         DataSyncManager.initDataSyncManager(getApplicationContext(), AnnouncementsActivity.this);

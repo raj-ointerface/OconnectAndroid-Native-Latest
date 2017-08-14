@@ -53,6 +53,7 @@ import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseRelation;
 import com.parse.ParseTwitterUtils;
 import com.parse.ParseUser;
 import com.parse.RequestPasswordResetCallback;
@@ -86,6 +87,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import io.realm.Realm;
+import io.realm.RealmList;
 
 public class SignInActivity2 extends AppCompatActivity {
     enum SignInType { Normal,Twitter,Facebook, LinkedIn}
@@ -201,12 +203,17 @@ public class SignInActivity2 extends AppCompatActivity {
                     AppUtil.setSignedInUserID(SignInActivity2.this, user.getObjectId());
 
                     OConnectBaseActivity.currentPerson = Person.saveFromParseUser(user, false);
+
+                    addPersonToConference(user);
+
                     callTwitterImportAPI(user);
 
                     // dialog.dismiss();
 
-                    Intent i = new Intent(SignInActivity2.this, DashboardActivity.class);
-                    SignInActivity2.this.startActivity(i);
+                    // Intent i = new Intent(SignInActivity2.this, DashboardActivity.class);
+                    // SignInActivity2.this.startActivity(i);
+
+                    executePINPromptWorkflow(user);
                 }
             }
         });
@@ -232,7 +239,8 @@ public class SignInActivity2 extends AppCompatActivity {
                         if (user == null) {
                             Toast.makeText(SignInActivity2.this,"Error during Facebook Login!",Toast.LENGTH_LONG).show();
                         } else {
-                            dialog = ProgressDialog.show((Context)SignInActivity2.this, null, "Initializing Data ... Please wait.");
+                            // dialog = ProgressDialog.show((Context)SignInActivity2.this, null, "Initializing Data ... Please wait.");
+
                             if (user.isNew()) {
                                 user.put("userType", "app");
                                 user.saveInBackground();
@@ -243,12 +251,16 @@ public class SignInActivity2 extends AppCompatActivity {
                             AppUtil.setSignedInUserID(SignInActivity2.this, user.getObjectId());
 
                             OConnectBaseActivity.currentPerson = Person.saveFromParseUser(user, false);
+
+                            addPersonToConference(user);
+
                             callFacebookImportAPI(user);
 
-                            // dialog.dismiss();
+                            // Intent i = new Intent(SignInActivity2.this, DashboardActivity.class);
+                            // SignInActivity2.this.startActivity(i);
 
-                            Intent i = new Intent(SignInActivity2.this, DashboardActivity.class);
-                            SignInActivity2.this.startActivity(i);
+                            executePINPromptWorkflow(user);
+                            // dialog.dismiss();
                         }
                     }
 
@@ -369,9 +381,12 @@ public class SignInActivity2 extends AppCompatActivity {
 
                                     OConnectBaseActivity.currentPerson = Person.saveFromParseUser(parseUser, false);
 
-                                    Intent i = new Intent(SignInActivity2.this, DashboardActivity.class);
-                                    startActivity(i);
+                                    addPersonToConference(parseUser);
 
+                                    // Intent i = new Intent(SignInActivity2.this, DashboardActivity.class);
+                                    // startActivity(i);
+
+                                    executePINPromptWorkflow(parseUser);
                                 }
 
                                 dialog.dismiss();
@@ -437,6 +452,8 @@ public class SignInActivity2 extends AppCompatActivity {
                             OConnectBaseActivity.currentPerson = Person.saveFromParseUser(user, false);
                             AppUtil.setIsSignedIn(SignInActivity2.this, true);
                             AppUtil.setSignedInUserID(SignInActivity2.this, user.getObjectId());
+
+                            addPersonToConference(user);
 
                             dialog.dismiss();
 
@@ -986,5 +1003,225 @@ public class SignInActivity2 extends AppCompatActivity {
     private boolean isFacebookUserIsLoggedIn() {
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
         return accessToken != null;
+    }
+
+    private void executePINPromptWorkflow(final ParseUser finalUser) {
+        if (AppUtil.hasPinPromptEnteredForConference(SignInActivity2.this, AppUtil.getSelectedConferenceID(SignInActivity2.this)) == false
+                && OConnectBaseActivity.selectedConference.isShouldShowPin() == true &&
+                AppUtil.hasPinPromptSkippedForConference(SignInActivity2.this, AppUtil.getSelectedConferenceID(SignInActivity2.this)) == false) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(SignInActivity2.this);
+            builder.setTitle("Please Enter Your PIN To Verify Your Identity");
+            builder.setMessage("If you have received an email from the organizer with a PIN number, please enter it here to verify your identity.  If you did not receive an email, please Skip this step.");
+
+            final EditText input = new EditText(SignInActivity2.this);
+
+            final Realm realm = AppUtil.getRealmInstance(SignInActivity2.this);
+
+            input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+            builder.setView(input);
+
+            builder.setPositiveButton("Enter PIN", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    try {
+
+                        List<ParseObject> speakerList = ParseQuery.getQuery("Speaker").whereEqualTo("IOS_code", input.getText().toString()).find();
+                        List<ParseObject> attendeeList = ParseQuery.getQuery("Attendee").whereEqualTo("IOS_code", input.getText().toString()).find();
+
+                        boolean bUserLinked = false;
+
+                        if (speakerList.size() > 0) {
+                            ParseObject speakerObj = speakerList.get(0).fetchIfNeeded();
+
+                            speakerObj.fetchIfNeededInBackground(new GetCallback<ParseObject>() {
+                                @Override
+                                public void done(ParseObject object, ParseException e) {
+                                    if (e == null) {
+                                        object.put("UserLink", finalUser.getObjectId());
+
+                                        try {
+                                            object.save();
+                                        } catch (Exception ex) {
+                                            Log.d("APD", "Error saving Speaker: " + ex.getMessage());
+                                        }
+                                    }
+                                }
+                            });
+
+                            realm.beginTransaction();
+                            Speaker speaker = realm.where(Speaker.class).equalTo("objectId", speakerObj.getObjectId()).findFirst();
+                            if (speaker != null) {
+                                speaker.setUserLink(finalUser.getObjectId());
+                            }
+                            realm.commitTransaction();
+
+                            bUserLinked = true;
+                        } else if (attendeeList.size() > 0) {
+                            ParseObject attendeeObj = attendeeList.get(0).fetchIfNeeded();
+                            attendeeObj.put("UserLink", finalUser.getObjectId());
+                            attendeeObj.save();
+
+                            realm.beginTransaction();
+                            Attendee attendee = realm.where(Attendee.class).equalTo("objectId", attendeeObj.getObjectId()).findFirst();
+                            if (attendee != null) {
+                                attendee.setUserLink(finalUser.getObjectId());
+                            }
+                            realm.commitTransaction();
+
+                            bUserLinked = true;
+                        }
+
+                        if (bUserLinked == true) {
+                            AppUtil.addConferenceForPinPromptEntered(SignInActivity2.this, OConnectBaseActivity.selectedConference.getObjectId());
+                            SignInActivity2.this.finish();
+                            Intent i = new Intent(SignInActivity2.this, DashboardActivity.class);
+                            startActivity(i);
+                            overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up );
+                        } else {
+                            AlertDialog alertDialog = new AlertDialog.Builder(SignInActivity2.this).create();
+                            alertDialog.setTitle("Error");
+                            alertDialog.setMessage("Incorrect PIN.  Please try again when logging in.");
+                            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            SignInActivity2.this.finish();
+                                            Intent i = new Intent(SignInActivity2.this, DashboardActivity.class);
+                                            startActivity(i);
+                                            overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up );
+                                        }
+                                    });
+                            alertDialog.show();
+                        }
+
+                    } catch (Exception ex) {
+                        Log.d("SignIn2", ex.getMessage());
+                    }
+                }
+            });
+            builder.setNegativeButton("Skip", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(SignInActivity2.this);
+                    builder.setTitle("Are You Sure?");
+                    builder.setMessage("If you received an email with a PIN, we strongly recommend you enter it so that we can verify your identity properly.");
+
+                    final EditText input = new EditText(SignInActivity2.this);
+
+                    input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    builder.setView(input);
+
+                    builder.setPositiveButton("Enter PIN", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            try {
+                                List<ParseObject> speakerList = ParseQuery.getQuery("Speaker").whereEqualTo("IOS_code", input.getText().toString()).find();
+                                List<ParseObject> attendeeList = ParseQuery.getQuery("Attendee").whereEqualTo("IOS_code", input.getText().toString()).find();
+
+                                boolean bUserLinked = false;
+
+                                if (speakerList.size() > 0) {
+                                    ParseObject speakerObj = speakerList.get(0);
+                                    speakerObj.put("UserLink", finalUser.getObjectId());
+                                    speakerObj.save();
+
+                                    realm.beginTransaction();
+                                    Speaker speaker = realm.where(Speaker.class).equalTo("objectId", speakerObj.getObjectId()).findFirst();
+                                    if (speaker != null) {
+                                        speaker.setUserLink(finalUser.getObjectId());
+                                    }
+                                    realm.commitTransaction();
+
+                                    bUserLinked = true;
+                                } else if (attendeeList.size() > 0) {
+                                    ParseObject attendeeObj = attendeeList.get(0);
+                                    attendeeObj.put("UserLink", finalUser.getObjectId());
+                                    attendeeObj.save();
+
+                                    realm.beginTransaction();
+                                    Attendee attendee = realm.where(Attendee.class).equalTo("objectId", attendeeObj.getObjectId()).findFirst();
+                                    if (attendee != null) {
+                                        attendee.setUserLink(finalUser.getObjectId());
+                                    }
+                                    realm.commitTransaction();
+
+                                    bUserLinked = true;
+                                }
+
+                                if (bUserLinked == true) {
+                                    AppUtil.addConferenceForPinPromptEntered(SignInActivity2.this, OConnectBaseActivity.selectedConference.getObjectId());
+                                    SignInActivity2.this.finish();
+                                    Intent i = new Intent(SignInActivity2.this, DashboardActivity.class);
+                                    startActivity(i);
+                                    overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up );
+                                } else {
+                                    AlertDialog alertDialog = new AlertDialog.Builder(SignInActivity2.this).create();
+                                    alertDialog.setTitle("Error");
+                                    alertDialog.setMessage("Incorrect PIN.  Please try again when logging in.");
+                                    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                                            new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    SignInActivity2.this.finish();
+                                                    Intent i = new Intent(SignInActivity2.this, DashboardActivity.class);
+                                                    startActivity(i);
+                                                    overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up );
+                                                }
+                                            });
+                                    alertDialog.show();
+                                }
+                            } catch (Exception ex) {
+                                Log.d("SignIn2", ex.getMessage());
+                            }
+                        }
+                    });
+                    builder.setNegativeButton("Skip", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            AppUtil.addConferenceForPinPromptSkipped(SignInActivity2.this, AppUtil.getSelectedConferenceID(SignInActivity2.this));
+                            Intent i = new Intent(SignInActivity2.this, DashboardActivity.class);
+                            startActivity(i);
+                            overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up );
+                        }
+                    });
+
+                    builder.create().show();
+
+                }
+            });
+
+            AlertDialog dialog = builder.create();
+
+            dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+
+            dialog.show();
+        } else {
+            Intent i = new Intent(SignInActivity2.this, DashboardActivity.class);
+            startActivity(i);
+            overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up );
+        }
+    }
+
+    private void addPersonToConference(ParseObject user) {
+        if (OConnectBaseActivity.selectedConference != null && OConnectBaseActivity.currentPerson != null) {
+            Realm realm = AppUtil.getRealmInstance(this);
+            realm.beginTransaction();
+            if (OConnectBaseActivity.selectedConference.getPeople() == null) {
+                OConnectBaseActivity.selectedConference.setPeople(new RealmList<Person>());
+            }
+
+            if (!OConnectBaseActivity.selectedConference.getPeople().contains(OConnectBaseActivity.currentPerson)) {
+                OConnectBaseActivity.selectedConference.getPeople().add(OConnectBaseActivity.currentPerson);
+            }
+
+            try {
+                ParseObject conf = ParseQuery.getQuery("Conference").whereEqualTo("objectId", OConnectBaseActivity.selectedConference.getObjectId()).getFirst();
+                ParseRelation<ParseObject> relation = conf.getRelation("person");
+                relation.add(user);
+                conf.save();
+            } catch (Exception ex) {
+                Log.d("APD", ex.getMessage());
+            }
+            realm.commitTransaction();
+            realm.close();
+        }
     }
 }

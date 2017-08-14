@@ -396,7 +396,6 @@ public class ConferenceListViewActivity extends AppCompatActivity {
         autoComplete.setTextSize(16);
         // autoComplete.setBackground(getResources().getDrawable(R.drawable.search_view));
 
-
         if (AppConfig.isPrivateLabelApp == true && launchedFromLeftNav == false) {
             if (getConferenceCount() <= 1) {
                 if (AppUtil.getIsSignedIn(ConferenceListViewActivity.this) == true) {
@@ -423,6 +422,16 @@ public class ConferenceListViewActivity extends AppCompatActivity {
             ConferenceListViewActivity.this.finish();
             Intent i = new Intent(ConferenceListViewActivity.this, DashboardActivity.class);
             startActivity(i);
+        } else if (launchedFromLeftNav == false) {
+            Realm realm = AppUtil.getRealmInstance(this);
+
+            com.ointerface.oconnect.data.AppConfig config = realm.where(com.ointerface.oconnect.data.AppConfig.class).findFirst();
+
+            if (config != null && config.getShowConfList() == false) {
+                ConferenceListViewActivity.this.finish();
+                Intent i = new Intent(ConferenceListViewActivity.this, DashboardActivity.class);
+                startActivity(i);
+            }
         }
 
         navigation.setSelectedItemId(R.id.navigation_coming_soon);

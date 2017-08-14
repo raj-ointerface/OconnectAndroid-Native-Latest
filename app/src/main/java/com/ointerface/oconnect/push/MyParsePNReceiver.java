@@ -2,15 +2,19 @@ package com.ointerface.oconnect.push;
 
 import android.app.ActivityManager;
 import android.app.AlertDialog;
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.os.AsyncTask;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+import android.view.WindowManager;
 
 import com.ointerface.oconnect.App;
 import com.ointerface.oconnect.MainSplashActivity;
@@ -20,8 +24,11 @@ import com.ointerface.oconnect.activities.ConnectionsActivity;
 import com.ointerface.oconnect.activities.OConnectBaseActivity;
 import com.ointerface.oconnect.data.MasterNotification;
 import com.ointerface.oconnect.data.Person;
+import com.ointerface.oconnect.service.BackgroundService;
 import com.ointerface.oconnect.util.AppUtil;
+import com.parse.ParseObject;
 import com.parse.ParsePushBroadcastReceiver;
+import com.parse.ParseQuery;
 
 import org.json.JSONObject;
 
@@ -41,7 +48,7 @@ public class MyParsePNReceiver extends ParsePushBroadcastReceiver {
 
     public static final String PARSE_DATA_KEY = "com.parse.Data";
 
-    protected void onPushReceive(Context mContext, Intent intent) {
+    protected void onPushReceive(final Context mContext, Intent intent) {
 
         int badgeCount = getAlertCount(mContext);
 
@@ -49,27 +56,71 @@ public class MyParsePNReceiver extends ParsePushBroadcastReceiver {
 
         setBadge(mContext, badgeCount);
 
+        /*
+        for (String key : intent.getExtras().keySet()) {
+            String tempStr = intent.getExtras().getString(key);
+            tempStr = tempStr;
+        }
+        */
+
+        String jsonStr = intent.getExtras().getString(PARSE_DATA_KEY);
+
+        boolean isMessageFromCMSForDataUpdate = true;
+
+        try {
+            JSONObject jsonObj = new JSONObject(jsonStr);
+
+
+            if (jsonObj.has("class")) {
+                String notificationType = jsonObj.getString("class");
+
+                if (notificationType != null && notificationType.equalsIgnoreCase("Notification")) {
+                    isMessageFromCMSForDataUpdate = false;
+                } else {
+                    isMessageFromCMSForDataUpdate = true;
+                }
+            }
+        } catch (Exception ex) {
+            Log.d("APD", ex.getMessage());
+        }
         if (isAppRunning(mContext, "com.ointerface.oconnect") == true) {
             try {
-                JSONObject data = new JSONObject(intent.getExtras().getString(PARSE_DATA_KEY));
-                AlertDialog dialog = new AlertDialog.Builder(mContext)
-                        .setMessage(data.toString())
-                        .setCancelable(true)
-                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        })
-                        .create();
 
-                dialog.show();
+                if (isMessageFromCMSForDataUpdate == false) {
+                    ParseObject notification = ParseQuery.getQuery("MasterNotification").addDescendingOrder("createdAt").getFirst();
+
+                    String message = notification.getString("alert");
+
+                    JSONObject data = new JSONObject(intent.getExtras().getString(PARSE_DATA_KEY));
+                    AlertDialog dialog = new AlertDialog.Builder(App.getInstance().activity)
+                            .setMessage(message)
+                            .setCancelable(true)
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            })
+                            .create();
+
+                    dialog.show();
+                } else {
+                    AsyncTask.execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            mContext.startService(new Intent(mContext, BackgroundService.class));
+                        }
+                    });
+                }
             } catch (Exception ex) {
                 Log.d("APD", ex.getMessage());
             }
         } else {
             try {
-                JSONObject data = new JSONObject(intent.getExtras().getString(PARSE_DATA_KEY));
+
+                ParseObject notification = ParseQuery.getQuery("MasterNotification").addDescendingOrder("createdAt").getFirst();
+
+                String message = notification.getString("alert");
 
                 Intent notificationIntent = new Intent(mContext, MainSplashActivity.class);
                 PendingIntent contentIntent = PendingIntent.getActivity(mContext,
@@ -82,11 +133,17 @@ public class MyParsePNReceiver extends ParsePushBroadcastReceiver {
                 NotificationCompat.Builder builder = new NotificationCompat.Builder(mContext);
                 builder.setContentIntent(contentIntent);
                 builder.setContentTitle("OConnect");
-                builder.setContentText(data.toString());
+                builder.setContentText(message);
                 builder.setSmallIcon(R.drawable.oconnect_logo);
                 builder.setAutoCancel(true);
 
-                notificationManager.notify("MyTag", 0, builder.build());
+                // notificationManager.notify("MyTag", 0, builder.build());
+
+                Notification systemNotification = builder.build();
+
+                if (systemNotification != null) {
+                    notificationManager.notify(null, 10, systemNotification);
+                }
             } catch (Exception ex) {
                 Log.d("APD", ex.getMessage());
             }

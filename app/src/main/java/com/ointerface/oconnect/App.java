@@ -1,5 +1,6 @@
 package com.ointerface.oconnect;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.ComponentName;
 import android.content.Intent;
@@ -28,6 +29,7 @@ import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseInstallation;
 import com.parse.ParsePush;
+import com.parse.ParsePushBroadcastReceiver;
 import com.parse.ParseTwitterUtils;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
@@ -71,6 +73,8 @@ public class App extends MultiDexApplication implements ServiceConnection, Messa
 
     public SinchService.SinchServiceInterface mSinchServiceInterface;
 
+    public Activity activity;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -104,6 +108,7 @@ public class App extends MultiDexApplication implements ServiceConnection, Messa
             }
         });
 
+
         if (AppUtil.getDefaultRealmLoaded(getApplicationContext()) == false) {
             Uri path = Uri.parse("file:///android_asset/default.realm");
 
@@ -113,17 +118,21 @@ public class App extends MultiDexApplication implements ServiceConnection, Messa
                 @Override
                 public void migrate(DynamicRealm realm, long oldVersion, long newVersion) {
 
-                    /*
-                    realm.getSchema().create("SurveyQuestion");
-                    realm.getSchema().get("SurveyQuestion").addField("objectId", String.class);
-                    realm.getSchema().get("SurveyQuestion").addPrimaryKey("objectId").setRequired("objectId", true);
-                    realm.getSchema().get("SurveyQuestion").addField("question", String.class);
-                    realm.getSchema().get("SurveyQuestion").addField("order", Integer.class);
-                    realm.getSchema().get("SurveyQuestion").addField("conference", String.class);
-                    */
 
+                    realm.getSchema().create("AppConfig");
+                    realm.getSchema().get("AppConfig").addField("objectId", String.class);
+                    realm.getSchema().get("AppConfig").addPrimaryKey("objectId").setRequired("objectId", true);
+                    realm.getSchema().get("AppConfig").addField("defaultConference", String.class);
+                    realm.getSchema().get("AppConfig").addField("showMainSplash", Boolean.class);
+                    realm.getSchema().get("AppConfig").addField("showConfList", Boolean.class);
+                    realm.getSchema().get("AppConfig").addField("organizationId", String.class);
+                    realm.getSchema().get("AppConfig").addField("appName", String.class);
 
-                    realm.getSchema().get("SinchMessage").addField("isRead", Boolean.class);
+                    realm.getSchema().get("Conference").addField("DashboardImage", byte[].class);
+
+                    // realm.getSchema().get("SinchMessage").addField("isRead", Boolean.class);
+                    // realm.getSchema().get("Event").addField("trackColor", String.class);
+
                 }
             };
 

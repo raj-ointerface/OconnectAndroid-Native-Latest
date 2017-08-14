@@ -56,9 +56,11 @@ public class AboutUsActivity extends OConnectBaseActivity {
 
         ivConferenceImage = (ImageView) findViewById(R.id.ivConferenceImage);
 
-        Bitmap bm = BitmapFactory.decodeByteArray(selectedConference.getImage(), 0, selectedConference.getImage().length);
+        if (selectedConference.getImage() != null) {
+            Bitmap bm = BitmapFactory.decodeByteArray(selectedConference.getImage(), 0, selectedConference.getImage().length);
 
-        ivConferenceImage.setImageBitmap(bm);
+            ivConferenceImage.setImageBitmap(bm);
+        }
     }
 
 }

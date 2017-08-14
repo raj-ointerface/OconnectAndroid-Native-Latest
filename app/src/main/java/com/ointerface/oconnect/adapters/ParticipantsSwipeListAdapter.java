@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +25,7 @@ import com.ointerface.oconnect.activities.OConnectBaseActivity;
 import com.ointerface.oconnect.activities.ParticipantsActivity;
 import com.ointerface.oconnect.data.Attendee;
 import com.ointerface.oconnect.data.Event;
+import com.ointerface.oconnect.data.Person;
 import com.ointerface.oconnect.data.Speaker;
 import com.ointerface.oconnect.util.AppUtil;
 import com.parse.ParseObject;
@@ -31,6 +33,8 @@ import com.parse.ParseQuery;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
 
+import java.io.InputStream;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.TreeSet;
@@ -55,6 +59,7 @@ public class ParticipantsSwipeListAdapter extends BaseSwipeAdapter {
 
     public ArrayList<Speaker> mSpeakers = new ArrayList<Speaker>();
     public ArrayList<Attendee> mAttendees = new ArrayList<Attendee>();
+    public ArrayList<Person> mPeople = new ArrayList<Person>();
 
     public TreeSet<Integer> hiddenPositionsByUser = new TreeSet<Integer>();
     public TreeSet<Integer> connectedPositionsByUser = new TreeSet<Integer>();
@@ -66,6 +71,8 @@ public class ParticipantsSwipeListAdapter extends BaseSwipeAdapter {
         this.activity = activity;
         this.mSpeakers = new ArrayList<Speaker>();
         this.mAttendees = new ArrayList<Attendee>();
+        this.mPeople = new ArrayList<Person>();
+
         hiddenPositionsByUser = new TreeSet<Integer>();
 
         mInflater = LayoutInflater.from(context);
@@ -78,6 +85,9 @@ public class ParticipantsSwipeListAdapter extends BaseSwipeAdapter {
         mAttendees.add(item);
     }
 
+    public void addPerson(final Person item) {
+        mPeople.add(item);
+    }
 
     @Override
     public int getCount() {
@@ -85,7 +95,7 @@ public class ParticipantsSwipeListAdapter extends BaseSwipeAdapter {
             return mSpeakers.size();
         }
 
-        return mAttendees.size();
+        return mPeople.size() + mAttendees.size();
     }
 
     @Override
@@ -94,7 +104,10 @@ public class ParticipantsSwipeListAdapter extends BaseSwipeAdapter {
             mSpeakers.get(position).getName();
         }
 
-        return mAttendees.get(position).getName();
+        if (position >= mPeople.size()) {
+            return mAttendees.get(position - mPeople.size()).getName();
+        }
+        return mPeople.get(position).getFirstName();
     }
 
     @Override
@@ -157,11 +170,12 @@ public class ParticipantsSwipeListAdapter extends BaseSwipeAdapter {
             ivHouse.setBackground(AppUtil.changeDrawableColor(context, R.drawable.icon_participants_house, AppUtil.getPrimaryThemColorAsInt()));
 
             if (speaker.getImage() != null) {
-                Bitmap bmp = BitmapFactory.decodeByteArray(speaker.getImage(), 0, speaker.getImage().length);
+                // Bitmap bmp = BitmapFactory.decodeByteArray(speaker.getImage(), 0, speaker.getImage().length);
 
+                Bitmap bitmap = decodeSampledBitmapFromByteArray(speaker.getImage(), AppUtil.convertDPToPXInt(context, 80), AppUtil.convertDPToPXInt(context, 80));
                 // Drawable d = new BitmapDrawable(context.getResources(), bmp);
 
-                ivPicture.setImageBitmap(bmp);
+                ivPicture.setImageBitmap(bitmap);
 
                 // ivPicture.setBackground(d);
             } else {
@@ -306,200 +320,438 @@ public class ParticipantsSwipeListAdapter extends BaseSwipeAdapter {
                 rlContent.setBackgroundResource(R.drawable.layout_background_rounded);
             }
         } else {
-            final Attendee attendee = mAttendees.get(position);
 
-            ImageView ivInfo = (ImageView) convertView.findViewById(R.id.ivParticipantJobTitle);
-            ImageView ivSuitcase = (ImageView) convertView.findViewById(R.id.ivParticipantOrg);
-            ImageView ivLightBuld = (ImageView) convertView.findViewById(R.id.ivParticipantInterests);
-            ImageView ivHouse = (ImageView) convertView.findViewById(R.id.ivParticipantLocation);
-            ImageView ivPicture = (ImageView) convertView.findViewById(R.id.ivParticipantPicture);
+            boolean bIsAttendee = false;
 
-            RelativeLayout rlContainer = (RelativeLayout) convertView.findViewById(R.id.rlContainer);
-            RelativeLayout rlContent = (RelativeLayout) convertView.findViewById(R.id.rlContent);
-
-            rlContainer.setClipChildren(false);
-            rlContent.setClipChildren(false);
-
-            ivInfo.setBackground(AppUtil.changeDrawableColor(context, R.drawable.icon_participants_info, AppUtil.getPrimaryThemColorAsInt()));
-            ivSuitcase.setBackground(AppUtil.changeDrawableColor(context, R.drawable.icon_paricipants_suitcase, AppUtil.getPrimaryThemColorAsInt()));
-            ivLightBuld.setBackground(AppUtil.changeDrawableColor(context, R.drawable.icon_participants_light_bulb, AppUtil.getPrimaryThemColorAsInt()));
-            ivHouse.setBackground(AppUtil.changeDrawableColor(context, R.drawable.icon_participants_house, AppUtil.getPrimaryThemColorAsInt()));
-
-            if (attendee.getImage() != null) {
-                Bitmap bmp = BitmapFactory.decodeByteArray(attendee.getImage(), 0, attendee.getImage().length);
-                Drawable d = new BitmapDrawable(context.getResources(), bmp);
-                ivPicture.setBackground(d);
-            } else {
-                ivPicture.setBackgroundResource(R.drawable.icon_silhouette);
+            if (position >= mPeople.size()) {
+                bIsAttendee = true;
+                position = position - mPeople.size();
             }
 
-            TextView tvName = (TextView) convertView.findViewById(R.id.tvParticipantName);
-            TextView tvJobTitle = (TextView) convertView.findViewById(R.id.tvParticipantJobTitle);
-            TextView tvOrg = (TextView) convertView.findViewById(R.id.tvParticipantOrg);
-            TextView tvInterests = (TextView) convertView.findViewById(R.id.tvParticipantInterests);
-            TextView tvLocation = (TextView) convertView.findViewById(R.id.tvParticipantLocation);
+            if (bIsAttendee == true) {
+                final Attendee attendee = mAttendees.get(position);
 
-            tvName.setText(attendee.getName());
+                ImageView ivInfo = (ImageView) convertView.findViewById(R.id.ivParticipantJobTitle);
+                ImageView ivSuitcase = (ImageView) convertView.findViewById(R.id.ivParticipantOrg);
+                ImageView ivLightBuld = (ImageView) convertView.findViewById(R.id.ivParticipantInterests);
+                ImageView ivHouse = (ImageView) convertView.findViewById(R.id.ivParticipantLocation);
+                ImageView ivPicture = (ImageView) convertView.findViewById(R.id.ivParticipantPicture);
 
-            if (attendee.getJob() != null && !attendee.getJob().equalsIgnoreCase("")) {
-                tvJobTitle.setText(attendee.getJob());
-                tvJobTitle.setVisibility(View.VISIBLE);
-            } else {
-                tvJobTitle.setVisibility(GONE);
-                ivInfo.setVisibility(GONE);
-            }
+                RelativeLayout rlContainer = (RelativeLayout) convertView.findViewById(R.id.rlContainer);
+                RelativeLayout rlContent = (RelativeLayout) convertView.findViewById(R.id.rlContent);
 
-            if (attendee.getOrganization() != null && !attendee.getOrganization().equalsIgnoreCase("")) {
-                tvOrg.setText(attendee.getOrganization());
-                tvOrg.setVisibility(View.VISIBLE);
-            } else {
-                tvOrg.setVisibility(GONE);
-                ivSuitcase.setVisibility(GONE);
-            }
+                rlContainer.setClipChildren(false);
+                rlContent.setClipChildren(false);
 
-            // TODO SET INTERESTS
-            tvInterests.setVisibility(GONE);
-            ivLightBuld.setVisibility(GONE);
+                ivInfo.setBackground(AppUtil.changeDrawableColor(context, R.drawable.icon_participants_info, AppUtil.getPrimaryThemColorAsInt()));
+                ivSuitcase.setBackground(AppUtil.changeDrawableColor(context, R.drawable.icon_paricipants_suitcase, AppUtil.getPrimaryThemColorAsInt()));
+                ivLightBuld.setBackground(AppUtil.changeDrawableColor(context, R.drawable.icon_participants_light_bulb, AppUtil.getPrimaryThemColorAsInt()));
+                ivHouse.setBackground(AppUtil.changeDrawableColor(context, R.drawable.icon_participants_house, AppUtil.getPrimaryThemColorAsInt()));
 
-            if (attendee.getLocation() != null && !attendee.getLocation().equalsIgnoreCase("")) {
-                tvLocation.setText(attendee.getLocation());
-                tvLocation.setVisibility(View.VISIBLE);
-            } else {
-                tvLocation.setVisibility(GONE);
-                ivHouse.setVisibility(GONE);
-            }
+                if (attendee.getImage() != null) {
+                    Bitmap bmp = BitmapFactory.decodeByteArray(attendee.getImage(), 0, attendee.getImage().length);
+                    Drawable d = new BitmapDrawable(context.getResources(), bmp);
+                    ivPicture.setBackground(d);
+                } else {
+                    ivPicture.setBackgroundResource(R.drawable.icon_silhouette);
+                }
 
-            final int finalPosition = position;
-            final SwipeLayout swipeMain = (SwipeLayout) convertView.findViewById(R.id.swipeMain);
-            TextView tvConnect = (TextView) convertView.findViewById(R.id.tvConnect);
-            TextView tvHide = (TextView) convertView.findViewById(R.id.tvHide);
-            final TextView tvCheckIn = (TextView) convertView.findViewById(R.id.tvCheckIn);
-            tvCheckIn.setVisibility(GONE);
+                TextView tvName = (TextView) convertView.findViewById(R.id.tvParticipantName);
+                TextView tvJobTitle = (TextView) convertView.findViewById(R.id.tvParticipantJobTitle);
+                TextView tvOrg = (TextView) convertView.findViewById(R.id.tvParticipantOrg);
+                TextView tvInterests = (TextView) convertView.findViewById(R.id.tvParticipantInterests);
+                TextView tvLocation = (TextView) convertView.findViewById(R.id.tvParticipantLocation);
 
-            if (attendee.getCheckedIn() == true) {
-                tvCheckIn.setVisibility(View.VISIBLE);
-                tvCheckIn.setText("Checked In");
-            }
+                tvName.setText(attendee.getName());
 
-            if (activity.currentSpeaker != null &&
-                    activity.currentSpeaker.isAllowCheckIn() == true) {
-                tvCheckIn.setVisibility(View.VISIBLE);
+                if (attendee.getJob() != null && !attendee.getJob().equalsIgnoreCase("")) {
+                    tvJobTitle.setText(attendee.getJob());
+                    tvJobTitle.setVisibility(View.VISIBLE);
+                } else {
+                    tvJobTitle.setVisibility(GONE);
+                    ivInfo.setVisibility(GONE);
+                }
 
-                tvCheckIn.setOnClickListener(new View.OnClickListener() {
+                if (attendee.getOrganization() != null && !attendee.getOrganization().equalsIgnoreCase("")) {
+                    tvOrg.setText(attendee.getOrganization());
+                    tvOrg.setVisibility(View.VISIBLE);
+                } else {
+                    tvOrg.setVisibility(GONE);
+                    ivSuitcase.setVisibility(GONE);
+                }
+
+                // TODO SET INTERESTS
+                tvInterests.setVisibility(GONE);
+                ivLightBuld.setVisibility(GONE);
+
+                if (attendee.getLocation() != null && !attendee.getLocation().equalsIgnoreCase("")) {
+                    tvLocation.setText(attendee.getLocation());
+                    tvLocation.setVisibility(View.VISIBLE);
+                } else {
+                    tvLocation.setVisibility(GONE);
+                    ivHouse.setVisibility(GONE);
+                }
+
+                final int finalPosition = position;
+                final SwipeLayout swipeMain = (SwipeLayout) convertView.findViewById(R.id.swipeMain);
+                TextView tvConnect = (TextView) convertView.findViewById(R.id.tvConnect);
+                TextView tvHide = (TextView) convertView.findViewById(R.id.tvHide);
+                final TextView tvCheckIn = (TextView) convertView.findViewById(R.id.tvCheckIn);
+                tvCheckIn.setVisibility(GONE);
+
+                if (attendee.getCheckedIn() == true) {
+                    tvCheckIn.setVisibility(View.VISIBLE);
+                    tvCheckIn.setText("Checked In");
+                }
+
+                if (activity.currentSpeaker != null &&
+                        activity.currentSpeaker.isAllowCheckIn() == true) {
+                    tvCheckIn.setVisibility(View.VISIBLE);
+
+                    tvCheckIn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Realm realm = AppUtil.getRealmInstance(App.getInstance());
+                            realm.beginTransaction();
+                            attendee.setCheckedIn(true);
+                            realm.commitTransaction();
+
+                            try {
+                                ParseObject parseAttendee = ParseQuery.getQuery("Attendee").get(attendee.getObjectId());
+                                if (parseAttendee != null) {
+                                    parseAttendee.put("isCheckedIn", true);
+                                    parseAttendee.save();
+                                }
+                            } catch (Exception ex) {
+                                Log.d("Participants", ex.getMessage());
+                            }
+
+                            tvCheckIn.setText("Checked In");
+                        }
+                    });
+                }
+
+                tvHide.setTextColor(AppUtil.getPrimaryThemColorAsInt());
+
+                tvHide.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (hiddenPositionsByUser.contains(finalPosition)) {
+                            hiddenPositionsByUser.remove(finalPosition);
+                        } else {
+                            hiddenPositionsByUser.add(finalPosition);
+                        }
+
+                        swipeMain.close();
+                        notifyDataSetChanged();
+                    }
+                });
+
+                tvConnect.setTextColor(AppUtil.getPrimaryThemColorAsInt());
+
+                tvConnect.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Realm realm = AppUtil.getRealmInstance(App.getInstance());
                         realm.beginTransaction();
-                        attendee.setCheckedIn(true);
-                        realm.commitTransaction();
+                        if (connectedPositionsAttendeeByUser.contains(finalPosition)) {
+                            connectedPositionsAttendeeByUser.remove(finalPosition);
+                            OConnectBaseActivity.currentPerson.getFavoriteAttendees().remove(attendee);
 
-                        try {
-                            ParseObject parseAttendee = ParseQuery.getQuery("Attendee").get(attendee.getObjectId());
-                            if (parseAttendee != null) {
-                                parseAttendee.put("isCheckedIn", true);
-                                parseAttendee.save();
+                            try {
+                                if (OConnectBaseActivity.currentPerson != null) {
+                                    ParseUser user = ParseUser.getQuery().get(OConnectBaseActivity.currentPerson.getObjectId());
+                                    ParseRelation<ParseObject> attendeesRelation = user.getRelation("favoriteAttendeesRelation");
+
+                                    ParseObject attendeeObj = ParseQuery.getQuery("Attendee").get(attendee.getObjectId());
+
+                                    if (attendeeObj != null) {
+                                        attendeesRelation.remove(attendeeObj);
+                                    }
+
+                                    user.save();
+                                }
+                            } catch (Exception ex) {
+                                Log.d("APD", ex.getMessage());
                             }
-                        } catch (Exception ex) {
-                            Log.d("Participants", ex.getMessage());
-                        }
 
-                        tvCheckIn.setText("Checked In");
+                            Toast.makeText(context, "Attendee removed from My Connections ...", Toast.LENGTH_LONG).show();
+                        } else {
+                            connectedPositionsAttendeeByUser.add(finalPosition);
+                            OConnectBaseActivity.currentPerson.getFavoriteAttendees().add(attendee);
+
+                            try {
+                                if (OConnectBaseActivity.currentPerson != null) {
+                                    ParseUser user = ParseUser.getQuery().get(OConnectBaseActivity.currentPerson.getObjectId());
+                                    ParseRelation<ParseObject> attendeesRelation = user.getRelation("favoriteAttendeesRelation");
+
+                                    ParseObject attendeeObj = ParseQuery.getQuery("Attendee").get(attendee.getObjectId());
+
+                                    if (attendeeObj != null) {
+                                        attendeesRelation.add(attendeeObj);
+                                    }
+
+                                    user.save();
+                                }
+                            } catch (Exception ex) {
+                                Log.d("APD", ex.getMessage());
+                            }
+
+                            Toast.makeText(context, "Attendee added to My Connections ...", Toast.LENGTH_LONG).show();
+                        }
+                        realm.commitTransaction();
+                        realm.close();
+
+                        swipeMain.close();
+                        notifyDataSetChanged();
                     }
                 });
-            }
 
-            tvHide.setTextColor(AppUtil.getPrimaryThemColorAsInt());
-
-            tvHide.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (hiddenPositionsByUser.contains(finalPosition)) {
-                        hiddenPositionsByUser.remove(finalPosition);
-                    } else {
-                        hiddenPositionsByUser.add(finalPosition);
-                    }
-
-                    swipeMain.close();
-                    notifyDataSetChanged();
+                if (connectedPositionsAttendeeByUser.contains(position)) {
+                    tvConnect.setText("Unconnect");
+                } else {
+                    tvConnect.setText("Connect");
                 }
-            });
 
-            tvConnect.setTextColor(AppUtil.getPrimaryThemColorAsInt());
+                if (hiddenPositionsByUser.contains(position)) {
+                    tvHide.setText("Unhide");
+                    rlContent.setBackgroundResource(R.drawable.layout_hidden_background_rounded);
+                    rlContent.getBackground().setAlpha(80);
+                } else {
+                    tvHide.setText("Hide");
+                    rlContent.setBackgroundResource(R.drawable.layout_background_rounded);
+                }
+            } else {
+                final Person person = mPeople.get(position);
 
-            tvConnect.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Realm realm = AppUtil.getRealmInstance(App.getInstance());
-                    realm.beginTransaction();
-                    if (connectedPositionsAttendeeByUser.contains(finalPosition)) {
-                        connectedPositionsAttendeeByUser.remove(finalPosition);
-                        OConnectBaseActivity.currentPerson.getFavoriteAttendees().remove(attendee);
+                ImageView ivInfo = (ImageView) convertView.findViewById(R.id.ivParticipantJobTitle);
+                ImageView ivSuitcase = (ImageView) convertView.findViewById(R.id.ivParticipantOrg);
+                ImageView ivLightBuld = (ImageView) convertView.findViewById(R.id.ivParticipantInterests);
+                ImageView ivHouse = (ImageView) convertView.findViewById(R.id.ivParticipantLocation);
+                final ImageView ivPicture = (ImageView) convertView.findViewById(R.id.ivParticipantPicture);
 
-                        try {
-                            if (OConnectBaseActivity.currentPerson != null) {
-                                ParseUser user = ParseUser.getQuery().get(OConnectBaseActivity.currentPerson.getObjectId());
-                                ParseRelation<ParseObject> attendeesRelation = user.getRelation("favoriteAttendeesRelation");
+                RelativeLayout rlContainer = (RelativeLayout) convertView.findViewById(R.id.rlContainer);
+                RelativeLayout rlContent = (RelativeLayout) convertView.findViewById(R.id.rlContent);
 
-                                ParseObject attendeeObj = ParseQuery.getQuery("Attendee").get(attendee.getObjectId());
+                rlContainer.setClipChildren(false);
+                rlContent.setClipChildren(false);
 
-                                if (attendeeObj != null) {
-                                    attendeesRelation.remove(attendeeObj);
-                                }
+                ivInfo.setBackground(AppUtil.changeDrawableColor(context, R.drawable.icon_participants_info, AppUtil.getPrimaryThemColorAsInt()));
+                ivSuitcase.setBackground(AppUtil.changeDrawableColor(context, R.drawable.icon_paricipants_suitcase, AppUtil.getPrimaryThemColorAsInt()));
+                ivLightBuld.setBackground(AppUtil.changeDrawableColor(context, R.drawable.icon_participants_light_bulb, AppUtil.getPrimaryThemColorAsInt()));
+                ivHouse.setBackground(AppUtil.changeDrawableColor(context, R.drawable.icon_participants_house, AppUtil.getPrimaryThemColorAsInt()));
 
-                                user.save();
+                if (person.getPictureURL() != null) {
+
+                    final String pictureURL = person.getPictureURL();
+
+                    Log.d("APD", "currentPerson.getPictureURL(): " + person.getPictureURL());
+
+                    new AsyncTask<Void, Void, Void>() {
+                        public Bitmap bmp;
+                        @Override
+                        protected Void doInBackground(Void... params) {
+                            try {
+                                InputStream in = new URL(pictureURL).openStream();
+                                bmp = BitmapFactory.decodeStream(in);
+                            } catch (Exception e) {
+                                Log.d("APD", e.getMessage());
                             }
-                        } catch (Exception ex) {
-                            Log.d("APD", ex.getMessage());
+                            return null;
                         }
 
-                        Toast.makeText(context, "Attendee removed from My Connections ...", Toast.LENGTH_LONG).show();
-                    } else {
-                        connectedPositionsAttendeeByUser.add(finalPosition);
-                        OConnectBaseActivity.currentPerson.getFavoriteAttendees().add(attendee);
+                        @Override
+                        protected void onPostExecute(Void result) {
+                            Log.d("APD", "pictureURL BITMAP: " + bmp);
 
-                        try {
-                            if (OConnectBaseActivity.currentPerson != null) {
-                                ParseUser user = ParseUser.getQuery().get(OConnectBaseActivity.currentPerson.getObjectId());
-                                ParseRelation<ParseObject> attendeesRelation = user.getRelation("favoriteAttendeesRelation");
+                            if (bmp != null) {
+                                Drawable d = new BitmapDrawable(context.getResources(), bmp);
 
-                                ParseObject attendeeObj = ParseQuery.getQuery("Attendee").get(attendee.getObjectId());
+                                ivPicture.setImageDrawable(d);
 
-                                if (attendeeObj != null) {
-                                    attendeesRelation.add(attendeeObj);
-                                }
-
-                                user.save();
                             }
-                        } catch (Exception ex) {
-                            Log.d("APD", ex.getMessage());
                         }
 
-                        Toast.makeText(context, "Attendee added to My Connections ...", Toast.LENGTH_LONG).show();
-                    }
-                    realm.commitTransaction();
-                    realm.close();
-
-                    swipeMain.close();
-                    notifyDataSetChanged();
+                    }.execute();
+                } else {
+                    ivPicture.setBackgroundResource(R.drawable.icon_silhouette);
                 }
-            });
 
-            if (connectedPositionsAttendeeByUser.contains(position)) {
-                tvConnect.setText("Unconnect");
-            } else {
-                tvConnect.setText("Connect");
-            }
+                TextView tvName = (TextView) convertView.findViewById(R.id.tvParticipantName);
+                TextView tvJobTitle = (TextView) convertView.findViewById(R.id.tvParticipantJobTitle);
+                TextView tvOrg = (TextView) convertView.findViewById(R.id.tvParticipantOrg);
+                TextView tvInterests = (TextView) convertView.findViewById(R.id.tvParticipantInterests);
+                TextView tvLocation = (TextView) convertView.findViewById(R.id.tvParticipantLocation);
 
-            if (hiddenPositionsByUser.contains(position)) {
-                tvHide.setText("Unhide");
-                rlContent.setBackgroundResource(R.drawable.layout_hidden_background_rounded);
-                rlContent.getBackground().setAlpha(80);
-            } else {
-                tvHide.setText("Hide");
-                rlContent.setBackgroundResource(R.drawable.layout_background_rounded);
+                tvName.setText(person.getFirstName() + " " + person.getLastName());
+
+                if (person.getJob() != null && !person.getJob().equalsIgnoreCase("")) {
+                    tvJobTitle.setText(person.getJob());
+                    tvJobTitle.setVisibility(View.VISIBLE);
+                } else {
+                    tvJobTitle.setVisibility(GONE);
+                    ivInfo.setVisibility(GONE);
+                }
+
+                if (person.getOrg() != null && !person.getOrg().equalsIgnoreCase("")) {
+                    tvOrg.setText(person.getOrg());
+                    tvOrg.setVisibility(View.VISIBLE);
+                } else {
+                    tvOrg.setVisibility(GONE);
+                    ivSuitcase.setVisibility(GONE);
+                }
+
+                // TODO SET INTERESTS
+                tvInterests.setVisibility(GONE);
+                ivLightBuld.setVisibility(GONE);
+
+                if (person.getLocation() != null && !person.getLocation().equalsIgnoreCase("")) {
+                    tvLocation.setText(person.getLocation());
+                    tvLocation.setVisibility(View.VISIBLE);
+                } else {
+                    tvLocation.setVisibility(GONE);
+                    ivHouse.setVisibility(GONE);
+                }
+
+                final int finalPosition = position;
+                final SwipeLayout swipeMain = (SwipeLayout) convertView.findViewById(R.id.swipeMain);
+                TextView tvConnect = (TextView) convertView.findViewById(R.id.tvConnect);
+                TextView tvHide = (TextView) convertView.findViewById(R.id.tvHide);
+                final TextView tvCheckIn = (TextView) convertView.findViewById(R.id.tvCheckIn);
+                tvCheckIn.setVisibility(GONE);
+
+                tvHide.setTextColor(AppUtil.getPrimaryThemColorAsInt());
+
+                tvHide.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (hiddenPositionsByUser.contains(finalPosition)) {
+                            hiddenPositionsByUser.remove(finalPosition);
+                        } else {
+                            hiddenPositionsByUser.add(finalPosition);
+                        }
+
+                        swipeMain.close();
+                        notifyDataSetChanged();
+                    }
+                });
+
+                tvConnect.setTextColor(AppUtil.getPrimaryThemColorAsInt());
+
+                tvConnect.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Realm realm = AppUtil.getRealmInstance(App.getInstance());
+                        realm.beginTransaction();
+                        if (connectedPositionsAttendeeByUser.contains(finalPosition)) {
+                            connectedPositionsAttendeeByUser.remove(finalPosition);
+                            OConnectBaseActivity.currentPerson.getFavoriteUsers().remove(person);
+
+                            try {
+                                if (OConnectBaseActivity.currentPerson != null) {
+                                    ParseUser user = ParseUser.getQuery().get(OConnectBaseActivity.currentPerson.getObjectId());
+                                    ParseRelation<ParseObject> usersRelation = user.getRelation("favoriteUsersRelation");
+
+                                    ParseObject personObj = ParseQuery.getQuery("User").get(person.getObjectId());
+
+                                    if (personObj != null) {
+                                        usersRelation.remove(personObj);
+                                    }
+
+                                    user.save();
+                                }
+                            } catch (Exception ex) {
+                                Log.d("APD", ex.getMessage());
+                            }
+
+                            Toast.makeText(context, "Attendee removed from My Connections ...", Toast.LENGTH_LONG).show();
+                        } else {
+                            connectedPositionsAttendeeByUser.add(finalPosition);
+                            OConnectBaseActivity.currentPerson.getFavoriteUsers().add(person);
+
+                            try {
+                                if (OConnectBaseActivity.currentPerson != null) {
+                                    ParseUser user = ParseUser.getQuery().get(OConnectBaseActivity.currentPerson.getObjectId());
+                                    ParseRelation<ParseObject> usersRelation = user.getRelation("favoriteUsersRelation");
+
+                                    ParseObject userObj = ParseQuery.getQuery("User").get(person.getObjectId());
+
+                                    if (userObj != null) {
+                                        usersRelation.add(userObj);
+                                    }
+
+                                    user.save();
+                                }
+                            } catch (Exception ex) {
+                                Log.d("APD", ex.getMessage());
+                            }
+
+                            Toast.makeText(context, "Attendee added to My Connections ...", Toast.LENGTH_LONG).show();
+                        }
+                        realm.commitTransaction();
+                        realm.close();
+
+                        swipeMain.close();
+                        notifyDataSetChanged();
+                    }
+                });
+
+                if (connectedPositionsAttendeeByUser.contains(position)) {
+                    tvConnect.setText("Unconnect");
+                } else {
+                    tvConnect.setText("Connect");
+                }
+
+                if (hiddenPositionsByUser.contains(position)) {
+                    tvHide.setText("Unhide");
+                    rlContent.setBackgroundResource(R.drawable.layout_hidden_background_rounded);
+                    rlContent.getBackground().setAlpha(80);
+                } else {
+                    tvHide.setText("Hide");
+                    rlContent.setBackgroundResource(R.drawable.layout_background_rounded);
+                }
             }
         }
 
+    }
+
+    public static Bitmap decodeSampledBitmapFromByteArray(byte[] data,
+                                                          int reqWidth, int reqHeight) {
+
+        // First decode with inJustDecodeBounds=true to check dimensions
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeByteArray(data, 0, data.length, options);
+
+        // Calculate inSampleSize
+        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+
+        // Decode bitmap with inSampleSize set
+        options.inJustDecodeBounds = false;
+        return BitmapFactory.decodeByteArray(data, 0, data.length, options);
+    }
+
+    public static int calculateInSampleSize(
+            BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        // Raw height and width of image
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+
+        if (height > reqHeight || width > reqWidth) {
+
+            final int halfHeight = height / 2;
+            final int halfWidth = width / 2;
+
+            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
+            // height and width larger than the requested height and width.
+            while ((halfHeight / inSampleSize) > reqHeight
+                    && (halfWidth / inSampleSize) > reqWidth) {
+                inSampleSize *= 2;
+            }
+        }
+
+        return inSampleSize;
     }
 }
 

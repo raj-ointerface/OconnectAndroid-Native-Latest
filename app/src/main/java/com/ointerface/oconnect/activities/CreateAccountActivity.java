@@ -31,6 +31,9 @@ import com.ointerface.oconnect.data.CloudUtil;
 import com.ointerface.oconnect.data.Person;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.ParseRelation;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
@@ -41,7 +44,10 @@ import java.io.FileDescriptor;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
+
+import io.realm.RealmList;
 
 import static android.R.attr.data;
 import static android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE;
@@ -178,6 +184,21 @@ public class CreateAccountActivity extends AppCompatActivity {
         try {
             user.save();
             OConnectBaseActivity.currentPerson = Person.saveFromParseUser(user, false);
+
+            if (OConnectBaseActivity.selectedConference != null) {
+                if (OConnectBaseActivity.selectedConference.getPeople() == null) {
+                    OConnectBaseActivity.selectedConference.setPeople(new RealmList<Person>());
+                }
+
+                if (!OConnectBaseActivity.selectedConference.getPeople().contains(OConnectBaseActivity.currentPerson)) {
+                    OConnectBaseActivity.selectedConference.getPeople().add(OConnectBaseActivity.currentPerson);
+
+                    ParseObject conf = ParseQuery.getQuery("Conference").whereEqualTo("objectId", OConnectBaseActivity.selectedConference.getObjectId()).getFirst();
+                    ParseRelation<ParseObject> relation = conf.getRelation("person");
+                    relation.add(user);
+                    conf.save();
+                }
+            }
         } catch (Exception ex) {
             Log.d("CreateAccount", ex.getMessage());
         }

@@ -3,6 +3,8 @@ package com.ointerface.oconnect.activities;
 import android.app.DownloadManager;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.IntDef;
 import android.support.design.widget.FloatingActionButton;
@@ -99,8 +101,18 @@ public class DashboardActivity extends OConnectBaseActivity {
 
         tvConferenceTitle = (TextView) findViewById(R.id.tvConferenceTitle);
 
-        if (selectedConference != null) {
+        ImageView ivConferenceLogo = (ImageView) findViewById(R.id.ivConferenceLogo);
+
+        if (selectedConference != null && selectedConference.getDashboardImage() != null) {
+            Bitmap bm = BitmapFactory.decodeByteArray(selectedConference.getDashboardImage(), 0, selectedConference.getDashboardImage().length);
+
+            ivConferenceLogo.setImageBitmap(bm);
+            ivConferenceLogo.setVisibility(View.VISIBLE);
+            tvConferenceTitle.setVisibility(GONE);
+        } else if (selectedConference != null) {
             tvConferenceTitle.setText(selectedConference.getName());
+            ivConferenceLogo.setVisibility(GONE);
+            tvConferenceTitle.setVisibility(View.VISIBLE);
         }
 
         tvTwitterText = (TextView) findViewById(R.id.tvTwitterText);

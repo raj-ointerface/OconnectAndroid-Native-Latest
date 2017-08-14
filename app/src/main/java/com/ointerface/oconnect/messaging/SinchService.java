@@ -6,9 +6,12 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
 
+import com.ointerface.oconnect.util.AppUtil;
 import com.sinch.android.rtc.*;
 import com.sinch.android.rtc.messaging.MessageClientListener;
 import com.sinch.android.rtc.messaging.WritableMessage;
+
+import io.realm.Realm;
 
 public class SinchService extends Service {
 

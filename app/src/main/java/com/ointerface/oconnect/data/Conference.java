@@ -2,6 +2,7 @@ package com.ointerface.oconnect.data;
 
 import java.util.Date;
 
+import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 import io.realm.annotations.Required;
@@ -84,6 +85,25 @@ public class Conference extends RealmObject {
     private boolean showParticipants = true;
     private String toolbarLabelExternalLink = "";
     private String group = "";
+    private byte[] DashboardImage = null;
+
+    public byte[] getDashboardImage() {
+        return DashboardImage;
+    }
+
+    public void setDashboardImage(byte[] dashboardImage) {
+        DashboardImage = dashboardImage;
+    }
+
+    private RealmList<Person> people = null;
+
+    public RealmList<Person> getPeople() {
+        return people;
+    }
+
+    public void setPeople(RealmList<Person> people) {
+        this.people = people;
+    }
 
     public String getObjectId() {
         return objectId;

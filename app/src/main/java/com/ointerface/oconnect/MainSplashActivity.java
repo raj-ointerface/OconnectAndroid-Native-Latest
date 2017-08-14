@@ -1,20 +1,24 @@
 package com.ointerface.oconnect;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 
 import com.crashlytics.android.Crashlytics;
+import com.ointerface.oconnect.data.AppConfig;
 import com.ointerface.oconnect.data.DataSyncManager;
 import com.ointerface.oconnect.data.IDataSyncListener;
 import com.ointerface.oconnect.push.MyParsePNReceiver;
 import com.ointerface.oconnect.service.BackgroundService;
+import com.ointerface.oconnect.util.AppUtil;
 
 import java.util.Calendar;
 import java.util.Date;
 
 import io.fabric.sdk.android.Fabric;
+import io.realm.Realm;
 
 public class MainSplashActivity extends AppCompatActivity implements IDataSyncListener {
 
@@ -26,30 +30,39 @@ public class MainSplashActivity extends AppCompatActivity implements IDataSyncLi
 
         setContentView(R.layout.activity_main_splash);
 
-        /*
-        DataSyncManager.dialog = ProgressDialog.show((Context)this, null, "Initializing Data ... Please wait.");
+        // DataSyncManager.dialog = ProgressDialog.show((Context)this, null, "Initializing Data ... Please wait.");
+
+        Realm realm = AppUtil.getRealmInstance(this);
+
+        AppConfig config = realm.where(AppConfig.class).findFirst();
+
+        if (config != null && config.getShowMainSplash() == false) {
+            Intent i = new Intent(MainSplashActivity.this, CustomSplashActivity.class);
+            startActivity(i);
+        } else {
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    // Goto CustomSplashActivity after 4 seconds
+                    Intent i = new Intent(MainSplashActivity.this, CustomSplashActivity.class);
+                    startActivity(i);
+                }
+            }, 4000);
+        }
 
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
-                DataSyncManager.shouldSyncAll = true;
-                DataSyncManager.beginDataSync(getApplicationContext(), MainSplashActivity.this);
+
+                // DataSyncManager.shouldSyncAll = true;
+                // DataSyncManager.beginDataSync(getApplicationContext(), MainSplashActivity.this);
+
+                MyParsePNReceiver.setBadge(MainSplashActivity.this, MyParsePNReceiver.getAlertCount(MainSplashActivity.this));
+
+                startService(new Intent(MainSplashActivity.this, BackgroundService.class));
             }
         });
-        */
 
-        MyParsePNReceiver.setBadge(this, MyParsePNReceiver.getAlertCount(this));
-
-        startService(new Intent(this, BackgroundService.class));
-
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            public void run() {
-                // Goto CustomSplashActivity after 4 seconds
-                Intent i = new Intent(MainSplashActivity.this, CustomSplashActivity.class);
-                startActivity(i);
-            }
-        }, 4000);
     }
 
     public void onDataSyncFinish() {

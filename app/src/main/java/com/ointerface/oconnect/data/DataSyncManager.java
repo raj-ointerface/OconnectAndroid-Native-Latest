@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.ointerface.oconnect.R;
 import com.ointerface.oconnect.util.AppConfig;
 import com.ointerface.oconnect.util.AppUtil;
 import com.parse.FindCallback;
@@ -263,12 +264,39 @@ public class DataSyncManager {
                                 Log.d("DataSyncManager", "Line 231 " + ex.getMessage());
                             }
 
+                            ParseFile parseImage2 = (ParseFile) parseObject.getParseFile("DashboardImage");
+
+                            try {
+                                if (parseImage2 != null) {
+                                    conference.setDashboardImage(parseImage2.getData());
+                                }
+                            } catch (Exception ex) {
+                                Log.d("DataSyncManager", "Line 231 " + ex.getMessage());
+                            }
+
                             conference.setContactEmail(parseObject.getString("contactEmail"));
                             conference.setDescription(parseObject.getString("description"));
                             conference.setShowParticipants(parseObject.getBoolean("showParticipants"));
                             conference.setToolbarLabelExternalLink(parseObject.getString("toolbarLabelExternalLink"));
                             conference.setGroup(parseObject.getString("group"));
 
+                            ParseRelation<ParseObject> peopleRelation = parseObject.getRelation("person");
+
+                            try {
+                                List<ParseObject> peopleList = peopleRelation.getQuery().find();
+
+                                conference.setPeople(new RealmList<Person>());
+
+                                if (peopleList != null) {
+                                    for (ParseObject thisObj : peopleList) {
+                                        Person thisPerson = Person.saveFromParseUser(thisObj, true);
+
+                                        conference.getPeople().add(thisPerson);
+                                    }
+                                }
+                            } catch (Exception ex) {
+                                Log.d("APD", ex.getMessage());
+                            }
                         } else {
                             // Update in Realm
 
@@ -353,12 +381,39 @@ public class DataSyncManager {
                                 Log.d("DataSyncManager", "Line 323 " + ex.getMessage());
                             }
 
+                            ParseFile parseImage2 = (ParseFile) parseObject.getParseFile("DashboardImage");
+
+                            try {
+                                if (parseImage2 != null) {
+                                    result.setDashboardImage(parseImage2.getData());
+                                }
+                            } catch (Exception ex) {
+                                Log.d("DataSyncManager", "Line 231 " + ex.getMessage());
+                            }
+
                             result.setContactEmail(parseObject.getString("contactEmail"));
                             result.setDescription(parseObject.getString("description"));
                             result.setShowParticipants(parseObject.getBoolean("showParticipants"));
                             result.setToolbarLabelExternalLink(parseObject.getString("toolbarLabelExternalLink"));
                             result.setGroup(parseObject.getString("group"));
 
+                            ParseRelation<ParseObject> peopleRelation = parseObject.getRelation("person");
+
+                            try {
+                                List<ParseObject> peopleList = peopleRelation.getQuery().find();
+
+                                result.setPeople(new RealmList<Person>());
+
+                                if (peopleList != null) {
+                                    for (ParseObject thisObj : peopleList) {
+                                        Person thisPerson = Person.saveFromParseUser(thisObj, true);
+
+                                        result.getPeople().add(thisPerson);
+                                    }
+                                }
+                            } catch (Exception ex) {
+                                Log.d("APD", ex.getMessage());
+                            }
                         }
                     }
 
@@ -446,6 +501,7 @@ public class DataSyncManager {
                             session.setStartTime(parseObject.getDate("startTime"));
                             session.setLocation(parseObject.getString("location"));
                             session.setModerator(parseObject.getString("moderator"));
+                            session.setColor(parseObject.getString("color"));
 
                             ParseObject tempObj = parseObject.getParseObject("conference");
 
@@ -465,6 +521,7 @@ public class DataSyncManager {
                             result.setStartTime(parseObject.getDate("startTime"));
                             result.setLocation(parseObject.getString("location"));
                             result.setModerator(parseObject.getString("moderator"));
+                            result.setColor(parseObject.getString("color"));
 
                             ParseObject tempObj = parseObject.getParseObject("conference");
 
@@ -473,8 +530,6 @@ public class DataSyncManager {
                             }
 
                             result.setUpdatedAt(parseObject.getUpdatedAt());
-
-
                         }
                     }
 
@@ -562,6 +617,8 @@ public class DataSyncManager {
                             event.setName(parseObject.getString("name"));
                             event.setStartTime(parseObject.getDate("startTime"));
                             event.setLocation(parseObject.getString("location"));
+
+                            event.setTrackColor(parseObject.getString("trackColor"));
 
                             event.setInfo(parseObject.getString("info"));
 
@@ -725,6 +782,8 @@ public class DataSyncManager {
                             result.setStartTime(parseObject.getDate("startTime"));
                             result.setLocation(parseObject.getString("location"));
 
+                            result.setTrackColor(parseObject.getString("trackColor"));
+
                             result.setInfo(parseObject.getString("info"));
 
                             JSONArray linksJSONArr = parseObject.getJSONArray("links");
@@ -855,6 +914,24 @@ public class DataSyncManager {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Speaker").setLimit(1000);
 
         Date date = getLastSyncDate();
+
+        try {
+            List<ParseObject> deletedSpeakers = query.whereGreaterThanOrEqualTo("updatedAt", date).whereEqualTo("isDeleted", true).find();
+            Realm realm = AppUtil.getRealmInstance(App.getInstance());
+            realm.beginTransaction();
+
+            for (ParseObject currentObj : deletedSpeakers) {
+                Speaker speaker = realm.where(Speaker.class).equalTo("objectId", currentObj.getObjectId()).findFirst();
+
+                if (speaker != null) {
+                    speaker.deleteFromRealm();
+
+                }
+            }
+            realm.commitTransaction();
+        } catch (Exception ex) {
+            Log.d("DataSyncManager", ex.getMessage());
+        }
 
         if (date != null) {
             query.whereGreaterThanOrEqualTo("updatedAt", date).whereNotEqualTo("isDeleted", true);
@@ -1266,6 +1343,25 @@ public class DataSyncManager {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Attendee").setLimit(1000);
 
         Date date = getLastSyncDate();
+
+        try {
+            List<ParseObject> deletedAttendees = query.whereGreaterThanOrEqualTo("updatedAt", date).whereEqualTo("isDeleted", true).find();
+            Realm realm = AppUtil.getRealmInstance(App.getInstance());
+            realm.beginTransaction();
+
+            for (ParseObject currentObj : deletedAttendees) {
+                Attendee attendee = realm.where(Attendee.class).equalTo("objectId", currentObj.getObjectId()).findFirst();
+
+                if (attendee != null) {
+
+                    attendee.deleteFromRealm();
+
+                }
+            }
+            realm.commitTransaction();
+        } catch (Exception ex) {
+            Log.d("DataSyncManager", ex.getMessage());
+        }
 
         if (date != null) {
             query.whereGreaterThanOrEqualTo("updatedAt", date).whereNotEqualTo("isDeleted", true);
@@ -2415,11 +2511,40 @@ public class DataSyncManager {
                     realm.commitTransaction();
                     realm.close();
 
-                    callback.onDataSyncFinish();
+                    dataAppConfig();
                 }
             }
         });
 
+    }
+
+    static public void dataAppConfig() {
+        try {
+            final ParseObject parseObject = ParseQuery.getQuery("AppConfig").whereEqualTo("appName", context.getString(R.string.app_name)).getFirst();
+
+            Realm realm = AppUtil.getRealmInstance(App.getInstance());
+            realm.beginTransaction();
+
+            com.ointerface.oconnect.data.AppConfig result = realm.where(com.ointerface.oconnect.data.AppConfig.class).equalTo("appName", context.getString(R.string.app_name)).findFirst();
+
+            if (result == null) {
+                result = realm.createObject(com.ointerface.oconnect.data.AppConfig.class, parseObject.getObjectId());
+            }
+
+            result.setDefaultConference(parseObject.getString("defaultConference"));
+            result.setShowConfList(parseObject.getBoolean("showConfList"));
+            result.setShowMainSplash(parseObject.getBoolean("showMainSplash"));
+            result.setOrganizationId(parseObject.getString("organizationId"));
+            result.setAppName(context.getString(R.string.app_name));
+
+            realm.commitTransaction();
+            realm.close();
+
+        } catch (Exception ex) {
+            Log.d("APD", ex.getMessage());
+        }
+
+        callback.onDataSyncFinish();
     }
 
     static public void setLastSyncDate(Date syncDate) {
@@ -2434,7 +2559,7 @@ public class DataSyncManager {
 
     static public Date getLastSyncDate() {
         SharedPreferences prefs = context.getSharedPreferences(AppConfig.sharedPrefsName, MODE_PRIVATE);
-        String lastSyncDateStr = prefs.getString(AppConfig.lastSyncDateName, "2017-07-14T07:00:00");
+        String lastSyncDateStr = prefs.getString(AppConfig.lastSyncDateName, "2017-08-12T07:00:00");
 
         SimpleDateFormat isoFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
         isoFormat.setTimeZone(TimeZone.getTimeZone("UTC"));

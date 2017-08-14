@@ -26,7 +26,19 @@ public class CustomSplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (AppConfig.isPrivateLabelApp == false) {
+        Realm realm = AppUtil.getRealmInstance(App.getInstance());
+
+        com.ointerface.oconnect.data.AppConfig config = realm.where(com.ointerface.oconnect.data.AppConfig.class).equalTo("appName",getString(R.string.app_name)).findFirst();
+
+        Organization result;
+
+        if (config != null && config.getOrganizationId() != null && !config.getOrganizationId().equalsIgnoreCase("")) {
+            result = realm.where(Organization.class).equalTo("objectId", config.getOrganizationId()).findFirst();
+        } else {
+            result = realm.where(Organization.class).equalTo("objectId", AppConfig.primaryOrganizationID).findFirst();
+        }
+
+        if (result == null || result.getShowSplash() == false) {
             // Goto Conference List View
             gotoConferenceListView();
             finish();
@@ -34,9 +46,6 @@ public class CustomSplashActivity extends AppCompatActivity {
         }
 
         setContentView(R.layout.activity_custom_splash);
-
-        Realm realm = AppUtil.getRealmInstance(App.getInstance());
-        Organization result = realm.where(Organization.class).equalTo("objectId", AppConfig.primaryOrganizationID).findFirst();
 
         if (result != null) {
             if (result.getShowSplash() == true) {

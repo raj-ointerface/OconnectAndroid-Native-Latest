@@ -26,6 +26,7 @@ public class Event extends RealmObject implements Serializable {
     private String location = "";
     private RealmList<Speaker> speakers = new RealmList<Speaker>();
     private String info = "";
+    private String trackColor = "";
 
     public String getInfo() {
         return info;
@@ -105,5 +106,13 @@ public class Event extends RealmObject implements Serializable {
 
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public String getTrackColor() {
+        return trackColor;
+    }
+
+    public void setTrackColor(String trackColor) {
+        this.trackColor = trackColor;
     }
 }
