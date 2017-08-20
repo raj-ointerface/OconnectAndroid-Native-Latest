@@ -897,12 +897,15 @@ public class ConferenceListViewActivity extends AppCompatActivity {
 
         ArrayList<Conference> otherConferences = new ArrayList<Conference>();
 
+        if (!realm.isInTransaction()) {
+            realm.beginTransaction();
+        }
+
         for (int j = 0; j < conferences.length; ++j) {
             if (conferences[j].getGroup() == null || conferences[j].getGroup().equalsIgnoreCase("") ||
                     conferences[j].getGroup().equalsIgnoreCase("Other")) {
-                realm.beginTransaction();
+
                 conferences[j].setGroup("Other");
-                realm.commitTransaction();
                 otherConferences.add(conferences[j]);
                 continue;
             }
@@ -916,6 +919,8 @@ public class ConferenceListViewActivity extends AppCompatActivity {
             }
             adapter.addItem(conferences[j]);
         }
+
+        realm.commitTransaction();
 
         for (int k = 0; k < otherConferences.size(); ++k) {
             if (k == 0) {

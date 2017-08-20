@@ -122,6 +122,7 @@ public class CreateAccountActivity extends AppCompatActivity {
                     CloudUtil.setPersonToUserRole(newUser);
                     saveUserDetails(newUser);
                 } else {
+                    /*
                     AlertDialog alertDialog = new AlertDialog.Builder(CreateAccountActivity.this).create();
                     alertDialog.setTitle("Error");
                     alertDialog.setMessage(e.getLocalizedMessage());
@@ -132,6 +133,10 @@ public class CreateAccountActivity extends AppCompatActivity {
                                 }
                             });
                     alertDialog.show();
+                    */
+
+                    CreateAccountActivity.this.finish();
+                    overridePendingTransition(R.anim.hold, R.anim.disappear_to_bottom);
                 }
             }
         });

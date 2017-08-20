@@ -12,16 +12,20 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.AsyncTask;
+import android.os.Handler;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.view.WindowManager;
 
 import com.ointerface.oconnect.App;
+import com.ointerface.oconnect.CustomSplashActivity;
 import com.ointerface.oconnect.MainSplashActivity;
 import com.ointerface.oconnect.R;
 import com.ointerface.oconnect.activities.AnnouncementsActivity;
 import com.ointerface.oconnect.activities.ConnectionsActivity;
 import com.ointerface.oconnect.activities.OConnectBaseActivity;
+import com.ointerface.oconnect.data.DataSyncManager;
+import com.ointerface.oconnect.data.IDataSyncListener;
 import com.ointerface.oconnect.data.MasterNotification;
 import com.ointerface.oconnect.data.Person;
 import com.ointerface.oconnect.service.BackgroundService;
@@ -33,6 +37,8 @@ import com.parse.ParseQuery;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import io.realm.Realm;
@@ -44,7 +50,7 @@ import io.realm.Sort;
  * Created by AnthonyDoan on 7/14/17.
  */
 
-public class MyParsePNReceiver extends ParsePushBroadcastReceiver {
+public class MyParsePNReceiver extends ParsePushBroadcastReceiver implements IDataSyncListener {
 
     public static final String PARSE_DATA_KEY = "com.parse.Data";
 
@@ -108,7 +114,8 @@ public class MyParsePNReceiver extends ParsePushBroadcastReceiver {
                     AsyncTask.execute(new Runnable() {
                         @Override
                         public void run() {
-                            mContext.startService(new Intent(mContext, BackgroundService.class));
+                            DataSyncManager.shouldSyncAll = true;
+                            DataSyncManager.beginDataSync(mContext, MyParsePNReceiver.this);
                         }
                     });
                 }
@@ -231,5 +238,10 @@ public class MyParsePNReceiver extends ParsePushBroadcastReceiver {
         }
 
         return alertResults.size();
+    }
+
+    public void onDataSyncFinish() {
+        Date dateTimeNow = Calendar.getInstance().getTime();
+        DataSyncManager.setLastSyncDate(dateTimeNow);
     }
 }

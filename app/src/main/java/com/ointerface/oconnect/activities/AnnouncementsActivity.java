@@ -73,7 +73,7 @@ public class AnnouncementsActivity extends OConnectBaseActivity implements IData
         DataSyncManager.shouldSyncAll = false;
         DataSyncManager.initDataSyncManager(getApplicationContext(), AnnouncementsActivity.this);
         DataSyncManager.dataSyncMasterNotifications();
-        DataSyncManager.dialog.hide();
+        // DataSyncManager.dialog.hide();
 
         getListViewData();
 
