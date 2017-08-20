@@ -205,17 +205,16 @@ public class App extends MultiDexApplication implements ServiceConnection, Messa
             if (AppUtil.getIsSignedIn(getApplicationContext()) == true) {
                 Realm realm = AppUtil.getRealmInstance(App.getInstance());
                 OConnectBaseActivity.currentPerson = realm.where(Person.class).equalTo("objectId", AppUtil.getSignedInUserID(getApplicationContext())).findFirst();
-            }
 
-            if (OConnectBaseActivity.currentPerson != null) {
-                if (!mSinchServiceInterface.isStarted()) {
-                    mSinchServiceInterface.startClient(OConnectBaseActivity.currentPerson.getObjectId());
+                if (OConnectBaseActivity.currentPerson != null) {
+                    if (!mSinchServiceInterface.isStarted()) {
+                        mSinchServiceInterface.startClient(OConnectBaseActivity.currentPerson.getObjectId());
+                    }
                 }
+
+                mSinchServiceInterface.addMessageClientListener(this);
+                onServiceConnected();
             }
-
-            mSinchServiceInterface.addMessageClientListener(this);
-            onServiceConnected();
-
         }
     }
 

@@ -11,9 +11,192 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6736b8c4-7ebc-425a-bc50-27c196ea6b02" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/layout/speaker_detail_top_section_list_view_item.xml" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/android-profile/profile-2017-05-21-08-37-17-634.rawproto" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/android-profile/profile-2017-05-21-08-38-31-397.rawproto" afterPath="" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/bundles/debug/classes.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/bundles/debug/libs/volley.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/bundles/debug/res/drawable-hdpi-v4/ic_launcher.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/bundles/debug/res/drawable-mdpi-v4/ic_launcher.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/bundles/debug/res/drawable-xhdpi-v4/ic_launcher.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/bundles/debug/res/drawable-xxhdpi-v4/ic_launcher.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/bundles/default/classes.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/bundles/default/libs/volley.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/bundles/default/res/drawable-hdpi-v4/ic_launcher.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/bundles/default/res/drawable-mdpi-v4/ic_launcher.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/bundles/default/res/drawable-xhdpi-v4/ic_launcher.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/bundles/default/res/drawable-xxhdpi-v4/ic_launcher.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/classes/debug/android/support/v4/R.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/classes/debug/com/linkedin/android/mobilesdk/BuildConfig.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/classes/debug/com/linkedin/android/mobilesdk/R$attr.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/classes/debug/com/linkedin/android/mobilesdk/R$drawable.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/classes/debug/com/linkedin/android/mobilesdk/R$string.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/classes/debug/com/linkedin/android/mobilesdk/R.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/classes/debug/com/linkedin/platform/APIHelper$1.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/classes/debug/com/linkedin/platform/APIHelper$2.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/classes/debug/com/linkedin/platform/APIHelper$3.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/classes/debug/com/linkedin/platform/APIHelper.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/classes/debug/com/linkedin/platform/AccessToken.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/classes/debug/com/linkedin/platform/DeepLinkHelper.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/classes/debug/com/linkedin/platform/LISession.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/classes/debug/com/linkedin/platform/LISessionManager$LISessionImpl.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/classes/debug/com/linkedin/platform/LISessionManager.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/classes/debug/com/linkedin/platform/errors/ApiErrorResponse.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/classes/debug/com/linkedin/platform/errors/LIApiError$ErrorType.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/classes/debug/com/linkedin/platform/errors/LIApiError.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/classes/debug/com/linkedin/platform/errors/LIAppErrorCode.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/classes/debug/com/linkedin/platform/errors/LIAuthError.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/classes/debug/com/linkedin/platform/errors/LIDeepLinkError.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/classes/debug/com/linkedin/platform/internals/AppStore$1.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/classes/debug/com/linkedin/platform/internals/AppStore$2.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/classes/debug/com/linkedin/platform/internals/AppStore$SupportedAppStore.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/classes/debug/com/linkedin/platform/internals/AppStore.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/classes/debug/com/linkedin/platform/internals/BuildConfig.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/classes/debug/com/linkedin/platform/internals/LIAppVersion.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/classes/debug/com/linkedin/platform/internals/QueueManager.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/classes/debug/com/linkedin/platform/listeners/ApiListener.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/classes/debug/com/linkedin/platform/listeners/ApiResponse.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/classes/debug/com/linkedin/platform/listeners/AuthListener.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/classes/debug/com/linkedin/platform/listeners/DeepLinkListener.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/classes/debug/com/linkedin/platform/utils/Scope$LIPermission.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/classes/debug/com/linkedin/platform/utils/Scope.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/classes/release/android/support/v4/R.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/classes/release/com/linkedin/android/mobilesdk/BuildConfig.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/classes/release/com/linkedin/android/mobilesdk/R$attr.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/classes/release/com/linkedin/android/mobilesdk/R$drawable.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/classes/release/com/linkedin/android/mobilesdk/R$string.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/classes/release/com/linkedin/android/mobilesdk/R.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/classes/release/com/linkedin/platform/APIHelper$1.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/classes/release/com/linkedin/platform/APIHelper$2.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/classes/release/com/linkedin/platform/APIHelper$3.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/classes/release/com/linkedin/platform/APIHelper.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/classes/release/com/linkedin/platform/AccessToken.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/classes/release/com/linkedin/platform/DeepLinkHelper.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/classes/release/com/linkedin/platform/LISession.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/classes/release/com/linkedin/platform/LISessionManager$LISessionImpl.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/classes/release/com/linkedin/platform/LISessionManager.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/classes/release/com/linkedin/platform/errors/ApiErrorResponse.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/classes/release/com/linkedin/platform/errors/LIApiError$ErrorType.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/classes/release/com/linkedin/platform/errors/LIApiError.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/classes/release/com/linkedin/platform/errors/LIAppErrorCode.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/classes/release/com/linkedin/platform/errors/LIAuthError.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/classes/release/com/linkedin/platform/errors/LIDeepLinkError.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/classes/release/com/linkedin/platform/internals/AppStore$1.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/classes/release/com/linkedin/platform/internals/AppStore$2.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/classes/release/com/linkedin/platform/internals/AppStore$SupportedAppStore.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/classes/release/com/linkedin/platform/internals/AppStore.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/classes/release/com/linkedin/platform/internals/BuildConfig.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/classes/release/com/linkedin/platform/internals/LIAppVersion.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/classes/release/com/linkedin/platform/internals/QueueManager.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/classes/release/com/linkedin/platform/listeners/ApiListener.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/classes/release/com/linkedin/platform/listeners/ApiResponse.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/classes/release/com/linkedin/platform/listeners/AuthListener.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/classes/release/com/linkedin/platform/listeners/DeepLinkListener.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/classes/release/com/linkedin/platform/utils/Scope$LIPermission.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/classes/release/com/linkedin/platform/utils/Scope.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/incremental/compileDebugAidl/dependency.store" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/incremental/compileDebugAndroidTestAidl/dependency.store" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/incremental/compileReleaseAidl/dependency.store" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/res/merged/androidTest/debug/drawable-hdpi-v4/ic_launcher.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/res/merged/androidTest/debug/drawable-mdpi-v4/ic_launcher.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4/ic_launcher.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/res/merged/androidTest/debug/drawable-xxhdpi-v4/ic_launcher.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/res/merged/debug/drawable-hdpi-v4/ic_launcher.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/res/merged/debug/drawable-mdpi-v4/ic_launcher.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/res/merged/debug/drawable-xhdpi-v4/ic_launcher.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/res/merged/debug/drawable-xxhdpi-v4/ic_launcher.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/res/merged/release/drawable-hdpi-v4/ic_launcher.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/res/merged/release/drawable-mdpi-v4/ic_launcher.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/res/merged/release/drawable-xhdpi-v4/ic_launcher.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/res/merged/release/drawable-xxhdpi-v4/ic_launcher.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/res/resources-debug-androidTest.ap_" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/outputs/aar/linkedin-sdk-debug.aar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/outputs/aar/linkedin-sdk-release.aar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/libs/volley.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/src/main/res/drawable-hdpi/ic_launcher.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/src/main/res/drawable-mdpi/ic_launcher.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/src/main/res/drawable-xhdpi/ic_launcher.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/src/main/res/drawable-xxhdpi/ic_launcher.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/generated/source/buildConfig/androidTest/debug/com/linkedin/android/mobilesdk/test/BuildConfig.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/generated/source/buildConfig/debug/com/linkedin/android/mobilesdk/BuildConfig.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/generated/source/buildConfig/release/com/linkedin/android/mobilesdk/BuildConfig.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/generated/source/r/androidTest/debug/android/support/v4/R.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/generated/source/r/androidTest/debug/com/linkedin/android/mobilesdk/R.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/generated/source/r/androidTest/debug/com/linkedin/android/mobilesdk/test/R.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/generated/source/r/debug/android/support/v4/R.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/generated/source/r/debug/com/linkedin/android/mobilesdk/R.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/generated/source/r/release/android/support/v4/R.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/generated/source/r/release/com/linkedin/android/mobilesdk/R.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/blame/res/androidTest/debug/multi/values.json" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/blame/res/androidTest/debug/single/drawable-hdpi-v4.json" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/blame/res/androidTest/debug/single/drawable-mdpi-v4.json" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/blame/res/androidTest/debug/single/drawable-xhdpi-v4.json" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/blame/res/androidTest/debug/single/drawable-xxhdpi-v4.json" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/blame/res/debug/multi/values.json" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/blame/res/debug/single/drawable-hdpi-v4.json" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/blame/res/debug/single/drawable-mdpi-v4.json" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/blame/res/debug/single/drawable-xhdpi-v4.json" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/blame/res/debug/single/drawable-xxhdpi-v4.json" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/blame/res/release/multi/values.json" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/blame/res/release/single/drawable-hdpi-v4.json" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/blame/res/release/single/drawable-mdpi-v4.json" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/blame/res/release/single/drawable-xhdpi-v4.json" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/blame/res/release/single/drawable-xxhdpi-v4.json" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/bundles/debug/AndroidManifest.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/bundles/debug/R.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/bundles/debug/res/values/values.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/bundles/default/AndroidManifest.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/bundles/default/R.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/bundles/default/res/values/values.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/incremental-safeguard/debug/tag.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/incremental-safeguard/release/tag.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/incremental/mergeDebugAndroidTestResources/compile-file-map.properties" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/incremental/mergeDebugAndroidTestResources/merged.dir/values/values.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/incremental/mergeDebugAndroidTestResources/merger.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/incremental/mergeDebugAssets/merger.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/incremental/mergeDebugJniLibFolders/merger.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/incremental/mergeDebugResources/compile-file-map.properties" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/incremental/mergeDebugResources/merged.dir/values/values.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/incremental/mergeDebugResources/merger.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/incremental/mergeDebugShaders/merger.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/incremental/mergeReleaseAssets/merger.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/incremental/mergeReleaseJniLibFolders/merger.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/incremental/mergeReleaseResources/compile-file-map.properties" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/incremental/mergeReleaseResources/merged.dir/values/values.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/incremental/mergeReleaseResources/merger.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/incremental/mergeReleaseShaders/merger.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/incremental/packageDebugResources/compile-file-map.properties" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/incremental/packageDebugResources/merged.dir/values/values.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/incremental/packageDebugResources/merger.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/incremental/packageReleaseResources/compile-file-map.properties" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/incremental/packageReleaseResources/merged.dir/values/values.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/incremental/packageReleaseResources/merger.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/manifest/androidTest/debug/AndroidManifest.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/manifests/aapt/debug/AndroidManifest.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/manifests/aapt/release/AndroidManifest.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/res/merged/androidTest/debug/values/values.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/res/merged/debug/values/values.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/res/merged/release/values/values.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/build/intermediates/symbols/androidTest/debug/R.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/src/main/AndroidManifest.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/src/main/java/com/linkedin/platform/APIHelper.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/src/main/java/com/linkedin/platform/AccessToken.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/src/main/java/com/linkedin/platform/DeepLinkHelper.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/src/main/java/com/linkedin/platform/LISession.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/src/main/java/com/linkedin/platform/LISessionManager.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/src/main/java/com/linkedin/platform/errors/ApiErrorResponse.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/src/main/java/com/linkedin/platform/errors/LIApiError.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/src/main/java/com/linkedin/platform/errors/LIAppErrorCode.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/src/main/java/com/linkedin/platform/errors/LIAuthError.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/src/main/java/com/linkedin/platform/errors/LIDeepLinkError.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/src/main/java/com/linkedin/platform/internals/AppStore.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/src/main/java/com/linkedin/platform/internals/BuildConfig.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/src/main/java/com/linkedin/platform/internals/LIAppVersion.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/src/main/java/com/linkedin/platform/internals/QueueManager.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/src/main/java/com/linkedin/platform/listeners/ApiListener.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/src/main/java/com/linkedin/platform/listeners/ApiResponse.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/src/main/java/com/linkedin/platform/listeners/AuthListener.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/src/main/java/com/linkedin/platform/listeners/DeepLinkListener.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/src/main/java/com/linkedin/platform/utils/Scope.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/src/main/res/values/strings.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/linkedin-sdk/src/test/AndroidManifest.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/3.3/taskArtifacts/fileHashes.bin" afterPath="$PROJECT_DIR$/.gradle/3.3/taskArtifacts/fileHashes.bin" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/3.3/taskArtifacts/fileSnapshots.bin" afterPath="$PROJECT_DIR$/.gradle/3.3/taskArtifacts/fileSnapshots.bin" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/3.3/taskArtifacts/taskArtifacts.bin" afterPath="$PROJECT_DIR$/.gradle/3.3/taskArtifacts/taskArtifacts.bin" />
@@ -23,33 +206,10 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/3.3/tasks/_app_compileDebugJavaWithJavac/localJarClasspathSnapshot/localJarClasspathSnapshot.bin" afterPath="$PROJECT_DIR$/.gradle/3.3/tasks/_app_compileDebugJavaWithJavac/localJarClasspathSnapshot/localJarClasspathSnapshot.bin" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/3.3/tasks/_app_compileDebugJavaWithJavac/localJarClasspathSnapshot/localJarClasspathSnapshot.lock" afterPath="$PROJECT_DIR$/.gradle/3.3/tasks/_app_compileDebugJavaWithJavac/localJarClasspathSnapshot/localJarClasspathSnapshot.lock" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/generated/mockable-android-25.jar" afterPath="$PROJECT_DIR$/build/generated/mockable-android-25.jar" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/gradle.xml" afterPath="$PROJECT_DIR$/.idea/gradle.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Oconnect.iml" afterPath="$PROJECT_DIR$/Oconnect.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/app.iml" afterPath="$PROJECT_DIR$/app/app.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/App.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/App.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/activities/EditAccountActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/activities/EditAccountActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/activities/NTEScheduleActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/activities/NTEScheduleActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/activities/OConnectBaseActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/activities/OConnectBaseActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/activities/ParticipantsActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/activities/ParticipantsActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/activities/ScheduleActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/activities/ScheduleActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/activities/SignInActivity2.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/activities/SignInActivity2.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/adapters/DashboardEventListViewAdapter.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/adapters/DashboardEventListViewAdapter.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/adapters/EventDetailExpandableListViewAdapter.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/adapters/EventDetailExpandableListViewAdapter.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/adapters/SpeakerDetailExpandableListViewAdapter.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/adapters/SpeakerDetailExpandableListViewAdapter.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/data/Attendee.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/data/Attendee.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/data/DataSyncManager.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/data/DataSyncManager.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/data/Speaker.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/data/Speaker.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/fragments/AttendeeDetailViewFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/fragments/AttendeeDetailViewFragment.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/fragments/EventDetailViewFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/fragments/EventDetailViewFragment.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/fragments/SpeakerDetailViewFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/fragments/SpeakerDetailViewFragment.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/util/AppConfig.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/util/AppConfig.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/util/AppUtil.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/util/AppUtil.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_speaker_detail_view.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_speaker_detail_view.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/speaker_detail_item_list_view.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/speaker_detail_item_list_view.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/speaker_detail_list_child.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/speaker_detail_list_child.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/speaker_detail_list_send_question.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/speaker_detail_list_send_question.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/linkedin-sdk/linkedin-sdk.iml" afterPath="$PROJECT_DIR$/linkedin-sdk/linkedin-sdk.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sinch-android-rtc-3.11.1/sinch-android-rtc-3.11.1.iml" afterPath="$PROJECT_DIR$/sinch-android-rtc-3.11.1/sinch-android-rtc-3.11.1.iml" />
     </list>
@@ -96,90 +256,33 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="SpeakerDetailExpandableListViewAdapter.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/adapters/SpeakerDetailExpandableListViewAdapter.java">
+      <file leaf-file-name="build.gradle" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/build.gradle">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="335">
-              <caret line="516" column="10" selection-start-line="486" selection-start-column="10" selection-end-line="516" selection-end-column="10" />
-              <folding>
-                <element signature="e#8307#9199#0" expanded="true" />
-                <element signature="e#9198#9199#0" expanded="true" />
-                <element signature="e#10568#10823#0" expanded="true" />
-                <element signature="e#10822#10823#0" expanded="true" />
-                <element signature="e#10868#11123#0" expanded="true" />
-                <element signature="e#11122#11123#0" expanded="true" />
-                <element signature="e#11308#11704#0" expanded="true" />
-                <element signature="e#11452#11670#0" expanded="true" />
-                <element signature="e#11669#11670#0" expanded="true" />
-                <element signature="e#11703#11704#0" expanded="true" />
-                <element signature="e#13229#15527#0" expanded="true" />
-                <element signature="e#15526#15527#0" expanded="true" />
-                <element signature="e#15576#17874#0" expanded="true" />
-                <element signature="e#17873#17874#0" expanded="true" />
-                <element signature="e#25520#26386#0" expanded="true" />
-                <element signature="e#26385#26386#0" expanded="true" />
-                <element signature="e#30820#31583#0" expanded="true" />
-                <element signature="e#31582#31583#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="AttendeeDetailViewFragment.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/fragments/AttendeeDetailViewFragment.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="191">
-              <caret line="167" column="12" selection-start-line="167" selection-start-column="12" selection-end-line="171" selection-end-column="13" />
-              <folding>
-                <element signature="e#6926#8992#0" expanded="true" />
-                <element signature="e#8991#8992#0" expanded="true" />
-                <element signature="e#9033#11096#0" expanded="true" />
-                <element signature="e#11095#11096#0" expanded="true" />
-                <element signature="e#11764#12350#0" expanded="true" />
-                <element signature="e#12349#12350#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="EventDetailViewFragment.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/fragments/EventDetailViewFragment.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="211">
-              <caret line="121" column="8" selection-start-line="121" selection-start-column="8" selection-end-line="121" selection-end-column="72" />
-              <folding>
-                <element signature="e#5647#6083#0" expanded="true" />
-                <element signature="e#6082#6083#0" expanded="true" />
-                <element signature="e#6125#6561#0" expanded="true" />
-                <element signature="e#6560#6561#0" expanded="true" />
-                <element signature="e#6743#8061#0" expanded="true" />
-                <element signature="e#8060#8061#0" expanded="true" />
-                <element signature="e#8100#9418#0" expanded="true" />
-                <element signature="e#9417#9418#0" expanded="true" />
-                <element signature="e#9608#9924#0" expanded="true" />
-                <element signature="e#9923#9924#0" expanded="true" />
-                <element signature="e#9965#10281#0" expanded="true" />
-                <element signature="e#10280#10281#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="EventDetailExpandableListViewAdapter.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/adapters/EventDetailExpandableListViewAdapter.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="317">
-              <caret line="188" column="5" selection-start-line="188" selection-start-column="5" selection-end-line="188" selection-end-column="5" />
+            <state relative-caret-position="93">
+              <caret line="109" column="7" selection-start-line="109" selection-start-column="7" selection-end-line="109" selection-end-column="7" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="speaker_detail_item_list_view.xml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/speaker_detail_item_list_view.xml">
+      <file leaf-file-name="CustomSplashActivity.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/CustomSplashActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="135">
-              <caret line="9" column="34" selection-start-line="9" selection-start-column="34" selection-end-line="9" selection-end-column="34" />
+            <state relative-caret-position="330">
+              <caret line="47" column="42" selection-start-line="47" selection-start-column="42" selection-end-line="47" selection-end-column="42" />
+              <folding>
+                <element signature="e#1023#1051#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="activity_custom_splash.xml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_custom_splash.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="48">
+              <caret line="6" column="43" selection-start-line="6" selection-start-column="43" selection-end-line="6" selection-end-column="43" />
               <folding />
             </state>
           </provider>
@@ -188,48 +291,65 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="EventLink.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/data/EventLink.java">
+      <file leaf-file-name="AppConfig.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/data/AppConfig.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="180">
-              <caret line="14" column="26" selection-start-line="14" selection-start-column="19" selection-end-line="14" selection-end-column="26" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="fragment_event_detail_layout.xml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_event_detail_layout.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="108">
-              <caret line="154" column="41" selection-start-line="154" selection-start-column="37" selection-end-line="154" selection-end-column="41" />
-              <folding />
-            </state>
-          </provider>
-          <provider editor-type-id="android-designer2">
-            <state />
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="MyNotesActivity.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/activities/MyNotesActivity.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="49">
-              <caret line="153" column="16" selection-start-line="153" selection-start-column="16" selection-end-line="155" selection-end-column="84" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="DashboardEventListViewAdapter.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/adapters/DashboardEventListViewAdapter.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="289">
-              <caret line="188" column="20" selection-start-line="185" selection-start-column="20" selection-end-line="188" selection-end-column="20" />
+            <state relative-caret-position="270">
+              <caret line="20" column="32" selection-start-line="20" selection-start-column="32" selection-end-line="20" selection-end-column="32" />
               <folding>
-                <element signature="e#5135#9773#0" expanded="true" />
-                <element signature="e#9772#9773#0" expanded="true" />
+                <element signature="imports" expanded="true" />
+                <element signature="e#565#566#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="colors.xml" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/src/main/res/values/colors.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="75">
+              <caret line="5" column="17" selection-start-line="5" selection-start-column="17" selection-end-line="5" selection-end-column="17" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="App.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/App.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="274">
+              <caret line="215" column="37" selection-start-line="215" selection-start-column="37" selection-end-line="215" selection-end-column="37" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="build.gradle" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/linkedin-sdk/build.gradle">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-522">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="EditAccountActivity.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/activities/EditAccountActivity.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="30">
+              <caret line="212" column="21" selection-start-line="212" selection-start-column="21" selection-end-line="212" selection-end-column="21" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MainSplashActivity.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/MainSplashActivity.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="45">
+              <caret line="37" column="0" selection-start-line="37" selection-start-column="0" selection-end-line="37" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -237,14 +357,10 @@
       <file leaf-file-name="Person.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/data/Person.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="255">
-              <caret line="46" column="59" selection-start-line="46" selection-start-column="59" selection-end-line="46" selection-end-column="59" />
+            <state relative-caret-position="57">
+              <caret line="151" column="0" selection-start-line="151" selection-start-column="0" selection-end-line="151" selection-end-column="0" />
               <folding>
-                <element signature="e#1373#1381#0" expanded="true" />
-                <element signature="e#2530#2531#0" expanded="true" />
-                <element signature="e#2566#2567#0" expanded="true" />
-                <element signature="e#2736#2737#0" expanded="true" />
-                <element signature="e#2773#2774#0" expanded="true" />
+                <element signature="e#4041#4042#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -256,11 +372,16 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Interface" />
+        <option value="layoutResourceFile_vertical" />
         <option value="resourceFile" />
         <option value="Class" />
-        <option value="layoutResourceFile_vertical" />
       </list>
     </option>
+  </component>
+  <component name="GenerateSignedApkSettings">
+    <option name="KEY_STORE_PATH" value="$USER_HOME$/oconnect_signing_farbic.jks" />
+    <option name="KEY_ALIAS" value="key0" />
+    <option name="REMEMBER_PASSWORDS" value="true" />
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -381,11 +502,6 @@
                 <option name="name" value="prepareComDaimajiaEasingLibrary100Library" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
-                <option name="description" value="Prepare com.facebook.android:facebook-android-sdk:4.23.0" />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
-                <option name="name" value="prepareComFacebookAndroidFacebookAndroidSdk4230Library" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
                 <option name="description" value="Prepare com.google.android.gms:play-services-gass:10.2.1" />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
                 <option name="name" value="prepareComGoogleAndroidGmsPlayServicesGass1021Library" />
@@ -394,10 +510,6 @@
                 <option name="description" value="Prepare com.android.support:support-vector-drawable:25.3.1" />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
                 <option name="name" value="prepareComAndroidSupportSupportVectorDrawable2531Library" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
-                <option name="name" value="transformClassesWithJarMergingForRelease" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="description" value="Runs all device checks using Device Providers and Test Servers." />
@@ -471,6 +583,11 @@
                 <option name="name" value="compileDebugUnitTestJavaWithJavac" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
+                <option name="description" value="Prepare com.crashlytics.sdk.android:beta:1.2.5" />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="prepareComCrashlyticsSdkAndroidBeta125Library" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
                 <option name="description" value="Prepare com.google.android.gms:play-services-iid:10.2.1" />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
                 <option name="name" value="prepareComGoogleAndroidGmsPlayServicesIid1021Library" />
@@ -482,10 +599,6 @@
               <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
                 <option name="name" value="transformClassesWithDexForDebug" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
-                <option name="name" value="transformClassesWithJarMergingForDebug" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
@@ -819,6 +932,11 @@
                 <option name="name" value="prepareComGoogleAndroidGmsPlayServicesPanorama1021Library" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
+                <option name="description" value="Prepare com.facebook.android:facebook-android-sdk:4.25.0" />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="prepareComFacebookAndroidFacebookAndroidSdk4250Library" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
                 <option name="description" value="Run unit tests for the debug build." />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
                 <option name="name" value="testDebugUnitTest" />
@@ -991,17 +1109,13 @@
                 <option name="name" value="assembleRelease" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
-                <option name="description" value="Prepare com.android.support:multidex-instrumentation:1.0.1" />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
-                <option name="name" value="prepareComAndroidSupportMultidexInstrumentation101Library" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
-                <option name="name" value="transformClassesWithJarMergingForDebugAndroidTest" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
                 <option name="name" value="generateReleaseResValues" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="description" value="Prepare com.crashlytics.sdk.android:answers:1.3.13" />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="prepareComCrashlyticsSdkAndroidAnswers1313Library" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
@@ -1044,6 +1158,11 @@
                 <option name="description" value="Assembles a bundle containing the library in debug." />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
                 <option name="name" value="bundleDebug" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="description" value="Prepare com.crashlytics.sdk.android:crashlytics:2.6.8" />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="prepareComCrashlyticsSdkAndroidCrashlytics268Library" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
@@ -1116,11 +1235,12 @@
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
-                <option name="name" value="transformClassesWithMultidexlistForDebug" />
+                <option name="name" value="generateDebugResources" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
+                <option name="description" value="Prepare com.crashlytics.sdk.android:crashlytics-core:2.3.17" />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
-                <option name="name" value="generateDebugResources" />
+                <option name="name" value="prepareComCrashlyticsSdkAndroidCrashlyticsCore2317Library" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="description" value="Assembles and tests this project and all projects it depends on." />
@@ -1248,8 +1368,9 @@
                 <option name="name" value="prepareComGoogleAndroidGmsPlayServicesAnalytics1021Library" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
+                <option name="description" value="Prepare io.fabric.sdk.android:fabric:1.3.17" />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
-                <option name="name" value="transformClassesWithMultidexlistForRelease" />
+                <option name="name" value="prepareIoFabricSdkAndroidFabric1317Library" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
@@ -1398,10 +1519,6 @@
                 <option name="description" value="Uploads an APK to Crashlytics for distribution." />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
                 <option name="name" value="crashlyticsUploadDistributionDebug" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
-                <option name="name" value="transformClassesWithMultidexlistForDebugAndroidTest" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="description" value="Prepare com.google.firebase:firebase-iid:10.2.1" />
@@ -1644,11 +1761,6 @@
                 <option name="name" value="prepareComDaimajiaEasingLibrary100Library" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
-                <option name="description" value="Prepare com.facebook.android:facebook-android-sdk:4.23.0" />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/app" />
-                <option name="name" value="prepareComFacebookAndroidFacebookAndroidSdk4230Library" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
                 <option name="description" value="Prepare com.google.android.gms:play-services-gass:10.2.1" />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/app" />
                 <option name="name" value="prepareComGoogleAndroidGmsPlayServicesGass1021Library" />
@@ -1657,10 +1769,6 @@
                 <option name="description" value="Prepare com.android.support:support-vector-drawable:25.3.1" />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/app" />
                 <option name="name" value="prepareComAndroidSupportSupportVectorDrawable2531Library" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/app" />
-                <option name="name" value="transformClassesWithJarMergingForRelease" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="description" value="Runs all device checks using Device Providers and Test Servers." />
@@ -1730,6 +1838,11 @@
                 <option name="name" value="compileDebugUnitTestJavaWithJavac" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
+                <option name="description" value="Prepare com.crashlytics.sdk.android:beta:1.2.5" />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/app" />
+                <option name="name" value="prepareComCrashlyticsSdkAndroidBeta125Library" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
                 <option name="description" value="Prepare com.google.android.gms:play-services-iid:10.2.1" />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/app" />
                 <option name="name" value="prepareComGoogleAndroidGmsPlayServicesIid1021Library" />
@@ -1741,10 +1854,6 @@
               <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/app" />
                 <option name="name" value="transformClassesWithDexForDebug" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/app" />
-                <option name="name" value="transformClassesWithJarMergingForDebug" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/app" />
@@ -2048,6 +2157,11 @@
                 <option name="name" value="prepareComGoogleAndroidGmsPlayServicesPanorama1021Library" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
+                <option name="description" value="Prepare com.facebook.android:facebook-android-sdk:4.25.0" />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/app" />
+                <option name="name" value="prepareComFacebookAndroidFacebookAndroidSdk4250Library" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
                 <option name="description" value="Run unit tests for the debug build." />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/app" />
                 <option name="name" value="testDebugUnitTest" />
@@ -2216,17 +2330,13 @@
                 <option name="name" value="assembleRelease" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
-                <option name="description" value="Prepare com.android.support:multidex-instrumentation:1.0.1" />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/app" />
-                <option name="name" value="prepareComAndroidSupportMultidexInstrumentation101Library" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/app" />
-                <option name="name" value="transformClassesWithJarMergingForDebugAndroidTest" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/app" />
                 <option name="name" value="generateReleaseResValues" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="description" value="Prepare com.crashlytics.sdk.android:answers:1.3.13" />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/app" />
+                <option name="name" value="prepareComCrashlyticsSdkAndroidAnswers1313Library" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="description" value="Prepare com.google.android.gms:play-services-plus:10.2.1" />
@@ -2256,6 +2366,11 @@
                 <option name="description" value="Prepare com.google.android.gms:play-services-identity:10.2.1" />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/app" />
                 <option name="name" value="prepareComGoogleAndroidGmsPlayServicesIdentity1021Library" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="description" value="Prepare com.crashlytics.sdk.android:crashlytics:2.6.8" />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/app" />
+                <option name="name" value="prepareComCrashlyticsSdkAndroidCrashlytics268Library" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/app" />
@@ -2310,11 +2425,12 @@
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/app" />
-                <option name="name" value="transformClassesWithMultidexlistForDebug" />
+                <option name="name" value="generateDebugResources" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
+                <option name="description" value="Prepare com.crashlytics.sdk.android:crashlytics-core:2.3.17" />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/app" />
-                <option name="name" value="generateDebugResources" />
+                <option name="name" value="prepareComCrashlyticsSdkAndroidCrashlyticsCore2317Library" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="description" value="Assembles and tests this project and all projects it depends on." />
@@ -2437,8 +2553,9 @@
                 <option name="name" value="prepareComGoogleAndroidGmsPlayServicesAnalytics1021Library" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
+                <option name="description" value="Prepare io.fabric.sdk.android:fabric:1.3.17" />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/app" />
-                <option name="name" value="transformClassesWithMultidexlistForRelease" />
+                <option name="name" value="prepareIoFabricSdkAndroidFabric1317Library" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/app" />
@@ -2582,10 +2699,6 @@
                 <option name="description" value="Uploads an APK to Crashlytics for distribution." />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/app" />
                 <option name="name" value="crashlyticsUploadDistributionDebug" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/app" />
-                <option name="name" value="transformClassesWithMultidexlistForDebugAndroidTest" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="description" value="Prepare com.google.firebase:firebase-iid:10.2.1" />
@@ -3495,7 +3608,7 @@
     </option>
     <option name="modificationStamps">
       <map>
-        <entry key="$PROJECT_DIR$" value="7490899378000" />
+        <entry key="$PROJECT_DIR$" value="7495197266000" />
       </map>
     </option>
     <option name="projectBuildClasspath">
@@ -3653,7 +3766,7 @@
                             <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/commons-codec/commons-codec/1.4/commons-codec-1.4.jar" />
                             <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/com/android/tools/external/com-intellij/uast/162.2228.14/uast-162.2228.14.jar" />
                             <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/com/android/tools/external/lombok/lombok-ast/0.2.3/lombok-ast-0.2.3.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.fabric.tools/gradle/1.22.2/e24eda2a9d288247a9e2a19d8bfa2fb8f757d457/gradle-1.22.2.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.fabric.tools/gradle/1.24.0/81e4256e9e195ed1fc9d8047d143af0deefc7bb2/gradle-1.24.0.jar" />
                           </list>
                         </option>
                         <option name="path" value="$PROJECT_DIR$/app" />
@@ -3970,57 +4083,57 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/messaging/NotificationsListenerService.java" />
-        <option value="$PROJECT_DIR$/app/src/main/res/layout/content_right_navigation.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/res/layout/message_list_item.xml" />
-        <option value="$PROJECT_DIR$/build.gradle" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/adapters/ParticipantsSwipeListAdapter.java" />
-        <option value="$PROJECT_DIR$/app/src/test/java/com/ointerface/oconnect/ExampleUnitTest.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/adapters/MyAgendaListViewAdapter.java" />
-        <option value="$PROJECT_DIR$/app/build.gradle" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/messaging/BaseActivity.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/data/SinchMessage.java" />
-        <option value="$PROJECT_DIR$/app/src/main/res/layout/message_right.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/res/layout/content_appbar_messaging_layout.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/messaging/MessageAdapter.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/messaging/SinchService.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/messaging/GcmIntentService.java" />
-        <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_messaging_list.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/messaging/MessagingListActivity.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/messaging/MessagingActivity.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/messaging/MessageListAdapter.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/MainSplashActivity.java" />
-        <option value="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/res/layout/list_view_person_item.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/res/layout/list_view_event_item.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/adapters/SearchExpandableListViewAdapter.java" />
-        <option value="$PROJECT_DIR$/app/src/main/res/layout/content_left_navigation.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/fragments/SearchDialogFragment.java" />
-        <option value="$PROJECT_DIR$/app/src/main/res/layout/fragment_search_dialog.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/activities/NTEScheduleActivity.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/activities/ParticipantsActivity.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/activities/ScheduleActivity.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/activities/OConnectBaseActivity.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/activities/DashboardActivity.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/adapters/DashboardEventListViewAdapter.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/util/AppConfig.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/activities/SignInActivity2.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/activities/EditAccountActivity.java" />
-        <option value="$PROJECT_DIR$/app/src/main/res/layout/speaker_detail_list_child.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/res/layout/fragment_speaker_detail_view.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/res/layout/speaker_detail_item_list_view.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_conference_list_view.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/activities/SignInActivity1.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/fragments/OverlayDialogFragment.java" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/schedule_overlay_3.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/schedule_overlay_4.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/schedule_overlay_2.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/schedule_overlay_1.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/participants_overlay.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/rolodex_item_view.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/activities/AnalyticsSurveyActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/activities/ConnectionsActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/content_connections.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/fragment_attendee_detail_view.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/speaker_detail_top_section_list_view_item.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/res/layout/speaker_detail_list_send_question.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/fragments/SpeakerDetailViewFragment.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/data/Speaker.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/App.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/data/Attendee.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/data/DataSyncManager.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/util/AppUtil.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/adapters/SpeakerDetailExpandableListViewAdapter.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/fragments/AttendeeDetailViewFragment.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/fragments/EventDetailViewFragment.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/util/AppUtil.java" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/message_list_item.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/messaging/MessageListAdapter.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/data/SinchMessage.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/adapters/EventDetailExpandableListViewAdapter.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/activities/ScheduleActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/activities/AboutUsActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/adapters/SpeakerDetailExpandableListViewAdapter.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/adapters/ScheduleSwipeListAdapter.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/service/BackgroundService.java" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/schedule_group_list_child.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/data/Session.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/data/Event.java" />
+        <option value="$PROJECT_DIR$/app/src/main/res/drawable/red_dot.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/content_right_navigation.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/content_appbar_main.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/messaging/SinchService.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/activities/OConnectBaseActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/adapters/ParticipantsSwipeListAdapter.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/activities/SignInActivity2.java" />
+        <option value="$PROJECT_DIR$/app/build.gradle" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/util/AppConfig.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/data/Conference.java" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/content_dashboard.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/activities/DashboardActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/activities/ParticipantsActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/data/AppConfig.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/CustomSplashActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/data/DataSyncManager.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/ConferenceListViewActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/activities/CreateAccountActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/activities/AnnouncementsActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/push/MyParsePNReceiver.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/MainSplashActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/App.java" />
       </list>
     </option>
   </component>
@@ -4055,236 +4168,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
-      <pane id="Scope" />
-      <pane id="AndroidView">
-        <subPane>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Oconnect" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Gradle Scripts" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidBuildScriptsGroupNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Oconnect" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Oconnect" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="linkedin-sdk" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Oconnect" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="res" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Oconnect" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="res" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="layout" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderTypeNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Oconnect" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Oconnect" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Oconnect" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="oconnect" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Oconnect" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="oconnect" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="util" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Oconnect" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="oconnect" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="fragments" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Oconnect" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="oconnect" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="data" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Oconnect" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="oconnect" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="adapters" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Oconnect" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="oconnect" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="activities" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Oconnect" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="manifests" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidManifestsGroupNode" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -4317,24 +4200,224 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Oconnect" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Oconnect" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="libs" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
+      <pane id="AndroidView">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Oconnect" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Gradle Scripts" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidBuildScriptsGroupNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Oconnect" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Oconnect" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="linkedin-sdk" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="res" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="values" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderTypeNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Oconnect" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="linkedin-sdk" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="res" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Oconnect" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="linkedin-sdk" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="platform" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Oconnect" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="linkedin-sdk" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="manifests" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidManifestsGroupNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Oconnect" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="res" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Oconnect" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="assets" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Oconnect" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Oconnect" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="oconnect" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Oconnect" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="oconnect" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="messaging" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Oconnect" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+      <pane id="Scope" />
+      <pane id="Scratches" />
       <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="android.sdk.path" value="$USER_HOME$/Library/Android/sdk" />
-    <property name="settings.editor.selected.configurable" value="instant.run" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
     <property name="settings.editor.splitter.proportion" value="0.2" />
     <property name="device.picker.selection" value="f6f54274" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/app/libs/sinch-android-rtc-3.11.1.aar" />
     <property name="android.project.structure.last.selected" value="app" />
     <property name="android.project.structure.proportion" value="0.15" />
+    <property name="ExportApk.ApkPath" value="$PROJECT_DIR$/app" />
+    <property name="ExportApk.Flavors" value="" />
+    <property name="ExportApk.BuildType" value="release" />
+    <property name="ExportApk.SignV2" value="true" />
   </component>
   <component name="RecentsManager">
     <key name="android.template.packageName">
-      <recent name="com.ointerface.oconnect.messaging" />
       <recent name="com.ointerface.oconnect.activities" />
+      <recent name="com.ointerface.oconnect.messaging" />
       <recent name="com.ointerface.oconnect" />
     </key>
     <key name="android.template.parentActivityClass">
@@ -4664,6 +4747,14 @@
       <option name="presentableId" value="Default" />
       <updated>1491870710834</updated>
     </task>
+    <task id="LOCAL-00001" summary="Check In for Gagan's build">
+      <created>1503253820839</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1503253820840</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TodoView">
@@ -4677,36 +4768,37 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="14" y="23" width="1266" height="709" extended-state="0" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3288364" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.20404722" sideWeight="0.45996732" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.8178752" sideWeight="0.45343137" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.29738563" sideWeight="0.5362563" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.38785836" sideWeight="0.5400327" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Android Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24283305" sideWeight="0.48120916" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.767285" sideWeight="0.54656863" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Android Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.36593592" sideWeight="0.48120916" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32979593" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.5413153" sideWeight="0.49673203" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3288364" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32715008" sideWeight="0.49673203" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.30185497" sideWeight="0.49673203" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.17706576" sideWeight="0.49673203" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.9443508" sideWeight="0.5367647" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.29738563" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17537943" sideWeight="0.49714285" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.29738563" sideWeight="0.4637437" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32979593" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Fabric" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32924837" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Android Model" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.21416526" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.31028667" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.767285" sideWeight="0.49714285" order="1" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -4750,12 +4842,16 @@
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
   </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Check In for Gagan's build" />
+    <option name="LAST_COMMIT_MESSAGE" value="Check In for Gagan's build" />
+  </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/data/DataSyncManager.java</url>
-          <line>402</line>
+          <line>458</line>
           <properties />
           <option name="timeStamp" value="23" />
         </line-breakpoint>
@@ -4797,25 +4893,25 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/ConferenceListViewActivity.java</url>
-          <line>360</line>
+          <line>407</line>
           <properties />
           <option name="timeStamp" value="39" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/activities/SignInActivity2.java</url>
-          <line>422</line>
+          <line>515</line>
           <properties />
           <option name="timeStamp" value="43" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/activities/SignInActivity2.java</url>
-          <line>436</line>
+          <line>529</line>
           <properties />
           <option name="timeStamp" value="44" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/activities/SignInActivity2.java</url>
-          <line>425</line>
+          <line>518</line>
           <properties />
           <option name="timeStamp" value="45" />
         </line-breakpoint>
@@ -4869,7 +4965,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/activities/ScheduleActivity.java</url>
-          <line>246</line>
+          <line>247</line>
           <properties />
           <option name="timeStamp" value="72" />
         </line-breakpoint>
@@ -4881,7 +4977,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/activities/ScheduleActivity.java</url>
-          <line>255</line>
+          <line>256</line>
           <properties />
           <option name="timeStamp" value="76" />
         </line-breakpoint>
@@ -4893,31 +4989,31 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/data/DataSyncManager.java</url>
-          <line>915</line>
+          <line>993</line>
           <properties />
           <option name="timeStamp" value="80" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/data/DataSyncManager.java</url>
-          <line>1327</line>
+          <line>1424</line>
           <properties />
           <option name="timeStamp" value="82" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/data/DataSyncManager.java</url>
-          <line>1384</line>
+          <line>1483</line>
           <properties />
           <option name="timeStamp" value="83" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/activities/SignInActivity2.java</url>
-          <line>448</line>
+          <line>541</line>
           <properties />
           <option name="timeStamp" value="84" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/activities/SignInActivity2.java</url>
-          <line>456</line>
+          <line>549</line>
           <properties />
           <option name="timeStamp" value="88" />
         </line-breakpoint>
@@ -4929,15 +5025,9 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/activities/SignInActivity2.java</url>
-          <line>612</line>
+          <line>736</line>
           <properties />
           <option name="timeStamp" value="94" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/data/Person.java</url>
-          <line>369</line>
-          <properties />
-          <option name="timeStamp" value="103" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/data/Person.java</url>
@@ -4953,7 +5043,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/activities/ConnectionsActivity.java</url>
-          <line>255</line>
+          <line>296</line>
           <properties />
           <option name="timeStamp" value="106" />
         </line-breakpoint>
@@ -4962,30 +5052,6 @@
           <line>425</line>
           <properties />
           <option name="timeStamp" value="107" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/activities/ScheduleActivity.java</url>
-          <line>286</line>
-          <properties />
-          <option name="timeStamp" value="108" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/activities/ScheduleActivity.java</url>
-          <line>288</line>
-          <properties />
-          <option name="timeStamp" value="109" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/activities/ScheduleActivity.java</url>
-          <line>301</line>
-          <properties />
-          <option name="timeStamp" value="111" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/activities/EventDetailViewActivity.java</url>
-          <line>80</line>
-          <properties />
-          <option name="timeStamp" value="112" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/activities/SpeakerDetailViewActivity.java</url>
@@ -5001,7 +5067,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/adapters/ParticipantsSwipeListAdapter.java</url>
-          <line>328</line>
+          <line>351</line>
           <properties />
           <option name="timeStamp" value="120" />
         </line-breakpoint>
@@ -5013,155 +5079,236 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/activities/ParticipantsActivity.java</url>
-          <line>170</line>
+          <line>186</line>
           <properties />
           <option name="timeStamp" value="122" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/adapters/ParticipantsSwipeListAdapter.java</url>
-          <line>332</line>
+          <line>355</line>
           <properties />
           <option name="timeStamp" value="123" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/activities/ParticipantsActivity.java</url>
-          <line>284</line>
+          <line>317</line>
           <properties />
           <option name="timeStamp" value="133" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/activities/SignInActivity2.java</url>
+          <line>238</line>
+          <properties />
+          <option name="timeStamp" value="137" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/activities/SignInActivity2.java</url>
+          <line>190</line>
+          <properties />
+          <option name="timeStamp" value="138" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/activities/DashboardActivity.java</url>
+          <line>296</line>
+          <properties />
+          <option name="timeStamp" value="141" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/activities/SignInActivity2.java</url>
+          <line>187</line>
+          <properties />
+          <option name="timeStamp" value="142" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/activities/OConnectBaseActivity.java</url>
+          <line>865</line>
+          <properties />
+          <option name="timeStamp" value="144" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/activities/SignInActivity2.java</url>
+          <line>785</line>
+          <properties />
+          <option name="timeStamp" value="145" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/activities/SignInActivity2.java</url>
+          <line>342</line>
+          <properties />
+          <option name="timeStamp" value="146" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/activities/SignInActivity2.java</url>
+          <line>305</line>
+          <properties />
+          <option name="timeStamp" value="147" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/activities/SignInActivity2.java</url>
+          <line>299</line>
+          <properties />
+          <option name="timeStamp" value="148" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/activities/SignInActivity2.java</url>
+          <line>292</line>
+          <properties />
+          <option name="timeStamp" value="152" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/activities/SignInActivity2.java</url>
+          <line>399</line>
+          <properties />
+          <option name="timeStamp" value="153" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/activities/SignInActivity2.java</url>
+          <line>408</line>
+          <properties />
+          <option name="timeStamp" value="154" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/push/MyParsePNReceiver.java</url>
+          <line>91</line>
+          <properties />
+          <option name="timeStamp" value="160" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.parse/parse-android/1.13.0/f43cc29ff26f12c25bcc55eed39e9c7633cb2982/parse-android-1.13.0-sources.jar!/com/parse/ParsePushBroadcastReceiver.java</url>
+          <line>138</line>
+          <properties />
+          <option name="timeStamp" value="167" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/adapters/ScheduleSwipeListAdapter.java</url>
+          <line>268</line>
+          <properties />
+          <option name="timeStamp" value="168" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/push/MyParsePNReceiver.java</url>
+          <line>65</line>
+          <properties />
+          <option name="timeStamp" value="169" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/data/DataSyncManager.java</url>
+          <line>2522</line>
+          <properties />
+          <option name="timeStamp" value="170" />
+        </line-breakpoint>
       </breakpoints>
-      <option name="time" value="134" />
+      <option name="time" value="171" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/content_left_navigation.xml">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/activities/InfoActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="139">
-          <caret line="24" column="4" selection-start-line="24" selection-start-column="4" selection-end-line="31" selection-end-column="25" />
-          <folding />
-        </state>
-      </provider>
-      <provider editor-type-id="android-designer2">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_search_dialog.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="20" column="8" selection-start-line="20" selection-start-column="8" selection-end-line="20" selection-end-column="8" />
-          <folding />
-        </state>
-      </provider>
-      <provider editor-type-id="android-designer2">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/fragments/SearchDialogFragment.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2511">
-          <caret line="291" column="121" selection-start-line="291" selection-start-column="121" selection-end-line="291" selection-end-column="121" />
-          <folding>
-            <element signature="e#5260#7043#0" expanded="true" />
-            <element signature="e#7042#7043#0" expanded="true" />
-            <element signature="e#7811#7824#0" expanded="true" />
-            <element signature="e#7886#7899#0" expanded="true" />
-            <element signature="e#10944#10952#0" expanded="true" />
-            <element signature="e#11084#11116#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="185">
+          <caret line="64" column="137" selection-start-line="64" selection-start-column="32" selection-end-line="64" selection-end-column="137" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/activities/NTEScheduleActivity.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/messaging/SinchService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="298">
+          <caret line="191" column="5" selection-start-line="191" selection-start-column="5" selection-end-line="191" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/data/SinchMessage.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="225">
-          <caret line="596" column="39" selection-start-line="596" selection-start-column="39" selection-end-line="596" selection-end-column="39" />
-          <folding />
+          <caret line="19" column="26" selection-start-line="19" selection-start-column="20" selection-end-line="19" selection-end-column="26" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_participants.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="12" column="37" selection-start-line="12" selection-start-column="37" selection-end-line="12" selection-end-column="37" />
-          <folding />
-        </state>
-      </provider>
-      <provider editor-type-id="android-designer2">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/app_bar_participants.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="16" column="40" selection-start-line="16" selection-start-column="40" selection-end-line="16" selection-end-column="40" />
-          <folding />
-        </state>
-      </provider>
-      <provider editor-type-id="android-designer2">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/content_participants.xml">
+    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.parse/parse-android/1.13.0/f43cc29ff26f12c25bcc55eed39e9c7633cb2982/parse-android-1.13.0-sources.jar!/com/parse/ParsePushBroadcastReceiver.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="150">
-          <caret line="10" column="42" selection-start-line="10" selection-start-column="25" selection-end-line="10" selection-end-column="42" />
-          <folding />
-        </state>
-      </provider>
-      <provider editor-type-id="android-designer2">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/activities/ParticipantsActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="60" column="34" selection-start-line="60" selection-start-column="34" selection-end-line="60" selection-end-column="34" />
+          <caret line="138" column="0" selection-start-line="138" selection-start-column="0" selection-end-line="138" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/content_right_navigation.xml">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/adapters/SpeakerDetailExpandableListViewAdapter.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="40">
-          <caret line="30" column="38" selection-start-line="30" selection-start-column="25" selection-end-line="30" selection-end-column="38" />
+        <state relative-caret-position="120">
+          <caret line="505" column="75" selection-start-line="505" selection-start-column="64" selection-end-line="505" selection-end-column="75" />
           <folding />
         </state>
       </provider>
-      <provider editor-type-id="android-designer2">
-        <state />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/data/SpeakerLink.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="10" column="13" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
+        </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/adapters/SearchExpandableListViewAdapter.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/data/Event.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="147" column="20" selection-start-line="147" selection-start-column="20" selection-end-line="149" selection-end-column="57" />
+        <state relative-caret-position="225">
+          <caret line="28" column="33" selection-start-line="28" selection-start-column="33" selection-end-line="28" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/activities/OConnectBaseActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="544">
+          <caret line="427" column="32" selection-start-line="398" selection-start-column="20" selection-end-line="427" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/adapters/ParticipantsSwipeListAdapter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="300">
+          <caret line="544" column="0" selection-start-line="544" selection-start-column="0" selection-end-line="544" selection-end-column="0" />
           <folding>
-            <element signature="imports" expanded="false" />
+            <element signature="e#1918#1926#0" expanded="false" />
+            <element signature="e#2661#2662#0" expanded="false" />
+            <element signature="e#2696#2697#0" expanded="false" />
+            <element signature="e#2747#2748#0" expanded="false" />
+            <element signature="e#2783#2784#0" expanded="false" />
+            <element signature="e#2831#2832#0" expanded="false" />
+            <element signature="e#2864#2865#0" expanded="false" />
+            <element signature="e#28971#29490#0" expanded="false" />
+            <element signature="e#29489#29490#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/adapters/ScheduleSwipeListAdapter.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/activities/SignInActivity2.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2550">
-          <caret line="189" column="15" selection-start-line="189" selection-start-column="15" selection-end-line="189" selection-end-column="15" />
-          <folding />
+        <state relative-caret-position="77">
+          <caret line="1209" column="0" selection-start-line="1209" selection-start-column="0" selection-end-line="1209" selection-end-column="0" />
+          <folding>
+            <element signature="e#18685#40389#0" expanded="false" />
+            <element signature="e#40388#40389#0" expanded="false" />
+            <element signature="e#52610#53332#0" expanded="false" />
+            <element signature="e#53331#53332#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/activities/ScheduleActivity.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/data/Attendee.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="522">
-          <caret line="303" column="37" selection-start-line="277" selection-start-column="20" selection-end-line="303" selection-end-column="37" />
-          <folding />
+        <state relative-caret-position="120">
+          <caret line="20" column="13" selection-start-line="20" selection-start-column="13" selection-end-line="20" selection-end-column="13" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_speaker_detail_view.xml">
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/drawable-mdpi/oconnect_splash.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_main_splash.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="12" column="37" selection-start-line="12" selection-start-column="37" selection-end-line="12" selection-end-column="37" />
+        <state relative-caret-position="165">
+          <caret line="11" column="45" selection-start-line="11" selection-start-column="45" selection-end-line="11" selection-end-column="45" />
           <folding />
         </state>
       </provider>
@@ -5169,18 +5316,15 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/app_bar_speaker_detail_view.xml">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/data/Organization.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="16" column="41" selection-start-line="16" selection-start-column="41" selection-end-line="16" selection-end-column="41" />
+        <state relative-caret-position="315">
+          <caret line="30" column="18" selection-start-line="30" selection-start-column="18" selection-end-line="30" selection-end-column="18" />
           <folding />
         </state>
       </provider>
-      <provider editor-type-id="android-designer2">
-        <state />
-      </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/content_speaker_detail_view.xml">
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/conference_list_view_item.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -5191,60 +5335,17 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/util/AppConfig.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/data/Conference.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="24" column="47" selection-start-line="24" selection-start-column="47" selection-end-line="24" selection-end-column="47" />
-          <folding />
+        <state relative-caret-position="217">
+          <caret line="89" column="39" selection-start-line="89" selection-start-column="39" selection-end-line="89" selection-end-column="39" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/activities/SignInActivity2.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_dashboard.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="161">
-          <caret line="183" column="73" selection-start-line="183" selection-start-column="73" selection-end-line="183" selection-end-column="73" />
-          <folding>
-            <element signature="e#13462#13814#0" expanded="true" />
-            <element signature="e#13813#13814#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/activities/EditAccountActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="320">
-          <caret line="164" column="11" selection-start-line="164" selection-start-column="11" selection-end-line="164" selection-end-column="11" />
-          <folding>
-            <element signature="e#5353#5615#0" expanded="true" />
-            <element signature="e#5614#5615#0" expanded="true" />
-            <element signature="e#5669#5932#0" expanded="true" />
-            <element signature="e#5931#5932#0" expanded="true" />
-            <element signature="e#5986#6249#0" expanded="true" />
-            <element signature="e#6248#6249#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/activities/QRCodeScannerActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="82">
-          <caret line="120" column="16" selection-start-line="120" selection-start-column="16" selection-end-line="125" selection-end-column="33" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/adapters/NavExpandableListViewAdapter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="237">
-          <caret line="146" column="8" selection-start-line="146" selection-start-column="8" selection-end-line="151" selection-end-column="9" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_attendee_detail_view.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="144">
-          <caret line="50" column="40" selection-start-line="50" selection-start-column="40" selection-end-line="50" selection-end-column="40" />
+        <state relative-caret-position="135">
+          <caret line="12" column="31" selection-start-line="12" selection-start-column="31" selection-end-line="12" selection-end-column="31" />
           <folding />
         </state>
       </provider>
@@ -5252,55 +5353,10 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/activities/ConnectionsActivity.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/app_bar_dashboard.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="19">
-          <caret line="239" column="84" selection-start-line="239" selection-start-column="84" selection-end-line="239" selection-end-column="84" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/adapters/SponsorsListViewAdapter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="26" column="13" selection-start-line="26" selection-start-column="13" selection-end-line="26" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/adapters/ParticipantsSwipeListAdapter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="597">
-          <caret line="333" column="13" selection-start-line="333" selection-start-column="13" selection-end-line="333" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/messaging/MessagingActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="127">
-          <caret line="151" column="41" selection-start-line="151" selection-start-column="27" selection-end-line="151" selection-end-column="41" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/activities/OConnectBaseActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="104" column="13" selection-start-line="104" selection-start-column="13" selection-end-line="104" selection-end-column="13" />
-          <folding>
-            <element signature="e#32738#32751#0" expanded="true" />
-            <element signature="e#32813#32826#0" expanded="true" />
-            <element signature="e#35895#35903#0" expanded="true" />
-            <element signature="e#36035#36067#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/speaker_detail_list_child.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="12" column="41" selection-start-line="12" selection-start-column="41" selection-end-line="12" selection-end-column="41" />
+        <state relative-caret-position="128">
+          <caret line="15" column="34" selection-start-line="15" selection-start-column="34" selection-end-line="15" selection-end-column="34" />
           <folding />
         </state>
       </provider>
@@ -5308,231 +5364,37 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_speaker_detail_view.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="11" column="39" selection-start-line="11" selection-start-column="39" selection-end-line="11" selection-end-column="39" />
-          <folding />
-        </state>
-      </provider>
-      <provider editor-type-id="android-designer2">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/speaker_detail_top_section_list_view_item.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="4" column="31" selection-start-line="4" selection-start-column="31" selection-end-line="4" selection-end-column="31" />
-          <folding />
-        </state>
-      </provider>
-      <provider editor-type-id="android-designer2">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/speaker_detail_list_send_question.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="315">
-          <caret line="21" column="33" selection-start-line="21" selection-start-column="33" selection-end-line="21" selection-end-column="33" />
-          <folding />
-        </state>
-      </provider>
-      <provider editor-type-id="android-designer2">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/activities/SpeakerDetailViewActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="214">
-          <caret line="101" column="52" selection-start-line="101" selection-start-column="52" selection-end-line="101" selection-end-column="52" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/data/SurveyQuestionAnswer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="10" column="13" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/data/Speaker.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/content_dashboard.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="345">
-          <caret line="39" column="30" selection-start-line="39" selection-start-column="30" selection-end-line="39" selection-end-column="30" />
-          <folding>
-            <element signature="e#1082#1083#0" expanded="true" />
-            <element signature="e#1124#1125#0" expanded="true" />
-            <element signature="e#1158#1159#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/App.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="191" column="79" selection-start-line="191" selection-start-column="79" selection-end-line="191" selection-end-column="79" />
+          <caret line="33" column="40" selection-start-line="33" selection-start-column="40" selection-end-line="33" selection-end-column="40" />
           <folding />
         </state>
       </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/data/Attendee.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="44" column="30" selection-start-line="44" selection-start-column="30" selection-end-line="44" selection-end-column="30" />
-          <folding>
-            <element signature="e#1156#1157#0" expanded="true" />
-            <element signature="e#1198#1199#0" expanded="true" />
-            <element signature="e#1232#1233#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/data/DataSyncManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="191">
-          <caret line="1394" column="34" selection-start-line="1394" selection-start-column="34" selection-end-line="1394" selection-end-column="34" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/adapters/AttendeeDetailExpandableListView.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="30" column="13" selection-start-line="30" selection-start-column="13" selection-end-line="30" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/fragments/SpeakerDetailViewFragment.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="164">
-          <caret line="128" column="49" selection-start-line="128" selection-start-column="49" selection-end-line="128" selection-end-column="49" />
-          <folding />
-        </state>
+      <provider editor-type-id="android-designer2">
+        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/activities/DashboardActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1069">
-          <caret line="176" column="9" selection-start-line="176" selection-start-column="9" selection-end-line="176" selection-end-column="9" />
+        <state relative-caret-position="257">
+          <caret line="115" column="9" selection-start-line="115" selection-start-column="9" selection-end-line="115" selection-end-column="9" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/util/AppUtil.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/activities/AboutUsActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="396" column="32" selection-start-line="396" selection-start-column="32" selection-end-line="396" selection-end-column="32" />
+        <state relative-caret-position="60">
+          <caret line="24" column="13" selection-start-line="24" selection-start-column="13" selection-end-line="24" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/activities/ParticipantsActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1530">
+          <caret line="152" column="13" selection-start-line="152" selection-start-column="13" selection-end-line="152" selection-end-column="13" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/data/Person.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="46" column="59" selection-start-line="46" selection-start-column="59" selection-end-line="46" selection-end-column="59" />
-          <folding>
-            <element signature="e#1373#1381#0" expanded="true" />
-            <element signature="e#2530#2531#0" expanded="true" />
-            <element signature="e#2566#2567#0" expanded="true" />
-            <element signature="e#2736#2737#0" expanded="true" />
-            <element signature="e#2773#2774#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/activities/MyNotesActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="49">
-          <caret line="153" column="16" selection-start-line="153" selection-start-column="16" selection-end-line="155" selection-end-column="84" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/fragments/AttendeeDetailViewFragment.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="191">
-          <caret line="167" column="12" selection-start-line="167" selection-start-column="12" selection-end-line="171" selection-end-column="13" />
-          <folding>
-            <element signature="e#6926#8992#0" expanded="true" />
-            <element signature="e#8991#8992#0" expanded="true" />
-            <element signature="e#9033#11096#0" expanded="true" />
-            <element signature="e#11095#11096#0" expanded="true" />
-            <element signature="e#11764#12350#0" expanded="true" />
-            <element signature="e#12349#12350#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/adapters/DashboardEventListViewAdapter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="188" column="20" selection-start-line="185" selection-start-column="20" selection-end-line="188" selection-end-column="20" />
-          <folding>
-            <element signature="e#5135#9773#0" expanded="true" />
-            <element signature="e#9772#9773#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_event_detail_layout.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="108">
-          <caret line="154" column="41" selection-start-line="154" selection-start-column="37" selection-end-line="154" selection-end-column="41" />
-          <folding />
-        </state>
-      </provider>
-      <provider editor-type-id="android-designer2">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/adapters/SpeakerDetailExpandableListViewAdapter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="335">
-          <caret line="516" column="10" selection-start-line="486" selection-start-column="10" selection-end-line="516" selection-end-column="10" />
-          <folding>
-            <element signature="e#8307#9199#0" expanded="true" />
-            <element signature="e#9198#9199#0" expanded="true" />
-            <element signature="e#10568#10823#0" expanded="true" />
-            <element signature="e#10822#10823#0" expanded="true" />
-            <element signature="e#10868#11123#0" expanded="true" />
-            <element signature="e#11122#11123#0" expanded="true" />
-            <element signature="e#11308#11704#0" expanded="true" />
-            <element signature="e#11452#11670#0" expanded="true" />
-            <element signature="e#11669#11670#0" expanded="true" />
-            <element signature="e#11703#11704#0" expanded="true" />
-            <element signature="e#13229#15527#0" expanded="true" />
-            <element signature="e#15526#15527#0" expanded="true" />
-            <element signature="e#15576#17874#0" expanded="true" />
-            <element signature="e#17873#17874#0" expanded="true" />
-            <element signature="e#25520#26386#0" expanded="true" />
-            <element signature="e#26385#26386#0" expanded="true" />
-            <element signature="e#30820#31583#0" expanded="true" />
-            <element signature="e#31582#31583#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/fragments/EventDetailViewFragment.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="211">
-          <caret line="121" column="8" selection-start-line="121" selection-start-column="8" selection-end-line="121" selection-end-column="72" />
-          <folding>
-            <element signature="e#5647#6083#0" expanded="true" />
-            <element signature="e#6082#6083#0" expanded="true" />
-            <element signature="e#6125#6561#0" expanded="true" />
-            <element signature="e#6560#6561#0" expanded="true" />
-            <element signature="e#6743#8061#0" expanded="true" />
-            <element signature="e#8060#8061#0" expanded="true" />
-            <element signature="e#8100#9418#0" expanded="true" />
-            <element signature="e#9417#9418#0" expanded="true" />
-            <element signature="e#9608#9924#0" expanded="true" />
-            <element signature="e#9923#9924#0" expanded="true" />
-            <element signature="e#9965#10281#0" expanded="true" />
-            <element signature="e#10280#10281#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -5540,22 +5402,133 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="120">
           <caret line="10" column="13" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/messaging/MessagingActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="163" column="20" selection-start-line="163" selection-start-column="8" selection-end-line="163" selection-end-column="20" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/data/EventLink.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/network/TwitterAsyncTask.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="14" column="26" selection-start-line="14" selection-start-column="19" selection-end-line="14" selection-end-column="26" />
+        <state relative-caret-position="120">
+          <caret line="14" column="13" selection-start-line="14" selection-start-column="13" selection-end-line="14" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/service/BackgroundService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="855">
+          <caret line="84" column="27" selection-start-line="84" selection-start-column="27" selection-end-line="84" selection-end-column="27" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/speaker_detail_item_list_view.xml">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/util/AppConfig.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="9" column="34" selection-start-line="9" selection-start-column="34" selection-end-line="9" selection-end-column="34" />
+        <state relative-caret-position="-143">
+          <caret line="11" column="0" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/util/AppUtil.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="5550">
+          <caret line="467" column="50" selection-start-line="467" selection-start-column="26" selection-end-line="467" selection-end-column="50" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/mipmap-xhdpi/ic_launcher_round.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/mipmap-xxhdpi/ic_launcher.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="1" column="26" selection-start-line="1" selection-start-column="18" selection-end-line="1" selection-end-column="26" />
+          <folding>
+            <element signature="e#6010#6015#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4410">
+          <caret line="294" column="38" selection-start-line="294" selection-start-column="38" selection-end-line="294" selection-end-column="38" />
+          <folding />
+        </state>
+      </provider>
+      <provider editor-type-id="android-manifest">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/dimens.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/drawables.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/ConferenceListViewActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="12885">
+          <caret line="917" column="25" selection-start-line="917" selection-start-column="25" selection-end-line="917" selection-end-column="25" />
+          <folding>
+            <element signature="imports" expanded="false" />
+            <element signature="e#10771#10772#0" expanded="false" />
+            <element signature="e#10842#10843#0" expanded="false" />
+            <element signature="e#14482#14483#0" expanded="false" />
+            <element signature="e#14540#14541#0" expanded="false" />
+            <element signature="e#32273#32274#0" expanded="false" />
+            <element signature="e#32322#32323#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/ConferenceListViewAdapter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1005">
+          <caret line="94" column="77" selection-start-line="94" selection-start-column="77" selection-end-line="94" selection-end-column="77" />
+          <folding>
+            <element signature="imports" expanded="false" />
+            <element signature="e#1792#1793#0" expanded="false" />
+            <element signature="e#1816#1817#0" expanded="false" />
+            <element signature="e#1859#1860#0" expanded="false" />
+            <element signature="e#1894#1895#0" expanded="false" />
+            <element signature="e#1951#1952#0" expanded="false" />
+            <element signature="e#2004#2005#0" expanded="false" />
+            <element signature="e#2061#2062#0" expanded="false" />
+            <element signature="e#2092#2093#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_create_account.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="311">
+          <caret line="249" column="38" selection-start-line="249" selection-start-column="25" selection-end-line="249" selection-end-column="38" />
           <folding />
         </state>
       </provider>
@@ -5563,10 +5536,129 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/adapters/EventDetailExpandableListViewAdapter.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/activities/CreateAccountActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="317">
-          <caret line="188" column="5" selection-start-line="188" selection-start-column="5" selection-end-line="188" selection-end-column="5" />
+        <state relative-caret-position="385">
+          <caret line="138" column="87" selection-start-line="138" selection-start-column="87" selection-end-line="138" selection-end-column="87" />
+          <folding>
+            <marker date="1503245776000" expanded="false" signature="4916:5044" ph="(OnClickListener) (dialog, which) → {" />
+            <marker date="1503245776000" expanded="false" signature="5127:5162" ph="}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/activities/AnnouncementsActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="75" column="11" selection-start-line="75" selection-start-column="11" selection-end-line="75" selection-end-column="11" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/data/DataSyncManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1920">
+          <caret line="165" column="47" selection-start-line="165" selection-start-column="39" selection-end-line="165" selection-end-column="47" />
+          <folding>
+            <element signature="e#24373#24374#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/push/MyParsePNReceiver.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2483">
+          <caret line="52" column="94" selection-start-line="52" selection-start-column="94" selection-end-line="52" selection-end-column="94" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/CustomSplashActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="330">
+          <caret line="47" column="42" selection-start-line="47" selection-start-column="42" selection-end-line="47" selection-end-column="42" />
+          <folding>
+            <element signature="e#1023#1051#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_custom_splash.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="48">
+          <caret line="6" column="43" selection-start-line="6" selection-start-column="43" selection-end-line="6" selection-end-column="43" />
+          <folding />
+        </state>
+      </provider>
+      <provider editor-type-id="android-designer2">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/data/AppConfig.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="20" column="32" selection-start-line="20" selection-start-column="32" selection-end-line="20" selection-end-column="32" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#565#566#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/MainSplashActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="45">
+          <caret line="37" column="0" selection-start-line="37" selection-start-column="0" selection-end-line="37" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/data/Person.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="57">
+          <caret line="151" column="0" selection-start-line="151" selection-start-column="0" selection-end-line="151" selection-end-column="0" />
+          <folding>
+            <element signature="e#4041#4042#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/App.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="274">
+          <caret line="215" column="37" selection-start-line="215" selection-start-column="37" selection-end-line="215" selection-end-column="37" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/linkedin-sdk/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-522">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ointerface/oconnect/activities/EditAccountActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="212" column="21" selection-start-line="212" selection-start-column="21" selection-end-line="212" selection-end-column="21" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="93">
+          <caret line="109" column="7" selection-start-line="109" selection-start-column="7" selection-end-line="109" selection-end-column="7" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/colors.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="5" column="17" selection-start-line="5" selection-start-column="17" selection-end-line="5" selection-end-column="17" />
           <folding />
         </state>
       </provider>
