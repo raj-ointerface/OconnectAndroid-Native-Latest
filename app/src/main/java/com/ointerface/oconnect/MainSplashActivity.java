@@ -65,13 +65,14 @@ public class MainSplashActivity extends AppCompatActivity implements IDataSyncLi
     }
 
     public void onDataSyncFinish() {
-        if (DataSyncManager.dialog.isShowing() == true) {
+        if (DataSyncManager.dialog != null && DataSyncManager.dialog.isShowing() == true) {
             DataSyncManager.dialog.hide();
         }
 
         Date dateTimeNow = Calendar.getInstance().getTime();
         DataSyncManager.setLastSyncDate(dateTimeNow);
 
+        /*
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             public void run() {
@@ -80,5 +81,6 @@ public class MainSplashActivity extends AppCompatActivity implements IDataSyncLi
                 startActivity(i);
             }
         }, 4000);
+        */
     }
 }
