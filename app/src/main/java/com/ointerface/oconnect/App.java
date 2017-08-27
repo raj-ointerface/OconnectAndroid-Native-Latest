@@ -108,7 +108,6 @@ public class App extends MultiDexApplication implements ServiceConnection, Messa
             }
         });
 
-
         if (AppUtil.getDefaultRealmLoaded(getApplicationContext()) == false) {
             Uri path = Uri.parse("file:///android_asset/default.realm");
 
@@ -119,16 +118,16 @@ public class App extends MultiDexApplication implements ServiceConnection, Messa
                 public void migrate(DynamicRealm realm, long oldVersion, long newVersion) {
 
 
-                    realm.getSchema().create("AppConfig");
-                    realm.getSchema().get("AppConfig").addField("objectId", String.class);
-                    realm.getSchema().get("AppConfig").addPrimaryKey("objectId").setRequired("objectId", true);
-                    realm.getSchema().get("AppConfig").addField("defaultConference", String.class);
-                    realm.getSchema().get("AppConfig").addField("showMainSplash", Boolean.class);
-                    realm.getSchema().get("AppConfig").addField("showConfList", Boolean.class);
-                    realm.getSchema().get("AppConfig").addField("organizationId", String.class);
-                    realm.getSchema().get("AppConfig").addField("appName", String.class);
+                    // realm.getSchema().create("AppConfig");
+                    // realm.getSchema().get("AppConfig").addField("objectId", String.class);
+                    // realm.getSchema().get("AppConfig").addPrimaryKey("objectId").setRequired("objectId", true);
+                    // realm.getSchema().get("AppConfig").addField("defaultConference", String.class);
+                    // realm.getSchema().get("AppConfig").addField("showMainSplash", Boolean.class);
+                    // realm.getSchema().get("AppConfig").addField("showConfList", Boolean.class);
+                    // realm.getSchema().get("AppConfig").addField("organizationId", String.class);
+                    // realm.getSchema().get("AppConfig").addField("appName", String.class);
 
-                    realm.getSchema().get("Conference").addField("DashboardImage", byte[].class);
+                    // realm.getSchema().get("Conference").addField("DashboardImage", byte[].class);
 
                     // realm.getSchema().get("SinchMessage").addField("isRead", Boolean.class);
                     // realm.getSchema().get("Event").addField("trackColor", String.class);
@@ -155,7 +154,6 @@ public class App extends MultiDexApplication implements ServiceConnection, Messa
 
             Realm.setDefaultConfiguration(AppUtil.realmConfiguration);
         }
-
 
 
         /*

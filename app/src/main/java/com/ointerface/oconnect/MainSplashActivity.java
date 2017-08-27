@@ -50,6 +50,7 @@ public class MainSplashActivity extends AppCompatActivity implements IDataSyncLi
             }, 4000);
         }
 
+
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
@@ -61,7 +62,6 @@ public class MainSplashActivity extends AppCompatActivity implements IDataSyncLi
                 // startService(new Intent(MainSplashActivity.this, BackgroundService.class));
             }
         });
-
     }
 
     public void onDataSyncFinish() {

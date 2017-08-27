@@ -8,7 +8,9 @@ public class AppConfig {
     // If app is Private Label app, then set this to true to show the splash screen for the organization
     static public boolean isPrivateLabelApp = false;
 
-    static public String primaryOrganizationID = "D8cdOcYLOK";
+    // static public String primaryOrganizationID = "D8cdOcYLOK";
+
+    static public String primaryOrganizationID = "GnyLYhHwNT";
 
     // Shared Preferences
     static public String sharedPrefsName = "com.ointerface.oconnect.sharedprefs";

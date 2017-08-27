@@ -30,6 +30,10 @@ public class CustomSplashActivity extends AppCompatActivity {
 
         com.ointerface.oconnect.data.AppConfig config = realm.where(com.ointerface.oconnect.data.AppConfig.class).equalTo("appName",getString(R.string.app_name)).findFirst();
 
+        if (config.getDefaultConference() != null && !config.getDefaultConference().equalsIgnoreCase("")) {
+            AppUtil.setSelectedConferenceID(CustomSplashActivity.this, config.getDefaultConference());
+        }
+
         Organization result;
 
         if (config != null && config.getOrganizationId() != null && !config.getOrganizationId().equalsIgnoreCase("")) {
@@ -51,9 +55,11 @@ public class CustomSplashActivity extends AppCompatActivity {
             if (result.getShowSplash() == true) {
                 ImageView ivOrganizationLogo = (ImageView) findViewById(R.id.ivOrganizationLogo);
 
-                Bitmap bm = BitmapFactory.decodeByteArray(result.getImage(), 0, result.getImage().length);
+                if (result.getImage() != null) {
+                    Bitmap bm = BitmapFactory.decodeByteArray(result.getImage(), 0, result.getImage().length);
 
-                ivOrganizationLogo.setImageBitmap(bm);
+                    ivOrganizationLogo.setImageBitmap(bm);
+                }
 
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {

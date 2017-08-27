@@ -2511,14 +2511,14 @@ public class DataSyncManager {
                     realm.commitTransaction();
                     realm.close();
 
-                    dataAppConfig();
+                    dataSyncAppConfig();
                 }
             }
         });
 
     }
 
-    static public void dataAppConfig() {
+    static public void dataSyncAppConfig() {
         try {
             final ParseObject parseObject = ParseQuery.getQuery("AppConfig").whereEqualTo("appName", context.getString(R.string.app_name)).getFirst();
 
@@ -2559,7 +2559,7 @@ public class DataSyncManager {
 
     static public Date getLastSyncDate() {
         SharedPreferences prefs = context.getSharedPreferences(AppConfig.sharedPrefsName, MODE_PRIVATE);
-        String lastSyncDateStr = prefs.getString(AppConfig.lastSyncDateName, "2017-08-12T07:00:00");
+        String lastSyncDateStr = prefs.getString(AppConfig.lastSyncDateName, "2017-08-26T08:00:00");
 
         SimpleDateFormat isoFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
         isoFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
