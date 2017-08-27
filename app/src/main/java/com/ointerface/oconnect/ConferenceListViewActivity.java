@@ -728,7 +728,7 @@ public class ConferenceListViewActivity extends AppCompatActivity {
                     && !conferences[j].getState().toLowerCase().contains(searchText)
                     && !conferences[j].getZip().contains(searchText)
                     && !conferences[j].getCountry().toLowerCase().contains(searchText)
-                    //allows you to search by group
+                    // GS - allows you to search by group
                     && !conferences[j].getGroup().toLowerCase().contains(searchText)
                     && !df.format(conferences[j].getStartTime()).toLowerCase().contains(searchText)
                     && !df.format(conferences[j].getEndTime()).toLowerCase().contains(searchText)) {
