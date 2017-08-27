@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="sinch-android-rtc-3.11.1">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.android/build-cache/58fbe3ca456d34f6f4296c18ab7a5a581d018ce9/output/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.android/build-cache/58fbe3ca456d34f6f4296c18ab7a5a581d018ce9/output/res" />
+      <root url="file://$USER_HOME$/.android/build-cache/315f49a93b5814b4709758138941ddc1a9ac4f57/output/res" />
+      <root url="jar://$USER_HOME$/.android/build-cache/315f49a93b5814b4709758138941ddc1a9ac4f57/output/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

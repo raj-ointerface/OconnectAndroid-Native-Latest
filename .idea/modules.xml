@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Oconnect.iml" filepath="$PROJECT_DIR$/Oconnect.iml" />
+      <module fileurl="file://$PROJECT_DIR$/OconnectAndroid-Native-Latest.iml" filepath="$PROJECT_DIR$/OconnectAndroid-Native-Latest.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/linkedin-sdk/linkedin-sdk.iml" filepath="$PROJECT_DIR$/linkedin-sdk/linkedin-sdk.iml" />
       <module fileurl="file://$PROJECT_DIR$/sinch-android-rtc-3.11.1/sinch-android-rtc-3.11.1.iml" filepath="$PROJECT_DIR$/sinch-android-rtc-3.11.1/sinch-android-rtc-3.11.1.iml" />

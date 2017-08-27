@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="mopub-sdk-4.11.0">
     <CLASSES>
-      <root url="file://$USER_HOME$/.android/build-cache/d267af944c8e742321bab9d2db4ab9a55c21d1ff/output/res" />
-      <root url="jar://$USER_HOME$/.android/build-cache/d267af944c8e742321bab9d2db4ab9a55c21d1ff/output/jars/classes.jar!/" />
+      <root url="jar://$USER_HOME$/.android/build-cache/48dbcd3691f99c578b86c247ec15e55a34ccac6c/output/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.android/build-cache/48dbcd3691f99c578b86c247ec15e55a34ccac6c/output/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

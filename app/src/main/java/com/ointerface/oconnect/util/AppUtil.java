@@ -389,6 +389,12 @@ public class AppUtil {
                         context.startActivity(i);
                     }
                 });
+        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancel",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        //do nothing
+                    }
+                });
 
         alertDialog.show();
     }

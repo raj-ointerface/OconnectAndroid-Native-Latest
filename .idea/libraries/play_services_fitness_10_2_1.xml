@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="play-services-fitness-10.2.1">
     <CLASSES>
-      <root url="file://$USER_HOME$/.android/build-cache/a7c63d5feb0d52c19a0cdc71facbf25c3e4538c2/output/res" />
-      <root url="jar://$USER_HOME$/.android/build-cache/a7c63d5feb0d52c19a0cdc71facbf25c3e4538c2/output/jars/classes.jar!/" />
+      <root url="jar://$USER_HOME$/.android/build-cache/e563e39f48c1510af5d2276bc112c13d12f884fd/output/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.android/build-cache/e563e39f48c1510af5d2276bc112c13d12f884fd/output/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

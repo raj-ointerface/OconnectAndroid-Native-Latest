@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merger version="3"><dataSet config="main"><source path="/Users/AnthonyDoan/Desktop/workspace/OInterface/OConnect/Android/Oconnect/linkedin-sdk/src/main/jniLibs"/></dataSet><dataSet config="release"><source path="/Users/AnthonyDoan/Desktop/workspace/OInterface/OConnect/Android/Oconnect/linkedin-sdk/src/release/jniLibs"/></dataSet></merger>
+<merger version="3"><dataSet config="main"><source path="/Users/gagan/Desktop/workspace/ointerface/oconnect/adroid/OconnectAndroid-Native-Latest/linkedin-sdk/src/main/jniLibs"/></dataSet><dataSet config="release"><source path="/Users/gagan/Desktop/workspace/ointerface/oconnect/adroid/OconnectAndroid-Native-Latest/linkedin-sdk/src/release/jniLibs"/></dataSet></merger>
