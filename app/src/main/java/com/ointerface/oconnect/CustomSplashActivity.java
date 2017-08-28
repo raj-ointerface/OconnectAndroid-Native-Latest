@@ -30,7 +30,7 @@ public class CustomSplashActivity extends AppCompatActivity {
 
         com.ointerface.oconnect.data.AppConfig config = realm.where(com.ointerface.oconnect.data.AppConfig.class).equalTo("appName",getString(R.string.app_name)).findFirst();
 
-        if (config.getDefaultConference() != null && !config.getDefaultConference().equalsIgnoreCase("")) {
+        if (config != null && config.getDefaultConference() != null && !config.getDefaultConference().equalsIgnoreCase("")) {
             AppUtil.setSelectedConferenceID(CustomSplashActivity.this, config.getDefaultConference());
         }
 
@@ -49,7 +49,13 @@ public class CustomSplashActivity extends AppCompatActivity {
             return;
         }
 
-        setContentView(R.layout.activity_custom_splash);
+        //if the custom splash screen exists then display it
+        if(result.showCustomSplash()){
+            setContentView(R.layout.activity_custom_splash_with_custom_image);
+        }
+        else {
+            setContentView(R.layout.activity_custom_splash);
+        }
 
         if (result != null) {
             if (result.getShowSplash() == true) {

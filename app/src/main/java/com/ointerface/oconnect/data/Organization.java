@@ -21,6 +21,7 @@ public class Organization extends RealmObject {
     private Date createdAt;
     private byte[] image;
     private String website = "";
+    private boolean showCustomSplash = false;
 
     public String getObjectId() { return this.objectId; }
     public boolean getShowSplash() {return this.showSplash; }
@@ -30,6 +31,7 @@ public class Organization extends RealmObject {
     public Date getCreatedAt() { return this.createdAt; }
     public byte[] getImage() { return this.image; }
     public String getWebsite() { return this.website; }
+    public boolean showCustomSplash() {return this.showCustomSplash; }
 
     public void setObjectId(String id) { this.objectId = id; }
     public void setShowSplash(boolean shouldShow) { this.showSplash = shouldShow; }
@@ -39,4 +41,5 @@ public class Organization extends RealmObject {
     public void setCreatedAt(Date created) { this.createdAt = created; }
     public void setImage(byte[] imageArg) { this.image = imageArg; }
     public void setWebsite(String website) { this.website = website; }
+    public void setShowCustomSplash(boolean showCustomSplash) {this.showCustomSplash = showCustomSplash; }
 }
