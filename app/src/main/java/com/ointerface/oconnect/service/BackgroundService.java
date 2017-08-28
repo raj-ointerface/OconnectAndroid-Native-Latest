@@ -86,12 +86,12 @@ public class BackgroundService extends Service {
                     }
                 };
 
-                final ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(5);
-                executor.schedule(runnable, 2, TimeUnit.SECONDS);
+                // final ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(5);
+                // executor.schedule(runnable, 2, TimeUnit.SECONDS);
 
                 // executor.schedule(() -> captureCDRProcess(), 1, TimeUnit.MINUTES);
 
-                // handler.postDelayed(runnable, 1000);
+                handler.postDelayed(runnable, 1000);
             } catch (Exception e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();

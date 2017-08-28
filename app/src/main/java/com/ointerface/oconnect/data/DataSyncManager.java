@@ -105,12 +105,18 @@ public class DataSyncManager {
 
                             ParseFile parseImage = (ParseFile) parseObject.getParseFile("image");
 
+                            //grab the custom splash image from parse if the defualt image does not exists
+                            if(parseImage == null){
+                                parseImage = (ParseFile) parseObject.getParseFile("android_340x980");
+                                org.setShowCustomSplash(true);
+                            }
+
                             try {
                                 if (parseImage != null) {
                                     org.setImage(parseImage.getData());
                                 }
                             } catch (Exception ex) {
-                                Log.d("DataSyncManager", "Line 90 " + ex.getMessage());
+                                Log.d("DataSyncManager", "Line 119 " + ex.getMessage());
                             }
 
                         } else {
@@ -126,12 +132,18 @@ public class DataSyncManager {
 
                             ParseFile parseImage = (ParseFile) parseObject.getParseFile("image");
 
+                            //update the custom splash image from parse if the defualt image does not exists
+                            if(parseImage == null){
+                                parseImage = (ParseFile) parseObject.getParseFile("android_340x980");
+                                result.setShowCustomSplash(true);
+                            }
+
                             try {
                                 if (parseImage != null) {
                                     result.setImage(parseImage.getData());
                                 }
                             } catch (Exception ex) {
-                                Log.d("DataSyncManager", "Line 113 " + ex.getMessage());
+                                Log.d("DataSyncManager", "Line 146 " + ex.getMessage());
                             }
 
 
@@ -1041,6 +1053,9 @@ public class DataSyncManager {
                                         Log.d("DataSync", ex.getMessage());
                                     }
                                 }
+                            }
+                            else{
+
                             }
 
                             JSONArray filesJSONArr = parseObject.getJSONArray("slidesFiles");
