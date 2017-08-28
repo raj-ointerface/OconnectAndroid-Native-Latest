@@ -66,6 +66,18 @@ public class MainSplashActivity extends AppCompatActivity implements IDataSyncLi
         }
 
         startService(new Intent(MainSplashActivity.this, BackgroundService.class));
+
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                MyParsePNReceiver.setBadge(MainSplashActivity.this, MyParsePNReceiver.getAlertCount(MainSplashActivity.this));
+
+//                //DataSyncManager.shouldSyncAll = true;
+//                //DataSyncManager.beginDataSync(getApplicationContext(), MainSplashActivity.this);
+
+                startService(new Intent(MainSplashActivity.this, BackgroundService.class));
+            }
+        });
     }
 
     public void onDataSyncFinish() {
