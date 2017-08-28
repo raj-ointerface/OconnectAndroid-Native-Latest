@@ -30,11 +30,26 @@ public class MainSplashActivity extends AppCompatActivity implements IDataSyncLi
 
         setContentView(R.layout.activity_main_splash);
 
+        MyParsePNReceiver.setBadge(MainSplashActivity.this, MyParsePNReceiver.getAlertCount(MainSplashActivity.this));
+
         // DataSyncManager.dialog = ProgressDialog.show((Context)this, null, "Initializing Data ... Please wait.");
 
         Realm realm = AppUtil.getRealmInstance(this);
 
         AppConfig config = realm.where(AppConfig.class).findFirst();
+
+        /*
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+
+                // DataSyncManager.shouldSyncAll = true;
+                // DataSyncManager.beginDataSync(getApplicationContext(), MainSplashActivity.this);
+
+                startService(new Intent(MainSplashActivity.this, BackgroundService.class));
+            }
+        });
+        */
 
         if (config != null && config.getShowMainSplash() == false) {
             Intent i = new Intent(MainSplashActivity.this, CustomSplashActivity.class);
@@ -50,18 +65,7 @@ public class MainSplashActivity extends AppCompatActivity implements IDataSyncLi
             }, 4000);
         }
 
-
-        AsyncTask.execute(new Runnable() {
-            @Override
-            public void run() {
-                MyParsePNReceiver.setBadge(MainSplashActivity.this, MyParsePNReceiver.getAlertCount(MainSplashActivity.this));
-
-                DataSyncManager.shouldSyncAll = true;
-                DataSyncManager.beginDataSync(getApplicationContext(), MainSplashActivity.this);
-
-                // startService(new Intent(MainSplashActivity.this, BackgroundService.class));
-            }
-        });
+        startService(new Intent(MainSplashActivity.this, BackgroundService.class));
     }
 
     public void onDataSyncFinish() {
