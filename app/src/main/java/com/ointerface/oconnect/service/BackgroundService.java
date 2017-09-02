@@ -71,7 +71,10 @@ public class BackgroundService extends Service {
                                 @Override
                                 public void onDataSyncFinish() {
                                     Log.d("DataSync", "Data Sync Finished");
-                                    Date dateTimeNow = Calendar.getInstance().getTime();
+                                    Calendar cal = Calendar.getInstance();
+                                    cal.setTimeZone(java.util.TimeZone.getTimeZone("GMT"));
+                                    Date dateTimeNow = cal.getTime();
+
                                     DataSyncManager.setLastSyncDate(dateTimeNow);
                                     BackgroundService.isDataSyncing = false;
                                 }

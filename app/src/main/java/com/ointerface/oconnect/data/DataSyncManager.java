@@ -304,18 +304,24 @@ public class DataSyncManager {
                             try {
                                 List<ParseObject> peopleList = peopleRelation.getQuery().find();
 
-                                if (!realm.isInTransaction()) {
-                                    realm.beginTransaction();
-                                }
-
-                                conference.setPeople(new RealmList<Person>());
-
-                                if (realm.isInTransaction()) {
-                                    realm.commitTransaction();
-                                }
+                                RealmList<Person> existingUsers = conference.getPeople();
 
                                 if (peopleList != null) {
                                     for (ParseObject thisObj : peopleList) {
+                                        boolean bUserExists = false;
+
+                                        if (existingUsers != null) {
+                                            for (int h = 0; h < existingUsers.size(); ++h) {
+                                                if (thisObj.getObjectId().equalsIgnoreCase(existingUsers.get(h).getObjectId())) {
+                                                    bUserExists = true;
+                                                }
+                                            }
+                                        }
+
+                                        if (bUserExists == true) {
+                                            continue;
+                                        }
+
                                         Person thisPerson = Person.saveFromParseUser(thisObj, true);
 
                                         if (!realm.isInTransaction()) {
@@ -453,17 +459,24 @@ public class DataSyncManager {
                             try {
                                 List<ParseObject> peopleList = peopleRelation.getQuery().find();
 
-                                if (!realm.isInTransaction()) {
-                                    realm.beginTransaction();
-                                }
+                                RealmList<Person> existingUsers = result.getPeople();
 
-                                result.setPeople(new RealmList<Person>());
-
-                                if (realm.isInTransaction()) {
-                                    realm.commitTransaction();
-                                }
                                 if (peopleList != null) {
                                     for (ParseObject thisObj : peopleList) {
+                                        boolean bUserExists = false;
+
+                                        if (existingUsers != null) {
+                                            for (int h = 0; h < existingUsers.size(); ++h) {
+                                                if (thisObj.getObjectId().equalsIgnoreCase(existingUsers.get(h).getObjectId())) {
+                                                    bUserExists = true;
+                                                }
+                                            }
+                                        }
+
+                                        if (bUserExists == true) {
+                                            continue;
+                                        }
+
                                         Person thisPerson = Person.saveFromParseUser(thisObj, true);
 
                                         if (!realm.isInTransaction()) {

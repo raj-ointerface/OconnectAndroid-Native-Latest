@@ -38,18 +38,17 @@ public class MainSplashActivity extends AppCompatActivity implements IDataSyncLi
 
         AppConfig config = realm.where(AppConfig.class).findFirst();
 
-        /*
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
 
-                // DataSyncManager.shouldSyncAll = true;
-                // DataSyncManager.beginDataSync(getApplicationContext(), MainSplashActivity.this);
+                DataSyncManager.shouldSyncAll = true;
+                DataSyncManager.beginDataSync(getApplicationContext(), MainSplashActivity.this);
 
-                startService(new Intent(MainSplashActivity.this, BackgroundService.class));
+                // startService(new Intent(MainSplashActivity.this, BackgroundService.class));
             }
         });
-        */
+
 
         if (config != null && config.getShowMainSplash() == false) {
             Intent i = new Intent(MainSplashActivity.this, CustomSplashActivity.class);
@@ -65,7 +64,7 @@ public class MainSplashActivity extends AppCompatActivity implements IDataSyncLi
             }, 4000);
         }
 
-        startService(new Intent(MainSplashActivity.this, BackgroundService.class));
+        // startService(new Intent(MainSplashActivity.this, BackgroundService.class));
     }
 
     public void onDataSyncFinish() {
@@ -73,7 +72,10 @@ public class MainSplashActivity extends AppCompatActivity implements IDataSyncLi
             DataSyncManager.dialog.hide();
         }
 
-        Date dateTimeNow = Calendar.getInstance().getTime();
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeZone(java.util.TimeZone.getTimeZone("GMT"));
+        Date dateTimeNow = cal.getTime();
+
         DataSyncManager.setLastSyncDate(dateTimeNow);
 
         /*

@@ -1376,7 +1376,10 @@ public class OConnectBaseActivity extends AppCompatActivity
             DataSyncManager.dialog.hide();
         }
 
-        Date dateTimeNow = Calendar.getInstance().getTime();
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeZone(java.util.TimeZone.getTimeZone("GMT"));
+        Date dateTimeNow = cal.getTime();
+
         DataSyncManager.setLastSyncDate(dateTimeNow);
     }
 

@@ -241,7 +241,10 @@ public class MyParsePNReceiver extends ParsePushBroadcastReceiver implements IDa
     }
 
     public void onDataSyncFinish() {
-        Date dateTimeNow = Calendar.getInstance().getTime();
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeZone(java.util.TimeZone.getTimeZone("GMT"));
+        Date dateTimeNow = cal.getTime();
+
         DataSyncManager.setLastSyncDate(dateTimeNow);
     }
 }
