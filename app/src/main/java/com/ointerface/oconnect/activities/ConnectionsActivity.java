@@ -162,10 +162,8 @@ public class ConnectionsActivity extends OConnectBaseActivity {
             tvInterests.setVisibility(GONE);
         }
 
-        if (AppConfig.bSurveyShown == false) {
+        if (!AppUtil.getSurveyShown(this)) {
             AppUtil.displaySurveyOption(this);
-            AppUtil.setSurveyShown(this, true);
-            AppConfig.bSurveyShown = true;
         }
     }
 

@@ -189,9 +189,8 @@ public class DashboardActivity extends OConnectBaseActivity {
             }
         }
 
-        if (AppUtil.getSurveyShown(this) == false) {
+        if (!AppUtil.getSurveyShown(this)) {
             AppUtil.displaySurveyOption(this);
-            AppUtil.setSurveyShown(this, true);
         }
     }
 
