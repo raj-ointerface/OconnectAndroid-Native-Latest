@@ -107,7 +107,7 @@ public class DataSyncManager {
 
                             //grab the custom splash image from parse if the defualt image does not exists
                             if(parseImage == null){
-                                parseImage = (ParseFile) parseObject.getParseFile("android_340x980");
+                                parseImage = (ParseFile) parseObject.getParseFile("android_640x980");
                                 org.setShowCustomSplash(true);
                             }
 
@@ -134,7 +134,7 @@ public class DataSyncManager {
 
                             //update the custom splash image from parse if the defualt image does not exists
                             if(parseImage == null){
-                                parseImage = (ParseFile) parseObject.getParseFile("android_340x980");
+                                parseImage = (ParseFile) parseObject.getParseFile("android_640x980");
                                 result.setShowCustomSplash(true);
                             }
 
