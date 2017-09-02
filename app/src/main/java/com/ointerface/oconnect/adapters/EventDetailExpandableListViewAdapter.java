@@ -362,13 +362,15 @@ public class EventDetailExpandableListViewAdapter extends BaseExpandableListAdap
                 lvSpeakers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        // SpeakerDetailViewActivity.mItems = new ArrayList<RealmObject>();
+                        SpeakerDetailViewActivity.mItems = new ArrayList<RealmObject>();
 
-                        // SpeakerDetailViewActivity.mItems.addAll(speakersList);
+                        SpeakerDetailViewActivity.mItems.addAll(speakersList);
 
                         Intent i = new Intent(_context, SpeakerDetailViewActivity.class);
                         i.putExtra("SPEAKER_NUMBER", position);
-                        i.putExtra("SPEAKER_LIST", speakersList);
+
+                        // i.putExtra("SPEAKER_LIST", speakersList);
+
                         _context.startActivity(i);
                     }
                 });
@@ -526,6 +528,24 @@ public class EventDetailExpandableListViewAdapter extends BaseExpandableListAdap
                 filesList.addAll(journalResult);
                 filesList.addAll(fileResult);
 
+                final ArrayList<Speaker> speakersList = _listChildSpeaker.get(1);
+                ArrayList<String> speakerNamesList = new ArrayList<String>();
+
+                if (speakersList != null) {
+                    for (int i = 0; i < speakersList.size(); ++i) {
+                        Speaker currentSpeaker = speakersList.get(i);
+                        RealmResults<SpeakerAbstract> abstractResult2 = realm.where(SpeakerAbstract.class).equalTo("speakerID", currentSpeaker.getObjectId()).findAll();
+                        RealmResults<SpeakerMisc> miscResult2 = realm.where(SpeakerMisc.class).equalTo("speakerID", currentSpeaker.getObjectId()).findAll();
+                        RealmResults<SpeakerJournal> journalResult2 = realm.where(SpeakerJournal.class).equalTo("speakerID", currentSpeaker.getObjectId()).findAll();
+                        RealmResults<SpeakerFile> fileResult2 = realm.where(SpeakerFile.class).equalTo("speakerID", currentSpeaker.getObjectId()).findAll();
+
+                        filesList.addAll(abstractResult2);
+                        filesList.addAll(miscResult2);
+                        filesList.addAll(journalResult2);
+                        filesList.addAll(fileResult2);
+                    }
+                }
+
                 ArrayList<String> links = new ArrayList<String>();
                 ArrayList<String> urls = new ArrayList<String>();
 
@@ -549,6 +569,26 @@ public class EventDetailExpandableListViewAdapter extends BaseExpandableListAdap
                         urls.add(curFile.getUrl());
                     } else if (file instanceof EventAbstract) {
                         EventAbstract curFile = (EventAbstract) file;
+
+                        links.add(curFile.getName());
+                        urls.add(curFile.getUrl());
+                    } else if (file instanceof SpeakerFile) {
+                        SpeakerFile curFile = (SpeakerFile) file;
+
+                        links.add(curFile.getName());
+                        urls.add(curFile.getUrl());
+                    } else if (file instanceof SpeakerJournal) {
+                        SpeakerJournal curFile = (SpeakerJournal) file;
+
+                        links.add(curFile.getName());
+                        urls.add(curFile.getUrl());
+                    } else if (file instanceof SpeakerMisc) {
+                        SpeakerMisc curFile = (SpeakerMisc) file;
+
+                        links.add(curFile.getName());
+                        urls.add(curFile.getUrl());
+                    } else if (file instanceof SpeakerAbstract) {
+                        SpeakerAbstract curFile = (SpeakerAbstract) file;
 
                         links.add(curFile.getName());
                         urls.add(curFile.getUrl());

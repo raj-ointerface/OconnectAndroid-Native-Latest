@@ -345,6 +345,7 @@ public class ScheduleActivity extends OConnectBaseActivity {
         if (newSelectedDate != null) {
             sessionResults = realm.where(Session.class).equalTo("conference", AppUtil.getSelectedConferenceID(ScheduleActivity.this)).findAllSorted("startTime", Sort.ASCENDING);
         } else {
+            newSelectedDate = new Date();
             sessionResults = realm.where(Session.class).equalTo("conference", AppUtil.getSelectedConferenceID(ScheduleActivity.this)).findAllSorted("startTime", Sort.ASCENDING);
         }
 
@@ -644,13 +645,13 @@ public class ScheduleActivity extends OConnectBaseActivity {
 
         Date currentScheduleDateNoTime = AppUtil.setTime(currentScheduleDate, 0, 0, 0, 0);
 
-        if (currentScheduleDateNoTime.compareTo(conferenceFirstDayNoTime) == 0) {
+        if (currentScheduleDateNoTime == null || currentScheduleDateNoTime.compareTo(conferenceFirstDayNoTime) == 0) {
             ivLeftArrow.setBackgroundResource(R.drawable.icon_left_arrow_inactive);
         } else {
             ivLeftArrow.setBackgroundResource(R.drawable.icon_left_arrow_active);
         }
 
-        if (currentScheduleDateNoTime.compareTo(conferenceLastDayNoTime) == 0) {
+        if (currentScheduleDateNoTime == null || currentScheduleDateNoTime.compareTo(conferenceLastDayNoTime) == 0) {
             ivRightArrow.setBackgroundResource(R.drawable.icon_right_arrow_inactive);
         } else {
             ivRightArrow.setBackgroundResource(R.drawable.icon_right_arrow_active);

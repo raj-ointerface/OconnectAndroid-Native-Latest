@@ -50,7 +50,7 @@ public class CustomSplashActivity extends AppCompatActivity {
         }
 
         //if the custom splash screen exists then display it
-        if(result.showCustomSplash()){
+        if(result != null && result.showCustomSplash() != null && result.showCustomSplash() == true){
             setContentView(R.layout.activity_custom_splash_with_custom_image);
         }
         else {

@@ -257,6 +257,21 @@ public class EventDetailViewFragment extends Fragment {
             bHasFile = true;
         }
 
+        for (int i = 0; i < speakersList.size(); ++i) {
+            Speaker currentSpeaker = speakersList.get(i);
+            RealmResults<SpeakerAbstract> abstractResult2 = realm.where(SpeakerAbstract.class).equalTo("speakerID", currentSpeaker.getObjectId()).findAll();
+            RealmResults<SpeakerMisc> miscResult2 = realm.where(SpeakerMisc.class).equalTo("speakerID", currentSpeaker.getObjectId()).findAll();
+            RealmResults<SpeakerJournal> journalResult2 = realm.where(SpeakerJournal.class).equalTo("speakerID", currentSpeaker.getObjectId()).findAll();
+            RealmResults<SpeakerFile> fileResult2 = realm.where(SpeakerFile.class).equalTo("speakerID", currentSpeaker.getObjectId()).findAll();
+
+            if (abstractResult2 != null && abstractResult2.size() > 0 ||
+                    miscResult2 != null && miscResult2.size() > 0 ||
+                    journalResult2 != null && journalResult2.size() > 0 ||
+                    fileResult2 != null && fileResult2.size() > 0) {
+                bHasFile = true;
+            }
+        }
+
         if (bHasFile == true) {
             _listDataHeader.add("Files");
             _listHeaderNumber.add(headerNumber);

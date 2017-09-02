@@ -181,7 +181,7 @@ public class AppUtil {
 
         final GregorianCalendar gc = new GregorianCalendar();
 
-        if (gc == null) {
+        if (gc == null || date == null) {
             return date;
         }
 

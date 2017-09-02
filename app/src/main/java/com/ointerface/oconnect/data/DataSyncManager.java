@@ -151,7 +151,6 @@ public class DataSyncManager {
                     }
 
                     realm.commitTransaction();
-                    realm.close();
                 } else {
                     Log.d("DataSyncManager", "Line 120 " + e.getMessage() + " " + e.getStackTrace());
                 }
@@ -190,6 +189,10 @@ public class DataSyncManager {
                         Conference result = realm.where(Conference.class).equalTo("objectId", parseObject.getObjectId()).findFirst();
 
                         if (result == null) {
+
+                            if (!realm.isInTransaction()) {
+                                realm.beginTransaction();
+                            }
 
                             // Create an object
                             Conference conference = realm.createObject(Conference.class, parseObject.getObjectId());
@@ -294,23 +297,55 @@ public class DataSyncManager {
 
                             ParseRelation<ParseObject> peopleRelation = parseObject.getRelation("person");
 
+                            if (realm.isInTransaction()) {
+                                realm.commitTransaction();
+                            }
+
                             try {
                                 List<ParseObject> peopleList = peopleRelation.getQuery().find();
 
+                                if (!realm.isInTransaction()) {
+                                    realm.beginTransaction();
+                                }
+
                                 conference.setPeople(new RealmList<Person>());
+
+                                if (realm.isInTransaction()) {
+                                    realm.commitTransaction();
+                                }
 
                                 if (peopleList != null) {
                                     for (ParseObject thisObj : peopleList) {
                                         Person thisPerson = Person.saveFromParseUser(thisObj, true);
 
+                                        if (!realm.isInTransaction()) {
+                                            realm.beginTransaction();
+                                        }
+
                                         conference.getPeople().add(thisPerson);
+
+                                        if (realm.isInTransaction()) {
+                                            realm.commitTransaction();
+                                        }
+
                                     }
                                 }
+
+
                             } catch (Exception ex) {
                                 Log.d("APD", ex.getMessage());
                             }
+
+                            if (!realm.isInTransaction()) {
+                                realm.beginTransaction();
+                            }
+
                         } else {
                             // Update in Realm
+
+                            if (!realm.isInTransaction()) {
+                                realm.beginTransaction();
+                            }
 
                             // result.setObjectId(parseObject.getObjectId());
                             result.setShowQRScanner(parseObject.getBoolean("showQRScanner"));
@@ -411,26 +446,52 @@ public class DataSyncManager {
 
                             ParseRelation<ParseObject> peopleRelation = parseObject.getRelation("person");
 
+                            if (realm.isInTransaction()) {
+                                realm.commitTransaction();
+                            }
+
                             try {
                                 List<ParseObject> peopleList = peopleRelation.getQuery().find();
 
+                                if (!realm.isInTransaction()) {
+                                    realm.beginTransaction();
+                                }
+
                                 result.setPeople(new RealmList<Person>());
 
+                                if (realm.isInTransaction()) {
+                                    realm.commitTransaction();
+                                }
                                 if (peopleList != null) {
                                     for (ParseObject thisObj : peopleList) {
                                         Person thisPerson = Person.saveFromParseUser(thisObj, true);
 
+                                        if (!realm.isInTransaction()) {
+                                            realm.beginTransaction();
+                                        }
+
                                         result.getPeople().add(thisPerson);
+
+                                        if (realm.isInTransaction()) {
+                                            realm.commitTransaction();
+                                        }
+
                                     }
                                 }
+
                             } catch (Exception ex) {
                                 Log.d("APD", ex.getMessage());
+                            }
+
+                            if (!realm.isInTransaction()) {
+                                realm.beginTransaction();
                             }
                         }
                     }
 
-                    realm.commitTransaction();
-                    realm.close();
+                    if (realm.isInTransaction()) {
+                        realm.commitTransaction();
+                    }
                 } else {
                     Log.d("DataSyncManager", "Line 336 " + e.getMessage() + " " + e.getStackTrace());
                 }
@@ -2574,7 +2635,7 @@ public class DataSyncManager {
 
     static public Date getLastSyncDate() {
         SharedPreferences prefs = context.getSharedPreferences(AppConfig.sharedPrefsName, MODE_PRIVATE);
-        String lastSyncDateStr = prefs.getString(AppConfig.lastSyncDateName, "2017-08-26T08:00:00");
+        String lastSyncDateStr = prefs.getString(AppConfig.lastSyncDateName, "2017-09-02T17:00:00");
 
         SimpleDateFormat isoFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
         isoFormat.setTimeZone(TimeZone.getTimeZone("UTC"));

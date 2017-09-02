@@ -239,7 +239,9 @@ public class Person extends RealmObject {
     static public Person saveFromParseUser(ParseObject parseObject, boolean skipPredAnalyticsSync) {
         Realm realm = AppUtil.getRealmInstance(App.getInstance());
 
-        realm.beginTransaction();
+        if (!realm.isInTransaction()) {
+            realm.beginTransaction();
+        }
 
         Person person = realm.where(Person.class).equalTo("objectId", parseObject.getObjectId()).findFirst();
 

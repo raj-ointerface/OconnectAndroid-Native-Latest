@@ -127,7 +127,8 @@ public class App extends MultiDexApplication implements ServiceConnection, Messa
                     // realm.getSchema().get("AppConfig").addField("organizationId", String.class);
                     // realm.getSchema().get("AppConfig").addField("appName", String.class);
 
-                    realm.getSchema().get("Organization").addField("showCustomSplash", Boolean.class);
+                    // realm.getSchema().get("Organization").addField("showCustomSplash", Boolean.class);
+                    // realm.getSchema().get("Organization").setNullable("showCustomSplash", true);
 
                     // realm.getSchema().get("SinchMessage").addField("isRead", Boolean.class);
                     // realm.getSchema().get("Event").addField("trackColor", String.class);
