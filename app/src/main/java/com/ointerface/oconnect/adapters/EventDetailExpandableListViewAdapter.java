@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.net.Uri;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -448,6 +449,8 @@ public class EventDetailExpandableListViewAdapter extends BaseExpandableListAdap
                 convertView = infalInflater.inflate(R.layout.discussion_board_list_item_post_questions, null);
 
                 final EditText etSendQuestion = (EditText) convertView.findViewById(R.id.etSendQuestion);
+
+                // etSendQuestion.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
 
                 TextView tvSend = (TextView) convertView.findViewById(R.id.tvSend);
 

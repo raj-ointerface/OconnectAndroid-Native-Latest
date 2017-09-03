@@ -25,6 +25,7 @@
         android:layout_marginTop="10dp"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
+        android:inputType="textVisiblePassword"
         android:gravity="top"
         android:foregroundGravity="top"
         android:hint="Post anonymous questions or comments"
