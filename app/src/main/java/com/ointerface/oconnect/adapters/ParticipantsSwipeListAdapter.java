@@ -41,6 +41,7 @@ import java.util.TreeSet;
 
 import io.realm.Realm;
 import io.realm.RealmList;
+import retrofit2.http.Url;
 
 import static android.view.View.GONE;
 
@@ -101,7 +102,7 @@ public class ParticipantsSwipeListAdapter extends BaseSwipeAdapter {
     @Override
     public String getItem(int position) {
         if (showingSpeakers == true) {
-            mSpeakers.get(position).getName();
+            return mSpeakers.get(position).getName();
         }
 
         if (position >= mPeople.size()) {
@@ -112,6 +113,11 @@ public class ParticipantsSwipeListAdapter extends BaseSwipeAdapter {
 
     @Override
     public long getItemId(int position) {
+        if (showingSpeakers == false) {
+            if (position >= mPeople.size()) {
+                return position - mPeople.size();
+            }
+        }
         return position;
     }
 
@@ -348,13 +354,15 @@ public class ParticipantsSwipeListAdapter extends BaseSwipeAdapter {
                 ivLightBuld.setBackground(AppUtil.changeDrawableColor(context, R.drawable.icon_participants_light_bulb, AppUtil.getPrimaryThemColorAsInt()));
                 ivHouse.setBackground(AppUtil.changeDrawableColor(context, R.drawable.icon_participants_house, AppUtil.getPrimaryThemColorAsInt()));
 
+                ivPicture.setBackgroundResource(R.drawable.icon_silhouette);
+
                 if (attendee.getImage() != null) {
                     Bitmap bmp = BitmapFactory.decodeByteArray(attendee.getImage(), 0, attendee.getImage().length);
                     Drawable d = new BitmapDrawable(context.getResources(), bmp);
                     ivPicture.setBackground(d);
-                } else {
+                } /*else {
                     ivPicture.setBackgroundResource(R.drawable.icon_silhouette);
-                }
+                } */
 
                 TextView tvName = (TextView) convertView.findViewById(R.id.tvParticipantName);
                 TextView tvJobTitle = (TextView) convertView.findViewById(R.id.tvParticipantJobTitle);
@@ -541,12 +549,19 @@ public class ParticipantsSwipeListAdapter extends BaseSwipeAdapter {
                 ivLightBuld.setBackground(AppUtil.changeDrawableColor(context, R.drawable.icon_participants_light_bulb, AppUtil.getPrimaryThemColorAsInt()));
                 ivHouse.setBackground(AppUtil.changeDrawableColor(context, R.drawable.icon_participants_house, AppUtil.getPrimaryThemColorAsInt()));
 
+                ivPicture.setBackgroundResource(R.drawable.icon_silhouette);
+
                 if (person.getPictureURL() != null) {
 
                     final String pictureURL = person.getPictureURL();
 
                     Log.d("APD", "currentPerson.getPictureURL(): " + person.getPictureURL());
 
+                    ivPicture.setTag(pictureURL);
+
+                    new DownloadTask().execute(pictureURL, ivPicture, context);
+
+                    /*
                     new AsyncTask<Void, Void, Void>() {
                         public Bitmap bmp;
                         @Override
@@ -573,8 +588,7 @@ public class ParticipantsSwipeListAdapter extends BaseSwipeAdapter {
                         }
 
                     }.execute();
-                } else {
-                    ivPicture.setBackgroundResource(R.drawable.icon_silhouette);
+                    */
                 }
 
                 TextView tvName = (TextView) convertView.findViewById(R.id.tvParticipantName);
@@ -748,11 +762,46 @@ public class ParticipantsSwipeListAdapter extends BaseSwipeAdapter {
             while ((halfHeight / inSampleSize) > reqHeight
                     && (halfWidth / inSampleSize) > reqWidth) {
                 inSampleSize *= 2;
-            }
-        }
 
+            }
+
+            return inSampleSize;
+        }
         return inSampleSize;
     }
+
+
+    public class DownloadTask extends AsyncTask<Object, Void, Void> {
+        public Bitmap bmp;
+        public ImageView ivPicture;
+        public String pictureUrl;
+        public Context context;
+
+        @Override
+        protected Void doInBackground(Object... params) {
+            try {
+                pictureUrl = (String) params[0];
+                ivPicture = (ImageView) params[1];
+                context = (Context) params[2];
+
+                InputStream in = new URL(pictureUrl).openStream();
+                bmp = BitmapFactory.decodeStream(in);
+            } catch (Exception e) {
+                Log.d("APD", e.getMessage());
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            Log.d("APD", "pictureURL BITMAP: " + bmp);
+
+            if (bmp != null && ivPicture.getTag().toString().equalsIgnoreCase(pictureUrl)) {
+                Drawable d = new BitmapDrawable(context.getResources(), bmp);
+
+                ivPicture.setImageDrawable(d);
+
+            }
+        }
+    }
 }
-
-

@@ -33,6 +33,7 @@ import com.ointerface.oconnect.R;
 import com.ointerface.oconnect.activities.AnalyticsSurveyActivity;
 import com.ointerface.oconnect.activities.ConnectionsActivity;
 import com.ointerface.oconnect.activities.DashboardActivity;
+import com.ointerface.oconnect.activities.EditAccountActivity;
 import com.ointerface.oconnect.activities.InfoActivity;
 import com.ointerface.oconnect.activities.MapsListActivity;
 import com.ointerface.oconnect.activities.OConnectBaseActivity;
@@ -118,7 +119,7 @@ public class AppUtil {
     }
 
     static public void setIsLeftNavUnlocked (Context context, boolean value) {
-        SharedPreferences.Editor editor = context.getSharedPreferences(AppConfig.getSharedPrefsNavItemPasswordEntered, MODE_PRIVATE).edit();
+        SharedPreferences.Editor editor = context.getSharedPreferences(AppConfig.sharedPrefsName, MODE_PRIVATE).edit();
         editor.putBoolean(AppConfig.getSharedPrefsNavItemPasswordEntered, value);
         editor.commit();
     }
@@ -241,6 +242,25 @@ public class AppUtil {
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
+                    }
+                });
+        alertDialog.show();
+    }
+
+    public static void displayNoContactsAvailableDialog(final Context context) {
+        AlertDialog alertDialog = new AlertDialog.Builder(context).create();
+        alertDialog.setTitle("");
+        alertDialog.setMessage("We don't have sufficient information about you.  Please complete your profile to see your suggested connections.");
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Edit Profile",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        context.startActivity(new Intent(context, EditAccountActivity.class));
                     }
                 });
         alertDialog.show();

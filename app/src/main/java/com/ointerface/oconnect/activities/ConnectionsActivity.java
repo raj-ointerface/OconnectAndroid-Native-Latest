@@ -77,6 +77,10 @@ public class ConnectionsActivity extends OConnectBaseActivity {
             circularRotation = false;
         }
 
+        if (adapter.mDataSuggestedConnections.size() == 0) {
+            AppUtil.displayNoContactsAvailableDialog(this);
+        }
+
         CarouselLayoutManager manager = new CarouselLayoutManager(CarouselLayoutManager.HORIZONTAL, circularRotation);
 
         manager.setPostLayoutListener(new CarouselZoomPostLayoutListener());
@@ -259,6 +263,10 @@ public class ConnectionsActivity extends OConnectBaseActivity {
     public void displaySuggestions() {
         adapter.showingMyConnections = false;
         adapter.notifyDataSetChanged();
+
+        if (adapter.mDataSuggestedConnections.size() == 0) {
+            AppUtil.displayNoContactsAvailableDialog(this);
+        }
     }
 
     public void getCarouselViewData() {

@@ -36,13 +36,15 @@ public class AttendeeDetailExpandableListView  extends BaseExpandableListAdapter
     private HashMap<Integer, Integer> _listChildCount;
     private HashMap<Integer, ArrayList<String>> _listChildItems;
     private Attendee _listAttendee;
+    private Person _listPerson;
 
     public AttendeeDetailExpandableListView(Context context, List<String> listDataHeader,
                                                   List<Integer> listHeaderNumber,
                                                   HashMap<Integer, Integer> listChildCount,
                                                   List<Boolean> listGroupHasListView,
                                                   HashMap<Integer, ArrayList<String>> listChildItems,
-                                                  Attendee listAttendee) {
+                                                  Attendee listAttendee,
+                                                  Person listPerson) {
         this._context = context;
         this._listDataHeader = listDataHeader;
         this._listHeaderNumber = listHeaderNumber;
@@ -50,6 +52,7 @@ public class AttendeeDetailExpandableListView  extends BaseExpandableListAdapter
         this._listGroupHasListView = listGroupHasListView;
         this._listChildItems = listChildItems;
         this._listAttendee = listAttendee;
+        this._listPerson = listPerson;
     }
 
     @Override
@@ -134,37 +137,72 @@ public class AttendeeDetailExpandableListView  extends BaseExpandableListAdapter
             TextView tvInterests = (TextView) convertView.findViewById(R.id.tvParticipantInterests);
             TextView tvLocation = (TextView) convertView.findViewById(R.id.tvParticipantLocation);
 
-            tvName.setText(_listAttendee.getName());
+            if (_listAttendee != null) {
+                tvName.setText(_listAttendee.getName());
 
-            if (_listAttendee.getJob() != null && !_listAttendee.getJob().equalsIgnoreCase("")) {
-                tvJobTitle.setText(_listAttendee.getJob());
-                tvJobTitle.setVisibility(View.VISIBLE);
-                ivInfo.setVisibility(View.VISIBLE);
-            } else {
-                tvJobTitle.setVisibility(GONE);
-                ivInfo.setVisibility(GONE);
-            }
+                if (_listAttendee.getJob() != null && !_listAttendee.getJob().equalsIgnoreCase("")) {
+                    tvJobTitle.setText(_listAttendee.getJob());
+                    tvJobTitle.setVisibility(View.VISIBLE);
+                    ivInfo.setVisibility(View.VISIBLE);
+                } else {
+                    tvJobTitle.setVisibility(GONE);
+                    ivInfo.setVisibility(GONE);
+                }
 
-            if (_listAttendee.getOrganization() != null && !_listAttendee.getOrganization().equalsIgnoreCase("")) {
-                tvOrg.setText(_listAttendee.getOrganization());
-                tvOrg.setVisibility(View.VISIBLE);
-                ivSuitcase.setVisibility(View.VISIBLE);
-            } else {
-                tvOrg.setVisibility(GONE);
-                ivSuitcase.setVisibility(GONE);
-            }
+                if (_listAttendee.getOrganization() != null && !_listAttendee.getOrganization().equalsIgnoreCase("")) {
+                    tvOrg.setText(_listAttendee.getOrganization());
+                    tvOrg.setVisibility(View.VISIBLE);
+                    ivSuitcase.setVisibility(View.VISIBLE);
+                } else {
+                    tvOrg.setVisibility(GONE);
+                    ivSuitcase.setVisibility(GONE);
+                }
 
-            // TODO SET INTERESTS
-            tvInterests.setVisibility(GONE);
-            ivLightBuld.setVisibility(GONE);
+                // TODO SET INTERESTS
+                tvInterests.setVisibility(GONE);
+                ivLightBuld.setVisibility(GONE);
 
-            if (_listAttendee.getLocation() != null && !_listAttendee.getLocation().equalsIgnoreCase("")) {
-                tvLocation.setText(_listAttendee.getLocation());
-                tvLocation.setVisibility(View.VISIBLE);
-                ivHouse.setVisibility(View.VISIBLE);
-            } else {
-                tvLocation.setVisibility(GONE);
-                ivHouse.setVisibility(GONE);
+                if (_listAttendee.getLocation() != null && !_listAttendee.getLocation().equalsIgnoreCase("")) {
+                    tvLocation.setText(_listAttendee.getLocation());
+                    tvLocation.setVisibility(View.VISIBLE);
+                    ivHouse.setVisibility(View.VISIBLE);
+                } else {
+                    tvLocation.setVisibility(GONE);
+                    ivHouse.setVisibility(GONE);
+                }
+            } else if (_listPerson != null) {
+                tvName.setText(_listPerson.getFirstName() + " " + _listPerson.getLastName());
+
+                if (_listPerson.getJob() != null && !_listPerson.getJob().equalsIgnoreCase("")) {
+                    tvJobTitle.setText(_listPerson.getJob());
+                    tvJobTitle.setVisibility(View.VISIBLE);
+                    ivInfo.setVisibility(View.VISIBLE);
+                } else {
+                    tvJobTitle.setVisibility(GONE);
+                    ivInfo.setVisibility(GONE);
+                }
+
+                if (_listPerson.getOrg() != null && !_listPerson.getOrg().equalsIgnoreCase("")) {
+                    tvOrg.setText(_listPerson.getOrg());
+                    tvOrg.setVisibility(View.VISIBLE);
+                    ivSuitcase.setVisibility(View.VISIBLE);
+                } else {
+                    tvOrg.setVisibility(GONE);
+                    ivSuitcase.setVisibility(GONE);
+                }
+
+                // TODO SET INTERESTS
+                tvInterests.setVisibility(GONE);
+                ivLightBuld.setVisibility(GONE);
+
+                if (_listPerson.getLocation() != null && !_listPerson.getLocation().equalsIgnoreCase("")) {
+                    tvLocation.setText(_listPerson.getLocation());
+                    tvLocation.setVisibility(View.VISIBLE);
+                    ivHouse.setVisibility(View.VISIBLE);
+                } else {
+                    tvLocation.setVisibility(GONE);
+                    ivHouse.setVisibility(GONE);
+                }
             }
         }
 

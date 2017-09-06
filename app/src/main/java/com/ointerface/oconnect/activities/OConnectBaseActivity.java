@@ -1266,7 +1266,7 @@ public class OConnectBaseActivity extends AppCompatActivity
             section3.add(new MenuItemHolder(R.drawable.icon_survey, itemStr));
         }
 
-        section2.add(new MenuItemHolder(R.drawable.icon_share, "Share"));
+        section3.add(new MenuItemHolder(R.drawable.icon_share, "Share"));
 
         if (selectedConference != null && selectedConference.isShowQRScanner()) {
             String itemStr = "QR Scanner";
@@ -1381,6 +1381,14 @@ public class OConnectBaseActivity extends AppCompatActivity
         Date dateTimeNow = cal.getTime();
 
         DataSyncManager.setLastSyncDate(dateTimeNow);
+
+        // preparing list data
+        prepareListData();
+
+        listAdapter = new NavExpandableListViewAdapter(this, listDataHeader, listDataChild);
+
+        // setting list adapter
+        expListView.setAdapter(listAdapter);
     }
 
     @Override

@@ -26,6 +26,7 @@ import com.ointerface.oconnect.activities.AttendeeDetailViewActivity;
 import com.ointerface.oconnect.activities.OConnectBaseActivity;
 import com.ointerface.oconnect.activities.SpeakerDetailViewActivity;
 import com.ointerface.oconnect.adapters.AttendeeDetailExpandableListView;
+import com.ointerface.oconnect.adapters.ParticipantsSwipeListAdapter;
 import com.ointerface.oconnect.adapters.SpeakerDetailExpandableListViewAdapter;
 import com.ointerface.oconnect.data.Attendee;
 import com.ointerface.oconnect.data.Event;
@@ -135,9 +136,21 @@ public class AttendeeDetailViewFragment extends Fragment {
 
         pageNumber = bundle.getInt("PAGE_NUMBER");
 
-        final Attendee attendee = (Attendee) mItems.get(pageNumber);
+        RealmObject realmObject = mItems.get(pageNumber);
 
-        final Person person = realm.where(Person.class).equalTo("objectId", attendee.getUserLink()).findFirst();
+        Attendee attendee = null;
+        Person person = null;
+
+        if (realmObject instanceof Attendee) {
+            attendee = (Attendee) realmObject;
+        } else if (realmObject instanceof  Person) {
+            person = (Person) realmObject;
+        }
+
+        final Attendee finalAttendee = attendee;
+        final Person finalPerson = person;
+
+        // final Person person = realm.where(Person.class).equalTo("objectId", attendee.getUserLink()).findFirst();
 
         final ImageView ivConnect = (ImageView) rootView.findViewById(R.id.ivConnect);
 
@@ -191,32 +204,62 @@ public class AttendeeDetailViewFragment extends Fragment {
 
                     List<ParseObject> usersList = usersQuery.find();
 
-                    Person user = realm.where(Person.class).equalTo("objectId", attendee.getUserLink()).findFirst();
+                    if (finalAttendee != null) {
+                        Person user = realm.where(Person.class).equalTo("objectId", finalAttendee.getUserLink()).findFirst();
 
-                    ParseUser parseAttendee = ParseUser.getQuery().get(attendee.getUserLink());
+                        ParseUser parseAttendee = ParseUser.getQuery().get(finalAttendee.getUserLink());
 
-                    RealmList<Attendee> connectedAttendees = OConnectBaseActivity.currentPerson.getFavoriteAttendees();
+                        RealmList<Attendee> connectedAttendees = OConnectBaseActivity.currentPerson.getFavoriteAttendees();
 
-                    connectedAttendees.add(attendee);
+                        connectedAttendees.add(finalAttendee);
 
-                    OConnectBaseActivity.currentPerson.setFavoriteAttendees(connectedAttendees);
+                        OConnectBaseActivity.currentPerson.setFavoriteAttendees(connectedAttendees);
 
-                    if (user != null) {
-                        RealmList<Person> connectedUsers = OConnectBaseActivity.currentPerson.getFavoriteUsers();
+                        if (user != null) {
+                            RealmList<Person> connectedUsers = OConnectBaseActivity.currentPerson.getFavoriteUsers();
 
-                        connectedUsers.add(user);
+                            connectedUsers.add(user);
 
-                        OConnectBaseActivity.currentPerson.setFavoriteUsers(connectedUsers);
-                    }
+                            OConnectBaseActivity.currentPerson.setFavoriteUsers(connectedUsers);
+                        }
 
-                    realm.commitTransaction();
+                        realm.commitTransaction();
 
-                    if (parseAttendee != null) {
-                        usersRelation.add(parseAttendee);
+                        if (parseAttendee != null) {
+                            usersRelation.add(parseAttendee);
 
-                        parseObject.put("favoriteUsersRelation", usersRelation);
+                            parseObject.put("favoriteUsersRelation", usersRelation);
 
-                        parseObject.save();
+                            parseObject.save();
+                        }
+                    } else if (finalPerson != null) {
+                        // Person user = realm.where(Person.class).equalTo("objectId", finalAttendee.getUserLink()).findFirst();
+
+                        ParseUser parseAttendee = ParseUser.getQuery().get(finalPerson.getObjectId());
+
+                        RealmList<Attendee> connectedAttendees = OConnectBaseActivity.currentPerson.getFavoriteAttendees();
+
+                        connectedAttendees.add(finalAttendee);
+
+                        OConnectBaseActivity.currentPerson.setFavoriteAttendees(connectedAttendees);
+
+                        if (finalPerson != null) {
+                            RealmList<Person> connectedUsers = OConnectBaseActivity.currentPerson.getFavoriteUsers();
+
+                            connectedUsers.add(finalPerson);
+
+                            OConnectBaseActivity.currentPerson.setFavoriteUsers(connectedUsers);
+                        }
+
+                        realm.commitTransaction();
+
+                        if (parseAttendee != null) {
+                            usersRelation.add(parseAttendee);
+
+                            parseObject.put("favoriteUsersRelation", usersRelation);
+
+                            parseObject.save();
+                        }
                     }
 
                 } catch (Exception ex) {
@@ -229,47 +272,81 @@ public class AttendeeDetailViewFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 try {
-                    ivConnect.setBackground(AppUtil.changeDrawableColor(activity, R.drawable.icon_blue_star_filled, AppUtil.getPrimaryThemColorAsInt()));
+                    if (finalAttendee != null) {
+                        ivConnect.setBackground(AppUtil.changeDrawableColor(activity, R.drawable.icon_blue_star_filled, AppUtil.getPrimaryThemColorAsInt()));
 
-                    realm.beginTransaction();
-                    RealmList<Person> realmFavoriteUsers = new RealmList<Person>();
+                        realm.beginTransaction();
+                        RealmList<Person> realmFavoriteUsers = new RealmList<Person>();
 
-                    ParseUser parseObject = ParseUser.getQuery().get(OConnectBaseActivity.currentPerson.getObjectId());
+                        ParseUser parseObject = ParseUser.getQuery().get(OConnectBaseActivity.currentPerson.getObjectId());
 
-                    ParseRelation<ParseObject> usersRelation = parseObject.getRelation("favoriteUsersRelation");
+                        ParseRelation<ParseObject> usersRelation = parseObject.getRelation("favoriteUsersRelation");
 
-                    ParseQuery<ParseObject> usersQuery = usersRelation.getQuery();
+                        ParseQuery<ParseObject> usersQuery = usersRelation.getQuery();
 
-                    List<ParseObject> usersList = usersQuery.find();
+                        List<ParseObject> usersList = usersQuery.find();
 
-                    Person user = realm.where(Person.class).equalTo("objectId", attendee.getUserLink()).findFirst();
+                        Person user = realm.where(Person.class).equalTo("objectId", finalAttendee.getUserLink()).findFirst();
 
-                    ParseUser parseSpeaker = ParseUser.getQuery().get(attendee.getUserLink());
+                        ParseUser parseSpeaker = ParseUser.getQuery().get(finalAttendee.getUserLink());
 
-                    RealmList<Attendee> connectedAttendees = OConnectBaseActivity.currentPerson.getFavoriteAttendees();
+                        RealmList<Attendee> connectedAttendees = OConnectBaseActivity.currentPerson.getFavoriteAttendees();
 
-                    connectedAttendees.add(attendee);
+                        connectedAttendees.add(finalAttendee);
 
-                    OConnectBaseActivity.currentPerson.setFavoriteAttendees(connectedAttendees);
+                        OConnectBaseActivity.currentPerson.setFavoriteAttendees(connectedAttendees);
 
-                    if (user != null) {
+                        if (user != null) {
+                            RealmList<Person> connectedUsers = OConnectBaseActivity.currentPerson.getFavoriteUsers();
+
+                            connectedUsers.add(user);
+
+                            OConnectBaseActivity.currentPerson.setFavoriteUsers(connectedUsers);
+                        }
+
+                        realm.commitTransaction();
+
+                        if (parseSpeaker != null) {
+                            usersRelation.add(parseSpeaker);
+
+                            parseObject.put("favoriteUsersRelation", usersRelation);
+
+                            parseObject.save();
+                        }
+                    } else if (finalPerson != null) {
+                        ivConnect.setBackground(AppUtil.changeDrawableColor(activity, R.drawable.icon_blue_star_filled, AppUtil.getPrimaryThemColorAsInt()));
+
+                        realm.beginTransaction();
+                        RealmList<Person> realmFavoriteUsers = new RealmList<Person>();
+
+                        ParseUser parseObject = ParseUser.getQuery().get(OConnectBaseActivity.currentPerson.getObjectId());
+
+                        ParseRelation<ParseObject> usersRelation = parseObject.getRelation("favoriteUsersRelation");
+
+                        ParseQuery<ParseObject> usersQuery = usersRelation.getQuery();
+
+                        List<ParseObject> usersList = usersQuery.find();
+
+                        // Person user = realm.where(Person.class).equalTo("objectId", finalAttendee.getUserLink()).findFirst();
+
+                        ParseUser parseSpeaker = ParseUser.getQuery().get(finalPerson.getObjectId());
+
                         RealmList<Person> connectedUsers = OConnectBaseActivity.currentPerson.getFavoriteUsers();
 
-                        connectedUsers.add(user);
+                        connectedUsers.add(finalPerson);
 
                         OConnectBaseActivity.currentPerson.setFavoriteUsers(connectedUsers);
+
+                        realm.commitTransaction();
+
+                        if (parseSpeaker != null) {
+                            usersRelation.add(parseSpeaker);
+
+                            parseObject.put("favoriteUsersRelation", usersRelation);
+
+                            parseObject.save();
+                        }
                     }
-
-                    realm.commitTransaction();
-
-                    if (parseSpeaker != null) {
-                        usersRelation.add(parseSpeaker);
-
-                        parseObject.put("favoriteUsersRelation", usersRelation);
-
-                        parseObject.save();
-                    }
-
                 } catch (Exception ex) {
                     Log.d("AttendeeDetail", "Exception: " + ex.getMessage());
                 }
@@ -279,16 +356,24 @@ public class AttendeeDetailViewFragment extends Fragment {
         tvMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Person user = realm.where(Person.class).equalTo("objectId", attendee.getUserLink()).findFirst();
+                if (finalAttendee != null) {
+                    Person user = realm.where(Person.class).equalTo("objectId", finalAttendee.getUserLink()).findFirst();
 
-                if (user != null) {
+                    if (user != null) {
+                        Intent intent = new Intent(activity, MessagingActivity.class);
+
+                        MessagingActivity.recipientIDStr = user.getObjectId();
+
+                        activity.startActivity(intent);
+                    } else {
+                        AppUtil.displayPersonNotAvailable(activity);
+                    }
+                } else if (finalPerson != null) {
                     Intent intent = new Intent(activity, MessagingActivity.class);
 
-                    MessagingActivity.recipientIDStr = user.getObjectId();
+                    MessagingActivity.recipientIDStr = finalPerson.getObjectId();
 
                     activity.startActivity(intent);
-                } else {
-                    AppUtil.displayPersonNotAvailable(activity);
                 }
             }
         });
@@ -296,16 +381,24 @@ public class AttendeeDetailViewFragment extends Fragment {
         ivMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Person user = realm.where(Person.class).equalTo("objectId", attendee.getUserLink()).findFirst();
+                if (finalAttendee != null) {
+                    Person user = realm.where(Person.class).equalTo("objectId", finalAttendee.getUserLink()).findFirst();
 
-                if (user != null) {
+                    if (user != null) {
+                        Intent intent = new Intent(activity, MessagingActivity.class);
+
+                        MessagingActivity.recipientIDStr = user.getObjectId();
+
+                        activity.startActivity(intent);
+                    } else {
+                        AppUtil.displayPersonNotAvailable(activity);
+                    }
+                } else if (finalPerson != null) {
                     Intent intent = new Intent(activity, MessagingActivity.class);
 
-                    MessagingActivity.recipientIDStr = user.getObjectId();
+                    MessagingActivity.recipientIDStr = finalPerson.getObjectId();
 
                     activity.startActivity(intent);
-                } else {
-                    AppUtil.displayPersonNotAvailable(activity);
                 }
             }
         });
@@ -343,18 +436,31 @@ public class AttendeeDetailViewFragment extends Fragment {
         }
         */
 
-        if (attendee.getImage() != null) {
-            Bitmap bmp = BitmapFactory.decodeByteArray(attendee.getImage(), 0, attendee.getImage().length);
+        if (finalAttendee != null && finalAttendee.getImage() != null) {
+            Bitmap bmp = BitmapFactory.decodeByteArray(finalAttendee.getImage(), 0, finalAttendee.getImage().length);
             Drawable d = new BitmapDrawable(activity.getResources(), bmp);
             ivProfile.setBackground(d);
 
             // Bitmap bm2 = BitmapFactory.decodeByteArray(attendee.getImage(), 0, attendee.getImage().length);
 
             // ivProfile.setImageBitmap(bm2);
+        } else if (finalPerson != null && finalPerson.getPictureURL() != null) {
+            final String pictureURL = person.getPictureURL();
+
+            Log.d("APD", "currentPerson.getPictureURL(): " + person.getPictureURL());
+
+            ivProfile.setTag(pictureURL);
+
+            new DownloadTask().execute(pictureURL, ivProfile, getActivity());
         }
 
-        TextView tvAttendeeName = (TextView) rootView.findViewById(R.id.tvAttendeeName);
-        tvAttendeeName.setText(attendee.getName());
+        if (finalAttendee != null) {
+            TextView tvAttendeeName = (TextView) rootView.findViewById(R.id.tvAttendeeName);
+            tvAttendeeName.setText(finalAttendee.getName());
+        } else if (finalPerson != null) {
+            TextView tvAttendeeName = (TextView) rootView.findViewById(R.id.tvAttendeeName);
+            tvAttendeeName.setText(finalPerson.getFirstName() + " " + finalPerson.getLastName());
+        }
 
         elvAttendeeDetailInfo = (ExpandableListView) rootView.findViewById(R.id.elvAttendeeInfo);
 
@@ -380,13 +486,30 @@ public class AttendeeDetailViewFragment extends Fragment {
 
         pageNumber = bundle.getInt("PAGE_NUMBER");
 
-        Attendee attendee = (Attendee) mItems.get(pageNumber);
+        RealmObject realmObject = mItems.get(pageNumber);
+
+        Attendee attendee = null;
+        Person person = null;
+
+        if (realmObject instanceof Attendee) {
+            attendee = (Attendee) realmObject;
+        } else if (realmObject instanceof  Person) {
+            person = (Person) realmObject;
+        }
 
         int groupNum = 0;
 
         if (attendee.getJob() != null && !attendee.getJob().equalsIgnoreCase("") ||
                 attendee.getOrganization() != null && !attendee.getOrganization().equalsIgnoreCase("") ||
                 attendee.getLocation() != null && !attendee.getLocation().equalsIgnoreCase("")) {
+            _listDataHeader.add("About");
+            _listHeaderNumber.add(groupNum);
+            _listGroupHasListView.add(false);
+            _listChildCount.put(groupNum,1);
+            ++groupNum;
+        } else if (person.getJob() != null && !person.getJob().equalsIgnoreCase("") ||
+                person.getOrg() != null && !person.getOrg().equalsIgnoreCase("") ||
+                person.getLocation() != null && !person.getLocation().equalsIgnoreCase("")) {
             _listDataHeader.add("About");
             _listHeaderNumber.add(groupNum);
             _listGroupHasListView.add(false);
@@ -406,5 +529,39 @@ public class AttendeeDetailViewFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
+    }
+
+    public class DownloadTask extends AsyncTask<Object, Void, Void> {
+        public Bitmap bmp;
+        public ImageView ivPicture;
+        public String pictureUrl;
+        public Context context;
+
+        @Override
+        protected Void doInBackground(Object... params) {
+            try {
+                pictureUrl = (String) params[0];
+                ivPicture = (ImageView) params[1];
+                context = (Context) params[2];
+
+                InputStream in = new URL(pictureUrl).openStream();
+                bmp = BitmapFactory.decodeStream(in);
+            } catch (Exception e) {
+                Log.d("APD", e.getMessage());
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            Log.d("APD", "pictureURL BITMAP: " + bmp);
+
+            if (bmp != null && ivPicture.getTag().toString().equalsIgnoreCase(pictureUrl)) {
+                Drawable d = new BitmapDrawable(context.getResources(), bmp);
+
+                ivPicture.setImageDrawable(d);
+
+            }
+        }
     }
 }

@@ -34,6 +34,7 @@ import com.ointerface.oconnect.data.Attendee;
 import com.ointerface.oconnect.data.Person;
 import com.ointerface.oconnect.data.Session;
 import com.ointerface.oconnect.data.Speaker;
+import com.ointerface.oconnect.fragments.AttendeeDetailViewFragment;
 import com.ointerface.oconnect.fragments.OverlayDialogFragment;
 import com.ointerface.oconnect.util.AppConfig;
 import com.ointerface.oconnect.util.AppUtil;
@@ -185,18 +186,26 @@ public class ParticipantsActivity extends OConnectBaseActivity {
                 } else {
                     AttendeeDetailViewActivity.mItems = new ArrayList<RealmObject>();
 
-                    if (adapter.mAttendees.size() < 11) {
+                    if (adapter.mPeople.size() + adapter.mAttendees.size() < 11) {
+                        AttendeeDetailViewActivity.mItems.addAll(adapter.mPeople);
                         AttendeeDetailViewActivity.mItems.addAll(adapter.mAttendees);
                     } else {
                         int index = position;
-                        for (int i = 0; i < 10 && index < adapter.mAttendees.size(); ++i) {
+
+                        int i = 0;
+
+                        for (i = 0; i < 10 && index < adapter.mPeople.size(); ++i) {
+                            AttendeeDetailViewActivity.mItems.add(adapter.mPeople.get(index++));
+                        }
+
+                        for (; i < 10 && index < adapter.mAttendees.size(); ++i) {
                             AttendeeDetailViewActivity.mItems.add(adapter.mAttendees.get(index++));
                         }
                     }
 
                     Intent i = new Intent(ParticipantsActivity.this, AttendeeDetailViewActivity.class);
 
-                    if (adapter.mAttendees.size() < 11) {
+                    if (adapter.mPeople.size() + adapter.mAttendees.size() < 11) {
                         i.putExtra("ATTENDEE_NUMBER", position);
                     } else {
                         i.putExtra("ATTENDEE_NUMBER", 0);
