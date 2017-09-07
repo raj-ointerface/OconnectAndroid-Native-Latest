@@ -185,6 +185,8 @@ public class SignInActivity2 extends AppCompatActivity {
 
     public void twitterLoginClicked(View sender) {
 
+        dialog = ProgressDialog.show((Context)SignInActivity2.this, null, "Initializing Data ... Please wait.");
+
         ParseTwitterUtils.logIn(this, new LogInCallback() {
             @Override
             public void done(ParseUser user, ParseException err) {
@@ -192,7 +194,7 @@ public class SignInActivity2 extends AppCompatActivity {
                     Log.d("APD", "ParseTwitterUtils.logIn error: " + err.getMessage());
                     Toast.makeText(SignInActivity2.this,"Error during Twitter Login!",Toast.LENGTH_LONG).show();
                 } else {
-                    dialog = ProgressDialog.show((Context)SignInActivity2.this, null, "Initializing Data ... Please wait.");
+
                     if (user.isNew()) {
                         user.put("userType", "app");
                         user.saveInBackground();
@@ -208,11 +210,6 @@ public class SignInActivity2 extends AppCompatActivity {
 
                     callTwitterImportAPI(user);
 
-                    // dialog.dismiss();
-
-                    // Intent i = new Intent(SignInActivity2.this, DashboardActivity.class);
-                    // SignInActivity2.this.startActivity(i);
-
                     executePINPromptWorkflow(user);
                 }
             }
@@ -221,15 +218,12 @@ public class SignInActivity2 extends AppCompatActivity {
 
     public void callTwitterImportAPI(ParseUser user) {
         new TwitterImportTask().execute(user);
-
-        // OConnectBaseActivity.currentPerson = Person.saveFromParseUser(user, false);
-
-        // Intent i = new Intent(SignInActivity2.this, DashboardActivity.class);
-        // startActivity(i);
     }
 
     public void facebookLoginClicked(View sender) {
         // ParseFacebookUtils.initialize(this);
+
+        dialog = ProgressDialog.show((Context)SignInActivity2.this, null, "Initializing Data ... Please wait.");
 
         List<String> permissions = Arrays.asList("email", "user_photos", "public_profile", "user_friends");
         ParseFacebookUtils.logInWithReadPermissionsInBackground(this, permissions
@@ -239,7 +233,6 @@ public class SignInActivity2 extends AppCompatActivity {
                         if (user == null) {
                             Toast.makeText(SignInActivity2.this,"Error during Facebook Login!",Toast.LENGTH_LONG).show();
                         } else {
-                            // dialog = ProgressDialog.show((Context)SignInActivity2.this, null, "Initializing Data ... Please wait.");
 
                             if (user.isNew()) {
                                 user.put("userType", "app");
@@ -256,11 +249,7 @@ public class SignInActivity2 extends AppCompatActivity {
 
                             callFacebookImportAPI(user);
 
-                            // Intent i = new Intent(SignInActivity2.this, DashboardActivity.class);
-                            // SignInActivity2.this.startActivity(i);
-
                             executePINPromptWorkflow(user);
-                            // dialog.dismiss();
                         }
                     }
 
@@ -382,9 +371,6 @@ public class SignInActivity2 extends AppCompatActivity {
                                     OConnectBaseActivity.currentPerson = Person.saveFromParseUser(parseUser, false);
 
                                     addPersonToConference(parseUser);
-
-                                    // Intent i = new Intent(SignInActivity2.this, DashboardActivity.class);
-                                    // startActivity(i);
 
                                     executePINPromptWorkflow(parseUser);
                                 }

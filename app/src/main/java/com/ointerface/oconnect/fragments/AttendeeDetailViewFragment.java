@@ -518,7 +518,7 @@ public class AttendeeDetailViewFragment extends Fragment {
         }
 
         adapter = new AttendeeDetailExpandableListView(activity, _listDataHeader, _listHeaderNumber, _listChildCount,
-                _listGroupHasListView, _listChildItems, attendee);
+                _listGroupHasListView, _listChildItems, attendee, person);
     }
 
     @Override
