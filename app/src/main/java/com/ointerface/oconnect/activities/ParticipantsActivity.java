@@ -478,6 +478,22 @@ public class ParticipantsActivity extends OConnectBaseActivity {
             }
         }
 
+        RealmList<Person> peopleList = OConnectBaseActivity.selectedConference.getPeople();
+
+        if (peopleList != null) {
+            for (int i = 0; i < peopleList.size(); ++i) {
+                Person person = peopleList.get(i);
+
+                for (String value : searchArr) {
+                    if (person.getFirstName().toLowerCase().contains(value) ||
+                            person.getLastName().toLowerCase().contains(value)) {
+                        adapter.addPerson(person);
+                        break;
+                    }
+                }
+            }
+        }
+
         adapter.showingSpeakers = bIsSpeakerView;
 
         lvParticipantsList.setAdapter(adapter);

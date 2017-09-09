@@ -347,6 +347,15 @@ public class SignInActivity2 extends AppCompatActivity {
                                         });
 
                                         parseUser = user;
+
+                                        AppUtil.setIsSignedIn(SignInActivity2.this, true);
+                                        AppUtil.setSignedInUserID(SignInActivity2.this, parseUser.getObjectId());
+
+                                        OConnectBaseActivity.currentPerson = Person.saveFromParseUser(parseUser, false);
+
+                                        addPersonToConference(parseUser);
+
+                                        executePINPromptWorkflow(parseUser);
                                     } else {
                                         final ParseUser user = new ParseUser();
 
@@ -359,20 +368,20 @@ public class SignInActivity2 extends AppCompatActivity {
                                             @Override
                                             public void done(ParseException e) {
                                                 new LinkedInImportTask().execute(user.getObjectId(), token);
+
+                                                AppUtil.setIsSignedIn(SignInActivity2.this, true);
+                                                AppUtil.setSignedInUserID(SignInActivity2.this, user.getObjectId());
+
+                                                OConnectBaseActivity.currentPerson = Person.saveFromParseUser(user, false);
+
+                                                addPersonToConference(user);
+
+                                                executePINPromptWorkflow(user);
                                             }
                                         });
 
                                         parseUser = user;
                                     }
-
-                                    AppUtil.setIsSignedIn(SignInActivity2.this, true);
-                                    AppUtil.setSignedInUserID(SignInActivity2.this, parseUser.getObjectId());
-
-                                    OConnectBaseActivity.currentPerson = Person.saveFromParseUser(parseUser, false);
-
-                                    addPersonToConference(parseUser);
-
-                                    executePINPromptWorkflow(parseUser);
                                 }
 
                                 dialog.dismiss();
