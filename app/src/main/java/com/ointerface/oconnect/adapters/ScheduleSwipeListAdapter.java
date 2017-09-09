@@ -266,6 +266,8 @@ public class ScheduleSwipeListAdapter extends BaseSwipeAdapter {
                 TextView tvHide = (TextView) convertView.findViewById(R.id.tvHide);
                 ImageView ivStar = (ImageView) convertView.findViewById(R.id.ivStar);
 
+                relativeLayout.setBackgroundColor(AppConfig.customGrayColor);
+
                 if (event.getTrackColor() != null && !event.getTrackColor().equalsIgnoreCase("")) {
                     relativeLayout.setBackgroundColor(Color.parseColor(event.getTrackColor()));
                 }

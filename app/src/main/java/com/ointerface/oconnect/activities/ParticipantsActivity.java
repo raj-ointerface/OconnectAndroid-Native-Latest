@@ -194,12 +194,20 @@ public class ParticipantsActivity extends OConnectBaseActivity {
 
                         int i = 0;
 
-                        for (i = 0; i < 10 && index < adapter.mPeople.size(); ++i) {
-                            AttendeeDetailViewActivity.mItems.add(adapter.mPeople.get(index++));
+                        if (position < adapter.mPeople.size()) {
+                            for (i = 0; i < 10 && index < adapter.mPeople.size(); ++i) {
+                                AttendeeDetailViewActivity.mItems.add(adapter.mPeople.get(index++));
+                            }
                         }
 
-                        for (; i < 10 && index < adapter.mAttendees.size(); ++i) {
-                            AttendeeDetailViewActivity.mItems.add(adapter.mAttendees.get(index++));
+                        int newIndex = 0;
+
+                        if (index >= adapter.mPeople.size()) {
+                            newIndex = index - adapter.mPeople.size();
+                        }
+
+                        for (int j = 0; (i + j) < 10 && newIndex < adapter.mAttendees.size(); ++j) {
+                            AttendeeDetailViewActivity.mItems.add(adapter.mAttendees.get(newIndex++));
                         }
                     }
 

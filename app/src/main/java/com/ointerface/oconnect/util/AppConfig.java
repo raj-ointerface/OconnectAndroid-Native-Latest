@@ -39,6 +39,7 @@ public class AppConfig {
     static public int lightGreyColor = 0xFFE2E2E0;
     static public int hiddenGreyBackgroundColor = 0xFF6D7177;
     static public int messagingBackgroundColor = 0xFF0289F7;
+    static public int customGrayColor = 0xFFCBC9CA;
 
     static public boolean bSurveyShown = false;
     static public boolean bParticipantsTutorialShown = false;

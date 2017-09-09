@@ -32,6 +32,7 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
+import com.squareup.picasso.Picasso;
 
 import java.io.InputStream;
 import java.net.URL;
@@ -174,6 +175,8 @@ public class ParticipantsSwipeListAdapter extends BaseSwipeAdapter {
             ivSuitcase.setBackground(AppUtil.changeDrawableColor(context, R.drawable.icon_paricipants_suitcase, AppUtil.getPrimaryThemColorAsInt()));
             ivLightBuld.setBackground(AppUtil.changeDrawableColor(context, R.drawable.icon_participants_light_bulb, AppUtil.getPrimaryThemColorAsInt()));
             ivHouse.setBackground(AppUtil.changeDrawableColor(context, R.drawable.icon_participants_house, AppUtil.getPrimaryThemColorAsInt()));
+
+            ivPicture.setImageResource(R.drawable.icon_silhouette);
 
             if (speaker.getImage() != null) {
                 // Bitmap bmp = BitmapFactory.decodeByteArray(speaker.getImage(), 0, speaker.getImage().length);
@@ -354,15 +357,16 @@ public class ParticipantsSwipeListAdapter extends BaseSwipeAdapter {
                 ivLightBuld.setBackground(AppUtil.changeDrawableColor(context, R.drawable.icon_participants_light_bulb, AppUtil.getPrimaryThemColorAsInt()));
                 ivHouse.setBackground(AppUtil.changeDrawableColor(context, R.drawable.icon_participants_house, AppUtil.getPrimaryThemColorAsInt()));
 
+                ivPicture.setImageBitmap(null);
                 ivPicture.setBackgroundResource(R.drawable.icon_silhouette);
 
                 if (attendee.getImage() != null) {
                     Bitmap bmp = BitmapFactory.decodeByteArray(attendee.getImage(), 0, attendee.getImage().length);
                     Drawable d = new BitmapDrawable(context.getResources(), bmp);
                     ivPicture.setBackground(d);
-                } /*else {
+                }  else {
                     ivPicture.setBackgroundResource(R.drawable.icon_silhouette);
-                } */
+                }
 
                 TextView tvName = (TextView) convertView.findViewById(R.id.tvParticipantName);
                 TextView tvJobTitle = (TextView) convertView.findViewById(R.id.tvParticipantJobTitle);
@@ -549,6 +553,7 @@ public class ParticipantsSwipeListAdapter extends BaseSwipeAdapter {
                 ivLightBuld.setBackground(AppUtil.changeDrawableColor(context, R.drawable.icon_participants_light_bulb, AppUtil.getPrimaryThemColorAsInt()));
                 ivHouse.setBackground(AppUtil.changeDrawableColor(context, R.drawable.icon_participants_house, AppUtil.getPrimaryThemColorAsInt()));
 
+                ivPicture.setImageBitmap(null);
                 ivPicture.setBackgroundResource(R.drawable.icon_silhouette);
 
                 if (person.getPictureURL() != null) {
@@ -557,38 +562,11 @@ public class ParticipantsSwipeListAdapter extends BaseSwipeAdapter {
 
                     Log.d("APD", "currentPerson.getPictureURL(): " + person.getPictureURL());
 
-                    ivPicture.setTag(pictureURL);
+                    Picasso.with(context).load(pictureURL).into(ivPicture);
 
-                    new DownloadTask().execute(pictureURL, ivPicture, context);
+                    // ivPicture.setTag(pictureURL);
 
-                    /*
-                    new AsyncTask<Void, Void, Void>() {
-                        public Bitmap bmp;
-                        @Override
-                        protected Void doInBackground(Void... params) {
-                            try {
-                                InputStream in = new URL(pictureURL).openStream();
-                                bmp = BitmapFactory.decodeStream(in);
-                            } catch (Exception e) {
-                                Log.d("APD", e.getMessage());
-                            }
-                            return null;
-                        }
-
-                        @Override
-                        protected void onPostExecute(Void result) {
-                            Log.d("APD", "pictureURL BITMAP: " + bmp);
-
-                            if (bmp != null) {
-                                Drawable d = new BitmapDrawable(context.getResources(), bmp);
-
-                                ivPicture.setImageDrawable(d);
-
-                            }
-                        }
-
-                    }.execute();
-                    */
+                    // new DownloadTask().execute(pictureURL, ivPicture, context);
                 }
 
                 TextView tvName = (TextView) convertView.findViewById(R.id.tvParticipantName);

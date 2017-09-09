@@ -100,7 +100,7 @@ public class AttendeeDetailExpandableListView  extends BaseExpandableListAdapter
                              boolean isLastChild, View convertView, ViewGroup parent) {
         Realm realm = AppUtil.getRealmInstance(App.getInstance());
 
-        Person person = realm.where(Person.class).equalTo("objectId", _listAttendee.getUserLink()).findFirst();
+        // Person person = realm.where(Person.class).equalTo("objectId", _listAttendee.getUserLink()).findFirst();
 
         String groupItemStr = (String) getGroup(groupPosition);
 

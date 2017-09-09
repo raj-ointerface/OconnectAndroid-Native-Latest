@@ -17,7 +17,7 @@ android {
         minSdkVersion 21
         targetSdkVersion 24
         versionCode 1
-        versionName "1.03"
+        versionName "1.04"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
@@ -111,6 +111,7 @@ dependencies {
     compile 'de.hdodenhof:circleimageview:2.1.0'
     compile 'com.azoft.carousellayoutmanager:carousel:1.2.1'
     compile 'com.google.android.gms:play-services:10.2.1'
+    compile 'com.squareup.picasso:picasso:2.5.2'
 
     compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
         transitive = true;

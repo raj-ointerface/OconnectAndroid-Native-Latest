@@ -2648,7 +2648,7 @@ public class DataSyncManager {
 
     static public Date getLastSyncDate() {
         SharedPreferences prefs = context.getSharedPreferences(AppConfig.sharedPrefsName, MODE_PRIVATE);
-        String lastSyncDateStr = prefs.getString(AppConfig.lastSyncDateName, "2017-09-02T17:00:00");
+        String lastSyncDateStr = prefs.getString(AppConfig.lastSyncDateName, "2017-09-09T08:00:00");
 
         SimpleDateFormat isoFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
         isoFormat.setTimeZone(TimeZone.getTimeZone("UTC"));

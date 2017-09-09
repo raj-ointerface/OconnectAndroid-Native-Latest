@@ -499,17 +499,17 @@ public class AttendeeDetailViewFragment extends Fragment {
 
         int groupNum = 0;
 
-        if (attendee.getJob() != null && !attendee.getJob().equalsIgnoreCase("") ||
+        if (attendee != null && (attendee.getJob() != null && !attendee.getJob().equalsIgnoreCase("") ||
                 attendee.getOrganization() != null && !attendee.getOrganization().equalsIgnoreCase("") ||
-                attendee.getLocation() != null && !attendee.getLocation().equalsIgnoreCase("")) {
+                attendee.getLocation() != null && !attendee.getLocation().equalsIgnoreCase(""))) {
             _listDataHeader.add("About");
             _listHeaderNumber.add(groupNum);
             _listGroupHasListView.add(false);
             _listChildCount.put(groupNum,1);
             ++groupNum;
-        } else if (person.getJob() != null && !person.getJob().equalsIgnoreCase("") ||
+        } else if (person != null && (person.getJob() != null && !person.getJob().equalsIgnoreCase("") ||
                 person.getOrg() != null && !person.getOrg().equalsIgnoreCase("") ||
-                person.getLocation() != null && !person.getLocation().equalsIgnoreCase("")) {
+                person.getLocation() != null && !person.getLocation().equalsIgnoreCase(""))) {
             _listDataHeader.add("About");
             _listHeaderNumber.add(groupNum);
             _listGroupHasListView.add(false);
