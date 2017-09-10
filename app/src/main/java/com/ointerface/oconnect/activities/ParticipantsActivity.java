@@ -31,6 +31,7 @@ import com.ointerface.oconnect.R;
 import com.ointerface.oconnect.adapters.MyAgendaListViewAdapter;
 import com.ointerface.oconnect.adapters.ParticipantsSwipeListAdapter;
 import com.ointerface.oconnect.data.Attendee;
+import com.ointerface.oconnect.data.Event;
 import com.ointerface.oconnect.data.Person;
 import com.ointerface.oconnect.data.Session;
 import com.ointerface.oconnect.data.Speaker;
@@ -42,6 +43,8 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -286,6 +289,14 @@ public class ParticipantsActivity extends OConnectBaseActivity {
                 getWindow().setSoftInputMode(
                         WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
+                bIsSpeakerView = adapter.showingSpeakers;
+
+                getListViewData();
+
+                adapter.showingSpeakers = bIsSpeakerView;
+
+                lvParticipantsList.setAdapter(adapter);
+
             }
         });
 
@@ -425,11 +436,21 @@ public class ParticipantsActivity extends OConnectBaseActivity {
 
         RealmList<Person> peopleList = OConnectBaseActivity.selectedConference.getPeople();
 
+        realm.beginTransaction();
         if (peopleList != null) {
+
+            Collections.sort(peopleList, new Comparator<Person>() {
+                @Override
+                public int compare(Person o1, Person o2) {
+                    return o1.getFirstName().compareTo(o2.getFirstName());
+                }
+            });
+
             for (int i = 0; i < peopleList.size(); ++i) {
                 adapter.addPerson(peopleList.get(i));
             }
         }
+        realm.commitTransaction();
     }
 
     public void performSearch(String searchText) {

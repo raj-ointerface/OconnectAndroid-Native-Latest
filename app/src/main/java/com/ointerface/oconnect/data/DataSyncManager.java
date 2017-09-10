@@ -295,6 +295,8 @@ public class DataSyncManager {
                             conference.setToolbarLabelExternalLink(parseObject.getString("toolbarLabelExternalLink"));
                             conference.setGroup(parseObject.getString("group"));
 
+                            conference.getPeople().clear();
+
                             ParseRelation<ParseObject> peopleRelation = parseObject.getRelation("person");
 
                             if (realm.isInTransaction()) {
@@ -449,6 +451,8 @@ public class DataSyncManager {
                             result.setShowParticipants(parseObject.getBoolean("showParticipants"));
                             result.setToolbarLabelExternalLink(parseObject.getString("toolbarLabelExternalLink"));
                             result.setGroup(parseObject.getString("group"));
+
+                            result.getPeople().clear();
 
                             ParseRelation<ParseObject> peopleRelation = parseObject.getRelation("person");
 
@@ -2648,7 +2652,7 @@ public class DataSyncManager {
 
     static public Date getLastSyncDate() {
         SharedPreferences prefs = context.getSharedPreferences(AppConfig.sharedPrefsName, MODE_PRIVATE);
-        String lastSyncDateStr = prefs.getString(AppConfig.lastSyncDateName, "2017-09-09T08:00:00");
+        String lastSyncDateStr = prefs.getString(AppConfig.lastSyncDateName, "2017-09-10T20:00:00");
 
         SimpleDateFormat isoFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
         isoFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
