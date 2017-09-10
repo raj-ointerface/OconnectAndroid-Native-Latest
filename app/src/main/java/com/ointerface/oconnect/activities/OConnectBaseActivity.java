@@ -238,7 +238,7 @@ public class OConnectBaseActivity extends AppCompatActivity
         ivHelp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(OConnectBaseActivity.this, HelpViewPagerActivity.class);
+                Intent i = new Intent(OConnectBaseActivity.this, ConnectionsActivity.class);
                 startActivity(i);
             }
         });

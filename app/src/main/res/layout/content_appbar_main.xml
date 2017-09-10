@@ -53,7 +53,7 @@
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:scaleType="fitCenter"
-                android:background="@drawable/icon_question_mark"/>
+                android:background="@drawable/icon_star_filled"/>
             <ImageView
                 android:id="@+id/ivSearch"
                 android:layout_toLeftOf="@+id/flRightToolbarPerson"

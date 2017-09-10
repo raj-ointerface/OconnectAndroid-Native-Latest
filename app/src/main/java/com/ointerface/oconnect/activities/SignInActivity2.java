@@ -192,6 +192,7 @@ public class SignInActivity2 extends AppCompatActivity {
             public void done(ParseUser user, ParseException err) {
                 if (user == null) {
                     Log.d("APD", "ParseTwitterUtils.logIn error: " + err.getMessage());
+                    dialog.dismiss();
                     Toast.makeText(SignInActivity2.this,"Error during Twitter Login!",Toast.LENGTH_LONG).show();
                 } else {
 
@@ -231,6 +232,7 @@ public class SignInActivity2 extends AppCompatActivity {
                     @Override
                     public void done(ParseUser user, ParseException err) {
                         if (user == null) {
+                            dialog.dismiss();
                             Toast.makeText(SignInActivity2.this,"Error during Facebook Login!",Toast.LENGTH_LONG).show();
                         } else {
 
