@@ -442,6 +442,10 @@ public class ParticipantsActivity extends OConnectBaseActivity {
             Collections.sort(peopleList, new Comparator<Person>() {
                 @Override
                 public int compare(Person o1, Person o2) {
+                    if (o1.getFirstName() == null || o2.getFirstName() == null) {
+                        return 0;
+                    }
+
                     return o1.getFirstName().compareTo(o2.getFirstName());
                 }
             });
