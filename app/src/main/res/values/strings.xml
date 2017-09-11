@@ -102,4 +102,6 @@
     <string name="schedule_overlay_4_text">"Select this button to traverse between the participants and the schedule."</string>
     <string name="title_activity_messaging_list">MessagingListActivity</string>
     <string name="title_activity_discussion_board">DiscussionBoardActivity</string>
+    <string name="speaker">Speaker</string>
+    <string name="attendees">Attendees</string>
 </resources>

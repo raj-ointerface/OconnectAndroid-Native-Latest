@@ -11,6 +11,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.ButtonBarLayout;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -20,6 +21,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -62,7 +64,11 @@ public class ParticipantsActivity extends OConnectBaseActivity {
 
     private SearchView participantsSearch;
 
-    private BottomNavigationView navigation;
+    private Button attendeeButton;
+
+    private Button speakerButton;
+
+    private LinearLayout bottomNavigation;
 
     public Speaker currentSpeaker = null;
 
@@ -101,49 +107,6 @@ public class ParticipantsActivity extends OConnectBaseActivity {
 
         ivHelp.setVisibility(View.VISIBLE);
 
-        navigation = (BottomNavigationView) findViewById(R.id.navigation);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-        navigation.setBackgroundColor(AppUtil.getPrimaryThemColorAsInt());
-
-        int[][] states = new int[][] {
-                new int[] { android.R.attr.state_enabled}, // enabled
-                new int[] {-android.R.attr.state_enabled}, // disabled
-                new int[] { android.R.attr.state_checked}, // unchecked
-                new int[] { android.R.attr.state_pressed},  // pressed
-                new int[] { android.R.attr.state_selected}  // selected
-        };
-
-        int[] colors = new int[] {
-                Color.BLACK,
-                Color.BLACK,
-                Color.WHITE,
-                Color.WHITE,
-                Color.WHITE
-        };
-
-        ColorStateList colorStateList = new ColorStateList(states, colors);
-
-        navigation.setItemTextColor(colorStateList);
-
-        View view1 = navigation.findViewById(R.id.navigation_speakers);
-
-        view1.setPadding(0,0,0,30);
-
-        View view2 = navigation.findViewById(R.id.navigation_attendees);
-
-        view2.setPadding(0,0,0,30);
-
-        Menu menu = navigation.getMenu();
-
-        if (selectedConference.getParticipantsLabelSpeakers() != null &&
-                !selectedConference.getParticipantsLabelSpeakers().equalsIgnoreCase("")) {
-            menu.getItem(0).setTitle(selectedConference.getParticipantsLabelSpeakers());
-        }
-
-        if (selectedConference.getParticipantsLabelParticipants() != null &&
-                !selectedConference.getParticipantsLabelParticipants().equalsIgnoreCase("")) {
-            menu.getItem(1).setTitle(selectedConference.getParticipantsLabelParticipants());
-        }
 
         lvParticipantsList = (ListView) findViewById(R.id.lvParticipants);
 
@@ -229,9 +192,45 @@ public class ParticipantsActivity extends OConnectBaseActivity {
             }
         });
 
-        navigation.setSelectedItemId(R.id.navigation_attendees);
 
-        displayAttendees();
+
+        //show buttons at bottom
+        bottomNavigation = (LinearLayout) findViewById(R.id.bottom_navigation);
+        bottomNavigation.setBackgroundColor(AppUtil.getPrimaryThemColorAsInt());
+
+
+
+        speakerButton = (Button) findViewById(R.id.navigation_speakers_button);
+        attendeeButton = (Button) findViewById(R.id.navigation_attendees_button);
+
+        speakerButton.setBackgroundResource(R.drawable.button_border);
+        attendeeButton.setBackgroundResource(R.drawable.button_border);
+
+        speakerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                speakerButton.setBackgroundResource(R.drawable.button_border_white);
+                speakerButton.setTextColor(AppUtil.getPrimaryThemColorAsInt());
+                attendeeButton.setBackgroundResource(R.drawable.button_border);
+                attendeeButton.setTextColor(Color.WHITE);
+                bIsSpeakerView = true;
+                displaySpeakers();
+            }
+        });
+
+        attendeeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                attendeeButton.setBackgroundResource(R.drawable.button_border_white);
+                attendeeButton.setTextColor(AppUtil.getPrimaryThemColorAsInt());
+                speakerButton.setBackgroundResource(R.drawable.button_border);
+                speakerButton.setTextColor(Color.WHITE);
+                bIsSpeakerView = false;
+                displayAttendees();
+            }
+        });
+
+
 
         if (AppUtil.getParticipantsTutorialShown(this) == false && AppConfig.bParticipantsTutorialShown == false) {
             FragmentManager fm = getSupportFragmentManager();
@@ -349,53 +348,6 @@ public class ParticipantsActivity extends OConnectBaseActivity {
         });
     }
 
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
-
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-
-            Menu menu = navigation.getMenu();
-
-            View speakersView = navigation.findViewById(R.id.navigation_speakers);
-
-            if (speakersView.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
-                ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) speakersView.getLayoutParams();
-                p.setMargins(0, 0, 0, 0);
-                speakersView.requestLayout();
-            }
-
-            View attendeesView = navigation.findViewById(R.id.navigation_attendees);
-
-            if (attendeesView.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
-                ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) attendeesView.getLayoutParams();
-                p.setMargins(0, 0, 0, 0);
-                attendeesView.requestLayout();
-            }
-
-            switch (item.getItemId()) {
-                case R.id.navigation_speakers:
-                    speakersView.setBackgroundColor(AppConfig.lightGreyColor);
-
-                    attendeesView.setBackgroundColor(AppUtil.getPrimaryThemColorAsInt());
-
-                    bIsSpeakerView = true;
-                    displaySpeakers();
-                    return true;
-                case R.id.navigation_attendees:
-                    speakersView.setBackgroundColor(AppUtil.getPrimaryThemColorAsInt());
-
-                    attendeesView.setBackgroundColor(AppConfig.lightGreyColor);
-
-                    bIsSpeakerView = false;
-
-                    displayAttendees();
-                    return true;
-            }
-            return false;
-        }
-
-    };
 
     public void displaySpeakers() {
         getListViewData();
@@ -462,8 +414,6 @@ public class ParticipantsActivity extends OConnectBaseActivity {
         if (searchText == null || searchText.equalsIgnoreCase("")) {
             return;
         }
-
-        // ArrayList<String> searchArr = new ArrayList<String>();
 
         searchText = searchText.toLowerCase();
 
