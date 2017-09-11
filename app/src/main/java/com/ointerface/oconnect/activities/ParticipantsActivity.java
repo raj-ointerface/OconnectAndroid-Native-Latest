@@ -510,10 +510,12 @@ public class ParticipantsActivity extends OConnectBaseActivity {
                 Person person = peopleList.get(i);
 
                 for (String value : searchArr) {
-                    if (person.getFirstName().toLowerCase().contains(value) ||
-                            person.getLastName().toLowerCase().contains(value)) {
-                        adapter.addPerson(person);
-                        break;
+                    if (person.getFirstName() != null && person.getLastName() != null) {
+                        if (person.getFirstName().toLowerCase().contains(value) ||
+                                person.getLastName().toLowerCase().contains(value)) {
+                            adapter.addPerson(person);
+                            break;
+                        }
                     }
                 }
             }
