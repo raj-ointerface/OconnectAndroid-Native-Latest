@@ -1751,6 +1751,26 @@ public class DataSyncManager {
 
         Date date = getLastSyncDate();
 
+
+        try {
+            List<ParseObject> deletedMaps = query.whereGreaterThanOrEqualTo("updatedAt", date).whereEqualTo("isDeleted", true).find();
+            Realm realm = AppUtil.getRealmInstance(App.getInstance());
+            realm.beginTransaction();
+
+            for (ParseObject currentObj : deletedMaps) {
+                Maps map = realm.where(Maps.class).equalTo("objectId", currentObj.getObjectId()).findFirst();
+
+                if (map != null) {
+
+                    map.deleteFromRealm();
+
+                }
+            }
+            realm.commitTransaction();
+        } catch (Exception ex) {
+            Log.d("DataSyncManager", ex.getMessage());
+        }
+
         if (date != null) {
             query.whereGreaterThanOrEqualTo("updatedAt", date).whereNotEqualTo("isDeleted", true);
         }

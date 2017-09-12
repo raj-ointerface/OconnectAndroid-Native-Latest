@@ -203,7 +203,8 @@ public class ParticipantsActivity extends OConnectBaseActivity {
         speakerButton = (Button) findViewById(R.id.navigation_speakers_button);
         attendeeButton = (Button) findViewById(R.id.navigation_attendees_button);
 
-        speakerButton.setBackgroundResource(R.drawable.button_border);
+        speakerButton.setBackgroundResource(R.drawable.button_border_white);
+        speakerButton.setTextColor(AppUtil.getPrimaryThemColorAsInt());
         attendeeButton.setBackgroundResource(R.drawable.button_border);
 
         speakerButton.setOnClickListener(new View.OnClickListener() {

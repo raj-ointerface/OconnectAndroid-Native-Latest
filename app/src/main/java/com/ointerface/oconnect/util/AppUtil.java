@@ -402,7 +402,9 @@ public class AppUtil {
         final AlertDialog alertDialog = new AlertDialog.Builder(context).create();
         alertDialog.setTitle("Make Better Connections");
         alertDialog.setMessage("Would you like to connect with others at this event?");
-        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Start",
+
+
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, context.getResources().getString(R.string.label_dont_show_again),
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         AppUtil.setSurveyShown(context, true);
@@ -411,18 +413,19 @@ public class AppUtil {
                     }
                 });
 
-        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "No",
+        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "No Thanks",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         alertDialog.dismiss();
                     }
                 });
 
-        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Don't ask again",
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Start",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         AppUtil.setSurveyShown(context, true);
-                        alertDialog.dismiss();
+                        Intent i = new Intent(context, AnalyticsSurveyActivity.class);
+                        context.startActivity(i);
                     }
                 });
 
