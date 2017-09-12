@@ -226,6 +226,8 @@ public class SignInActivity2 extends AppCompatActivity {
 
         dialog = ProgressDialog.show((Context)SignInActivity2.this, null, "Initializing Data ... Please wait.");
 
+        AccessToken.setCurrentAccessToken(null);
+
         List<String> permissions = Arrays.asList("email", "user_photos", "public_profile", "user_friends");
         ParseFacebookUtils.logInWithReadPermissionsInBackground(this, permissions
                 , new LogInCallback() {

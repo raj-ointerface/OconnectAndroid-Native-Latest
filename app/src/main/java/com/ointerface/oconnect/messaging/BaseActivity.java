@@ -28,7 +28,7 @@ public abstract class BaseActivity extends AppCompatActivity implements ServiceC
 
             if (OConnectBaseActivity.currentPerson != null) {
                 if (!mSinchServiceInterface.isStarted()) {
-                    mSinchServiceInterface.startClient("eLd3wgDMIJ");
+                    mSinchServiceInterface.startClient(OConnectBaseActivity.currentPerson.getObjectId());
                 }
             }
 
