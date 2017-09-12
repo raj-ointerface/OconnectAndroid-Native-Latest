@@ -191,9 +191,11 @@ public class SignInActivity2 extends AppCompatActivity {
             @Override
             public void done(ParseUser user, ParseException err) {
                 if (user == null) {
-                    Log.d("APD", "ParseTwitterUtils.logIn error: " + err.getMessage());
+                    if (err != null){
+                        Log.d("APD", "ParseTwitterUtils.logIn error: " + err.getMessage());
+                        Toast.makeText(SignInActivity2.this,"Error during Twitter Login!",Toast.LENGTH_LONG).show();
+                    }
                     dialog.dismiss();
-                    Toast.makeText(SignInActivity2.this,"Error during Twitter Login!",Toast.LENGTH_LONG).show();
                 } else {
 
                     if (user.isNew()) {
@@ -213,6 +215,7 @@ public class SignInActivity2 extends AppCompatActivity {
 
                     executePINPromptWorkflow(user);
                 }
+                dialog.dismiss();
             }
         });
     }
@@ -234,7 +237,6 @@ public class SignInActivity2 extends AppCompatActivity {
                     @Override
                     public void done(ParseUser user, ParseException err) {
                         if (user == null) {
-                            dialog.dismiss();
                             Toast.makeText(SignInActivity2.this,"Error during Facebook Login!",Toast.LENGTH_LONG).show();
                         } else {
 
@@ -255,6 +257,7 @@ public class SignInActivity2 extends AppCompatActivity {
 
                             executePINPromptWorkflow(user);
                         }
+                        dialog.dismiss();
                     }
 
                 });
@@ -406,6 +409,7 @@ public class SignInActivity2 extends AppCompatActivity {
             public void onAuthError(LIAuthError error) {
                 // Handle authentication errors
                 Log.d("APD", "APD " + error.toString());
+                dialog.dismiss();
             }
         }, false);
     }

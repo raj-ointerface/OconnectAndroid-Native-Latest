@@ -407,9 +407,8 @@ public class AppUtil {
         alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, context.getResources().getString(R.string.label_dont_show_again),
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        AppUtil.setSurveyShown(context, true);
-                        Intent i = new Intent(context, AnalyticsSurveyActivity.class);
-                        context.startActivity(i);
+                        setSurveyShown(context, true);
+                        alertDialog.dismiss();
                     }
                 });
 
