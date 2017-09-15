@@ -1,30 +1,20 @@
 package com.ointerface.oconnect.activities;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.ointerface.oconnect.App;
 import com.ointerface.oconnect.R;
-import com.ointerface.oconnect.adapters.AnnouncementsListViewAdapter;
 import com.ointerface.oconnect.adapters.SponsorsListViewAdapter;
-import com.ointerface.oconnect.data.MasterNotification;
 import com.ointerface.oconnect.data.Sponsor;
 import com.ointerface.oconnect.util.AppUtil;
 
 import java.util.ArrayList;
 
 import io.realm.Realm;
-import io.realm.RealmList;
 import io.realm.RealmResults;
 import io.realm.Sort;
 
@@ -52,7 +42,7 @@ public class SponsorsListActivity extends OConnectBaseActivity {
         ivSearch.setVisibility(GONE);
         ivRightToolbarIcon.setVisibility(View.VISIBLE);
 
-        ivHelp.setVisibility(View.VISIBLE);
+        ivConnections.setVisibility(View.VISIBLE);
         tvEdit.setVisibility(GONE);
 
         getListViewData();

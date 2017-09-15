@@ -1,13 +1,7 @@
 package com.ointerface.oconnect.activities;
 
 import android.content.Intent;
-import android.media.Image;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -48,7 +42,7 @@ public class InfoActivity extends OConnectBaseActivity {
         }
 
         ivSearch.setVisibility(GONE);
-        ivHelp.setVisibility(View.VISIBLE);
+        ivConnections.setVisibility(View.VISIBLE);
         ivRightToolbarIcon.setVisibility(View.VISIBLE);
         ivProfileLanyard.setVisibility(GONE);
 

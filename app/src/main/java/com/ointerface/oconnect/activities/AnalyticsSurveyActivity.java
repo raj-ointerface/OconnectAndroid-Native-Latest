@@ -1,20 +1,10 @@
 package com.ointerface.oconnect.activities;
 
-import android.Manifest;
-import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -22,10 +12,6 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.google.zxing.ResultPoint;
-import com.journeyapps.barcodescanner.BarcodeCallback;
-import com.journeyapps.barcodescanner.BarcodeResult;
-import com.journeyapps.barcodescanner.CompoundBarcodeView;
 import com.ointerface.oconnect.App;
 import com.ointerface.oconnect.R;
 import com.ointerface.oconnect.adapters.SurveyAnswerListViewAdapter;
@@ -37,10 +23,8 @@ import com.parse.ParseObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import io.realm.Realm;
-import io.realm.RealmList;
 import io.realm.RealmResults;
 import io.realm.Sort;
 
@@ -68,7 +52,7 @@ public class AnalyticsSurveyActivity extends OConnectBaseActivity {
         tvToolbarTitle.setText("Survey");
 
         ivProfileLanyard.setVisibility(GONE);
-        ivHelp.setVisibility(GONE);
+        ivConnections.setVisibility(GONE);
         ivRightToolbarIcon.setVisibility(GONE);
         ivSearch.setVisibility(GONE);
 

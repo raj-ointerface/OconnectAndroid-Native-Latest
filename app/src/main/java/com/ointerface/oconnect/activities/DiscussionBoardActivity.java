@@ -1,41 +1,24 @@
 package com.ointerface.oconnect.activities;
 
-import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.ointerface.oconnect.App;
 import com.ointerface.oconnect.R;
-import com.ointerface.oconnect.adapters.AnnouncementsListViewAdapter;
 import com.ointerface.oconnect.adapters.DiscussionBoardQuestionListViewAdapter;
 import com.ointerface.oconnect.data.DBQuestion;
-import com.ointerface.oconnect.data.DataSyncManager;
-import com.ointerface.oconnect.data.DiscussionBoard;
 import com.ointerface.oconnect.data.Event;
 import com.ointerface.oconnect.data.IDataSyncListener;
-import com.ointerface.oconnect.data.MasterNotification;
-import com.ointerface.oconnect.data.Person;
 import com.ointerface.oconnect.util.AppUtil;
-import com.parse.ParseUser;
 
 import java.util.ArrayList;
 
 import io.realm.Realm;
-import io.realm.RealmList;
 import io.realm.RealmResults;
 import io.realm.Sort;
 
@@ -61,7 +44,7 @@ public class DiscussionBoardActivity extends OConnectBaseActivity implements IDa
         ivSearch.setVisibility(GONE);
         ivRightToolbarIcon.setVisibility(GONE);
 
-        ivHelp.setVisibility(GONE);
+        ivConnections.setVisibility(GONE);
         tvEdit.setVisibility(GONE);
 
         drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, navigationViewRight);

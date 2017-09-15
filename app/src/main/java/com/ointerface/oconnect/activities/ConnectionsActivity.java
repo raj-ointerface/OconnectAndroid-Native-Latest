@@ -18,7 +18,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.azoft.carousellayoutmanager.CarouselLayoutManager;
@@ -41,12 +40,10 @@ import com.parse.ParseQuery;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Comparator;
 
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmObject;
-import io.realm.RealmResults;
 
 import static android.view.View.GONE;
 
@@ -101,7 +98,7 @@ public class ConnectionsActivity extends OConnectBaseActivity {
 
         ivSearch.setVisibility(GONE);
         ivRightToolbarIcon.setVisibility(View.VISIBLE);
-        ivHelp.setVisibility(View.VISIBLE);
+        ivConnections.setVisibility(View.VISIBLE);
         ivProfileLanyard.setVisibility(GONE);
 
         navigation = (BottomNavigationView) findViewById(R.id.navigation);

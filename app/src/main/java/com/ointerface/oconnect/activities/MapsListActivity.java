@@ -2,10 +2,6 @@ package com.ointerface.oconnect.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -17,7 +13,6 @@ import com.ointerface.oconnect.data.Maps;
 import com.ointerface.oconnect.util.AppUtil;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -43,7 +38,7 @@ public class MapsListActivity extends OConnectBaseActivity {
         }
 
         ivProfileLanyard.setVisibility(GONE);
-        ivHelp.setVisibility(View.VISIBLE);
+        ivConnections.setVisibility(View.VISIBLE);
         ivRightToolbarIcon.setVisibility(View.VISIBLE);
         ivSearch.setVisibility(GONE);
 

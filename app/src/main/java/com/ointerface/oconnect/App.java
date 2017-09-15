@@ -180,7 +180,7 @@ public class App extends MultiDexApplication implements ServiceConnection, Messa
 
         ParseTwitterUtils.initialize("0ZV9x1zOTs5nXcaFRS3eIengI", "zrsg7kCincIM0fqig4CJk0laliX5tUpsrSmgMyQdjqBcHhZtY4");
 
-        // generateHashkey();
+        generateHashkey();
     }
 
     public static void initSinchClient(String userID) {
