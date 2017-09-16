@@ -71,19 +71,41 @@ public class DataSyncManager {
             query.whereGreaterThanOrEqualTo("updatedAt", date);
         }
 
+        List<ParseObject>  allObjects = new ArrayList<ParseObject>();
+
+        int countSkip=0,loopCloseCount=0;
+        do{
+            query.setLimit(1000);
+            query.setSkip(countSkip);
+            List<ParseObject> objects=null;
+            try {
+                objects = query.find();
+                loopCloseCount = objects.size();
+                countSkip += objects.size();
+                if(loopCloseCount > 0) {
+                    allObjects.addAll(objects);
+                }
+            } catch (com.parse.ParseException e) {
+                e.printStackTrace();
+                loopCloseCount=0;
+            }
+        } while (loopCloseCount > 0);
+
         Log.d("DataSyncManager", "Begin Parse Query For Organizations");
 
+        /*
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> objects, com.parse.ParseException e) {
                 if (e == null) {
-                    Log.d("DataSyncManager", "Start Processing Org Records: " + objects.size() + " objects");
+                */
+                    Log.d("DataSyncManager", "Start Processing Org Records: " + allObjects.size() + " objects");
 
                     Realm realm = AppUtil.getRealmInstance(App.getInstance());
 
                     realm.beginTransaction();
 
-                    for (ParseObject parseObject : objects) {
+                    for (ParseObject parseObject : allObjects) {
 
                         Organization result = realm.where(Organization.class).equalTo("objectId", parseObject.getObjectId()).findFirst();
 
@@ -151,6 +173,7 @@ public class DataSyncManager {
                     }
 
                     realm.commitTransaction();
+                /*
                 } else {
                     Log.d("DataSyncManager", "Line 120 " + e.getMessage() + " " + e.getStackTrace());
                 }
@@ -162,6 +185,13 @@ public class DataSyncManager {
                 }
             }
         });
+        */
+
+        if (shouldSyncAll == true) {
+            dataSyncConferences();
+        } else {
+            callback.onDataSyncFinish();
+        }
     }
 
     static public void dataSyncConferences() {
@@ -174,16 +204,39 @@ public class DataSyncManager {
         }
 
         Log.d("DataSyncManager", "Begin Query for Parse Conferences");
+
+        List<ParseObject>  allObjects = new ArrayList<ParseObject>();
+
+        int countSkip=0,loopCloseCount=0;
+        do{
+            query.setLimit(1000);
+            query.setSkip(countSkip);
+            List<ParseObject> objects=null;
+            try {
+                objects = query.find();
+                loopCloseCount = objects.size();
+                countSkip += objects.size();
+                if(loopCloseCount > 0) {
+                    allObjects.addAll(objects);
+                }
+            } catch (com.parse.ParseException e) {
+                e.printStackTrace();
+                loopCloseCount=0;
+            }
+        } while (loopCloseCount > 0);
+
+        /*
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> objects, com.parse.ParseException e) {
                 if (e == null) {
-                    Log.d("DataSyncManager", "Start Processing Conferences: " + objects.size() + " objects");
+                */
+                    Log.d("DataSyncManager", "Start Processing Conferences: " + allObjects.size() + " objects");
 
                     Realm realm = AppUtil.getRealmInstance(App.getInstance());
                     realm.beginTransaction();
 
-                    for (ParseObject parseObject : objects){
+                    for (ParseObject parseObject : allObjects) {
 
 
                         Conference result = realm.where(Conference.class).equalTo("objectId", parseObject.getObjectId()).findFirst();
@@ -509,6 +562,8 @@ public class DataSyncManager {
                     if (realm.isInTransaction()) {
                         realm.commitTransaction();
                     }
+
+                /*
                 } else {
                     Log.d("DataSyncManager", "Line 336 " + e.getMessage() + " " + e.getStackTrace());
                 }
@@ -521,6 +576,13 @@ public class DataSyncManager {
 
             }
         });
+        */
+
+        if (shouldSyncAll == true) {
+            dataSyncSessions();
+        } else {
+            callback.onDataSyncFinish();
+        }
     }
 
     static public void dataSyncSessions() {

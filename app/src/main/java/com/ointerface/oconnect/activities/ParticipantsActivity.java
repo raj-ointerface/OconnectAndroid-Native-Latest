@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
@@ -349,35 +350,84 @@ public class ParticipantsActivity extends OConnectBaseActivity {
             adapter.addSpeaker(speakerResults.get(i));
         }
 
+        ArrayList<RealmObject> sortedUsers = new ArrayList<RealmObject>();
+
         RealmResults<Attendee> attendeeResults;
 
         attendeeResults = realm.where(Attendee.class).equalTo("conference", AppUtil.getSelectedConferenceID(ParticipantsActivity.this)).findAllSorted("name", Sort.ASCENDING);
 
         for (int i = 0; i < attendeeResults.size(); ++i) {
-            adapter.addUser(attendeeResults.get(i));
+            sortedUsers.add(attendeeResults.get(i));
         }
 
         RealmList<Person> peopleList = OConnectBaseActivity.selectedConference.getPeople();
 
-        realm.beginTransaction();
         if (peopleList != null) {
+            for (int i = 0; i < peopleList.size(); ++i) {
+                sortedUsers.add(peopleList.get(i));
+            }
+        }
 
-            Collections.sort(peopleList, new Comparator<Person>() {
-                @Override
-                public int compare(Person o1, Person o2) {
-                    if (o1.getFirstName() == null || o2.getFirstName() == null) {
+        realm.beginTransaction();
+
+        Collections.sort(sortedUsers, new SortUser());
+
+        realm.commitTransaction();
+
+        /*
+        Collections.sort(sortedUsers, new Comparator<RealmObject>() {
+            @Override
+            public int compare(RealmObject o1, RealmObject o2) {
+                Attendee attendee1 = null;
+                Person person1 = null;
+                Attendee attendee2 = null;
+                Person person2 = null;
+
+                if (o1 instanceof Attendee) {
+                    attendee1 = (Attendee) o1;
+                } else if (o1 instanceof Person) {
+                    person1 = (Person) o1;
+                }
+
+                if (o2 instanceof Attendee) {
+                    attendee2 = (Attendee) o2;
+                } else if (o2 instanceof Person) {
+                    person2 = (Person) o2;
+                }
+
+                if (attendee1 != null && attendee2 != null) {
+                    if (attendee1.getName() == null || attendee2.getName() == null) {
                         return 0;
                     }
 
-                    return o1.getFirstName().compareTo(o2.getFirstName());
-                }
-            });
+                    return attendee1.getName().compareTo(attendee2.getName());
+                } else if (attendee1 != null && person2 != null) {
+                    if (attendee1.getName() == null || person2.getFirstName() == null) {
+                        return 0;
+                    }
 
-            for (int i = 0; i < peopleList.size(); ++i) {
-                adapter.addUser(peopleList.get(i));
+                    return attendee1.getName().compareTo(person2.getFirstName());
+                } else if (person1 != null && person2 != null) {
+                    if (person1.getFirstName() == null || person2.getFirstName() == null) {
+                        return 0;
+                    }
+
+                    return person1.getFirstName().compareTo(person2.getFirstName());
+                } else {
+                    if (person1.getFirstName() == null || attendee2.getName() == null) {
+                        return 0;
+                    }
+
+                    return person1.getFirstName().compareTo(attendee2.getName());
+                }
+
             }
-        }
-        realm.commitTransaction();
+        });
+        */
+
+        adapter.mUsers = new ArrayList<RealmObject>();
+
+        adapter.mUsers.addAll(sortedUsers);
     }
 
     public void performSearch(String searchText) {
@@ -445,5 +495,61 @@ public class ParticipantsActivity extends OConnectBaseActivity {
         adapter.showingSpeakers = bIsSpeakerView;
 
         lvParticipantsList.setAdapter(adapter);
+    }
+
+    public class SortUser implements Comparator<RealmObject> {
+        @Override
+        public int compare(RealmObject o1, RealmObject o2) {
+            Attendee attendee1 = null;
+            Person person1 = null;
+            Attendee attendee2 = null;
+            Person person2 = null;
+
+            if (o1 instanceof Attendee) {
+                attendee1 = (Attendee) o1;
+            } else if (o1 instanceof Person) {
+                person1 = (Person) o1;
+            }
+
+            if (o2 instanceof Attendee) {
+                attendee2 = (Attendee) o2;
+            } else if (o2 instanceof Person) {
+                person2 = (Person) o2;
+            }
+
+            if (attendee1 != null && attendee2 != null) {
+                if (attendee1.getName() == null || attendee2.getName() == null) {
+                    return 0;
+                }
+
+                // Log.d("APD", "Comparing: " + attendee1.getName() + " : " + attendee2.getName());
+
+                return attendee1.getName().compareTo(attendee2.getName());
+            } else if (attendee1 != null && person2 != null) {
+                if (attendee1.getName() == null || person2.getFirstName() == null) {
+                    return 0;
+                }
+
+                Log.d("APD", "Comparing: " + attendee1.getName() + " : " + person2.getFirstName());
+
+                return attendee1.getName().compareTo(person2.getFirstName());
+            } else if (person1 != null && person2 != null) {
+                if (person1.getFirstName() == null || person2.getFirstName() == null) {
+                    return 0;
+                }
+
+                // Log.d("APD", "Comparing: " + person1.getFirstName() + " : " + person2.getFirstName());
+
+                return person1.getFirstName().compareTo(person2.getFirstName());
+            } else {
+                if (person1.getFirstName() == null || attendee2.getName() == null) {
+                    return 0;
+                }
+
+                Log.d("APD", "Comparing: " + person1.getFirstName() + " : " + attendee2.getName());
+
+                return person1.getFirstName().compareTo(attendee2.getName());
+            }
+        }
     }
 }
