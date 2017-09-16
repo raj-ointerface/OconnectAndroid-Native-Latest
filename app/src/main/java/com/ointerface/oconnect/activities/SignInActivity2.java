@@ -344,6 +344,7 @@ public class SignInActivity2 extends AppCompatActivity {
 
                                         user.setUsername(finalEmailAddress);
                                         user.setEmail(finalEmailAddress);
+                                        user.setPassword(finalEmailAddress);
                                         user.put("firstName", finalFirstName);
                                         user.put("lastName", finalLastName);
 
@@ -368,6 +369,7 @@ public class SignInActivity2 extends AppCompatActivity {
                                         final ParseUser user = new ParseUser();
 
                                         user.setUsername(finalEmailAddress);
+                                        user.setPassword(finalEmailAddress);
                                         user.setEmail(finalEmailAddress);
                                         user.put("firstName", finalFirstName);
                                         user.put("lastName", finalLastName);
