@@ -30,8 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:textColor="@color/colorBlack"
-            android:textSize="16sp"
-            android:text="Tuesday, April 18"/>
+            android:textSize="16sp" />
         <ImageView
             android:id="@+id/ivRightArrow"
             android:layout_width="25dp"

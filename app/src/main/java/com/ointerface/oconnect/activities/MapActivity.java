@@ -7,27 +7,18 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
-import android.widget.ImageView;
 
 import com.ointerface.oconnect.R;
 import com.ointerface.oconnect.util.AppUtil;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
-
-import org.w3c.dom.Text;
-
-import java.net.URLEncoder;
-import java.util.Map;
 
 import static android.view.View.GONE;
 
@@ -51,7 +42,7 @@ public class MapActivity extends OConnectBaseActivity {
         }
 
         ivProfileLanyard.setVisibility(GONE);
-        ivHelp.setVisibility(View.VISIBLE);
+        ivConnections.setVisibility(View.VISIBLE);
         ivRightToolbarIcon.setVisibility(View.VISIBLE);
         ivSearch.setVisibility(GONE);
 

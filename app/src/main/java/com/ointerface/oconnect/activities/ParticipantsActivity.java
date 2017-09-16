@@ -1,23 +1,12 @@
 package com.ointerface.oconnect.activities;
 
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.ButtonBarLayout;
 import android.support.v7.widget.SearchView;
-import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
@@ -30,25 +19,17 @@ import android.widget.TextView;
 
 import com.ointerface.oconnect.App;
 import com.ointerface.oconnect.R;
-import com.ointerface.oconnect.adapters.MyAgendaListViewAdapter;
 import com.ointerface.oconnect.adapters.ParticipantsSwipeListAdapter;
 import com.ointerface.oconnect.data.Attendee;
-import com.ointerface.oconnect.data.Event;
 import com.ointerface.oconnect.data.Person;
-import com.ointerface.oconnect.data.Session;
 import com.ointerface.oconnect.data.Speaker;
-import com.ointerface.oconnect.fragments.AttendeeDetailViewFragment;
 import com.ointerface.oconnect.fragments.OverlayDialogFragment;
 import com.ointerface.oconnect.util.AppConfig;
 import com.ointerface.oconnect.util.AppUtil;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmList;
@@ -105,7 +86,7 @@ public class ParticipantsActivity extends OConnectBaseActivity {
 
         initSearchView();
 
-        ivHelp.setVisibility(View.VISIBLE);
+        ivConnections.setVisibility(View.VISIBLE);
 
 
         lvParticipantsList = (ListView) findViewById(R.id.lvParticipants);
@@ -192,7 +173,8 @@ public class ParticipantsActivity extends OConnectBaseActivity {
         speakerButton = (Button) findViewById(R.id.navigation_speakers_button);
         attendeeButton = (Button) findViewById(R.id.navigation_attendees_button);
 
-        speakerButton.setBackgroundResource(R.drawable.button_border);
+        speakerButton.setBackgroundResource(R.drawable.button_border_white);
+        speakerButton.setTextColor(AppUtil.getPrimaryThemColorAsInt());
         attendeeButton.setBackgroundResource(R.drawable.button_border);
 
         speakerButton.setOnClickListener(new View.OnClickListener() {

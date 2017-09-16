@@ -3,30 +3,22 @@ package com.ointerface.oconnect.activities;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.google.zxing.ResultPoint;
-import com.google.zxing.integration.android.IntentIntegrator;
 import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.CompoundBarcodeView;
 import com.ointerface.oconnect.R;
 import com.ointerface.oconnect.util.AppUtil;
 
-import java.io.IOException;
 import java.util.List;
 
 import static android.view.View.GONE;
@@ -43,7 +35,7 @@ public class QRCodeScannerActivity extends OConnectBaseActivity {
         tvToolbarTitle.setText("QR Code Reader");
 
         ivProfileLanyard.setVisibility(GONE);
-        ivHelp.setVisibility(GONE);
+        ivConnections.setVisibility(GONE);
         ivRightToolbarIcon.setVisibility(GONE);
         ivSearch.setVisibility(GONE);
 

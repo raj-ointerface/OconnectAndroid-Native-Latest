@@ -9,11 +9,8 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -23,9 +20,6 @@ import android.webkit.WebViewClient;
 
 import com.ointerface.oconnect.R;
 import com.ointerface.oconnect.util.AppUtil;
-import com.parse.ParseFile;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
 
 import static android.view.View.GONE;
 
@@ -49,7 +43,7 @@ public class WebViewActivity extends OConnectBaseActivity {
         super.onCreateDrawer();
 
         ivProfileLanyard.setVisibility(GONE);
-        ivHelp.setVisibility(View.GONE);
+        ivConnections.setVisibility(View.GONE);
         ivRightToolbarIcon.setVisibility(View.GONE);
         ivSearch.setVisibility(GONE);
 
@@ -59,7 +53,7 @@ public class WebViewActivity extends OConnectBaseActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
         if (isEventBriteRegistration == true || isSurvey == true) {
-            ivHelp.setVisibility(View.VISIBLE);
+            ivConnections.setVisibility(View.VISIBLE);
             ivRightToolbarIcon.setVisibility(View.VISIBLE);
 
             tvHeaderBack.setVisibility(GONE);

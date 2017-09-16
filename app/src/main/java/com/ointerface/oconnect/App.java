@@ -180,7 +180,7 @@ public class App extends MultiDexApplication implements ServiceConnection, Messa
 
         ParseTwitterUtils.initialize("0ZV9x1zOTs5nXcaFRS3eIengI", "zrsg7kCincIM0fqig4CJk0laliX5tUpsrSmgMyQdjqBcHhZtY4");
 
-        // generateHashkey();
+        generateHashkey();
     }
 
     public static void initSinchClient(String userID) {
@@ -298,8 +298,9 @@ public class App extends MultiDexApplication implements ServiceConnection, Messa
 
     public void generateHashkey(){
         try {
-            PackageInfo info = getPackageManager().getPackageInfo(
-                    "com.ointerface.oconnect",
+            Log.d("gnerating HashKey", "right now");
+            Log.d("app name is", getPackageName());
+            PackageInfo info = getPackageManager().getPackageInfo(getPackageName(),
                     PackageManager.GET_SIGNATURES);
             for (Signature signature : info.signatures) {
                 MessageDigest md = MessageDigest.getInstance("SHA");

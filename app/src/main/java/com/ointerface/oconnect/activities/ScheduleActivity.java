@@ -1,23 +1,18 @@
 package com.ointerface.oconnect.activities;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.text.format.DateUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
-import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -25,14 +20,11 @@ import android.widget.TextView;
 
 import com.ointerface.oconnect.App;
 import com.ointerface.oconnect.R;
-import com.ointerface.oconnect.adapters.DashboardEventListViewAdapter;
-import com.ointerface.oconnect.adapters.ScheduleExpandableListViewAdapter;
 import com.ointerface.oconnect.adapters.ScheduleSwipeListAdapter;
 import com.ointerface.oconnect.data.Event;
 import com.ointerface.oconnect.data.Session;
 import com.ointerface.oconnect.data.Speaker;
 import com.ointerface.oconnect.data.SpeakerEventCache;
-import com.ointerface.oconnect.fragments.EventDetailViewFragment;
 import com.ointerface.oconnect.fragments.OverlayDialogFragment;
 import com.ointerface.oconnect.util.AppConfig;
 import com.ointerface.oconnect.util.AppUtil;
@@ -43,7 +35,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.TimeZone;
 import java.util.TreeSet;
 
 import io.realm.Realm;
@@ -104,7 +95,7 @@ public class ScheduleActivity extends OConnectBaseActivity {
 
         ivSearch.setVisibility(GONE);
         ivProfileLanyard.setVisibility(View.VISIBLE);
-        ivHelp.setVisibility(View.VISIBLE);
+        ivConnections.setVisibility(View.VISIBLE);
 
         ivProfileLanyard.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -553,7 +544,7 @@ public class ScheduleActivity extends OConnectBaseActivity {
 
         Date currentScheduleDateNoTime = AppUtil.setTime(currentScheduleDate, 0, 0, 0, 0);
 
-        if (currentScheduleDateNoTime.compareTo(conferenceFirstDayNoTime) == 0) {
+        if (currentScheduleDateNoTime == null || currentScheduleDateNoTime.compareTo(conferenceFirstDayNoTime) == 0) {
             return;
         }
 
@@ -599,7 +590,7 @@ public class ScheduleActivity extends OConnectBaseActivity {
 
         Date currentScheduleDateNoTime = AppUtil.setTime(currentScheduleDate, 0, 0, 0, 0);
 
-        if (currentScheduleDateNoTime.compareTo(conferenceLastDayNoTime) == 0) {
+        if (currentScheduleDateNoTime == null || currentScheduleDateNoTime.compareTo(conferenceLastDayNoTime) == 0) {
             return;
         }
 

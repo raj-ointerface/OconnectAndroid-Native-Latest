@@ -3,22 +3,12 @@ package com.ointerface.oconnect.activities;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.ointerface.oconnect.App;
 import com.ointerface.oconnect.R;
-import com.ointerface.oconnect.data.Organization;
-import com.ointerface.oconnect.util.AppConfig;
-import com.ointerface.oconnect.util.AppUtil;
-
-import io.realm.Realm;
 
 import static android.view.View.GONE;
 
@@ -38,7 +28,7 @@ public class AboutUsActivity extends OConnectBaseActivity {
 
         ivProfileLanyard.setVisibility(GONE);
         ivSearch.setVisibility(GONE);
-        ivHelp.setVisibility(View.VISIBLE);
+        ivConnections.setVisibility(View.VISIBLE);
         ivRightToolbarIcon.setVisibility(View.VISIBLE);
 
         tvConferenceName = (TextView) findViewById(R.id.tvConferenceTitle);

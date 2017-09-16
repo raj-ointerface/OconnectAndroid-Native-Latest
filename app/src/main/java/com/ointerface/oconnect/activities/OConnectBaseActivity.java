@@ -1,7 +1,6 @@
 package com.ointerface.oconnect.activities;
 
 import android.app.Activity;
-import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.ComponentName;
 import android.content.Context;
@@ -10,24 +9,14 @@ import android.content.ServiceConnection;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Bundle;
-import android.os.Handler;
 import android.os.IBinder;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.widget.SearchView;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.DragEvent;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -59,11 +48,8 @@ import com.linkedin.platform.listeners.AuthListener;
 import com.linkedin.platform.utils.Scope;
 import com.ointerface.oconnect.App;
 import com.ointerface.oconnect.ConferenceListViewActivity;
-import com.ointerface.oconnect.CustomSplashActivity;
-import com.ointerface.oconnect.MainSplashActivity;
 import com.ointerface.oconnect.R;
 import com.ointerface.oconnect.adapters.NavExpandableListViewAdapter;
-import com.ointerface.oconnect.adapters.ScheduleSwipeListAdapter;
 import com.ointerface.oconnect.adapters.SearchExpandableListViewAdapter;
 import com.ointerface.oconnect.containers.MenuItemHolder;
 import com.ointerface.oconnect.data.Attendee;
@@ -71,16 +57,13 @@ import com.ointerface.oconnect.data.Conference;
 import com.ointerface.oconnect.data.DataSyncManager;
 import com.ointerface.oconnect.data.Event;
 import com.ointerface.oconnect.data.IDataSyncListener;
-import com.ointerface.oconnect.data.MasterNotification;
-import com.ointerface.oconnect.data.Organization;
 import com.ointerface.oconnect.data.Person;
 import com.ointerface.oconnect.data.Session;
 import com.ointerface.oconnect.data.SinchMessage;
 import com.ointerface.oconnect.data.Speaker;
 import com.ointerface.oconnect.data.SpeakerEventCache;
+import com.ointerface.oconnect.fragments.HelpViewPagerFragment;
 import com.ointerface.oconnect.fragments.SearchDialogFragment;
-import com.ointerface.oconnect.messaging.MessageAdapter;
-import com.ointerface.oconnect.messaging.MessagingActivity;
 import com.ointerface.oconnect.messaging.MessagingListActivity;
 import com.ointerface.oconnect.messaging.SinchService;
 import com.ointerface.oconnect.util.AppUtil;
@@ -103,7 +86,6 @@ import org.json.JSONObject;
 
 import java.io.InputStream;
 import java.net.URL;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -113,7 +95,6 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Realm;
-import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.RealmResults;
 import io.realm.Sort;
@@ -142,7 +123,7 @@ public class OConnectBaseActivity extends AppCompatActivity
 
     public ImageView ivProfileLanyard;
     public ImageView ivSearch;
-    public ImageView ivHelp;
+    public ImageView ivConnections;
     public CircleImageView ivRightToolbarIcon;
     public ImageView ivRightToolbarIconOverlay;
     public TextView tvToolbarTitle;
@@ -233,17 +214,22 @@ public class OConnectBaseActivity extends AppCompatActivity
 
         ivProfileLanyard.setVisibility(GONE);
 
-        ivHelp = (ImageView) toolbar.findViewById(R.id.ivQuestion);
+        ivConnections = (ImageView) toolbar.findViewById(R.id.ivConnections);
 
-        ivHelp.setOnClickListener(new View.OnClickListener() {
+        ivConnections.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(OConnectBaseActivity.this, ConnectionsActivity.class);
-                startActivity(i);
+                if(AppUtil.getIsSignedIn(OConnectBaseActivity.this)) {
+                    Intent i = new Intent(OConnectBaseActivity.this, ConnectionsActivity.class);
+                    startActivity(i);
+                }
+                else{
+                    AppUtil.displayPleaseSignInForConnectionsDialog(OConnectBaseActivity.this);
+                }
             }
         });
 
-        ivHelp.setVisibility(GONE);
+        ivConnections.setVisibility(GONE);
 
         ivRightToolbarIcon = (CircleImageView) toolbar.findViewById(R.id.ivRightToolbarPerson);
 
@@ -735,6 +721,10 @@ public class OConnectBaseActivity extends AppCompatActivity
                         i = new Intent(OConnectBaseActivity.this, ParticipantsActivity.class);
                         startActivity(i);
                         break;
+                    case R.drawable.icon_question_mark:
+                        i = new Intent(OConnectBaseActivity.this, HelpViewPagerActivity.class);
+                        startActivity(i);
+                        break;
                     case R.drawable.icon_survey:
                         i = new Intent(OConnectBaseActivity.this, WebViewActivity.class);
 
@@ -749,7 +739,6 @@ public class OConnectBaseActivity extends AppCompatActivity
                         i.putExtra("OPEN", "");
                         i.putExtra("isSurvey", true);
                         startActivity(i);
-
 
                         return false;
                         /*
@@ -1276,6 +1265,7 @@ public class OConnectBaseActivity extends AppCompatActivity
 
         section3.add(new MenuItemHolder(R.drawable.icon_about_us, "About Us"));
         section3.add(new MenuItemHolder(R.drawable.icon_refresh, "Refresh"));
+        section3.add(new MenuItemHolder(R.drawable.icon_question_mark, "Help"));
 
         listDataChild.put(listDataHeader.get(0), section1); // Header, Child data
         listDataChild.put(listDataHeader.get(1), section2);

@@ -1,24 +1,16 @@
 package com.ointerface.oconnect.activities;
 
 import android.app.ProgressDialog;
-import android.content.Context;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ListView;
 
 import com.ointerface.oconnect.App;
 import com.ointerface.oconnect.R;
 import com.ointerface.oconnect.adapters.MyAgendaListViewAdapter;
-import com.ointerface.oconnect.adapters.MyNotesListViewAdapter;
 import com.ointerface.oconnect.data.DataSyncManager;
 import com.ointerface.oconnect.data.Event;
 import com.ointerface.oconnect.data.IDataSyncListener;
-import com.ointerface.oconnect.data.MyNote;
 import com.ointerface.oconnect.util.AppUtil;
 
 import java.util.ArrayList;
@@ -27,7 +19,6 @@ import java.util.Comparator;
 
 import io.realm.Realm;
 import io.realm.RealmList;
-import io.realm.RealmResults;
 
 import static android.view.View.GONE;
 
@@ -45,7 +36,7 @@ public class MyAgendaActivity extends OConnectBaseActivity implements IDataSyncL
         tvToolbarTitle.setText("My Agenda");
 
         ivProfileLanyard.setVisibility(GONE);
-        ivHelp.setVisibility(View.VISIBLE);
+        ivConnections.setVisibility(View.VISIBLE);
         ivRightToolbarIcon.setVisibility(View.VISIBLE);
         ivSearch.setVisibility(GONE);
 

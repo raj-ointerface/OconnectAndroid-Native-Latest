@@ -4,19 +4,14 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.ointerface.oconnect.R;
-import com.ointerface.oconnect.fragments.EventDetailViewFragment;
 import com.ointerface.oconnect.fragments.SpeakerDetailViewFragment;
 import com.ointerface.oconnect.util.AppUtil;
 
@@ -45,7 +40,7 @@ public class SpeakerDetailViewActivity extends OConnectBaseActivity {
         tvToolbarTitle.setText("Speaker");
 
         ivProfileLanyard.setVisibility(GONE);
-        ivHelp.setVisibility(GONE);
+        ivConnections.setVisibility(GONE);
         ivRightToolbarIcon.setVisibility(GONE);
         ivSearch.setVisibility(GONE);
 

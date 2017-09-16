@@ -46,7 +46,6 @@
         android:layout_centerHorizontal="true"
         android:gravity="center_horizontal"
         android:textColor="@color/colorBlack"
-        android:text="Tony Doan"
         android:textSize="22sp"/>
     <Button
         android:id="@+id/btnConnections"
