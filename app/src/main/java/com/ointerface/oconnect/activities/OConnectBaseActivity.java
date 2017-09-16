@@ -62,6 +62,7 @@ import com.ointerface.oconnect.data.Session;
 import com.ointerface.oconnect.data.SinchMessage;
 import com.ointerface.oconnect.data.Speaker;
 import com.ointerface.oconnect.data.SpeakerEventCache;
+import com.ointerface.oconnect.fragments.HelpViewPagerFragment;
 import com.ointerface.oconnect.fragments.SearchDialogFragment;
 import com.ointerface.oconnect.messaging.MessagingListActivity;
 import com.ointerface.oconnect.messaging.SinchService;
@@ -720,6 +721,10 @@ public class OConnectBaseActivity extends AppCompatActivity
                         i = new Intent(OConnectBaseActivity.this, ParticipantsActivity.class);
                         startActivity(i);
                         break;
+                    case R.drawable.icon_question_mark:
+                        i = new Intent(OConnectBaseActivity.this, HelpViewPagerActivity.class);
+                        startActivity(i);
+                        break;
                     case R.drawable.icon_survey:
                         i = new Intent(OConnectBaseActivity.this, WebViewActivity.class);
 
@@ -734,7 +739,6 @@ public class OConnectBaseActivity extends AppCompatActivity
                         i.putExtra("OPEN", "");
                         i.putExtra("isSurvey", true);
                         startActivity(i);
-
 
                         return false;
                         /*
@@ -1261,6 +1265,7 @@ public class OConnectBaseActivity extends AppCompatActivity
 
         section3.add(new MenuItemHolder(R.drawable.icon_about_us, "About Us"));
         section3.add(new MenuItemHolder(R.drawable.icon_refresh, "Refresh"));
+        section3.add(new MenuItemHolder(R.drawable.icon_question_mark, "Help"));
 
         listDataChild.put(listDataHeader.get(0), section1); // Header, Child data
         listDataChild.put(listDataHeader.get(1), section2);
