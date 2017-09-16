@@ -18,7 +18,7 @@
     <ListView
         android:id="@+id/lvParticipants"
         android:layout_below="@+id/participantSearch"
-        android:layout_above="@+id/navigation"
+        android:layout_above="@+id/bottom_navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:divider="@null"

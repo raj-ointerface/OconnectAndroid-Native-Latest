@@ -21,8 +21,8 @@
     <string name="twitter_access_token">"4822480146-xgFzAYofW3RZm7dF7PIbHjis5uFjhv1idYi3PSx"</string>
     <string name="twitter_access_token_secret">"4W0dm73LrO36lo0O6hzsWBhn6NR4q0HujYs9d7YDyLFj5"</string>
 
-    <string name="linkedin_client_id">"86hewqau0kmyph"</string>
-    <string name="linkedin_client_secret">"GLw9CBwpzEmbOm5L"</string>
+    <string name="linkedin_client_id">"758xwl5qajsppp"</string>
+    <string name="linkedin_client_secret">"xQUq2PN5hyDlbQL8"</string>
 
     <!-- <string name="parse_server_url">http://stage.oconnectapp.com/api/parse</string> -->
     <string name="parse_client_key">qe62myjfXeXhlS2sYYRyFobYqQ5Bvs82FXuU3CsN</string>
