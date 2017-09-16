@@ -38,6 +38,7 @@ public class MainSplashActivity extends AppCompatActivity implements IDataSyncLi
 
         AppConfig config = realm.where(AppConfig.class).findFirst();
 
+        /*
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
@@ -48,6 +49,22 @@ public class MainSplashActivity extends AppCompatActivity implements IDataSyncLi
                 // startService(new Intent(MainSplashActivity.this, BackgroundService.class));
             }
         });
+        */
+
+        Thread thread = new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                try  {
+                    DataSyncManager.shouldSyncAll = true;
+                    DataSyncManager.beginDataSync(getApplicationContext(), MainSplashActivity.this);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        thread.start();
 
 
         if (config != null && config.getShowMainSplash() == false) {

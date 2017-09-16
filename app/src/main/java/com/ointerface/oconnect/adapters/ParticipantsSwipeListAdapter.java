@@ -42,6 +42,7 @@ import java.util.TreeSet;
 
 import io.realm.Realm;
 import io.realm.RealmList;
+import io.realm.RealmObject;
 import retrofit2.http.Url;
 
 import static android.view.View.GONE;
@@ -60,8 +61,12 @@ public class ParticipantsSwipeListAdapter extends BaseSwipeAdapter {
     public boolean showingSpeakers = true;
 
     public ArrayList<Speaker> mSpeakers = new ArrayList<Speaker>();
-    public ArrayList<Attendee> mAttendees = new ArrayList<Attendee>();
-    public ArrayList<Person> mPeople = new ArrayList<Person>();
+
+    // public ArrayList<Attendee> mAttendees = new ArrayList<Attendee>();
+
+    // public ArrayList<Person> mPeople = new ArrayList<Person>();
+
+    public ArrayList<RealmObject> mUsers = new ArrayList<RealmObject>();
 
     public TreeSet<Integer> hiddenPositionsByUser = new TreeSet<Integer>();
     public TreeSet<Integer> connectedPositionsByUser = new TreeSet<Integer>();
@@ -72,8 +77,11 @@ public class ParticipantsSwipeListAdapter extends BaseSwipeAdapter {
         this.context = context;
         this.activity = activity;
         this.mSpeakers = new ArrayList<Speaker>();
-        this.mAttendees = new ArrayList<Attendee>();
-        this.mPeople = new ArrayList<Person>();
+
+        // this.mAttendees = new ArrayList<Attendee>();
+        // this.mPeople = new ArrayList<Person>();
+
+        this.mUsers = new ArrayList<RealmObject>();
 
         hiddenPositionsByUser = new TreeSet<Integer>();
 
@@ -83,12 +91,19 @@ public class ParticipantsSwipeListAdapter extends BaseSwipeAdapter {
     public void addSpeaker(final Speaker item) {
         mSpeakers.add(item);
     }
+
+    /*
     public void addAttendee(final Attendee item) {
         mAttendees.add(item);
     }
 
     public void addPerson(final Person item) {
         mPeople.add(item);
+    }
+    */
+
+    public void addUser(final RealmObject item) {
+        mUsers.add(item);
     }
 
     @Override
@@ -97,7 +112,9 @@ public class ParticipantsSwipeListAdapter extends BaseSwipeAdapter {
             return mSpeakers.size();
         }
 
-        return mPeople.size() + mAttendees.size();
+        // return mPeople.size() + mAttendees.size();
+
+        return mUsers.size();
     }
 
     @Override
@@ -106,18 +123,36 @@ public class ParticipantsSwipeListAdapter extends BaseSwipeAdapter {
             return mSpeakers.get(position).getName();
         }
 
+        /*
         if (position >= mPeople.size()) {
             return mAttendees.get(position - mPeople.size()).getName();
         }
-        return mPeople.get(position).getFirstName();
+        */
+
+        RealmObject user = mUsers.get(position);
+
+        Attendee attendee = null;
+        Person person = null;
+
+        if (user instanceof Attendee) {
+            attendee = (Attendee) user;
+        } else if (user instanceof  Person) {
+            person = (Person) user;
+        }
+
+        if (attendee != null) {
+            return attendee.getName();
+        } else if (person != null) {
+            return person.getFirstName() + person.getLastName();
+        }
+
+        return "";
     }
 
     @Override
     public long getItemId(int position) {
         if (showingSpeakers == false) {
-            if (position >= mPeople.size()) {
-                return position - mPeople.size();
-            }
+            return position;
         }
         return position;
     }
@@ -332,13 +367,24 @@ public class ParticipantsSwipeListAdapter extends BaseSwipeAdapter {
 
             boolean bIsAttendee = false;
 
-            if (position >= mPeople.size()) {
+            RealmObject user = mUsers.get(position);
+
+            Attendee thisAttendee = null;
+            Person thisPerson = null;
+
+            if (user instanceof Attendee) {
+                thisAttendee = (Attendee) user;
+            } else if (user instanceof  Person) {
+                thisPerson = (Person) user;
+            }
+
+
+            if (thisAttendee != null) {
                 bIsAttendee = true;
-                position = position - mPeople.size();
             }
 
             if (bIsAttendee == true) {
-                final Attendee attendee = mAttendees.get(position);
+                final Attendee attendee = (Attendee) mUsers.get(position);
 
                 ImageView ivInfo = (ImageView) convertView.findViewById(R.id.ivParticipantJobTitle);
                 ImageView ivSuitcase = (ImageView) convertView.findViewById(R.id.ivParticipantOrg);
@@ -534,7 +580,7 @@ public class ParticipantsSwipeListAdapter extends BaseSwipeAdapter {
                     rlContent.setBackgroundResource(R.drawable.layout_background_rounded);
                 }
             } else {
-                final Person person = mPeople.get(position);
+                final Person person = (Person) mUsers.get(position);
 
                 ImageView ivInfo = (ImageView) convertView.findViewById(R.id.ivParticipantJobTitle);
                 ImageView ivSuitcase = (ImageView) convertView.findViewById(R.id.ivParticipantOrg);

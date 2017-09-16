@@ -2661,10 +2661,10 @@ public class DataSyncManager {
         try {
             date = isoFormat.parse(lastSyncDateStr);
 
-            Calendar cal =Calendar.getInstance();
-            cal.setTime(date);
-            cal.add(Calendar.HOUR_OF_DAY,12);
-            date = cal.getTime();
+            // Calendar cal =Calendar.getInstance();
+            // cal.setTime(date);
+            // cal.add(Calendar.HOUR_OF_DAY,12);
+            // date = cal.getTime();
         } catch (Exception ex) {
             Log.d("DataSyncManager", ex.getMessage());
         }

@@ -152,34 +152,23 @@ public class ParticipantsActivity extends OConnectBaseActivity {
                 } else {
                     AttendeeDetailViewActivity.mItems = new ArrayList<RealmObject>();
 
-                    if (adapter.mPeople.size() + adapter.mAttendees.size() < 11) {
-                        AttendeeDetailViewActivity.mItems.addAll(adapter.mPeople);
-                        AttendeeDetailViewActivity.mItems.addAll(adapter.mAttendees);
+                    if (adapter.mUsers.size() < 11) {
+                        AttendeeDetailViewActivity.mItems.addAll(adapter.mUsers);
                     } else {
                         int index = position;
 
                         int i = 0;
 
-                        if (position < adapter.mPeople.size()) {
-                            for (i = 0; i < 10 && index < adapter.mPeople.size(); ++i) {
-                                AttendeeDetailViewActivity.mItems.add(adapter.mPeople.get(index++));
+                        if (position < adapter.mUsers.size()) {
+                            for (i = 0; i < 10 && index < adapter.mUsers.size(); ++i) {
+                                AttendeeDetailViewActivity.mItems.add(adapter.mUsers.get(index++));
                             }
-                        }
-
-                        int newIndex = 0;
-
-                        if (index >= adapter.mPeople.size()) {
-                            newIndex = index - adapter.mPeople.size();
-                        }
-
-                        for (int j = 0; (i + j) < 10 && newIndex < adapter.mAttendees.size(); ++j) {
-                            AttendeeDetailViewActivity.mItems.add(adapter.mAttendees.get(newIndex++));
                         }
                     }
 
                     Intent i = new Intent(ParticipantsActivity.this, AttendeeDetailViewActivity.class);
 
-                    if (adapter.mPeople.size() + adapter.mAttendees.size() < 11) {
+                    if (adapter.mUsers.size() < 11) {
                         i.putExtra("ATTENDEE_NUMBER", position);
                     } else {
                         i.putExtra("ATTENDEE_NUMBER", 0);
@@ -383,7 +372,7 @@ public class ParticipantsActivity extends OConnectBaseActivity {
         attendeeResults = realm.where(Attendee.class).equalTo("conference", AppUtil.getSelectedConferenceID(ParticipantsActivity.this)).findAllSorted("name", Sort.ASCENDING);
 
         for (int i = 0; i < attendeeResults.size(); ++i) {
-            adapter.addAttendee(attendeeResults.get(i));
+            adapter.addUser(attendeeResults.get(i));
         }
 
         RealmList<Person> peopleList = OConnectBaseActivity.selectedConference.getPeople();
@@ -403,7 +392,7 @@ public class ParticipantsActivity extends OConnectBaseActivity {
             });
 
             for (int i = 0; i < peopleList.size(); ++i) {
-                adapter.addPerson(peopleList.get(i));
+                adapter.addUser(peopleList.get(i));
             }
         }
         realm.commitTransaction();
@@ -447,7 +436,7 @@ public class ParticipantsActivity extends OConnectBaseActivity {
 
             for (String value : searchArr) {
                 if (attendee.getName().toLowerCase().contains(value)) {
-                    adapter.addAttendee(attendee);
+                    adapter.addUser(attendee);
                     break;
                 }
             }
@@ -463,7 +452,7 @@ public class ParticipantsActivity extends OConnectBaseActivity {
                     if (person.getFirstName() != null && person.getLastName() != null) {
                         if (person.getFirstName().toLowerCase().contains(value) ||
                                 person.getLastName().toLowerCase().contains(value)) {
-                            adapter.addPerson(person);
+                            adapter.addUser(person);
                             break;
                         }
                     }

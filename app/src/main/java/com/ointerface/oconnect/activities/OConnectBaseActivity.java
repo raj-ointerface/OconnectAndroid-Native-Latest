@@ -1394,6 +1394,21 @@ public class OConnectBaseActivity extends AppCompatActivity
     @Override
     public void onResume() {
         super.onResume();
+
+        if (currentPerson == null) {
+            ivRightToolbarIconOverlay.setVisibility(GONE);
+            viewRedDot.setVisibility(GONE);
+        } else {
+            int messageCount = getUnreadMessagesCount(currentPerson.getObjectId());
+
+            if (messageCount > 0) {
+                ivRightToolbarIconOverlay.setVisibility(View.VISIBLE);
+                viewRedDot.setVisibility(View.VISIBLE);
+            } else {
+                ivRightToolbarIconOverlay.setVisibility(GONE);
+                viewRedDot.setVisibility(GONE);
+            }
+        }
     }
 
     @Override
