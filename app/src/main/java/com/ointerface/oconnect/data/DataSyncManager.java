@@ -2671,6 +2671,7 @@ public class DataSyncManager {
     }
 
     static public Date getLastSyncDate() {
+
         SharedPreferences prefs = context.getSharedPreferences(AppConfig.sharedPrefsName, MODE_PRIVATE);
         String lastSyncDateStr = prefs.getString(AppConfig.lastSyncDateName, "2017-09-11T20:00:00");
 
@@ -2680,11 +2681,6 @@ public class DataSyncManager {
         Date date = null;
         try {
             date = isoFormat.parse(lastSyncDateStr);
-
-            Calendar cal =Calendar.getInstance();
-            cal.setTime(date);
-            cal.add(Calendar.HOUR_OF_DAY,12);
-            date = cal.getTime();
         } catch (Exception ex) {
             Log.d("DataSyncManager", ex.getMessage());
         }
