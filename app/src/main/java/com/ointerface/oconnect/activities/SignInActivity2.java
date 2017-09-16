@@ -429,7 +429,9 @@ public class SignInActivity2 extends AppCompatActivity {
             public void onAuthError(LIAuthError error) {
                 // Handle authentication errors
                 Log.d("APD", "APD " + error.toString());
-                dialog.dismiss();
+                if (dialog != null) {
+                    dialog.dismiss();
+                }
             }
         }, false);
     }
