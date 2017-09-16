@@ -59,6 +59,7 @@ import com.parse.ParseUser;
 import com.parse.RequestPasswordResetCallback;
 import org.apache.http.NameValuePair;
 import com.parse.SaveCallback;
+import com.parse.SignUpCallback;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
 import com.twitter.sdk.android.core.TwitterException;
@@ -371,6 +372,7 @@ public class SignInActivity2 extends AppCompatActivity {
                                         user.put("firstName", finalFirstName);
                                         user.put("lastName", finalLastName);
 
+                                        /*
                                         user.saveInBackground(new SaveCallback() {
                                             @Override
                                             public void done(ParseException e) {
@@ -384,6 +386,24 @@ public class SignInActivity2 extends AppCompatActivity {
                                                 addPersonToConference(user);
 
                                                 executePINPromptWorkflow(user);
+                                            }
+                                        });
+                                        */
+
+                                        user.signUpInBackground(new SignUpCallback() {
+                                            public void done(ParseException e) {
+                                                if (e == null) {
+                                                    new LinkedInImportTask().execute(user.getObjectId(), token);
+
+                                                    AppUtil.setIsSignedIn(SignInActivity2.this, true);
+                                                    AppUtil.setSignedInUserID(SignInActivity2.this, user.getObjectId());
+
+                                                    OConnectBaseActivity.currentPerson = Person.saveFromParseUser(user, false);
+
+                                                    addPersonToConference(user);
+
+                                                    executePINPromptWorkflow(user);
+                                                }
                                             }
                                         });
 
