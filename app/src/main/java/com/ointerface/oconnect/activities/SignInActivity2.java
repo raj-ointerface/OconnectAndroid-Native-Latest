@@ -331,7 +331,20 @@ public class SignInActivity2 extends AppCompatActivity {
                         final String finalFirstName = firstName;
                         final String finalLastName = lastName;
 
-                        final String token = LISessionManager.getInstance(getApplicationContext()).getSession().getAccessToken().toString();
+                        final String tokenJSON = LISessionManager.getInstance(getApplicationContext()).getSession().getAccessToken().toString();
+
+                        String tempToken = "";
+                        try {
+                            JSONObject jsonObject = new JSONObject(tokenJSON);
+
+                            if (jsonObject.has("accessTokenValue")) {
+                                tempToken = jsonObject.getString("accessTokenValue");
+                            }
+                        } catch (Exception ex){
+                            Log.d("APD", ex.getMessage());
+                        }
+
+                        final String token = tempToken;
 
                         ParseQuery<ParseUser> query = ParseUser.getQuery();
                         query.whereEqualTo("username", emailAddress);
@@ -357,6 +370,7 @@ public class SignInActivity2 extends AppCompatActivity {
 
                                         parseUser = user;
 
+                                        /*
                                         AppUtil.setIsSignedIn(SignInActivity2.this, true);
                                         AppUtil.setSignedInUserID(SignInActivity2.this, parseUser.getObjectId());
 
@@ -365,6 +379,7 @@ public class SignInActivity2 extends AppCompatActivity {
                                         addPersonToConference(parseUser);
 
                                         executePINPromptWorkflow(parseUser);
+                                        */
                                     } else {
                                         final ParseUser user = new ParseUser();
 
