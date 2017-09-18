@@ -164,7 +164,8 @@ public class ConnectionsActivity extends OConnectBaseActivity {
         }
 
         if (!AppUtil.getSurveyShown(this)) {
-            AppUtil.displaySurveyOption(this);
+            CustomDialog dialog = new CustomDialog();
+            dialog.showDialog(this);
         }
     }
 

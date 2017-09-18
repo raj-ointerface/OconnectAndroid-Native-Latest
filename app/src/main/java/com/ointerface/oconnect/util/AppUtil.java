@@ -22,10 +22,13 @@ import android.text.InputType;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.ointerface.oconnect.App;
 import com.ointerface.oconnect.ConferenceListViewActivity;
@@ -398,38 +401,6 @@ public class AppUtil {
         alertDialog.show();
     }
 
-    public static void displaySurveyOption(final Context context) {
-        final AlertDialog alertDialog = new AlertDialog.Builder(context).create();
-        alertDialog.setTitle("Make Better Connections");
-        alertDialog.setMessage("Would you like to connect with others at this event?");
-
-
-        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, context.getResources().getString(R.string.label_dont_show_again),
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        setSurveyShown(context, true);
-                        alertDialog.dismiss();
-                    }
-                });
-
-        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "No Thanks",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        alertDialog.dismiss();
-                    }
-                });
-
-        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Start",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        AppUtil.setSurveyShown(context, true);
-                        Intent i = new Intent(context, AnalyticsSurveyActivity.class);
-                        context.startActivity(i);
-                    }
-                });
-
-        alertDialog.show();
-    }
 
     static public boolean getDefaultRealmLoaded (Context context) {
         SharedPreferences prefs = context.getSharedPreferences(AppConfig.sharedPrefsName, MODE_PRIVATE);

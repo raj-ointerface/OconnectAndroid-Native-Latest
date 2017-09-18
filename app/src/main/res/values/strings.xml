@@ -104,4 +104,8 @@
     <string name="title_activity_discussion_board">DiscussionBoardActivity</string>
     <string name="speaker">Speaker</string>
     <string name="attendees">Attendees</string>
+    <string name="make_better_connections_msg">Help Us Help You Connect Better With Other Attendees...</string>
+    <string name="dont_ask_me_again">Don\'t Ask Me Again</string>
+    <string name="start">Start</string>
+    <string name="make_better_connections">Make Better Connections</string>
 </resources>

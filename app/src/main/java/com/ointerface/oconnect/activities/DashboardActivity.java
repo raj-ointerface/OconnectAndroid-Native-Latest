@@ -189,8 +189,9 @@ public class DashboardActivity extends OConnectBaseActivity {
             }
         }
 
-        if (!AppUtil.getSurveyShown(this)) {
-            AppUtil.displaySurveyOption(this);
+        if (!AppUtil.getSurveyShown(this) && AppUtil.getIsSignedIn(this)) {
+            CustomDialog dialog = new CustomDialog();
+            dialog.showDialog(this);
         }
     }
 
