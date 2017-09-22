@@ -56,6 +56,13 @@
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
 
+        <activity android:name="com.facebook.FacebookActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:theme="@style/FullyTranslucent"
+            tools:replace="android:theme"
+            android:label="@string/app_name" />
+
+
         <activity
             android:name=".MainSplashActivity"
             android:screenOrientation="portrait"
@@ -222,6 +229,7 @@
             android:label="@string/title_activity_analytics_survey"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+
 
         <service android:name=".messaging.SinchService" />
 
