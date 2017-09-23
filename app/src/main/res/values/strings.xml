@@ -109,4 +109,5 @@
     <string name="dont_ask_me_again">Don\'t Ask Me Again</string>
     <string name="start">Start</string>
     <string name="make_better_connections">Make Better Connections</string>
+    <string name="cancel">Cancel</string>
 </resources>

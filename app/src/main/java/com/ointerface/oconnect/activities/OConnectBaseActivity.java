@@ -49,6 +49,7 @@ import com.linkedin.platform.utils.Scope;
 import com.ointerface.oconnect.App;
 import com.ointerface.oconnect.ConferenceListViewActivity;
 import com.ointerface.oconnect.R;
+import com.ointerface.oconnect.adapters.DashboardEventListViewAdapter;
 import com.ointerface.oconnect.adapters.NavExpandableListViewAdapter;
 import com.ointerface.oconnect.adapters.SearchExpandableListViewAdapter;
 import com.ointerface.oconnect.containers.MenuItemHolder;

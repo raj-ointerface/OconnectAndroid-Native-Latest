@@ -71,86 +71,69 @@ public class ConferenceListViewActivity extends AppCompatActivity {
 
     static public int customColor = AppUtil.getPrimaryThemColorAsInt();
 
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
-
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-
-            int marginPx = AppUtil.convertDPToPXInt(ConferenceListViewActivity.this, 3);
-
-            BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
-
-            navigation.setBackgroundColor(AppConfig.whiteColor);
-
-            View view1 = navigation.findViewById(R.id.navigation_coming_soon);
-
-            RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-
-            // RelativeLayout.LayoutParams lp = (ViewGroup.LayoutParams) view1.getLayoutParams();
-
-            lp.setMargins(marginPx, marginPx, marginPx, marginPx);
-
-            view1.setLayoutParams(lp);
-
-            view1.requestLayout();
-
-            View view2 = navigation.findViewById(R.id.navigation_all_upcoming);
-
-            // LinearLayout.LayoutParams lp2 = (LinearLayout.LayoutParams) view2.getLayoutParams();
-            // lp2.setMargins(marginPx, marginPx, marginPx, marginPx);
-
-            view2.setLayoutParams(lp);
-
-            view2.requestLayout();
-
-            View view3 = navigation.findViewById(R.id.navigation_past);
-
-            // LinearLayout.LayoutParams lp3 = (LinearLayout.LayoutParams) view3.getLayoutParams();
-            // lp3.setMargins(marginPx, marginPx, marginPx, marginPx);
-
-            view3.setLayoutParams(lp);
-
-            view3.requestLayout();
-
-            switch (item.getItemId()) {
-                case R.id.navigation_coming_soon:
-                    view1.setBackgroundColor(AppConfig.lightGreyColor);
-
-                    view2.setBackgroundColor(customColor);
-
-                    view3.setBackgroundColor(customColor);
-
-                    displayComingSoon();
-                    return true;
-                case R.id.navigation_all_upcoming:
-                    view1.setBackgroundColor(customColor);
-
-                    view2.setBackgroundColor(AppConfig.lightGreyColor);
-
-                    view3.setBackgroundColor(customColor);
-
-                    displayAllUpcoming();
-                    return true;
-                case R.id.navigation_past:
-                    view1.setBackgroundColor(customColor);
-
-                    view2.setBackgroundColor(customColor);
-
-                    view3.setBackgroundColor(AppConfig.lightGreyColor);
-
-                    displayPast();
-                    return true;
-            }
-            return false;
-        }
-
-    };
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_conference_list_view);
+
+        final TextView comingSoon = (TextView) findViewById(R.id.coming_soon_btn);
+        final TextView allUpcoming = (TextView) findViewById(R.id.all_upcoming_btn);
+        final TextView past = (TextView) findViewById(R.id.past_btn);
+
+        comingSoon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                comingSoon.setBackgroundColor(AppConfig.lightGreyColor);
+                comingSoon.setTextColor(customColor);
+
+                allUpcoming.setBackgroundColor(customColor);
+                allUpcoming.setTextColor(AppConfig.whiteColor);
+
+                past.setBackgroundColor(customColor);
+                past.setTextColor(AppConfig.whiteColor);
+
+                displayComingSoon();
+            }
+        });
+
+        allUpcoming.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                comingSoon.setBackgroundColor(customColor);
+                comingSoon.setTextColor(AppConfig.whiteColor);
+
+                allUpcoming.setBackgroundColor(AppConfig.lightGreyColor);
+                allUpcoming.setTextColor(customColor);
+
+                past.setBackgroundColor(customColor);
+                past.setTextColor(AppConfig.whiteColor);
+
+                displayAllUpcoming();
+            }
+        });
+
+        past.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                comingSoon.setBackgroundColor(customColor);
+                comingSoon.setTextColor(AppConfig.whiteColor);
+
+                allUpcoming.setBackgroundColor(customColor);
+                allUpcoming.setTextColor(AppConfig.whiteColor);
+
+                past.setBackgroundColor(AppConfig.lightGreyColor);
+                past.setTextColor(customColor);
+
+                displayPast();
+            }
+        });
+
+
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         myToolbar.setBackgroundColor(AppConfig.defaultThemeColor);
@@ -268,58 +251,6 @@ public class ConferenceListViewActivity extends AppCompatActivity {
             }
         });
 
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-
-        // navigation.setBackgroundColor(AppUtil.getPrimaryThemColorAsInt());
-
-        int[][] states = new int[][] {
-                new int[] { android.R.attr.state_enabled}, // enabled
-                new int[] {-android.R.attr.state_enabled}, // disabled
-                new int[] { android.R.attr.state_checked}, // unchecked
-                new int[] { android.R.attr.state_pressed},  // pressed
-                new int[] { android.R.attr.state_selected}  // selected
-        };
-
-        int[] colors = new int[] {
-                Color.WHITE,
-                Color.WHITE,
-                Color.WHITE,
-                Color.WHITE,
-                Color.WHITE
-        };
-
-        ColorStateList colorStateList = new ColorStateList(states, colors);
-
-        navigation.setItemTextColor(colorStateList);
-
-        View view1 = navigation.findViewById(R.id.navigation_coming_soon);
-
-        view1.setPadding(0,0,0,30);
-
-        LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-
-        params1.setMargins(0, 0, AppUtil.convertDPToPXInt(this, 3), 0);
-
-        view1.setLayoutParams(params1);
-
-        view1.requestLayout();
-
-        View view2 = navigation.findViewById(R.id.navigation_all_upcoming);
-
-        view2.setPadding(0,0,0,30);
-
-        View view3 = navigation.findViewById(R.id.navigation_past);
-
-        view3.setPadding(0,0,0,30);
-
-        LinearLayout.LayoutParams params3 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-
-        params3.setMargins(AppUtil.convertDPToPXInt(this, 3), 0, 0, 0);
-
-        view3.setLayoutParams(params3);
-
-        view3.requestLayout();
 
         search = (SearchView) findViewById(R.id.search);
 
@@ -434,7 +365,15 @@ public class ConferenceListViewActivity extends AppCompatActivity {
             }
         }
 
-        navigation.setSelectedItemId(R.id.navigation_coming_soon);
+        comingSoon.setBackgroundColor(AppConfig.lightGreyColor);
+        comingSoon.setTextColor(customColor);
+
+        allUpcoming.setBackgroundColor(customColor);
+        allUpcoming.setTextColor(AppConfig.whiteColor);
+
+        past.setBackgroundColor(customColor);
+        past.setTextColor(AppConfig.whiteColor);
+
         displayComingSoon();
     }
 
