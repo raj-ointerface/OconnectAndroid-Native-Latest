@@ -1355,6 +1355,9 @@ public class OConnectBaseActivity extends AppCompatActivity
         AppUtil.setIsSignedIn(OConnectBaseActivity.this, false);
         drawer.closeDrawer(navigationViewRight);
 
+        ivRightToolbarIcon.setImageBitmap(null);
+        ivRightToolbarIcon.setImageResource(R.drawable.ic_person);
+
         if (AppUtil.getIsSignedIn(OConnectBaseActivity.this) == false) {
             drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, navigationViewRight);
         } else {

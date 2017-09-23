@@ -26,6 +26,8 @@ import android.widget.Toast;
 
 import com.facebook.AccessToken;
 import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
 import com.linkedin.platform.APIHelper;
 import com.linkedin.platform.LISessionManager;
 import com.linkedin.platform.errors.LIApiError;
@@ -251,17 +253,60 @@ public class SignInActivity2 extends AppCompatActivity {
                                 user.saveInBackground();
                             }
 
+                            final ParseUser finalUser = user;
+
                             AppUtil.setFacebookLoggedIn(SignInActivity2.this, true);
                             AppUtil.setIsSignedIn(SignInActivity2.this, true);
                             AppUtil.setSignedInUserID(SignInActivity2.this, user.getObjectId());
 
-                            OConnectBaseActivity.currentPerson = Person.saveFromParseUser(user, false);
+                            GraphRequest.GraphJSONObjectCallback mCallback = new GraphRequest.GraphJSONObjectCallback()
+                            {
+                                @Override
+                                public void onCompleted(JSONObject mData, GraphResponse mResponse)
+                                {
+                                    if(mResponse.getError() == null)
+                                    {
+                                        try
+                                        {
+                                            final JSONObject mPicture = mData.getJSONObject("picture");
+                                            final JSONObject mPictureData = mPicture.getJSONObject("data");
 
-                            addPersonToConference(user);
+                                            // final boolean mSilhouette = mPictureData.getBoolean("is_silhouette");
 
-                            callFacebookImportAPI(user);
 
-                            executePINPromptWorkflow(user);
+                                            final String mImageUrl = mPictureData.getString("url");
+
+                                            // finalUser.put("pictureURL", mImageUrl);
+
+                                            OConnectBaseActivity.currentPerson = Person.saveFromParseUser(finalUser, false);
+
+                                            Realm realm = AppUtil.getRealmInstance(SignInActivity2.this);
+
+                                            realm.beginTransaction();
+                                            OConnectBaseActivity.currentPerson.setPictureURL(mImageUrl);
+                                            realm.commitTransaction();
+
+                                            addPersonToConference(finalUser);
+
+                                            callFacebookImportAPI(finalUser);
+
+                                            executePINPromptWorkflow(finalUser);
+                                        } catch (JSONException e)
+                                        {
+
+                                        }
+                                    }
+                                }
+                            };
+
+                            Bundle mBundle = new Bundle();
+                            mBundle.putString("fields", "picture");
+
+                            GraphRequest mGetUserRequest = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(), mCallback);
+                            mGetUserRequest.setParameters(mBundle);
+
+                            mGetUserRequest.executeAndWait();
+
                         }
                     }
 
@@ -373,53 +418,104 @@ public class SignInActivity2 extends AppCompatActivity {
 
                         ParseQuery<ParseUser> query = ParseUser.getQuery();
                         query.whereEqualTo("username", emailAddress);
+                        //TODO
                         try{
                             List<ParseUser> objects = query.find();
 
-                            ParseUser parseUser = null;
+                            ParseUser parseUserTemp = null;
 
                             //if parse user already exists
                             if (objects.size() > 0) {
-                                final ParseUser user = objects.get(0);
+                                final ParseUser existingUser = objects.get(0);
+                                    existingUser.logInInBackground(emailAddress, emailAddress, new LogInCallback() {
+                                        @Override
+                                        public void done(ParseUser user, ParseException e) {
+                                            if (e == null) {
+                                                final ParseUser parseUser = user;
 
-                                user.setUsername(finalEmailAddress);
-                                user.setEmail(finalEmailAddress);
-                                user.setPassword(finalEmailAddress);
-                                user.put("firstName", finalFirstName);
-                                user.put("lastName", finalLastName);
+                                                parseUser.setUsername(finalEmailAddress);
+                                                parseUser.setEmail(finalEmailAddress);
+                                                parseUser.setPassword(finalEmailAddress);
+                                                parseUser.put("firstName", finalFirstName);
+                                                parseUser.put("lastName", finalLastName);
+                                                parseUser.put("pictureURL", finalPictureUrl);
+                                                parseUser.put("userType", "app");
+                                                parseUser.put("bio", finalSummary);
+                                                try{
+                                                    parseUser.put("location",finalLocation.getString("name"));
+                                                }catch(Exception jsonException){
+                                                    Log.d("parsingLocation1", jsonException.getLocalizedMessage());
+                                                }
 
+                                                parseUser.saveInBackground(new SaveCallback() {
+                                                    @Override
+                                                    public void done(ParseException e) {
+                                                        if (e == null) {
+                                                            //new LinkedInImportTask().execute(user.getObjectId(), token);
+                                                            //TODO
+                                                            //do this if the user already exists in the LinkedInData Table
+                                                            ParseQuery<ParseObject> query = ParseQuery.getQuery("LinkedInData");
+                                                            query.whereEqualTo("ocUser", parseUser.getObjectId());
+                                                            query.findInBackground(new FindCallback<ParseObject>() {
+                                                                @Override
+                                                                public void done(List<ParseObject> objects, ParseException e) {
+                                                                    if (e == null){
+                                                                        if(objects.size() > 0) {
+                                                                            ParseObject linkedInDataObject = objects.get(0);
+                                                                            linkedInDataObject.put("location", finalLocation);
+                                                                            linkedInDataObject.put("avatar", finalPictureUrl);
+                                                                            linkedInDataObject.put("summary", finalSummary);
+                                                                            linkedInDataObject.put("ocUser", parseUser.getObjectId());
+                                                                            linkedInDataObject.put("linkedInId", finalId);
+                                                                            linkedInDataObject.put("lastName", finalLastName);
+                                                                            linkedInDataObject.put("firstName", finalFirstName);
+                                                                            linkedInDataObject.put("email", finalEmailAddress);
 
-                                user.saveInBackground(new SaveCallback() {
-                                    @Override
-                                    public void done(ParseException e) {
-                                        if(e == null) {
-                                            //new LinkedInImportTask().execute(user.getObjectId(), token);
-                                            //TODO
-                                            ParseObject linkedInDataObject = new ParseObject("LinkedInData");
+                                                                            try {
+                                                                                linkedInDataObject.saveInBackground();
+                                                                            } catch (Exception exception) {
+                                                                                Log.d("linkedInDataObject", exception.getLocalizedMessage());
+                                                                            }
+                                                                        } else{
+                                                                            //this is only executed if the user does not exists in the LinkedInData Table
+                                                                            ParseObject linkedInDataObject = new ParseObject("LinkedInData");
 
-                                            linkedInDataObject.put("location", finalLocation);
-                                            linkedInDataObject.put("pictureUrl", finalPictureUrl);
-                                            linkedInDataObject.put("summary", finalSummary);
-                                            linkedInDataObject.put("ocUser", user.getObjectId());
+                                                                            linkedInDataObject.put("location", finalLocation);
+                                                                            linkedInDataObject.put("avatar", finalPictureUrl);
+                                                                            linkedInDataObject.put("summary", finalSummary);
+                                                                            linkedInDataObject.put("ocUser", parseUser.getObjectId());
+                                                                            linkedInDataObject.put("linkedInId", finalId);
+                                                                            linkedInDataObject.put("lastName", finalLastName);
+                                                                            linkedInDataObject.put("firstName", finalFirstName);
+                                                                            linkedInDataObject.put("email", finalEmailAddress);
 
-                                            AppUtil.setIsSignedIn(SignInActivity2.this, true);
-                                            AppUtil.setSignedInUserID(SignInActivity2.this, user.getObjectId());
+                                                                            try {
+                                                                                linkedInDataObject.saveInBackground();
+                                                                            } catch (Exception exception) {
+                                                                                Log.d("linkedInDataObject", exception.getLocalizedMessage());
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            });
+                                                        } else {
+                                                            Log.d("linkedInLogin1", e.getLocalizedMessage());
+                                                        }
 
-                                            OConnectBaseActivity.currentPerson = Person.saveFromParseUser(user, false);
+                                                    }
+                                                });
 
-                                            addPersonToConference(user);
+                                                AppUtil.setIsSignedIn(SignInActivity2.this, true);
+                                                AppUtil.setSignedInUserID(SignInActivity2.this, parseUser.getObjectId());
 
-                                            executePINPromptWorkflow(user);
+                                                OConnectBaseActivity.currentPerson = Person.saveFromParseUser(parseUser, false);
+
+                                                addPersonToConference(parseUser);
+
+                                                executePINPromptWorkflow(parseUser);
+                                            }
                                         }
-                                        else{
-                                            Log.d("linkedInLogin", e.getLocalizedMessage());
-                                        }
-
-                                    }
-                                });
-
-                                parseUser = user;
-
+                                    });
                             }
                             //if the parse user is new
                             else {
@@ -430,46 +526,54 @@ public class SignInActivity2 extends AppCompatActivity {
                                 user.setEmail(finalEmailAddress);
                                 user.put("firstName", finalFirstName);
                                 user.put("lastName", finalLastName);
-
+                                user.put("pictureURL", finalPictureUrl);
+                                user.put("userType", "app");
+                                user.put("bio", finalSummary);
+                                try{
+                                    user.put("location",finalLocation.getString("name"));
+                                }catch(Exception jsonException){
+                                    Log.d("parsingLocation", jsonException.getLocalizedMessage());
+                                }
 
                                 user.signUpInBackground(new SignUpCallback() {
                                     public void done(ParseException e) {
                                         if (e == null) {
                                             //new LinkedInImportTask().execute(user.getObjectId(), token);
 
+                                            //new LinkedInImportTask().execute(user.getObjectId(), token);
                                             //TODO
                                             ParseObject linkedInDataObject = new ParseObject("LinkedInData");
 
                                             linkedInDataObject.put("location", finalLocation);
-                                            linkedInDataObject.put("pictureUrl", finalPictureUrl);
+                                            linkedInDataObject.put("avatar", finalPictureUrl);
                                             linkedInDataObject.put("summary", finalSummary);
                                             linkedInDataObject.put("ocUser", user.getObjectId());
+                                            linkedInDataObject.put("linkedInId", finalId);
+                                            linkedInDataObject.put("lastName", finalLastName);
+                                            linkedInDataObject.put("firstName", finalFirstName);
+                                            linkedInDataObject.put("email", finalEmailAddress);
 
-                                            AppUtil.setIsSignedIn(SignInActivity2.this, true);
-                                            AppUtil.setSignedInUserID(SignInActivity2.this, user.getObjectId());
-
-                                            OConnectBaseActivity.currentPerson = Person.saveFromParseUser(user, false);
-
-                                            addPersonToConference(user);
-
-                                            executePINPromptWorkflow(user);
+                                            try {
+                                                linkedInDataObject.saveInBackground();
+                                            } catch (Exception exception) {
+                                                Log.d("linkedInDataObject", exception.getLocalizedMessage());
+                                            }
                                         }
-                                        else{
-                                            Log.d("linkedInLogin", e.getLocalizedMessage());
-                                        }
+
+                                        AppUtil.setIsSignedIn(SignInActivity2.this, true);
+                                        AppUtil.setSignedInUserID(SignInActivity2.this, user.getObjectId());
+
+                                        OConnectBaseActivity.currentPerson = Person.saveFromParseUser(user, false);
+
+                                        addPersonToConference(user);
+
+                                        executePINPromptWorkflow(user);
                                     }
                                 });
-
-                                parseUser = user;
                             }
                         }catch(Exception e){
-                            Log.d("GS", e.getLocalizedMessage());
+                            Log.d("tryBlock", e.getLocalizedMessage());
                         }
-
-
-
-                        dialog.dismiss();
-
                     }
 
                     @Override
@@ -491,6 +595,7 @@ public class SignInActivity2 extends AppCompatActivity {
             }
         }, false);
     }
+
 
     // Build the list of member permissions our LinkedIn session requires
     private static Scope buildScope() {
