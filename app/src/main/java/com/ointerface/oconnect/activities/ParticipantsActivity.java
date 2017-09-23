@@ -524,7 +524,7 @@ public class ParticipantsActivity extends OConnectBaseActivity {
 
                 // Log.d("APD", "Comparing: " + attendee1.getName() + " : " + attendee2.getName());
 
-                return attendee1.getName().compareTo(attendee2.getName());
+                return attendee1.getName().toLowerCase().compareTo(attendee2.getName().toLowerCase());
             } else if (attendee1 != null && person2 != null) {
                 if (attendee1.getName() == null || person2.getFirstName() == null) {
                     return 0;
@@ -532,7 +532,7 @@ public class ParticipantsActivity extends OConnectBaseActivity {
 
                 Log.d("APD", "Comparing: " + attendee1.getName() + " : " + person2.getFirstName());
 
-                return attendee1.getName().compareTo(person2.getFirstName());
+                return attendee1.getName().toLowerCase().compareTo(person2.getFirstName().toLowerCase());
             } else if (person1 != null && person2 != null) {
                 if (person1.getFirstName() == null || person2.getFirstName() == null) {
                     return 0;
@@ -548,7 +548,7 @@ public class ParticipantsActivity extends OConnectBaseActivity {
 
                 Log.d("APD", "Comparing: " + person1.getFirstName() + " : " + attendee2.getName());
 
-                return person1.getFirstName().compareTo(attendee2.getName());
+                return person1.getFirstName().toLowerCase().compareTo(attendee2.getName().toLowerCase());
             }
         }
     }
