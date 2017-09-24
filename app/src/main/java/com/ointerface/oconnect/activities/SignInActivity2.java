@@ -116,6 +116,7 @@ public class SignInActivity2 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         dialog = new ProgressDialog(this);
         dialog.setMessage("Initializing Data ... Please wait.");
+        dialog.setCancelable(false);
 
 
         // FacebookSdk.sdkInitialize(this);

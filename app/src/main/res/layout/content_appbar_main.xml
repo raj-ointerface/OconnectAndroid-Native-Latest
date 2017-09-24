@@ -50,8 +50,9 @@
                 android:id="@+id/ivConnections"
                 android:layout_toLeftOf="@+id/flRightToolbarPerson"
                 android:layout_marginRight="15dp"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginTop="5dp"
                 android:scaleType="fitCenter"
                 android:background="@drawable/icon_star_filled"/>
             <ImageView
