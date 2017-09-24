@@ -70,6 +70,16 @@ public class MapsListActivity extends OConnectBaseActivity {
                 startActivity(i);
             }
         });
+
+        if (mapResults.size() <= 1) {
+            Maps map = mapResults.get(0);
+
+            Intent i = new Intent(MapsListActivity.this, MapActivity.class);
+
+            i.putExtra("objectId", map.getObjectId());
+
+            startActivity(i);
+        }
     }
 
 }

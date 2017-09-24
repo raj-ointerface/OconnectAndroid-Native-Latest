@@ -194,6 +194,10 @@ public class SpeakerDetailExpandableListViewAdapter extends BaseExpandableListAd
                 @Override
                 public void onClick(View v) {
                     try {
+                        if (AppUtil.getIsSignedIn(_context) == false) {
+                            AppUtil.displayPleaseSignInDialog(_context);
+                            return;
+                        }
                         Person user = realm.where(Person.class).equalTo("objectId", speaker.getUserLink()).findFirst();
 
                         if (user != null) {
@@ -216,6 +220,10 @@ public class SpeakerDetailExpandableListViewAdapter extends BaseExpandableListAd
                 @Override
                 public void onClick(View v) {
                     try {
+                        if (AppUtil.getIsSignedIn(_context) == false) {
+                            AppUtil.displayPleaseSignInDialog(_context);
+                            return;
+                        }
                         Person user = realm.where(Person.class).equalTo("objectId", speaker.getUserLink()).findFirst();
 
                         if (user != null) {
@@ -260,6 +268,10 @@ public class SpeakerDetailExpandableListViewAdapter extends BaseExpandableListAd
             tvAddNote.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if (AppUtil.getIsSignedIn(_context) == false) {
+                        AppUtil.displayPleaseSignInDialog(_context);
+                        return;
+                    }
                     Intent i = new Intent(_context, MyNotesActivity.class);
                     _context.startActivity(i);
                 }
@@ -268,6 +280,10 @@ public class SpeakerDetailExpandableListViewAdapter extends BaseExpandableListAd
             ivAddNote.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if (AppUtil.getIsSignedIn(_context) == false) {
+                        AppUtil.displayPleaseSignInDialog(_context);
+                        return;
+                    }
                     Intent i = new Intent(_context, MyNotesActivity.class);
                     _context.startActivity(i);
                 }
@@ -343,6 +359,10 @@ public class SpeakerDetailExpandableListViewAdapter extends BaseExpandableListAd
                     @Override
                     public void onClick(View v) {
                         try {
+                            if (AppUtil.getIsSignedIn(_context) == false) {
+                                AppUtil.displayPleaseSignInDialog(_context);
+                                return;
+                            }
                             ivConnect.setBackground(AppUtil.changeDrawableColor(_context, R.drawable.icon_blue_star_filled, AppUtil.getPrimaryThemColorAsInt()));
 
                             realm.beginTransaction();
@@ -394,6 +414,10 @@ public class SpeakerDetailExpandableListViewAdapter extends BaseExpandableListAd
                     @Override
                     public void onClick(View v) {
                         try {
+                            if (AppUtil.getIsSignedIn(_context) == false) {
+                                AppUtil.displayPleaseSignInDialog(_context);
+                                return;
+                            }
                             ivConnect.setBackground(AppUtil.changeDrawableColor(_context, R.drawable.icon_blue_star_filled, AppUtil.getPrimaryThemColorAsInt()));
 
                             realm.beginTransaction();

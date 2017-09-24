@@ -191,6 +191,10 @@ public class AttendeeDetailViewFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 try {
+                    if (AppUtil.getIsSignedIn(getActivity()) == false) {
+                        AppUtil.displayPleaseSignInDialog(getActivity());
+                        return;
+                    }
                     ivConnect.setBackground(AppUtil.changeDrawableColor(activity, R.drawable.icon_blue_star_filled, AppUtil.getPrimaryThemColorAsInt()));
 
                     realm.beginTransaction();
@@ -272,6 +276,10 @@ public class AttendeeDetailViewFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 try {
+                    if (AppUtil.getIsSignedIn(getActivity()) == false) {
+                        AppUtil.displayPleaseSignInDialog(getActivity());
+                        return;
+                    }
                     if (finalAttendee != null) {
                         ivConnect.setBackground(AppUtil.changeDrawableColor(activity, R.drawable.icon_blue_star_filled, AppUtil.getPrimaryThemColorAsInt()));
 
@@ -356,6 +364,10 @@ public class AttendeeDetailViewFragment extends Fragment {
         tvMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (AppUtil.getIsSignedIn(getActivity()) == false) {
+                    AppUtil.displayPleaseSignInDialog(getActivity());
+                    return;
+                }
                 if (finalAttendee != null) {
                     Person user = realm.where(Person.class).equalTo("objectId", finalAttendee.getUserLink()).findFirst();
 
@@ -381,6 +393,10 @@ public class AttendeeDetailViewFragment extends Fragment {
         ivMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (AppUtil.getIsSignedIn(getActivity()) == false) {
+                    AppUtil.displayPleaseSignInDialog(getActivity());
+                    return;
+                }
                 if (finalAttendee != null) {
                     Person user = realm.where(Person.class).equalTo("objectId", finalAttendee.getUserLink()).findFirst();
 

@@ -83,7 +83,7 @@ public class MapActivity extends OConnectBaseActivity {
             }
         });
 
-        tvHeaderBack.setText(tvToolbarTitle.getText());
+        tvHeaderBack.setText("Back");
 
         tvHeaderBack.bringToFront();
 

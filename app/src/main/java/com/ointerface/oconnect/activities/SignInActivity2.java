@@ -71,6 +71,7 @@ import com.twitter.sdk.android.core.TwitterSession;
 import com.twitter.sdk.android.core.identity.TwitterAuthClient;
 
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -248,64 +249,76 @@ public class SignInActivity2 extends AppCompatActivity {
                         if (user == null) {
                             Toast.makeText(SignInActivity2.this,"Error during Facebook Login!",Toast.LENGTH_LONG).show();
                         } else {
-                            if (user.isNew()) {
-                                user.put("userType", "app");
-                                user.saveInBackground();
-                            }
-
                             final ParseUser finalUser = user;
 
-                            AppUtil.setFacebookLoggedIn(SignInActivity2.this, true);
-                            AppUtil.setIsSignedIn(SignInActivity2.this, true);
-                            AppUtil.setSignedInUserID(SignInActivity2.this, user.getObjectId());
-
-                            GraphRequest.GraphJSONObjectCallback mCallback = new GraphRequest.GraphJSONObjectCallback()
-                            {
+                            AsyncTask.execute(new Runnable() {
                                 @Override
-                                public void onCompleted(JSONObject mData, GraphResponse mResponse)
-                                {
-                                    if(mResponse.getError() == null)
-                                    {
-                                        try
-                                        {
-                                            final JSONObject mPicture = mData.getJSONObject("picture");
-                                            final JSONObject mPictureData = mPicture.getJSONObject("data");
-
-                                            // final boolean mSilhouette = mPictureData.getBoolean("is_silhouette");
-
-
-                                            final String mImageUrl = mPictureData.getString("url");
-
-                                            // finalUser.put("pictureURL", mImageUrl);
-
-                                            OConnectBaseActivity.currentPerson = Person.saveFromParseUser(finalUser, false);
-
-                                            Realm realm = AppUtil.getRealmInstance(SignInActivity2.this);
-
-                                            realm.beginTransaction();
-                                            OConnectBaseActivity.currentPerson.setPictureURL(mImageUrl);
-                                            realm.commitTransaction();
-
-                                            addPersonToConference(finalUser);
-
-                                            callFacebookImportAPI(finalUser);
-
-                                            executePINPromptWorkflow(finalUser);
-                                        } catch (JSONException e)
-                                        {
-
-                                        }
+                                public void run() {
+                                    if (finalUser.isNew()) {
+                                        finalUser.put("userType", "app");
+                                        finalUser.saveInBackground();
                                     }
+
+                                    AppUtil.setFacebookLoggedIn(SignInActivity2.this, true);
+                                    AppUtil.setIsSignedIn(SignInActivity2.this, true);
+                                    AppUtil.setSignedInUserID(SignInActivity2.this, finalUser.getObjectId());
+
+                                    GraphRequest.GraphJSONObjectCallback mCallback = new GraphRequest.GraphJSONObjectCallback()
+                                    {
+                                        @Override
+                                        public void onCompleted(JSONObject mData, GraphResponse mResponse)
+                                        {
+                                            if(mResponse.getError() == null)
+                                            {
+                                                try
+                                                {
+                                                    final JSONObject mPicture = mData.getJSONObject("picture");
+                                                    final JSONObject mPictureData = mPicture.getJSONObject("data");
+
+                                                    // final boolean mSilhouette = mPictureData.getBoolean("is_silhouette");
+
+
+                                                    final String mImageUrl = mPictureData.getString("url");
+
+                                                    // finalUser.put("pictureURL", mImageUrl);
+
+                                                    OConnectBaseActivity.currentPerson = Person.saveFromParseUser(finalUser, false);
+
+                                                    Realm realm = AppUtil.getRealmInstance(SignInActivity2.this);
+
+                                                    realm.beginTransaction();
+                                                    OConnectBaseActivity.currentPerson.setPictureURL(mImageUrl);
+                                                    realm.commitTransaction();
+
+                                                    runOnUiThread(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            addPersonToConference(finalUser);
+
+                                                            callFacebookImportAPI(finalUser);
+
+                                                            executePINPromptWorkflow(finalUser);
+                                                        }
+                                                    });
+
+                                                } catch (JSONException e)
+                                                {
+
+                                                }
+                                            }
+                                        }
+                                    };
+
+                                    Bundle mBundle = new Bundle();
+                                    mBundle.putString("fields", "picture.type(large)");
+
+                                    GraphRequest mGetUserRequest = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(), mCallback);
+                                    mGetUserRequest.setParameters(mBundle);
+
+                                    mGetUserRequest.executeAndWait();
+
                                 }
-                            };
-
-                            Bundle mBundle = new Bundle();
-                            mBundle.putString("fields", "picture");
-
-                            GraphRequest mGetUserRequest = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(), mCallback);
-                            mGetUserRequest.setParameters(mBundle);
-
-                            mGetUserRequest.executeAndWait();
+                            });
 
                         }
                     }
@@ -343,7 +356,7 @@ public class SignInActivity2 extends AppCompatActivity {
 
                 // Authentication was successful.  You can now do
                 // other calls with the SDK.
-                String url = "https://api.linkedin.com/v1/people/~:(id,first-name,last-name,email-address,location,summary,picture-url)";
+                String url = "https://api.linkedin.com/v1/people/~:(id,first-name,last-name,email-address,location,summary,picture-urls::(original))";
 
                 APIHelper apiHelper = APIHelper.getInstance(getApplicationContext());
                 apiHelper.getRequest(SignInActivity2.this, url, new ApiListener() {
@@ -352,228 +365,243 @@ public class SignInActivity2 extends AppCompatActivity {
                         AppUtil.setLinkedInLoggedIn(SignInActivity2.this, true);
 
                         // Success!
-                        //Log.d("APD", "linkedin response for data: " + apiResponse.getResponseDataAsJson().toString());
+                        Log.d("APD", "linkedin response for data: " + apiResponse.getResponseDataAsJson().toString());
 
                         final JSONObject obj = apiResponse.getResponseDataAsJson();
 
-                        String firstName = "";
-                        String lastName = "";
-                        String emailAddress = "";
-                        JSONObject location = null;
-                        String summary = "";
-                        String pictureUrl = "";
-                        String linkedInId = "";
+                        AsyncTask.execute(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                String firstName = "";
+                                String lastName = "";
+                                String emailAddress = "";
+                                JSONObject location = null;
+                                String summary = "";
+                                JSONObject pictureUrlObj = null;
+                                String linkedInId = "";
+                                String pictureUrl = "";
 
 
-                        try {
-                            if (obj.has("firstName")) {
-                                firstName = obj.getString("firstName");
-                            }
+                                try {
+                                    if (obj.has("firstName")) {
+                                        firstName = obj.getString("firstName");
+                                    }
 
-                            if (obj.has("lastName")) {
-                                lastName = obj.getString("lastName");
-                            }
+                                    if (obj.has("lastName")) {
+                                        lastName = obj.getString("lastName");
+                                    }
 
-                            if (obj.has("emailAddress")) {
-                                emailAddress = obj.getString("emailAddress");
-                            }
-                            if (obj.has("location")){
-                                location = obj.getJSONObject("location");
-                            }
-                            if (obj.has("summary")){
-                                summary = obj.getString("summary");
-                            }
-                            if (obj.has("pictureUrl")){
-                                pictureUrl = obj.getString("pictureUrl");
-                            }
-                            if (obj.has("id")){
-                                linkedInId = obj.getString("id");
-                            }
-                        } catch (Exception ex) {
-                            Log.d("APD", ex.getMessage());
-                        }
+                                    if (obj.has("emailAddress")) {
+                                        emailAddress = obj.getString("emailAddress");
+                                    }
+                                    if (obj.has("location")) {
+                                        location = obj.getJSONObject("location");
+                                    }
+                                    if (obj.has("summary")) {
+                                        summary = obj.getString("summary");
+                                    }
+                                    if (obj.has("pictureUrls")) {
+                                        pictureUrlObj = obj.getJSONObject("pictureUrls");
+                                        if (pictureUrlObj.has("values")) {
+                                            JSONArray strArr = pictureUrlObj.getJSONArray("values");
+                                            pictureUrl = strArr.getString(0);
+                                        }
+                                    }
+                                    if (obj.has("id")) {
+                                        linkedInId = obj.getString("id");
+                                    }
+                                } catch (Exception ex) {
+                                    Log.d("APD", ex.getMessage());
+                                }
 
-                        final String finalEmailAddress = emailAddress;
-                        final String finalFirstName = firstName;
-                        final String finalLastName = lastName;
-                        final JSONObject finalLocation = location;
-                        final String finalPictureUrl = pictureUrl;
-                        final String finalId = linkedInId;
-                        final String finalSummary = summary;
+                                final String finalEmailAddress = emailAddress;
+                                final String finalFirstName = firstName;
+                                final String finalLastName = lastName;
+                                final JSONObject finalLocation = location;
+                                final String finalPictureUrl = pictureUrl;
+                                final String finalId = linkedInId;
+                                final String finalSummary = summary;
 
-                        final String tokenJSON = LISessionManager.getInstance(getApplicationContext()).getSession().getAccessToken().toString();
+                                final String tokenJSON = LISessionManager.getInstance(getApplicationContext()).getSession().getAccessToken().toString();
 
-                        String tempToken = "";
-                        try {
-                            JSONObject jsonObject = new JSONObject(tokenJSON);
+                                String tempToken = "";
+                                try {
+                                    JSONObject jsonObject = new JSONObject(tokenJSON);
 
-                            if (jsonObject.has("accessTokenValue")) {
-                                tempToken = jsonObject.getString("accessTokenValue");
-                            }
-                        } catch (Exception ex){
-                            Log.d("APD", ex.getMessage());
-                        }
+                                    if (jsonObject.has("accessTokenValue")) {
+                                        tempToken = jsonObject.getString("accessTokenValue");
+                                    }
+                                } catch (Exception ex) {
+                                    Log.d("APD", ex.getMessage());
+                                }
 
-                        final String token = tempToken;
+                                final String token = tempToken;
 
-                        ParseQuery<ParseUser> query = ParseUser.getQuery();
-                        query.whereEqualTo("username", emailAddress);
-                        //TODO
-                        try{
-                            List<ParseUser> objects = query.find();
+                                ParseQuery<ParseUser> query = ParseUser.getQuery();
+                                query.whereEqualTo("username", emailAddress);
 
-                            ParseUser parseUserTemp = null;
+                                try {
+                                    List<ParseUser> objects = query.find();
 
-                            //if parse user already exists
-                            if (objects.size() > 0) {
-                                final ParseUser existingUser = objects.get(0);
-                                    existingUser.logInInBackground(emailAddress, emailAddress, new LogInCallback() {
-                                        @Override
-                                        public void done(ParseUser user, ParseException e) {
-                                            if (e == null) {
-                                                final ParseUser parseUser = user;
+                                    ParseUser parseUserTemp = null;
 
-                                                parseUser.setUsername(finalEmailAddress);
-                                                parseUser.setEmail(finalEmailAddress);
-                                                parseUser.setPassword(finalEmailAddress);
-                                                parseUser.put("firstName", finalFirstName);
-                                                parseUser.put("lastName", finalLastName);
-                                                parseUser.put("pictureURL", finalPictureUrl);
-                                                parseUser.put("userType", "app");
-                                                parseUser.put("bio", finalSummary);
-                                                try{
-                                                    parseUser.put("location",finalLocation.getString("name"));
-                                                }catch(Exception jsonException){
-                                                    Log.d("parsingLocation1", jsonException.getLocalizedMessage());
-                                                }
+                                    //if parse user already exists
+                                    if (objects.size() > 0) {
+                                        final ParseUser existingUser = objects.get(0);
 
-                                                parseUser.saveInBackground(new SaveCallback() {
-                                                    @Override
-                                                    public void done(ParseException e) {
-                                                        if (e == null) {
-                                                            //new LinkedInImportTask().execute(user.getObjectId(), token);
-                                                            //TODO
-                                                            //do this if the user already exists in the LinkedInData Table
-                                                            ParseQuery<ParseObject> query = ParseQuery.getQuery("LinkedInData");
-                                                            query.whereEqualTo("ocUser", parseUser.getObjectId());
-                                                            query.findInBackground(new FindCallback<ParseObject>() {
-                                                                @Override
-                                                                public void done(List<ParseObject> objects, ParseException e) {
-                                                                    if (e == null){
-                                                                        if(objects.size() > 0) {
-                                                                            ParseObject linkedInDataObject = objects.get(0);
-                                                                            linkedInDataObject.put("location", finalLocation);
-                                                                            linkedInDataObject.put("avatar", finalPictureUrl);
-                                                                            linkedInDataObject.put("summary", finalSummary);
-                                                                            linkedInDataObject.put("ocUser", parseUser.getObjectId());
-                                                                            linkedInDataObject.put("linkedInId", finalId);
-                                                                            linkedInDataObject.put("lastName", finalLastName);
-                                                                            linkedInDataObject.put("firstName", finalFirstName);
-                                                                            linkedInDataObject.put("email", finalEmailAddress);
+                                        final ParseUser parseUser = existingUser;
 
-                                                                            try {
-                                                                                linkedInDataObject.saveInBackground();
-                                                                            } catch (Exception exception) {
-                                                                                Log.d("linkedInDataObject", exception.getLocalizedMessage());
-                                                                            }
-                                                                        } else{
-                                                                            //this is only executed if the user does not exists in the LinkedInData Table
-                                                                            ParseObject linkedInDataObject = new ParseObject("LinkedInData");
+                                        parseUser.setUsername(finalEmailAddress);
+                                        parseUser.setEmail(finalEmailAddress);
+                                        parseUser.setPassword(finalEmailAddress);
+                                        parseUser.put("firstName", finalFirstName);
+                                        parseUser.put("lastName", finalLastName);
+                                        parseUser.put("pictureURL", finalPictureUrl);
+                                        parseUser.put("userType", "app");
+                                        parseUser.put("bio", finalSummary);
+                                        try {
+                                            parseUser.put("location", finalLocation.getString("name"));
+                                        } catch (Exception jsonException) {
+                                            Log.d("parsingLocation1", jsonException.getLocalizedMessage());
+                                        }
 
-                                                                            linkedInDataObject.put("location", finalLocation);
-                                                                            linkedInDataObject.put("avatar", finalPictureUrl);
-                                                                            linkedInDataObject.put("summary", finalSummary);
-                                                                            linkedInDataObject.put("ocUser", parseUser.getObjectId());
-                                                                            linkedInDataObject.put("linkedInId", finalId);
-                                                                            linkedInDataObject.put("lastName", finalLastName);
-                                                                            linkedInDataObject.put("firstName", finalFirstName);
-                                                                            linkedInDataObject.put("email", finalEmailAddress);
+                                        parseUser.saveInBackground(new SaveCallback() {
+                                            @Override
+                                            public void done(ParseException e) {
+                                                if (e == null) {
+                                                    //new LinkedInImportTask().execute(user.getObjectId(), token);
+                                                    //TODO
+                                                    //do this if the user already exists in the LinkedInData Table
+                                                    ParseQuery<ParseObject> query = ParseQuery.getQuery("LinkedInData");
+                                                    query.whereEqualTo("ocUser", parseUser.getObjectId());
+                                                    query.findInBackground(new FindCallback<ParseObject>() {
+                                                        @Override
+                                                        public void done(List<ParseObject> objects, ParseException e) {
+                                                            if (e == null) {
+                                                                if (objects.size() > 0) {
+                                                                    ParseObject linkedInDataObject = objects.get(0);
+                                                                    linkedInDataObject.put("location", finalLocation);
+                                                                    linkedInDataObject.put("avatar", finalPictureUrl);
+                                                                    linkedInDataObject.put("summary", finalSummary);
+                                                                    linkedInDataObject.put("ocUser", parseUser.getObjectId());
+                                                                    linkedInDataObject.put("linkedInId", finalId);
+                                                                    linkedInDataObject.put("lastName", finalLastName);
+                                                                    linkedInDataObject.put("firstName", finalFirstName);
+                                                                    linkedInDataObject.put("email", finalEmailAddress);
 
-                                                                            try {
-                                                                                linkedInDataObject.saveInBackground();
-                                                                            } catch (Exception exception) {
-                                                                                Log.d("linkedInDataObject", exception.getLocalizedMessage());
-                                                                            }
-                                                                        }
+                                                                    try {
+                                                                        linkedInDataObject.saveInBackground();
+                                                                    } catch (Exception exception) {
+                                                                        Log.d("linkedInDataObject", exception.getLocalizedMessage());
+                                                                    }
+                                                                } else {
+                                                                    //this is only executed if the user does not exists in the LinkedInData Table
+                                                                    ParseObject linkedInDataObject = new ParseObject("LinkedInData");
+
+                                                                    linkedInDataObject.put("location", finalLocation);
+                                                                    linkedInDataObject.put("avatar", finalPictureUrl);
+                                                                    linkedInDataObject.put("summary", finalSummary);
+                                                                    linkedInDataObject.put("ocUser", parseUser.getObjectId());
+                                                                    linkedInDataObject.put("linkedInId", finalId);
+                                                                    linkedInDataObject.put("lastName", finalLastName);
+                                                                    linkedInDataObject.put("firstName", finalFirstName);
+                                                                    linkedInDataObject.put("email", finalEmailAddress);
+
+                                                                    try {
+                                                                        linkedInDataObject.saveInBackground();
+                                                                    } catch (Exception exception) {
+                                                                        Log.d("linkedInDataObject", exception.getLocalizedMessage());
                                                                     }
                                                                 }
-                                                            });
-                                                        } else {
-                                                            Log.d("linkedInLogin1", e.getLocalizedMessage());
+                                                            }
                                                         }
+                                                    });
+                                                } else {
+                                                    Log.d("linkedInLogin1", e.getLocalizedMessage());
+                                                }
 
-                                                    }
-                                                });
+                                            }
+                                        });
 
+                                        OConnectBaseActivity.currentPerson = Person.saveFromParseUser(parseUser, false);
+
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
                                                 AppUtil.setIsSignedIn(SignInActivity2.this, true);
                                                 AppUtil.setSignedInUserID(SignInActivity2.this, parseUser.getObjectId());
-
-                                                OConnectBaseActivity.currentPerson = Person.saveFromParseUser(parseUser, false);
 
                                                 addPersonToConference(parseUser);
 
                                                 executePINPromptWorkflow(parseUser);
                                             }
+                                        });
+
+                                    } else {
+                                        final ParseUser user = new ParseUser();
+
+                                        user.setUsername(finalEmailAddress);
+                                        user.setPassword(finalEmailAddress);
+                                        user.setEmail(finalEmailAddress);
+                                        user.put("firstName", finalFirstName);
+                                        user.put("lastName", finalLastName);
+                                        user.put("pictureURL", finalPictureUrl);
+                                        user.put("userType", "app");
+                                        user.put("bio", finalSummary);
+                                        try {
+                                            user.put("location", finalLocation.getString("name"));
+                                        } catch (Exception jsonException) {
+                                            Log.d("parsingLocation", jsonException.getLocalizedMessage());
                                         }
-                                    });
-                            }
-                            //if the parse user is new
-                            else {
-                                final ParseUser user = new ParseUser();
 
-                                user.setUsername(finalEmailAddress);
-                                user.setPassword(finalEmailAddress);
-                                user.setEmail(finalEmailAddress);
-                                user.put("firstName", finalFirstName);
-                                user.put("lastName", finalLastName);
-                                user.put("pictureURL", finalPictureUrl);
-                                user.put("userType", "app");
-                                user.put("bio", finalSummary);
-                                try{
-                                    user.put("location",finalLocation.getString("name"));
-                                }catch(Exception jsonException){
-                                    Log.d("parsingLocation", jsonException.getLocalizedMessage());
-                                }
+                                        user.signUpInBackground(new SignUpCallback() {
+                                            public void done(ParseException e) {
+                                                if (e == null) {
+                                                    //new LinkedInImportTask().execute(user.getObjectId(), token);
 
-                                user.signUpInBackground(new SignUpCallback() {
-                                    public void done(ParseException e) {
-                                        if (e == null) {
-                                            //new LinkedInImportTask().execute(user.getObjectId(), token);
+                                                    //new LinkedInImportTask().execute(user.getObjectId(), token);
+                                                    //TODO
+                                                    ParseObject linkedInDataObject = new ParseObject("LinkedInData");
 
-                                            //new LinkedInImportTask().execute(user.getObjectId(), token);
-                                            //TODO
-                                            ParseObject linkedInDataObject = new ParseObject("LinkedInData");
+                                                    linkedInDataObject.put("location", finalLocation);
+                                                    linkedInDataObject.put("avatar", finalPictureUrl);
+                                                    linkedInDataObject.put("summary", finalSummary);
+                                                    linkedInDataObject.put("ocUser", user.getObjectId());
+                                                    linkedInDataObject.put("linkedInId", finalId);
+                                                    linkedInDataObject.put("lastName", finalLastName);
+                                                    linkedInDataObject.put("firstName", finalFirstName);
+                                                    linkedInDataObject.put("email", finalEmailAddress);
 
-                                            linkedInDataObject.put("location", finalLocation);
-                                            linkedInDataObject.put("avatar", finalPictureUrl);
-                                            linkedInDataObject.put("summary", finalSummary);
-                                            linkedInDataObject.put("ocUser", user.getObjectId());
-                                            linkedInDataObject.put("linkedInId", finalId);
-                                            linkedInDataObject.put("lastName", finalLastName);
-                                            linkedInDataObject.put("firstName", finalFirstName);
-                                            linkedInDataObject.put("email", finalEmailAddress);
+                                                    try {
+                                                        linkedInDataObject.saveInBackground();
+                                                    } catch (Exception exception) {
+                                                        Log.d("linkedInDataObject", exception.getLocalizedMessage());
+                                                    }
+                                                }
 
-                                            try {
-                                                linkedInDataObject.saveInBackground();
-                                            } catch (Exception exception) {
-                                                Log.d("linkedInDataObject", exception.getLocalizedMessage());
+                                                OConnectBaseActivity.currentPerson = Person.saveFromParseUser(user, false);
+
+                                                runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        AppUtil.setIsSignedIn(SignInActivity2.this, true);
+                                                        AppUtil.setSignedInUserID(SignInActivity2.this, user.getObjectId());
+
+                                                        addPersonToConference(user);
+
+                                                        executePINPromptWorkflow(user);
+                                                    }
+                                                });
+
                                             }
-                                        }
-
-                                        AppUtil.setIsSignedIn(SignInActivity2.this, true);
-                                        AppUtil.setSignedInUserID(SignInActivity2.this, user.getObjectId());
-
-                                        OConnectBaseActivity.currentPerson = Person.saveFromParseUser(user, false);
-
-                                        addPersonToConference(user);
-
-                                        executePINPromptWorkflow(user);
+                                        });
                                     }
-                                });
+                                } catch (Exception e) {
+                                    Log.d("tryBlock", e.getLocalizedMessage());
+                                }
                             }
-                        }catch(Exception e){
-                            Log.d("tryBlock", e.getLocalizedMessage());
-                        }
+                        });
                     }
 
                     @Override
@@ -1387,26 +1415,32 @@ public class SignInActivity2 extends AppCompatActivity {
 
     private void addPersonToConference(ParseObject user) {
         if (OConnectBaseActivity.selectedConference != null && OConnectBaseActivity.currentPerson != null) {
-            Realm realm = AppUtil.getRealmInstance(this);
-            realm.beginTransaction();
-            if (OConnectBaseActivity.selectedConference.getPeople() == null) {
-                OConnectBaseActivity.selectedConference.setPeople(new RealmList<Person>());
-            }
+            final ParseObject finalUser = user;
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Realm realm = AppUtil.getRealmInstance(SignInActivity2.this);
+                    realm.beginTransaction();
+                    if (OConnectBaseActivity.selectedConference.getPeople() == null) {
+                        OConnectBaseActivity.selectedConference.setPeople(new RealmList<Person>());
+                    }
 
-            if (!OConnectBaseActivity.selectedConference.getPeople().contains(OConnectBaseActivity.currentPerson)) {
-                OConnectBaseActivity.selectedConference.getPeople().add(OConnectBaseActivity.currentPerson);
-            }
+                    if (!OConnectBaseActivity.selectedConference.getPeople().contains(OConnectBaseActivity.currentPerson)) {
+                        OConnectBaseActivity.selectedConference.getPeople().add(OConnectBaseActivity.currentPerson);
+                    }
 
-            try {
-                ParseObject conf = ParseQuery.getQuery("Conference").whereEqualTo("objectId", OConnectBaseActivity.selectedConference.getObjectId()).getFirst();
-                ParseRelation<ParseObject> relation = conf.getRelation("person");
-                relation.add(user);
-                conf.save();
-            } catch (Exception ex) {
-                Log.d("APD", ex.getMessage());
-            }
-            realm.commitTransaction();
-            realm.close();
+                    try {
+                        ParseObject conf = ParseQuery.getQuery("Conference").whereEqualTo("objectId", OConnectBaseActivity.selectedConference.getObjectId()).getFirst();
+                        ParseRelation<ParseObject> relation = conf.getRelation("person");
+                        relation.add(finalUser);
+                        conf.save();
+                    } catch (Exception ex) {
+                        Log.d("APD", ex.getMessage());
+                    }
+                    realm.commitTransaction();
+                    realm.close();
+                }
+            });
         }
     }
 }

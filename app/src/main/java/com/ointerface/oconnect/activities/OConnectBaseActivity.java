@@ -708,10 +708,12 @@ public class OConnectBaseActivity extends AppCompatActivity
                         startActivity(i);
                         break;
                     case R.drawable.ic_person:
+                        /*
                         if (AppUtil.getIsSignedIn(OConnectBaseActivity.this) == false) {
                             AppUtil.displayPleaseSignInDialog(OConnectBaseActivity.this);
                             return false;
                         }
+                        */
 
                         if (AppUtil.getIsLeftNavUnlocked(OConnectBaseActivity.this) == false
                                 && selectedConference.isPasswordProtectSpeakers() == true) {

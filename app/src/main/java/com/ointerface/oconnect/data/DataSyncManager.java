@@ -1918,6 +1918,33 @@ public class DataSyncManager {
                     callback.onDataSyncFinish();
                 }
             }});
+
+        ParseQuery<ParseObject> query2 = ParseQuery.getQuery("Maps").setLimit(1000);
+
+        Date date2 = getLastSyncDate();
+
+        if (date2 != null) {
+            query2.whereGreaterThanOrEqualTo("updatedAt", date2).whereEqualTo("isDeleted", true);
+        }
+
+        query2.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, com.parse.ParseException e) {
+                if (e == null) {
+                    Realm realm = AppUtil.getRealmInstance(context);
+                    realm.beginTransaction();
+                    for (int i = 0; i < objects.size(); ++i) {
+                        ParseObject parseObject = objects.get(i);
+                        Maps result = realm.where(Maps.class).equalTo("objectId", parseObject.getObjectId()).findFirst();
+
+                        if (result != null) {
+                            result.deleteFromRealm();
+                        }
+                    }
+                    realm.commitTransaction();
+                }
+            }
+        });
     }
 
     static public void dataSyncSponsors() {
