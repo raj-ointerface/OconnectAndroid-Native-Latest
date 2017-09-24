@@ -258,10 +258,11 @@ public class DashboardActivity extends OConnectBaseActivity {
     public void makeConnectionsClicked (View view) {
         if (AppUtil.getIsSignedIn(this) == false) {
             AppUtil.displayPleaseSignInForConnectionsDialog(this);
-        }
+        }else{
 
         Intent i = new Intent(DashboardActivity.this, ConnectionsActivity.class);
         startActivity(i);
+        }
     }
 
     public void infoClicked (View view) {

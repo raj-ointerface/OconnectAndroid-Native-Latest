@@ -2,7 +2,6 @@ package com.ointerface.oconnect.activities;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -18,6 +17,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.azoft.carousellayoutmanager.CarouselLayoutManager;
@@ -49,7 +50,9 @@ import static android.view.View.GONE;
 
 public class ConnectionsActivity extends OConnectBaseActivity {
 
-    private BottomNavigationView navigation;
+    private Button myConnectionBtn;
+    private Button suggestionsBtn;
+    private LinearLayout bottomNavigationView;
     private RolodexAdapter adapter;
     private RecyclerView recyclerView;
 
@@ -97,41 +100,80 @@ public class ConnectionsActivity extends OConnectBaseActivity {
         ivConnections.setVisibility(View.VISIBLE);
         ivProfileLanyard.setVisibility(GONE);
 
-        navigation = (BottomNavigationView) findViewById(R.id.navigation);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-        navigation.setBackgroundColor(AppUtil.getPrimaryThemColorAsInt());
-
-        int[][] states = new int[][] {
-                new int[] { android.R.attr.state_enabled}, // enabled
-                new int[] {-android.R.attr.state_enabled}, // disabled
-                new int[] { android.R.attr.state_checked}, // unchecked
-                new int[] { android.R.attr.state_pressed},  // pressed
-                new int[] { android.R.attr.state_selected}  // selected
-        };
-
-        int[] colors = new int[] {
-                Color.BLACK,
-                Color.BLACK,
-                Color.WHITE,
-                Color.WHITE,
-                Color.WHITE
-        };
-
-        ColorStateList colorStateList = new ColorStateList(states, colors);
-
-        navigation.setItemTextColor(colorStateList);
-
-        View view1 = navigation.findViewById(R.id.navigation_my_connections);
-
-        view1.setPadding(0,0,0,30);
-
-        View view2 = navigation.findViewById(R.id.navigation_suggestions);
-
-        view2.setPadding(0,0,0,30);
-
-        navigation.setSelectedItemId(R.id.navigation_my_connections);
+//        navigation = (BottomNavigationView) findViewById(R.id.navigation);
+//        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+//        navigation.setBackgroundColor(AppUtil.getPrimaryThemColorAsInt());
+//
+//        int[][] states = new int[][] {
+//                new int[] { android.R.attr.state_enabled}, // enabled
+//                new int[] {-android.R.attr.state_enabled}, // disabled
+//                new int[] { android.R.attr.state_checked}, // unchecked
+//                new int[] { android.R.attr.state_pressed},  // pressed
+//                new int[] { android.R.attr.state_selected}  // selected
+//        };
+//
+//        int[] colors = new int[] {
+//                Color.BLACK,
+//                Color.BLACK,
+//                Color.WHITE,
+//                Color.WHITE,
+//                Color.WHITE
+//        };
+//
+//        ColorStateList colorStateList = new ColorStateList(states, colors);
+//
+//        navigation.setItemTextColor(colorStateList);
+//
+//        View view1 = navigation.findViewById(R.id.navigation_my_connections);
+//
+//        view1.setPadding(0,0,0,30);
+//
+//        View view2 = navigation.findViewById(R.id.navigation_suggestions);
+//
+//        view2.setPadding(0,0,0,30);
+//
+//        navigation.setSelectedItemId(R.id.navigation_my_connections);
 
         // displayConnections();
+
+        bottomNavigationView = (LinearLayout) findViewById(R.id.connections_bottom_navigation);
+        bottomNavigationView.setBackgroundColor(AppUtil.getPrimaryThemColorAsInt());
+
+        myConnectionBtn = (Button)findViewById(R.id.myConnectionsBtn);
+        suggestionsBtn = (Button) findViewById(R.id.suggestionsBtn);
+
+
+        myConnectionBtn.setBackgroundResource(R.drawable.button_border_white);
+        myConnectionBtn.setTextColor(AppUtil.getPrimaryThemColorAsInt());
+        suggestionsBtn.setBackgroundResource(R.drawable.button_border);
+
+        myConnectionBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myConnectionBtn.setBackgroundResource(R.drawable.button_border_white);
+                myConnectionBtn.setTextColor(AppUtil.getPrimaryThemColorAsInt());
+                suggestionsBtn.setBackgroundResource(R.drawable.button_border);
+                suggestionsBtn.setTextColor(Color.WHITE);
+                displayConnections();
+            }
+        });
+
+        suggestionsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (adapter.mDataSuggestedConnections.size() == 0) {
+                    AppUtil.displayNoContactsAvailableDialog(ConnectionsActivity.this);
+                }else {
+                    suggestionsBtn.setBackgroundResource(R.drawable.button_border_white);
+                    suggestionsBtn.setTextColor(AppUtil.getPrimaryThemColorAsInt());
+                    myConnectionBtn.setBackgroundResource(R.drawable.button_border);
+                    myConnectionBtn.setTextColor(Color.WHITE);
+                    displaySuggestions();
+                }
+
+            }
+        });
+
 
         tvEditProfile = (TextView) findViewById(R.id.tvEditProfile);
         tvInterests = (TextView) findViewById(R.id.tvInterests);
@@ -203,55 +245,6 @@ public class ConnectionsActivity extends OConnectBaseActivity {
             }
         });
     }
-
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
-
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-
-            Menu menu = navigation.getMenu();
-
-            View connectionsView = navigation.findViewById(R.id.navigation_my_connections);
-
-            if (connectionsView.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
-                ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) connectionsView.getLayoutParams();
-                p.setMargins(0, 0, 0, 0);
-                connectionsView.requestLayout();
-            }
-
-            View suggestionsView = navigation.findViewById(R.id.navigation_suggestions);
-
-            if (suggestionsView.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
-                ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) suggestionsView.getLayoutParams();
-                p.setMargins(0, 0, 0, 0);
-                suggestionsView.requestLayout();
-            }
-
-            switch (item.getItemId()) {
-                case R.id.navigation_my_connections:
-                    connectionsView.setBackgroundColor(AppConfig.lightGreyColor);
-
-                    suggestionsView.setBackgroundColor(AppUtil.getPrimaryThemColorAsInt());
-
-                    displayConnections();
-                    return true;
-                case R.id.navigation_suggestions:
-                    if (adapter.mDataSuggestedConnections.size() == 0) {
-                        AppUtil.displayNoContactsAvailableDialog(ConnectionsActivity.this);
-                    }else {
-                        connectionsView.setBackgroundColor(AppUtil.getPrimaryThemColorAsInt());
-
-                        suggestionsView.setBackgroundColor(AppConfig.lightGreyColor);
-
-                        displaySuggestions();
-                        return true;
-                    }
-            }
-            return false;
-        }
-
-    };
 
     public void displayConnections() {
         adapter.showingMyConnections = true;
