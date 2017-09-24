@@ -74,10 +74,6 @@ public class ConnectionsActivity extends OConnectBaseActivity {
             circularRotation = false;
         }
 
-        if (adapter.mDataSuggestedConnections.size() == 0) {
-            AppUtil.displayNoContactsAvailableDialog(this);
-        }
-
         CarouselLayoutManager manager = new CarouselLayoutManager(CarouselLayoutManager.HORIZONTAL, circularRotation);
 
         manager.setPostLayoutListener(new CarouselZoomPostLayoutListener());
@@ -241,12 +237,16 @@ public class ConnectionsActivity extends OConnectBaseActivity {
                     displayConnections();
                     return true;
                 case R.id.navigation_suggestions:
-                    connectionsView.setBackgroundColor(AppUtil.getPrimaryThemColorAsInt());
+                    if (adapter.mDataSuggestedConnections.size() == 0) {
+                        AppUtil.displayNoContactsAvailableDialog(ConnectionsActivity.this);
+                    }else {
+                        connectionsView.setBackgroundColor(AppUtil.getPrimaryThemColorAsInt());
 
-                    suggestionsView.setBackgroundColor(AppConfig.lightGreyColor);
+                        suggestionsView.setBackgroundColor(AppConfig.lightGreyColor);
 
-                    displaySuggestions();
-                    return true;
+                        displaySuggestions();
+                        return true;
+                    }
             }
             return false;
         }
@@ -261,10 +261,6 @@ public class ConnectionsActivity extends OConnectBaseActivity {
     public void displaySuggestions() {
         adapter.showingMyConnections = false;
         adapter.notifyDataSetChanged();
-
-        if (adapter.mDataSuggestedConnections.size() == 0) {
-            AppUtil.displayNoContactsAvailableDialog(this);
-        }
     }
 
     public void getCarouselViewData() {
