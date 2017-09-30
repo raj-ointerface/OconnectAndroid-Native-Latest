@@ -253,7 +253,7 @@ public class AppUtil {
     public static void displayNoContactsAvailableDialog(final Context context) {
         AlertDialog alertDialog = new AlertDialog.Builder(context).create();
         alertDialog.setTitle("");
-        alertDialog.setMessage("We don't have sufficient information about you.  Please complete your profile to see your suggested connections.");
+        alertDialog.setMessage("Please complete your profile to improve the quality of the suggested connections.");
         alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {

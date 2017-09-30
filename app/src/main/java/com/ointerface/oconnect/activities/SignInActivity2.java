@@ -455,7 +455,7 @@ public class SignInActivity2 extends AppCompatActivity {
 
                                         parseUser.setUsername(finalEmailAddress);
                                         parseUser.setEmail(finalEmailAddress);
-                                        parseUser.setPassword(finalEmailAddress);
+
                                         parseUser.put("firstName", finalFirstName);
                                         parseUser.put("lastName", finalLastName);
                                         parseUser.put("pictureURL", finalPictureUrl);
@@ -467,65 +467,55 @@ public class SignInActivity2 extends AppCompatActivity {
                                             Log.d("parsingLocation1", jsonException.getLocalizedMessage());
                                         }
 
-                                        parseUser.saveInBackground(new SaveCallback() {
+                                        //new LinkedInImportTask().execute(user.getObjectId(), token);
+                                        //TODO
+                                        //do this if the user already exists in the LinkedInData Table
+                                        ParseQuery<ParseObject> query2 = ParseQuery.getQuery("LinkedInData");
+                                        query2.whereEqualTo("ocUser", parseUser.getObjectId());
+                                        query2.findInBackground(new FindCallback<ParseObject>() {
                                             @Override
-                                            public void done(ParseException e) {
+                                            public void done(List<ParseObject> objects, ParseException e) {
                                                 if (e == null) {
-                                                    //new LinkedInImportTask().execute(user.getObjectId(), token);
-                                                    //TODO
-                                                    //do this if the user already exists in the LinkedInData Table
-                                                    ParseQuery<ParseObject> query = ParseQuery.getQuery("LinkedInData");
-                                                    query.whereEqualTo("ocUser", parseUser.getObjectId());
-                                                    query.findInBackground(new FindCallback<ParseObject>() {
-                                                        @Override
-                                                        public void done(List<ParseObject> objects, ParseException e) {
-                                                            if (e == null) {
-                                                                if (objects.size() > 0) {
-                                                                    ParseObject linkedInDataObject = objects.get(0);
-                                                                    linkedInDataObject.put("location", finalLocation);
-                                                                    linkedInDataObject.put("avatar", finalPictureUrl);
-                                                                    linkedInDataObject.put("summary", finalSummary);
-                                                                    linkedInDataObject.put("ocUser", parseUser.getObjectId());
-                                                                    linkedInDataObject.put("linkedInId", finalId);
-                                                                    linkedInDataObject.put("lastName", finalLastName);
-                                                                    linkedInDataObject.put("firstName", finalFirstName);
-                                                                    linkedInDataObject.put("email", finalEmailAddress);
+                                                    if (objects.size() > 0) {
+                                                        ParseObject linkedInDataObject = objects.get(0);
+                                                        linkedInDataObject.put("location", finalLocation);
+                                                        linkedInDataObject.put("avatar", finalPictureUrl);
+                                                        linkedInDataObject.put("summary", finalSummary);
+                                                        linkedInDataObject.put("ocUser", parseUser.getObjectId());
+                                                        linkedInDataObject.put("linkedInId", finalId);
+                                                        linkedInDataObject.put("lastName", finalLastName);
+                                                        linkedInDataObject.put("firstName", finalFirstName);
+                                                        linkedInDataObject.put("email", finalEmailAddress);
 
-                                                                    try {
-                                                                        linkedInDataObject.saveInBackground();
-                                                                    } catch (Exception exception) {
-                                                                        Log.d("linkedInDataObject", exception.getLocalizedMessage());
-                                                                    }
-                                                                } else {
-                                                                    //this is only executed if the user does not exists in the LinkedInData Table
-                                                                    ParseObject linkedInDataObject = new ParseObject("LinkedInData");
-
-                                                                    linkedInDataObject.put("location", finalLocation);
-                                                                    linkedInDataObject.put("avatar", finalPictureUrl);
-                                                                    linkedInDataObject.put("summary", finalSummary);
-                                                                    linkedInDataObject.put("ocUser", parseUser.getObjectId());
-                                                                    linkedInDataObject.put("linkedInId", finalId);
-                                                                    linkedInDataObject.put("lastName", finalLastName);
-                                                                    linkedInDataObject.put("firstName", finalFirstName);
-                                                                    linkedInDataObject.put("email", finalEmailAddress);
-
-                                                                    try {
-                                                                        linkedInDataObject.saveInBackground();
-                                                                    } catch (Exception exception) {
-                                                                        Log.d("linkedInDataObject", exception.getLocalizedMessage());
-                                                                    }
-                                                                }
-                                                            }
+                                                        try {
+                                                            linkedInDataObject.saveInBackground();
+                                                        } catch (Exception exception) {
+                                                            Log.d("linkedInDataObject", exception.getLocalizedMessage());
                                                         }
-                                                    });
-                                                } else {
-                                                    Log.d("linkedInLogin1", e.getLocalizedMessage());
-                                                }
+                                                    } else {
+                                                        //this is only executed if the user does not exists in the LinkedInData Table
+                                                        ParseObject linkedInDataObject = new ParseObject("LinkedInData");
 
+                                                        linkedInDataObject.put("location", finalLocation);
+                                                        linkedInDataObject.put("avatar", finalPictureUrl);
+                                                        linkedInDataObject.put("summary", finalSummary);
+                                                        linkedInDataObject.put("ocUser", parseUser.getObjectId());
+                                                        linkedInDataObject.put("linkedInId", finalId);
+                                                        linkedInDataObject.put("lastName", finalLastName);
+                                                        linkedInDataObject.put("firstName", finalFirstName);
+                                                        linkedInDataObject.put("email", finalEmailAddress);
+
+                                                        try {
+                                                            linkedInDataObject.saveInBackground();
+                                                        } catch (Exception exception) {
+                                                            Log.d("linkedInDataObject", exception.getLocalizedMessage());
+                                                        }
+                                                    }
+                                                }
                                             }
                                         });
 
-                                        OConnectBaseActivity.currentPerson = Person.saveFromParseUser(parseUser, false);
+                                        OConnectBaseActivity.currentPerson = Person.saveFromParseUserOnly(parseUser);
 
                                         runOnUiThread(new Runnable() {
                                             @Override
@@ -581,7 +571,7 @@ public class SignInActivity2 extends AppCompatActivity {
                                                     }
                                                 }
 
-                                                OConnectBaseActivity.currentPerson = Person.saveFromParseUser(user, false);
+                                                OConnectBaseActivity.currentPerson = Person.saveFromParseUserOnly(user);
 
                                                 runOnUiThread(new Runnable() {
                                                     @Override

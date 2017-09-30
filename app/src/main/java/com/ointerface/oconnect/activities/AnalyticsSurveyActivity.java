@@ -41,7 +41,9 @@ public class AnalyticsSurveyActivity extends OConnectBaseActivity {
 
     private TextView tvNext;
 
-    private int selectedAnswerNumber = 0;
+    // private int selectedAnswerNumber = 0;
+
+    private ArrayList<Integer> selectedAnswerNumberArr = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,34 +100,51 @@ public class AnalyticsSurveyActivity extends OConnectBaseActivity {
             }
         });
 
+        selectedAnswerNumberArr = new ArrayList<Integer>();
+
         tvSurveyQuestion = (TextView) findViewById(R.id.tvSurveyQuestion);
         lvSurvey = (ListView) findViewById(R.id.lvSurvey);
 
         lvSurvey.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                for (int i = 0; i < lvSurvey.getChildCount(); ++i) {
-                    View childView = lvSurvey.getChildAt(i);
+                SurveyQuestion question = questionsList.get(currentQuestionNumber - 1);
 
-                    TextView answer = (TextView) childView.findViewById(R.id.tvAnswer);
+                if (question.getAllowsMultipleSelection() == false) {
+                    for (int i = 0; i < lvSurvey.getChildCount(); ++i) {
+                        View childView = lvSurvey.getChildAt(i);
 
-                    if (answer != null) {
-                        answer.setBackgroundResource(R.drawable.survey_answer_unselected);
+                        TextView answer = (TextView) childView.findViewById(R.id.tvAnswer);
 
-                        GradientDrawable drawable = (GradientDrawable)answer.getBackground();
-                        drawable.setStroke(AppUtil.convertDPToPXInt(AnalyticsSurveyActivity.this, 4), AppUtil.getPrimaryThemColorAsInt());
-                        answer.setBackground(drawable);
+                        if (answer != null) {
+                            answer.setBackgroundResource(R.drawable.survey_answer_unselected);
+
+                            GradientDrawable drawable = (GradientDrawable) answer.getBackground();
+                            drawable.setStroke(AppUtil.convertDPToPXInt(AnalyticsSurveyActivity.this, 4), AppUtil.getPrimaryThemColorAsInt());
+                            answer.setBackground(drawable);
+                        }
                     }
                 }
 
                 TextView answer = (TextView) view.findViewById(R.id.tvAnswer);
-                answer.setBackgroundResource(R.drawable.survey_answer_selected);
 
-                GradientDrawable drawable = (GradientDrawable)answer.getBackground();
-                drawable.setStroke(AppUtil.convertDPToPXInt(AnalyticsSurveyActivity.this, 4), AppUtil.getPrimaryThemColorAsInt());
-                answer.setBackground(drawable);
+                if (!selectedAnswerNumberArr.contains(position)) {
+                    selectedAnswerNumberArr.add(position);
 
-                selectedAnswerNumber = position;
+                    answer.setBackgroundResource(R.drawable.survey_answer_selected);
+
+                    GradientDrawable drawable = (GradientDrawable)answer.getBackground();
+                    drawable.setStroke(AppUtil.convertDPToPXInt(AnalyticsSurveyActivity.this, 4), AppUtil.getPrimaryThemColorAsInt());
+                    answer.setBackground(drawable);
+                } else {
+                    selectedAnswerNumberArr.remove(position);
+
+                    answer.setBackgroundResource(R.drawable.survey_answer_unselected);
+
+                    GradientDrawable drawable = (GradientDrawable)answer.getBackground();
+                    drawable.setStroke(AppUtil.convertDPToPXInt(AnalyticsSurveyActivity.this, 4), AppUtil.getPrimaryThemColorAsInt());
+                    answer.setBackground(drawable);
+                }
             }
         });
 
@@ -218,13 +237,24 @@ public class AnalyticsSurveyActivity extends OConnectBaseActivity {
     public void saveAnswerToParse() {
         SurveyQuestion question = questionsList.get(currentQuestionNumber - 1);
         ArrayList<SurveyQuestionAnswer> answers = mapAnswers.get(question.getObjectId());
-        SurveyQuestionAnswer answer = answers.get(selectedAnswerNumber);
+
+        String answerStr = "";
+
+        for (Integer iAnswer : selectedAnswerNumberArr) {
+            SurveyQuestionAnswer answer = answers.get(iAnswer);
+
+            if (answerStr.equalsIgnoreCase("")) {
+                answerStr += answer.getObjectId();
+            } else {
+                answerStr += "|" + answer.getObjectId();
+            }
+        }
 
         ParseObject parseObject = new ParseObject("UserSurveyAnswer");
 
         parseObject.put("questionId", question.getObjectId());
 
-        parseObject.put("questionAnswerIds", answer.getObjectId());
+        parseObject.put("questionAnswerIds", answerStr);
 
         parseObject.put("userId", currentPerson.getObjectId());
 
@@ -234,6 +264,6 @@ public class AnalyticsSurveyActivity extends OConnectBaseActivity {
             Log.d("Survey", ex.getMessage());
         }
 
-        selectedAnswerNumber = 0;
+        selectedAnswerNumberArr.clear();
     }
 }

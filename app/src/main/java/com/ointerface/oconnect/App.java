@@ -133,6 +133,8 @@ public class App extends MultiDexApplication implements ServiceConnection, Messa
                     // realm.getSchema().get("SinchMessage").addField("isRead", Boolean.class);
                     // realm.getSchema().get("Event").addField("trackColor", String.class);
 
+                    realm.getSchema().get("SurveyQuestion").addField("allowsMultipleSelection", Boolean.class);
+
                 }
             };
 

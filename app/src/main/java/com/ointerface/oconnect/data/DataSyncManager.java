@@ -2263,6 +2263,7 @@ public class DataSyncManager {
 
                             surveyQuestion.setOrder(parseObject.getInt("order"));
                             surveyQuestion.setQuestion(parseObject.getString("question"));
+                            surveyQuestion.setAllowsMultipleSelection(parseObject.getBoolean("allowsMultipleSelection"));
 
                         } else {
 
@@ -2275,6 +2276,8 @@ public class DataSyncManager {
 
                             result.setOrder(parseObject.getInt("order"));
                             result.setQuestion(parseObject.getString("question"));
+
+                            result.setAllowsMultipleSelection(parseObject.getBoolean("allowsMultipleSelection"));
 
                         }
                     }

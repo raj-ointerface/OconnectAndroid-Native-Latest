@@ -444,4 +444,37 @@ public class Person extends RealmObject {
 
         return person;
     }
+
+    static public Person saveFromParseUserOnly(ParseObject parseObject) {
+        Realm realm = AppUtil.getRealmInstance(App.getInstance());
+
+        if (!realm.isInTransaction()) {
+            realm.beginTransaction();
+        }
+
+        Person person = realm.where(Person.class).equalTo("objectId", parseObject.getObjectId()).findFirst();
+
+        if (person == null) {
+            person = realm.createObject(Person.class, parseObject.getObjectId());
+        }
+
+        // person.setObjectId(parseObject.getObjectId());
+        person.setUpdatedAt(parseObject.getDate("updatedAt"));
+        person.setContact_email(parseObject.getString("contact_email"));
+        person.setContactable(parseObject.getBoolean("isContactable"));
+        person.setFirstName(parseObject.getString("firstName"));
+        person.setLastName(parseObject.getString("lastName"));
+        person.setJob(parseObject.getString("job"));
+        person.setOrg(parseObject.getString("org"));
+        person.setLocation(parseObject.getString("location"));
+        person.setInterests(parseObject.getString("Interests"));
+        person.setUserType(parseObject.getString("userType"));
+        person.setPictureURL(parseObject.getString("pictureURL"));
+        person.setPassword(parseObject.getString("password"));
+        person.setBio(parseObject.getString("bio"));
+
+        realm.commitTransaction();
+
+        return person;
+    }
 }

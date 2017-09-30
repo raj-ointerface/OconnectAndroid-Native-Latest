@@ -17,6 +17,16 @@ public class SurveyQuestion extends RealmObject {
     private Integer order = 0;
     private String conference = "";
 
+    private Boolean allowsMultipleSelection = false;
+
+    public Boolean getAllowsMultipleSelection() {
+        return allowsMultipleSelection;
+    }
+
+    public void setAllowsMultipleSelection(Boolean allowsMultipleSelection) {
+        this.allowsMultipleSelection = allowsMultipleSelection;
+    }
+
     public String getObjectId() {
         return objectId;
     }

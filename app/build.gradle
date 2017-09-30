@@ -22,11 +22,12 @@ android {
         applicationId "com.ointerface.oconnect.stsi"
         minSdkVersion 21
         targetSdkVersion 24
-        versionCode 1
-        versionName "1.23"
+        versionCode 2
+        versionName "2.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
+        signingConfig signingConfigs.stsi_release_key
     }
     buildTypes {
         release {
@@ -41,6 +42,8 @@ android {
     }
     configurations.all {
         resolutionStrategy.force 'com.google.code.findbugs:jsr305:1.3.9'
+    }
+    productFlavors {
     }
 }
 

@@ -530,7 +530,7 @@ public class ConnectionsActivity extends OConnectBaseActivity {
                     });
                 } else {
 
-                    holder.mItemViewBinding.btnClose.setVisibility(View.VISIBLE);
+                    holder.mItemViewBinding.btnClose.setVisibility(View.GONE);
 
                     final Realm realm = AppUtil.getRealmInstance(context);
                     final PredAnalyticsMatches matchObj = realm.where(PredAnalyticsMatches.class).equalTo("id1", OConnectBaseActivity.currentPerson.getObjectId()).equalTo("id2", currentPerson.getObjectId()).findFirst();
@@ -696,7 +696,7 @@ public class ConnectionsActivity extends OConnectBaseActivity {
     }
 
     public static String getConnectionStrengthString(double score) {
-        if (score >= 1 && score < 2) {
+        if (score < 2) {
             return "50%";
         } else if (score >= 2 && score < 3) {
             return "60%";
