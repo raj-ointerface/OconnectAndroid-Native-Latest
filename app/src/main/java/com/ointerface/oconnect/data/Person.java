@@ -3,6 +3,7 @@ package com.ointerface.oconnect.data;
 import android.util.Log;
 
 import com.ointerface.oconnect.App;
+import com.ointerface.oconnect.activities.OConnectBaseActivity;
 import com.ointerface.oconnect.util.AppUtil;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -443,6 +444,100 @@ public class Person extends RealmObject {
         }
 
         return person;
+    }
+
+    static public void downloadAnalyticMatches(String userObjectId) {
+        Realm realm = AppUtil.getRealmInstance(App.getInstance());
+
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("PredAnalyticsMatches").setLimit(1000);
+
+        Date date = DataSyncManager.getLastSyncDate();
+
+        if (date != null) {
+            query.whereGreaterThanOrEqualTo("createdAt", date);
+        } else {
+            query.whereEqualTo("id1", userObjectId).whereNotEqualTo("isAccepted", true).whereNotEqualTo("isRejected", true).addDescendingOrder("score");
+        }
+
+        try {
+            Person person = realm.where(Person.class).equalTo("objectId", userObjectId).findFirst();
+
+            OConnectBaseActivity.currentPerson = person;
+
+            List<ParseObject> suggestedConnectionsList = query.find();
+
+            realm.beginTransaction();
+
+            if (suggestedConnectionsList != null) {
+                for (int k = 0; k < suggestedConnectionsList.size(); ++k) {
+                    Log.d("APD", "DataSync AnalyticsMatches Found Suggestion");
+
+                    ParseObject curObj = suggestedConnectionsList.get(k);
+
+                    PredAnalyticsMatches result = realm.where(PredAnalyticsMatches.class).equalTo("objectId", curObj.getObjectId()).findFirst();
+
+                    if (result == null) {
+
+                        // Create an object
+                        PredAnalyticsMatches matchObj = realm.createObject(PredAnalyticsMatches.class, curObj.getObjectId());
+
+                        matchObj.setAccepted(curObj.getBoolean("isAccepted"));
+                        matchObj.setDeleted(curObj.getBoolean("isDeleted"));
+                        matchObj.setId1(curObj.getString("id1"));
+                        matchObj.setId2(curObj.getString("id2"));
+                        matchObj.setScore(curObj.getDouble("score"));
+                        matchObj.setScoreBio(curObj.getDouble("scoreBio"));
+                        matchObj.setScoreInterests(curObj.getDouble("scoreInterests"));
+                        matchObj.setScoreConferences(curObj.getDouble("scoreConferences"));
+                        matchObj.setScoreLocation(curObj.getDouble("scoreLocation"));
+                        matchObj.setScoreSurveyAnswers(curObj.getDouble("scoreSurveyAnswers"));
+
+                    } else {
+
+                        result.setAccepted(curObj.getBoolean("isAccepted"));
+                        result.setDeleted(curObj.getBoolean("isDeleted"));
+                        result.setId1(curObj.getString("id1"));
+                        result.setId2(curObj.getString("id2"));
+                        result.setScore(curObj.getDouble("score"));
+                        result.setScoreBio(curObj.getDouble("scoreBio"));
+                        result.setScoreInterests(curObj.getDouble("scoreInterests"));
+                        result.setScoreConferences(curObj.getDouble("scoreConferences"));
+                        result.setScoreLocation(curObj.getDouble("scoreLocation"));
+                        result.setScoreSurveyAnswers(curObj.getDouble("scoreSurveyAnswers"));
+
+                    }
+
+                    ParseQuery<ParseUser> queryUser = ParseUser.getQuery();
+                    queryUser.whereEqualTo("objectId",curObj.getString("id2"));
+
+                    List<ParseUser> userResults = queryUser.find();
+
+                    if (userResults.size() > 0) {
+
+                        ParseUser parseUser = userResults.get(0);
+
+                        Person newMatch = saveFromParseUser(parseUser, true);
+
+                        if (!realm.isInTransaction()) {
+                            realm.beginTransaction();
+                        }
+
+                        if (OConnectBaseActivity.currentPerson != null &&
+                                !OConnectBaseActivity.currentPerson.getSuggestedConnections().contains(newMatch)) {
+                            OConnectBaseActivity.currentPerson.getSuggestedConnections().add(newMatch);
+                        } else if (!person.getSuggestedConnections().contains(newMatch)) {
+                            person.getSuggestedConnections().add(newMatch);
+
+                        }
+
+                    }
+                }
+            }
+
+            realm.commitTransaction();
+        } catch (Exception ex) {
+            Log.d("Person", ex.getMessage());
+        }
     }
 
     static public Person saveFromParseUserOnly(ParseObject parseObject) {

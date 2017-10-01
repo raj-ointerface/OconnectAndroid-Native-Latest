@@ -10,6 +10,7 @@ import com.crashlytics.android.Crashlytics;
 import com.ointerface.oconnect.data.AppConfig;
 import com.ointerface.oconnect.data.DataSyncManager;
 import com.ointerface.oconnect.data.IDataSyncListener;
+import com.ointerface.oconnect.data.Person;
 import com.ointerface.oconnect.push.MyParsePNReceiver;
 import com.ointerface.oconnect.service.BackgroundService;
 import com.ointerface.oconnect.util.AppUtil;
@@ -43,8 +44,14 @@ public class MainSplashActivity extends AppCompatActivity implements IDataSyncLi
             @Override
             public void run() {
 
-                DataSyncManager.shouldSyncAll = true;
-                DataSyncManager.beginDataSync(getApplicationContext(), MainSplashActivity.this);
+                String userObjectId = AppUtil.getSignedInUserID(MainSplashActivity.this);
+                if ( userObjectId != null &&
+                        !userObjectId.equalsIgnoreCase("")) {
+                    Person.downloadAnalyticMatches(userObjectId);
+                }
+
+                // DataSyncManager.shouldSyncAll = true;
+                // DataSyncManager.beginDataSync(getApplicationContext(), MainSplashActivity.this);
 
                 // startService(new Intent(MainSplashActivity.this, BackgroundService.class));
             }

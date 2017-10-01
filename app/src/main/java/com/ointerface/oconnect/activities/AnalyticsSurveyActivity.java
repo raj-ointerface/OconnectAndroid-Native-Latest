@@ -1,5 +1,6 @@
 package com.ointerface.oconnect.activities;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -65,6 +66,8 @@ public class AnalyticsSurveyActivity extends OConnectBaseActivity {
             @Override
             public void onClick(View v) {
                 AnalyticsSurveyActivity.this.finish();
+                Intent i = new Intent(AnalyticsSurveyActivity.this, ConnectionsActivity.class);
+                startActivity(i);
             }
         });
 
@@ -163,6 +166,8 @@ public class AnalyticsSurveyActivity extends OConnectBaseActivity {
                 if (tvNext.getText().toString().equalsIgnoreCase("Finish")) {
                     AppUtil.setAnalyticsSurveyFinished(AnalyticsSurveyActivity.this, true);
                     AnalyticsSurveyActivity.this.finish();
+                    Intent i = new Intent(AnalyticsSurveyActivity.this, ConnectionsActivity.class);
+                    startActivity(i);
                 } else {
                     ++currentQuestionNumber;
                     displayCurrentQuestionAndAnswers();

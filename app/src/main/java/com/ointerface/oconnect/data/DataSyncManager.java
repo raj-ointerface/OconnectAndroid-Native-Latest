@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.ointerface.oconnect.MainSplashActivity;
 import com.ointerface.oconnect.R;
 import com.ointerface.oconnect.util.AppConfig;
 import com.ointerface.oconnect.util.AppUtil;
@@ -2740,6 +2741,13 @@ public class DataSyncManager {
 
         } catch (Exception ex) {
             Log.d("APD", ex.getMessage());
+        }
+
+        String userObjectId = AppUtil.getSignedInUserID(context);
+
+        if (userObjectId != null && !userObjectId.equalsIgnoreCase("")) {
+            Log.d("APD", "DataSync AnalyticsMatches called");
+            Person.downloadAnalyticMatches(userObjectId);
         }
 
         callback.onDataSyncFinish();
