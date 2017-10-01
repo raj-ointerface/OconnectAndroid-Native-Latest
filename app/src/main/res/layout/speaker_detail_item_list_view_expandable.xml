@@ -4,9 +4,13 @@
     android:layout_height="wrap_content"
     android:fillViewport="true"
     android:background="@color/colorWhite">
-    <ListView
+    <com.ointerface.oconnect.views.ExpandableHeightListView
         android:id="@+id/lvItems"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:dividerHeight="5dp"></ListView>
+        android:cacheColorHint="#00000000"
+        android:fadingEdge="none"
+        android:focusable="false"
+        android:scrollbars="none">
+    </com.ointerface.oconnect.views.ExpandableHeightListView>
 </RelativeLayout>

@@ -45,6 +45,7 @@ public class DataSyncManager {
     static private IDataSyncListener callback;
     static public ProgressDialog dialog;
     static public boolean shouldSyncAll = true;
+    static public ArrayList<IDataSyncListener> listeners = new ArrayList<IDataSyncListener>();
 
     // private static List<ParseObject> allObjects = new ArrayList<ParseObject>();
 
@@ -1200,19 +1201,25 @@ public class DataSyncManager {
 
                             JSONArray filesJSONArr = parseObject.getJSONArray("slidesFiles");
 
+                            Log.d("APD", "APD slidesFiles: " + filesJSONArr.toString());
+
                             if (filesJSONArr != null) {
                                 for (int m = 0; m < filesJSONArr.length(); ++m) {
                                     try {
                                         JSONObject fileObj = filesJSONArr.getJSONObject(m);
 
-                                        SpeakerFile speakerFile = realm.createObject(SpeakerFile.class, parseObject.getObjectId() + m);
+                                        SpeakerFile speakerFile = realm.where(SpeakerFile.class).equalTo("objectId", parseObject.getObjectId() + m).findFirst();
+
+                                        if (speakerFile == null) {
+                                            speakerFile = realm.createObject(SpeakerFile.class, parseObject.getObjectId() + m);
+                                        }
 
                                         speakerFile.setSpeakerID(parseObject.getObjectId());
                                         speakerFile.set__type(fileObj.getString("__type"));
                                         speakerFile.setName(fileObj.getString("name"));
                                         speakerFile.setUrl(fileObj.getString("url"));
                                     } catch (Exception ex) {
-                                        Log.d("DataSync", ex.getMessage());
+                                        Log.d("DataSync", "APD SpeakerFile exception: " + ex.getMessage());
                                     }
                                 }
                             }
@@ -1364,19 +1371,25 @@ public class DataSyncManager {
 
                             JSONArray filesJSONArr = parseObject.getJSONArray("slidesFiles");
 
+                            Log.d("APD", "APD slidesFiles: " + filesJSONArr.toString());
+
                             if (filesJSONArr != null) {
                                 for (int m = 0; m < filesJSONArr.length(); ++m) {
                                     try {
                                         JSONObject fileObj = filesJSONArr.getJSONObject(m);
 
-                                        SpeakerFile speakerFile = realm.createObject(SpeakerFile.class, parseObject.getObjectId() + m);
+                                        SpeakerFile speakerFile = realm.where(SpeakerFile.class).equalTo("objectId", parseObject.getObjectId() + m).findFirst();
+
+                                        if (speakerFile == null) {
+                                            speakerFile = realm.createObject(SpeakerFile.class, parseObject.getObjectId() + m);
+                                        }
 
                                         speakerFile.setSpeakerID(parseObject.getObjectId());
                                         speakerFile.set__type(fileObj.getString("__type"));
                                         speakerFile.setName(fileObj.getString("name"));
                                         speakerFile.setUrl(fileObj.getString("url"));
                                     } catch (Exception ex) {
-                                        Log.d("DataSync", ex.getMessage());
+                                        Log.d("DataSync", "APD SpeakerFile exception: " + ex.getMessage());
                                     }
                                 }
                             }
@@ -2730,6 +2743,10 @@ public class DataSyncManager {
         }
 
         callback.onDataSyncFinish();
+
+        for (IDataSyncListener thisListener : listeners) {
+            thisListener.onDataSyncFinish();
+        }
     }
 
     static public void setLastSyncDate(Date syncDate) {

@@ -51,6 +51,9 @@ public class MainSplashActivity extends AppCompatActivity implements IDataSyncLi
         });
         */
 
+        startService(new Intent(MainSplashActivity.this, BackgroundService.class));
+
+        /*
         Thread thread = new Thread(new Runnable() {
 
             @Override
@@ -65,7 +68,7 @@ public class MainSplashActivity extends AppCompatActivity implements IDataSyncLi
         });
 
         thread.start();
-
+        */
 
         if (config != null && config.getShowMainSplash() == false) {
             Intent i = new Intent(MainSplashActivity.this, CustomSplashActivity.class);

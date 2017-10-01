@@ -47,6 +47,7 @@ import com.ointerface.oconnect.data.SpeakerMisc;
 import com.ointerface.oconnect.messaging.MessagingActivity;
 import com.ointerface.oconnect.util.AppConfig;
 import com.ointerface.oconnect.util.AppUtil;
+import com.ointerface.oconnect.views.ExpandableHeightListView;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseRelation;
@@ -669,6 +670,8 @@ public class SpeakerDetailExpandableListViewAdapter extends BaseExpandableListAd
             filesList.addAll(journalResult);
             filesList.addAll(fileResult);
 
+            Log.d("APD", "APD SpeakerFiles count: " + fileResult.size());
+
             ArrayList<String> links = new ArrayList<String>();
             ArrayList<String> urls = new ArrayList<String>();
 
@@ -700,6 +703,7 @@ public class SpeakerDetailExpandableListViewAdapter extends BaseExpandableListAd
 
                     links.add(curFile.getName());
                     urls.add(curFile.getUrl());
+                    Log.d("APD", "APD SpeakerFile Info: " + curFile.getName() + " " + curFile.getUrl());
                 } else if (file instanceof SpeakerJournal) {
                     SpeakerJournal curFile = (SpeakerJournal) file;
 
@@ -718,13 +722,16 @@ public class SpeakerDetailExpandableListViewAdapter extends BaseExpandableListAd
                 }
             }
 
-            convertView = infalInflater.inflate(R.layout.speaker_detail_item_list_view, null);
+            convertView = infalInflater.inflate(R.layout.speaker_detail_item_list_view_expandable, null);
 
-            ListView lvItems = (ListView) convertView.findViewById(R.id.lvItems);
+            ExpandableHeightListView lvItems = (ExpandableHeightListView) convertView.findViewById(R.id.lvItems);
 
+            Log.d("APD", "APD SpeakerFiles Links: " + links.size() + ":" + urls.size());
             LinksListViewAdapter linksAdapter = new LinksListViewAdapter(_context, links, urls);
 
             lvItems.setAdapter(linksAdapter);
+
+            lvItems.setExpanded(true);
 
             final ArrayList<String> finalUrls = urls;
 

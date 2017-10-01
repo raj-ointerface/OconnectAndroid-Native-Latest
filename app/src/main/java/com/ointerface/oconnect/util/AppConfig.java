@@ -44,4 +44,5 @@ public class AppConfig {
     static public boolean bSurveyShown = false;
     static public boolean bParticipantsTutorialShown = false;
     static public boolean bScheduleTutorialShown = false;
+    static public boolean bAnalyticsSurveyOffered = false;
 }

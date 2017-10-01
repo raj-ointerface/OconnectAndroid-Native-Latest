@@ -2,6 +2,7 @@ package com.ointerface.oconnect.adapters;
 
 import android.content.Context;
 import android.graphics.Paint;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,11 +31,18 @@ public class LinksListViewAdapter extends BaseAdapter {
     public ArrayList<String> mData = new ArrayList<String>();
     public ArrayList<String> mURL = new ArrayList<String>();
 
+    private int index = 0;
+
     public LinksListViewAdapter(Context context, ArrayList<String> mDataArg, ArrayList<String> mURLArg) {
         super();
         this.context = context;
-        this.mData = mDataArg;
-        this.mURL = mURLArg;
+        mData = new ArrayList<String>();
+        mURL = new ArrayList<String>();
+
+        mData.addAll(mDataArg);
+        mURL.addAll(mURLArg);
+
+        index = 0;
 
         mInflater = LayoutInflater.from(context);
     }
@@ -46,6 +54,7 @@ public class LinksListViewAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
+        Log.d("APD", "APD mData size: " + mData.size());
         return mData.size();
     }
 
@@ -61,17 +70,22 @@ public class LinksListViewAdapter extends BaseAdapter {
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        String link = mData.get(position);
-
-        if (convertView == null) {
-            convertView = mInflater.inflate(R.layout.speaker_detail_list_link_item, null);
+        if (index >= mData.size()) {
+            index = 0;
         }
+
+        Log.d("APD", "APD SpeakerFile getView at: " + index);
+        String link = mData.get(index);
+
+        convertView = mInflater.inflate(R.layout.speaker_detail_list_link_item, null);
 
         TextView tvLink = (TextView) convertView.findViewById(R.id.tvLink);
 
         tvLink.setText(link);
 
         tvLink.setPaintFlags(tvLink.getPaintFlags()|Paint.UNDERLINE_TEXT_FLAG);
+
+        index += 1;
 
         return convertView;
     }

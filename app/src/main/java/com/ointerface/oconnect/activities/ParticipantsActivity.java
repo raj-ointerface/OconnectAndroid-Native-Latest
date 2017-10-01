@@ -22,6 +22,8 @@ import com.ointerface.oconnect.App;
 import com.ointerface.oconnect.R;
 import com.ointerface.oconnect.adapters.ParticipantsSwipeListAdapter;
 import com.ointerface.oconnect.data.Attendee;
+import com.ointerface.oconnect.data.DataSyncManager;
+import com.ointerface.oconnect.data.IDataSyncListener;
 import com.ointerface.oconnect.data.Person;
 import com.ointerface.oconnect.data.Speaker;
 import com.ointerface.oconnect.fragments.OverlayDialogFragment;
@@ -40,7 +42,7 @@ import io.realm.Sort;
 
 import static android.view.View.GONE;
 
-public class ParticipantsActivity extends OConnectBaseActivity {
+public class ParticipantsActivity extends OConnectBaseActivity implements IDataSyncListener {
     private ListView lvParticipantsList;
     private ParticipantsSwipeListAdapter adapter;
 
@@ -92,19 +94,7 @@ public class ParticipantsActivity extends OConnectBaseActivity {
 
         lvParticipantsList = (ListView) findViewById(R.id.lvParticipants);
 
-        Realm realm = AppUtil.getRealmInstance(App.getInstance());
-
-        if (currentPerson != null) {
-            Speaker result = realm.where(Speaker.class).equalTo("UserLink", currentPerson.getObjectId()).findFirst();
-
-            if (result != null) {
-                currentSpeaker = result;
-            }
-        }
-
-        getListViewData();
-
-        lvParticipantsList.setAdapter(adapter);
+        onDataSyncFinish();
 
         lvParticipantsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -211,6 +201,38 @@ public class ParticipantsActivity extends OConnectBaseActivity {
             dialogFragment.show(fm, OverlayDialogFragment.OverlayType.Partificpants1.name());
             AppConfig.bParticipantsTutorialShown = true;
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (!DataSyncManager.listeners.contains(this)) {
+            DataSyncManager.listeners.add(this);
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (DataSyncManager.listeners.contains(this)) {
+            DataSyncManager.listeners.remove(this);
+        }
+    }
+
+    public void onDataSyncFinish() {
+        Realm realm = AppUtil.getRealmInstance(App.getInstance());
+
+        if (currentPerson != null) {
+            Speaker result = realm.where(Speaker.class).equalTo("UserLink", currentPerson.getObjectId()).findFirst();
+
+            if (result != null) {
+                currentSpeaker = result;
+            }
+        }
+
+        getListViewData();
+
+        lvParticipantsList.setAdapter(adapter);
     }
 
     public void initSearchView() {
@@ -340,7 +362,13 @@ public class ParticipantsActivity extends OConnectBaseActivity {
     public void getListViewData() {
         Realm realm = AppUtil.getRealmInstance(App.getInstance());
 
+        if (adapter != null) {
+            bIsSpeakerView = adapter.showingSpeakers;
+        }
+
         adapter = new ParticipantsSwipeListAdapter(this, this);
+
+        adapter.showingSpeakers = bIsSpeakerView;
 
         RealmResults<Speaker> speakerResults;
 

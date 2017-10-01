@@ -21,7 +21,9 @@ import android.widget.TextView;
 import com.ointerface.oconnect.App;
 import com.ointerface.oconnect.R;
 import com.ointerface.oconnect.adapters.ScheduleSwipeListAdapter;
+import com.ointerface.oconnect.data.DataSyncManager;
 import com.ointerface.oconnect.data.Event;
+import com.ointerface.oconnect.data.IDataSyncListener;
 import com.ointerface.oconnect.data.Session;
 import com.ointerface.oconnect.data.Speaker;
 import com.ointerface.oconnect.data.SpeakerEventCache;
@@ -45,7 +47,7 @@ import io.realm.Sort;
 
 import static android.view.View.GONE;
 
-public class ScheduleActivity extends OConnectBaseActivity {
+public class ScheduleActivity extends OConnectBaseActivity implements IDataSyncListener {
     private SearchView scheduleSearch;
 
     private List<String> listDataHeader;
@@ -58,7 +60,7 @@ public class ScheduleActivity extends OConnectBaseActivity {
     private ListView lvEvents;
     private ScheduleSwipeListAdapter adapter;
 
-    private Date currentScheduleDate;
+    private Date currentScheduleDate = null;
 
     private TextView tvCurrentDay;
 
@@ -198,32 +200,9 @@ public class ScheduleActivity extends OConnectBaseActivity {
         ivLeftArrow = (ImageView) findViewById(R.id.ivLeftArrow);
         ivRightArrow = (ImageView) findViewById(R.id.ivRightArrow);
 
-        // if current day is during conference, then display that day
-        Date now = new Date();
-
-        if (now.before(selectedConference.getStartTime()) ||
-                now.after(selectedConference.getEndTime())) {
-            Realm realm = AppUtil.getRealmInstance(App.getInstance());
-            RealmResults<Session> results = realm.where(Session.class).equalTo("conference", AppUtil.getSelectedConferenceID(ScheduleActivity.this)).findAllSorted("startTime", Sort.ASCENDING);
-
-            if (results.size() > 0) {
-                Session session = results.first();
-
-                currentScheduleDate = session.getStartTime();
-
-            }
-        } else {
-            currentScheduleDate = now;
-
-            // we set the schedule date to the start of day so that entire day is displayed
-            currentScheduleDate = AppUtil.setTime(currentScheduleDate, 0, 0, 0, 0);
-        }
-
-        getListViewData(currentScheduleDate);
-
         lvEvents = (ListView) findViewById(R.id.elvSchedule);
 
-        lvEvents.setAdapter(adapter);
+        onDataSyncFinish();
 
         lvEvents.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -326,6 +305,51 @@ public class ScheduleActivity extends OConnectBaseActivity {
                 return false;
             }
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (!DataSyncManager.listeners.contains(this)) {
+            DataSyncManager.listeners.add(this);
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (DataSyncManager.listeners.contains(this)) {
+            DataSyncManager.listeners.remove(this);
+        }
+    }
+
+    public void onDataSyncFinish() {
+        // if current day is during conference, then display that day
+        Date now = new Date();
+
+        if (currentScheduleDate == null) {
+            if (now.before(selectedConference.getStartTime()) ||
+                    now.after(selectedConference.getEndTime())) {
+                Realm realm = AppUtil.getRealmInstance(App.getInstance());
+                RealmResults<Session> results = realm.where(Session.class).equalTo("conference", AppUtil.getSelectedConferenceID(ScheduleActivity.this)).findAllSorted("startTime", Sort.ASCENDING);
+
+                if (results.size() > 0) {
+                    Session session = results.first();
+
+                    currentScheduleDate = session.getStartTime();
+
+                }
+            } else {
+                currentScheduleDate = now;
+
+                // we set the schedule date to the start of day so that entire day is displayed
+                currentScheduleDate = AppUtil.setTime(currentScheduleDate, 0, 0, 0, 0);
+            }
+        }
+
+        getListViewData(currentScheduleDate);
+
+        lvEvents.setAdapter(adapter);
     }
 
     public void getListViewData(Date newSelectedDate) {
