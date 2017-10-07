@@ -546,32 +546,48 @@ public class ParticipantsActivity extends OConnectBaseActivity implements IDataS
             }
 
             if (attendee1 != null && attendee2 != null) {
-                if (attendee1.getName() == null || attendee2.getName() == null) {
+                if (attendee1.getName() == null && attendee2.getName() == null) {
                     return 0;
+                } else if (attendee1.getName() != null && attendee2.getName() == null) {
+                    return -1;
+                } else if (attendee1.getImage() == null && attendee2.getName() != null) {
+                    return 1;
                 }
 
                 // Log.d("APD", "Comparing: " + attendee1.getName() + " : " + attendee2.getName());
 
                 return attendee1.getName().toLowerCase().compareTo(attendee2.getName().toLowerCase());
             } else if (attendee1 != null && person2 != null) {
-                if (attendee1.getName() == null || person2.getFirstName() == null) {
+                if (attendee1.getName() == null && person2.getFirstName() == null) {
                     return 0;
+                } else if (attendee1.getName() != null && person2.getFirstName() == null) {
+                    return -1;
+                } else if (attendee1.getImage() == null && person2.getFirstName() != null) {
+                    return 1;
                 }
 
                 Log.d("APD", "Comparing: " + attendee1.getName() + " : " + person2.getFirstName());
 
                 return attendee1.getName().toLowerCase().compareTo(person2.getFirstName().toLowerCase());
             } else if (person1 != null && person2 != null) {
-                if (person1.getFirstName() == null || person2.getFirstName() == null) {
+                if (person1.getFirstName() == null && person2.getFirstName() == null) {
                     return 0;
+                } else if (person1.getFirstName() != null && person2.getFirstName() == null) {
+                    return -1;
+                } else if (person1.getFirstName() == null && person2.getFirstName() != null) {
+                    return 1;
                 }
 
                 // Log.d("APD", "Comparing: " + person1.getFirstName() + " : " + person2.getFirstName());
 
-                return person1.getFirstName().compareTo(person2.getFirstName());
+                return person1.getFirstName().toLowerCase().compareTo(person2.getFirstName().toLowerCase());
             } else {
-                if (person1.getFirstName() == null || attendee2.getName() == null) {
+                if (person1.getFirstName() == null && attendee2.getName() == null) {
                     return 0;
+                } else if (person1.getFirstName() != null && attendee2.getName() == null) {
+                    return -1;
+                } else if (person1.getFirstName() == null && attendee2.getName() != null) {
+                    return 1;
                 }
 
                 Log.d("APD", "Comparing: " + person1.getFirstName() + " : " + attendee2.getName());
