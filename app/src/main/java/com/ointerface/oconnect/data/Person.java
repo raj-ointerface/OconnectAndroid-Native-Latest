@@ -375,8 +375,14 @@ public class Person extends RealmObject {
 
             query.whereEqualTo("id1", parseObject.getObjectId()).whereNotEqualTo("isAccepted", true).whereNotEqualTo("isRejected", true).addDescendingOrder("score");
 
+            ParseQuery<ParseObject> query2 = ParseQuery.getQuery("PredAnalyticsMatches").setLimit(1000);
+
+            query2.whereEqualTo("id2", parseObject.getObjectId()).whereNotEqualTo("isAccepted", true).whereNotEqualTo("isRejected", true).addDescendingOrder("score");
+
             try {
                 List<ParseObject> suggestedConnectionsList = query.find();
+
+                suggestedConnectionsList.addAll(query2.find());
 
                 if (suggestedConnectionsList != null) {
                     for (int k = 0; k < suggestedConnectionsList.size(); ++k) {
@@ -422,7 +428,12 @@ public class Person extends RealmObject {
                         ParseQuery<ParseObject> queryUser = ParseQuery.getQuery("_User");
                         queryUser.whereEqualTo("objectId",curObj.getString("id2"));
 
+                        ParseQuery<ParseObject> queryUser2 = ParseQuery.getQuery("_User");
+                        queryUser2.whereEqualTo("objectId",curObj.getString("id1")).whereNotEqualTo("objectId", parseObject.getObjectId());
+
                         List<ParseObject> userResults = queryUser.find();
+
+                        userResults.addAll(queryUser2.find());
 
                         if (userResults.size() > 0) {
 
@@ -459,12 +470,22 @@ public class Person extends RealmObject {
             query.whereEqualTo("id1", userObjectId).whereNotEqualTo("isAccepted", true).whereNotEqualTo("isRejected", true).addDescendingOrder("score");
         }
 
+        ParseQuery<ParseObject> query2 = ParseQuery.getQuery("PredAnalyticsMatches").setLimit(1000);
+
+        if (date != null) {
+            query2.whereGreaterThanOrEqualTo("createdAt", date);
+        } else {
+            query2.whereEqualTo("id2", userObjectId).whereNotEqualTo("isAccepted", true).whereNotEqualTo("isRejected", true).addDescendingOrder("score");
+        }
+
         try {
             Person person = realm.where(Person.class).equalTo("objectId", userObjectId).findFirst();
 
             OConnectBaseActivity.currentPerson = person;
 
             List<ParseObject> suggestedConnectionsList = query.find();
+
+            suggestedConnectionsList.addAll(query2.find());
 
             realm.beginTransaction();
 
@@ -510,7 +531,12 @@ public class Person extends RealmObject {
                     ParseQuery<ParseUser> queryUser = ParseUser.getQuery();
                     queryUser.whereEqualTo("objectId",curObj.getString("id2"));
 
+                    ParseQuery<ParseUser> queryUser2 = ParseUser.getQuery();
+                    queryUser2.whereEqualTo("objectId",curObj.getString("id1")).whereNotEqualTo("objectId", userObjectId);
+
                     List<ParseUser> userResults = queryUser.find();
+
+                    userResults.addAll(queryUser2.find());
 
                     if (userResults.size() > 0) {
 

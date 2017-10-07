@@ -52,7 +52,9 @@
     <string name="label_please_sign_in">Please Sign In.</string>
     <string name="label_or">Or</string>
 
-    <string name="facebook_app_id">1670809836530865</string>
+    <!-- <string name="facebook_app_id">1670809836530865</string> -->
+    <string name="facebook_app_id">1595270920547482</string>
+
     <string name="fb_login_protocol_scheme">fb1670809836530865</string>
 
     <string name="no_internet">No Internet</string>

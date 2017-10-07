@@ -63,7 +63,27 @@ public class DataSyncManager {
         callback = callbackArg;
     }
 
+    static public void removeOneOffData() {
+        Realm realm = AppUtil.getRealmInstance(App.getInstance());
+        realm.beginTransaction();
+
+        RealmResults<SurveyQuestionAnswer> existingAnswers = realm.where(SurveyQuestionAnswer.class).findAll();
+
+        if (existingAnswers != null && existingAnswers.size() > 0) {
+            for (SurveyQuestionAnswer answer : existingAnswers) {
+                if (answer.getTitle().toLowerCase().contains("abobe")) {
+                    answer.deleteFromRealm();
+                    break;
+                }
+            }
+        }
+        realm.commitTransaction();
+    }
+
     static public void dataSyncOrganizations() {
+
+        removeOneOffData();
+        removeOneOffData();
 
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Organization").setLimit(1000);
 
@@ -2241,6 +2261,27 @@ public class DataSyncManager {
 
     static public void dataSyncSurveyQuestion() {
 
+        try {
+            ParseQuery<ParseObject> query2 = ParseQuery.getQuery("SurveyQuestion").whereEqualTo("isDeleted", true).setLimit(1000);
+
+            List<ParseObject> deletedQuestions = query2.find();
+
+            Realm realm = AppUtil.getRealmInstance(App.getInstance());
+            realm.beginTransaction();
+
+            for (ParseObject obj : deletedQuestions) {
+                SurveyQuestion deletedQuest = realm.where(SurveyQuestion.class).equalTo("objectId", obj.getObjectId()).findFirst();
+
+                if (deletedQuest != null) {
+                    deletedQuest.deleteFromRealm();
+                }
+            }
+
+            realm.commitTransaction();
+        } catch (Exception ex) {
+            Log.d("APD", ex.getMessage());
+        }
+
         ParseQuery<ParseObject> query = ParseQuery.getQuery("SurveyQuestion").whereNotEqualTo("isDeleted", true).setLimit(1000);
 
         Date date = getLastSyncDate();
@@ -2313,7 +2354,7 @@ public class DataSyncManager {
         Date date = getLastSyncDate();
 
         if (date != null) {
-            query.whereGreaterThanOrEqualTo("updatedAt", date);
+            // query.whereGreaterThanOrEqualTo("updatedAt", date);
         }
 
         Log.d("DataSyncManager", "Begin Parse Query For SurveyQuestionAnswer");

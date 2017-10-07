@@ -15,7 +15,7 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <permission
-        android:name="com.ointerface.oconnect.permission.C2D_MESSAGE"
+        android:name="${applicationId}.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
 
     <uses-permission android:name="android.permission.VIBRATE" />
@@ -25,12 +25,10 @@
     to match your app's package name + ".permission.C2D_MESSAGE".
     -->
 
-    <uses-permission android:name="com.ointerface.oconnect.permission.C2D_MESSAGE" />
+    <uses-permission android:name="${applicationId}.permission.C2D_MESSAGE" />
     <uses-permission android:name="com.ointerface.oconnect.messaging.permission.C2D_MESSAGE" />
 
     <uses-feature android:name="android.hardware.camera" />
-    <uses-feature android:name="android.hardware.camera2" />
-    <uses-feature android:name="android.hardware.camera.any" />
 
     <application
         android:name=".App"

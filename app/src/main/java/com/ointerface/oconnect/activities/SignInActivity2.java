@@ -165,29 +165,41 @@ public class SignInActivity2 extends AppCompatActivity {
     public void forgotPasswordClicked(View sender) {
         ParseUser.requestPasswordResetInBackground(username.getText().toString(), new RequestPasswordResetCallback() {
             @Override
-            public void done(ParseException e) {
-                if (e == null) {
-                    AlertDialog alertDialog = new AlertDialog.Builder(SignInActivity2.this).create();
-                    alertDialog.setTitle("");
-                    alertDialog.setMessage("An email with instructions on how to reset your password has been sent to your email.");
-                    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                }
-                            });
-                    alertDialog.show();
+            public void done(ParseException eArg) {
+                final ParseException e = eArg;
+
+                if (eArg == null) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            AlertDialog alertDialog = new AlertDialog.Builder(SignInActivity2.this).create();
+                            alertDialog.setTitle("");
+                            alertDialog.setMessage("An email with instructions on how to reset your password has been sent to your email.");
+                            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.dismiss();
+                                        }
+                                    });
+                            alertDialog.show();
+                        }
+                    });
                 } else {
-                    AlertDialog alertDialog = new AlertDialog.Builder(SignInActivity2.this).create();
-                    alertDialog.setTitle("Error");
-                    alertDialog.setMessage(e.getLocalizedMessage());
-                    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                }
-                            });
-                    alertDialog.show();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            AlertDialog alertDialog = new AlertDialog.Builder(SignInActivity2.this).create();
+                            alertDialog.setTitle("Error");
+                            alertDialog.setMessage(e.getLocalizedMessage());
+                            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.dismiss();
+                                        }
+                                    });
+                            alertDialog.show();
+                        }
+                    });
                 }
             }
         });
@@ -306,6 +318,15 @@ public class SignInActivity2 extends AppCompatActivity {
                                                 {
 
                                                 }
+                                            } else {
+                                                runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        addPersonToConference(finalUser);
+
+                                                        executePINPromptWorkflow(finalUser);
+                                                    }
+                                                });
                                             }
                                         }
                                     };
@@ -1416,9 +1437,11 @@ public class SignInActivity2 extends AppCompatActivity {
                         OConnectBaseActivity.selectedConference.setPeople(new RealmList<Person>());
                     }
 
+                    /*
                     if (!OConnectBaseActivity.selectedConference.getPeople().contains(OConnectBaseActivity.currentPerson)) {
                         OConnectBaseActivity.selectedConference.getPeople().add(OConnectBaseActivity.currentPerson);
                     }
+                    */
 
                     try {
                         ParseObject conf = ParseQuery.getQuery("Conference").whereEqualTo("objectId", OConnectBaseActivity.selectedConference.getObjectId()).getFirst();
