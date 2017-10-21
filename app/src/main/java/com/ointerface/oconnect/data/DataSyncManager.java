@@ -1155,156 +1155,165 @@ public class DataSyncManager {
                         ++counter;
 
                         Speaker result = realm.where(Speaker.class).equalTo("objectId", parseObject.getObjectId()).findFirst();
+                        try {
+                            if (result == null) {
 
-                        if (result == null) {
 
+                                // Create an object
+                                Speaker speaker = realm.createObject(Speaker.class, parseObject.getObjectId());
 
-                            // Create an object
-                            Speaker speaker = realm.createObject(Speaker.class, parseObject.getObjectId());
+                                // speaker.setObjectId(parseObject.getObjectId());
+                                speaker.setName(parseObject.getString("name"));
+                                speaker.setAllowCheckIn(parseObject.getBoolean("allowCheckIn"));
+                                speaker.setIOS_code(parseObject.getString("IOS_code"));
 
-                            // speaker.setObjectId(parseObject.getObjectId());
-                            speaker.setName(parseObject.getString("name"));
-                            speaker.setAllowCheckIn(parseObject.getBoolean("allowCheckIn"));
-                            speaker.setIOS_code(parseObject.getString("IOS_code"));
+                                // speaker.setUpdatedAt(parseObject.getUpdatedAt());
 
-                            // speaker.setUpdatedAt(parseObject.getUpdatedAt());
+                                speaker.setLocation(parseObject.getString("location"));
+                                speaker.setOrganization(parseObject.getString("organization"));
+                                speaker.setContactable(parseObject.getBoolean("isContactable"));
 
-                            speaker.setLocation(parseObject.getString("location"));
-                            speaker.setOrganization(parseObject.getString("organization"));
-                            speaker.setContactable(parseObject.getBoolean("isContactable"));
+                                speaker.setJob(parseObject.getString("job"));
+                                speaker.setBio(parseObject.getString("bio"));
 
-                            speaker.setJob(parseObject.getString("job"));
-                            speaker.setBio(parseObject.getString("bio"));
+                                speaker.setSpeakerLabel(parseObject.getString("speakerLabel"));
 
-                            speaker.setSpeakerLabel(parseObject.getString("speakerLabel"));
+                                speaker.setEmail(parseObject.getString("email"));
 
-                            speaker.setEmail(parseObject.getString("email"));
+                                ParseObject conferenceObj = parseObject.getParseObject("conference");
 
-                            ParseObject conferenceObj = parseObject.getParseObject("conference");
-
-                            if (conferenceObj != null) {
-                                speaker.setConference(conferenceObj.getObjectId());
-                            }
-
-                            ParseFile parseImage = (ParseFile) parseObject.getParseFile("image");
-
-                            try {
-                                if (parseImage != null) {
-                                    speaker.setImage(parseImage.getData());
+                                if (conferenceObj != null) {
+                                    speaker.setConference(conferenceObj.getObjectId());
                                 }
-                            } catch (Exception ex) {
-                                Log.d("DataSyncManager", "Line 699 " + ex.getMessage());
-                            }
 
-                            // Log.d("APD", "Speaker ObjectId: " + speaker.getObjectId() +
-                            // " IOS_code: " + speaker.getIOS_code());
+                                ParseFile parseImage = (ParseFile) parseObject.getParseFile("image");
 
-                            JSONArray linksJSONArr = parseObject.getJSONArray("links");
-
-                            if (linksJSONArr != null) {
-                                for (int m = 0; m < linksJSONArr.length(); ++m) {
-                                    try {
-                                        JSONObject linksObj = linksJSONArr.getJSONObject(m);
-
-                                        SpeakerLink speakerLink = realm.createObject(SpeakerLink.class, parseObject.getObjectId() + m);
-
-                                        speakerLink.setSpeakerID(parseObject.getObjectId());
-                                        speakerLink.setLabel(linksObj.getString("label"));
-                                        speakerLink.setLink(linksObj.getString("link"));
-                                    } catch (Exception ex) {
-                                        Log.d("DataSync", ex.getMessage());
+                                try {
+                                    if (parseImage != null) {
+                                        speaker.setImage(parseImage.getData());
                                     }
+                                } catch (Exception ex) {
+                                    Log.d("DataSyncManager", "Line 699 " + ex.getMessage());
                                 }
-                            }
-                            else{
 
-                            }
+                                // Log.d("APD", "Speaker ObjectId: " + speaker.getObjectId() +
+                                // " IOS_code: " + speaker.getIOS_code());
 
-                            JSONArray filesJSONArr = parseObject.getJSONArray("slidesFiles");
+                                JSONArray linksJSONArr = parseObject.getJSONArray("links");
 
-                            Log.d("APD", "APD slidesFiles: " + filesJSONArr.toString());
+                                realm.where(SpeakerLink.class).equalTo("speakerID", parseObject.getObjectId()).findAll().deleteAllFromRealm();
 
-                            if (filesJSONArr != null) {
-                                for (int m = 0; m < filesJSONArr.length(); ++m) {
-                                    try {
-                                        JSONObject fileObj = filesJSONArr.getJSONObject(m);
+                                if (linksJSONArr != null) {
+                                    for (int m = 0; m < linksJSONArr.length(); ++m) {
+                                        try {
+                                            JSONObject linksObj = linksJSONArr.getJSONObject(m);
 
-                                        SpeakerFile speakerFile = realm.where(SpeakerFile.class).equalTo("objectId", parseObject.getObjectId() + m).findFirst();
+                                            SpeakerLink speakerLink = realm.createObject(SpeakerLink.class, parseObject.getObjectId() + m);
 
-                                        if (speakerFile == null) {
-                                            speakerFile = realm.createObject(SpeakerFile.class, parseObject.getObjectId() + m);
+                                            speakerLink.setSpeakerID(parseObject.getObjectId());
+                                            speakerLink.setLabel(linksObj.getString("label"));
+                                            speakerLink.setLink(linksObj.getString("link"));
+                                        } catch (Exception ex) {
+                                            Log.d("DataSync", ex.getMessage());
                                         }
+                                    }
+                                } else {
 
-                                        speakerFile.setSpeakerID(parseObject.getObjectId());
-                                        speakerFile.set__type(fileObj.getString("__type"));
-                                        speakerFile.setName(fileObj.getString("name"));
-                                        speakerFile.setUrl(fileObj.getString("url"));
-                                    } catch (Exception ex) {
-                                        Log.d("DataSync", "APD SpeakerFile exception: " + ex.getMessage());
+                                }
+
+                                JSONArray filesJSONArr = parseObject.getJSONArray("slidesFiles");
+
+                                // Log.d("APD", "APD slidesFiles: " + filesJSONArr.toString());
+
+                                realm.where(SpeakerFile.class).equalTo("speakerID", parseObject.getObjectId()).findAll().deleteAllFromRealm();
+
+                                if (filesJSONArr != null) {
+                                    for (int m = 0; m < filesJSONArr.length(); ++m) {
+                                        try {
+                                            JSONObject fileObj = filesJSONArr.getJSONObject(m);
+
+                                            SpeakerFile speakerFile = realm.where(SpeakerFile.class).equalTo("objectId", parseObject.getObjectId() + m).findFirst();
+
+                                            if (speakerFile == null) {
+                                                speakerFile = realm.createObject(SpeakerFile.class, parseObject.getObjectId() + m);
+                                            }
+
+                                            speakerFile.setSpeakerID(parseObject.getObjectId());
+                                            speakerFile.set__type(fileObj.getString("__type"));
+                                            speakerFile.setName(fileObj.getString("name"));
+                                            speakerFile.setUrl(fileObj.getString("url"));
+                                        } catch (Exception ex) {
+                                            Log.d("DataSync", "APD SpeakerFile exception: " + ex.getMessage());
+                                        }
                                     }
                                 }
-                            }
 
-                            JSONArray journalsJSONArr = parseObject.getJSONArray("journalFiles");
+                                JSONArray journalsJSONArr = parseObject.getJSONArray("journalFiles");
 
-                            if (journalsJSONArr != null) {
-                                for (int m = 0; m < journalsJSONArr.length(); ++m) {
-                                    try {
-                                        JSONObject fileObj = journalsJSONArr.getJSONObject(m);
+                                realm.where(SpeakerJournal.class).equalTo("speakerID", parseObject.getObjectId()).findAll().deleteAllFromRealm();
 
-                                        SpeakerJournal speakerJournal = realm.createObject(SpeakerJournal.class, parseObject.getObjectId() + m);
+                                if (journalsJSONArr != null) {
+                                    for (int m = 0; m < journalsJSONArr.length(); ++m) {
+                                        try {
+                                            JSONObject fileObj = journalsJSONArr.getJSONObject(m);
 
-                                        speakerJournal.setSpeakerID(parseObject.getObjectId());
-                                        speakerJournal.set__type(fileObj.getString("__type"));
-                                        speakerJournal.setName(fileObj.getString("name"));
-                                        speakerJournal.setUrl(fileObj.getString("url"));
-                                    } catch (Exception ex) {
-                                        Log.d("DataSync", ex.getMessage());
+                                            SpeakerJournal speakerJournal = realm.createObject(SpeakerJournal.class, parseObject.getObjectId() + m);
+
+                                            speakerJournal.setSpeakerID(parseObject.getObjectId());
+                                            speakerJournal.set__type(fileObj.getString("__type"));
+                                            speakerJournal.setName(fileObj.getString("name"));
+                                            speakerJournal.setUrl(fileObj.getString("url"));
+                                        } catch (Exception ex) {
+                                            Log.d("DataSync", ex.getMessage());
+                                        }
                                     }
                                 }
-                            }
 
-                            JSONArray miscJSONArr = parseObject.getJSONArray("miscellaneousFiles");
+                                JSONArray miscJSONArr = parseObject.getJSONArray("miscellaneousFiles");
 
-                            if (miscJSONArr != null) {
-                                for (int m = 0; m < miscJSONArr.length(); ++m) {
-                                    try {
-                                        JSONObject fileObj = miscJSONArr.getJSONObject(m);
+                                realm.where(SpeakerMisc.class).equalTo("speakerID", parseObject.getObjectId()).findAll().deleteAllFromRealm();
 
-                                        SpeakerMisc speakerMisc = realm.createObject(SpeakerMisc.class, parseObject.getObjectId() + m);
+                                if (miscJSONArr != null) {
+                                    for (int m = 0; m < miscJSONArr.length(); ++m) {
+                                        try {
+                                            JSONObject fileObj = miscJSONArr.getJSONObject(m);
 
-                                        speakerMisc.setSpeakerID(parseObject.getObjectId());
-                                        speakerMisc.set__type(fileObj.getString("__type"));
-                                        speakerMisc.setName(fileObj.getString("name"));
-                                        speakerMisc.setUrl(fileObj.getString("url"));
-                                    } catch (Exception ex) {
-                                        Log.d("DataSync", ex.getMessage());
+                                            SpeakerMisc speakerMisc = realm.createObject(SpeakerMisc.class, parseObject.getObjectId() + m);
+
+                                            speakerMisc.setSpeakerID(parseObject.getObjectId());
+                                            speakerMisc.set__type(fileObj.getString("__type"));
+                                            speakerMisc.setName(fileObj.getString("name"));
+                                            speakerMisc.setUrl(fileObj.getString("url"));
+                                        } catch (Exception ex) {
+                                            Log.d("DataSync", ex.getMessage());
+                                        }
                                     }
                                 }
-                            }
 
-                            JSONArray abstractJSONArr = parseObject.getJSONArray("abstractFiles");
+                                JSONArray abstractJSONArr = parseObject.getJSONArray("abstractFiles");
 
-                            if (abstractJSONArr != null) {
-                                for (int m = 0; m < abstractJSONArr.length(); ++m) {
-                                    try {
-                                        JSONObject fileObj = abstractJSONArr.getJSONObject(m);
+                                realm.where(SpeakerAbstract.class).equalTo("speakerID", parseObject.getObjectId()).findAll().deleteAllFromRealm();
 
-                                        SpeakerAbstract speakerAbstract = realm.createObject(SpeakerAbstract.class, parseObject.getObjectId() + m);
+                                if (abstractJSONArr != null) {
+                                    for (int m = 0; m < abstractJSONArr.length(); ++m) {
+                                        try {
+                                            JSONObject fileObj = abstractJSONArr.getJSONObject(m);
 
-                                        speakerAbstract.setSpeakerID(parseObject.getObjectId());
-                                        speakerAbstract.set__type(fileObj.getString("__type"));
-                                        speakerAbstract.setName(fileObj.getString("name"));
-                                        speakerAbstract.setUrl(fileObj.getString("url"));
-                                    } catch (Exception ex) {
-                                        Log.d("DataSync", ex.getMessage());
+                                            SpeakerAbstract speakerAbstract = realm.createObject(SpeakerAbstract.class, parseObject.getObjectId() + m);
+
+                                            speakerAbstract.setSpeakerID(parseObject.getObjectId());
+                                            speakerAbstract.set__type(fileObj.getString("__type"));
+                                            speakerAbstract.setName(fileObj.getString("name"));
+                                            speakerAbstract.setUrl(fileObj.getString("url"));
+                                        } catch (Exception ex) {
+                                            Log.d("DataSync", ex.getMessage());
+                                        }
                                     }
                                 }
-                            }
 
-                            ParseRelation<ParseObject> eventsRelation = parseObject.getRelation("event");
+                                ParseRelation<ParseObject> eventsRelation = parseObject.getRelation("event");
 
-                            ParseQuery<ParseObject> eventsQuery = eventsRelation.getQuery();
+                                ParseQuery<ParseObject> eventsQuery = eventsRelation.getQuery();
 
                             /*
                             try {
@@ -1335,142 +1344,152 @@ public class DataSyncManager {
                             }
                             */
 
-                        } else {
+                            } else {
 
 
-                            // result.setObjectId(parseObject.getObjectId());
-                            result.setName(parseObject.getString("name"));
-                            result.setAllowCheckIn(parseObject.getBoolean("allowCheckIn"));
-                            result.setIOS_code(parseObject.getString("IOS_code"));
+                                // result.setObjectId(parseObject.getObjectId());
+                                result.setName(parseObject.getString("name"));
+                                result.setAllowCheckIn(parseObject.getBoolean("allowCheckIn"));
+                                result.setIOS_code(parseObject.getString("IOS_code"));
 
-                            // result.setUpdatedAt(parseObject.getUpdatedAt());
+                                // result.setUpdatedAt(parseObject.getUpdatedAt());
 
-                            result.setLocation(parseObject.getString("location"));
-                            result.setOrganization(parseObject.getString("organization"));
-                            result.setContactable(parseObject.getBoolean("isContactable"));
+                                result.setLocation(parseObject.getString("location"));
+                                result.setOrganization(parseObject.getString("organization"));
+                                result.setContactable(parseObject.getBoolean("isContactable"));
 
-                            result.setJob(parseObject.getString("job"));
-                            result.setBio(parseObject.getString("bio"));
+                                result.setJob(parseObject.getString("job"));
+                                result.setBio(parseObject.getString("bio"));
 
-                            result.setSpeakerLabel(parseObject.getString("speakerLabel"));
+                                result.setSpeakerLabel(parseObject.getString("speakerLabel"));
 
-                            result.setEmail(parseObject.getString("email"));
+                                result.setEmail(parseObject.getString("email"));
 
-                            ParseObject conferenceObj = parseObject.getParseObject("conference");
+                                ParseObject conferenceObj = parseObject.getParseObject("conference");
 
-                            if (conferenceObj != null) {
-                                result.setConference(conferenceObj.getObjectId());
-                            }
-
-                            ParseFile parseImage = (ParseFile) parseObject.getParseFile("image");
-
-                            try {
-                                if (parseImage != null) {
-                                    result.setImage(parseImage.getData());
+                                if (conferenceObj != null) {
+                                    result.setConference(conferenceObj.getObjectId());
                                 }
-                            } catch (Exception ex) {
-                                Log.d("DataSyncManager", "Line 755 " + ex.getMessage());
-                            }
 
-                            JSONArray linksJSONArr = parseObject.getJSONArray("links");
+                                ParseFile parseImage = (ParseFile) parseObject.getParseFile("image");
 
-                            if (linksJSONArr != null) {
-                                for (int m = 0; m < linksJSONArr.length(); ++m) {
-                                    try {
-                                        JSONObject linksObj = linksJSONArr.getJSONObject(m);
-
-                                        SpeakerLink speakerLink = realm.createObject(SpeakerLink.class, parseObject.getObjectId() + m);
-
-                                        speakerLink.setSpeakerID(parseObject.getObjectId());
-                                        speakerLink.setLabel(linksObj.getString("label"));
-                                        speakerLink.setLink(linksObj.getString("link"));
-                                    } catch (Exception ex) {
-                                        Log.d("DataSync", ex.getMessage());
+                                try {
+                                    if (parseImage != null) {
+                                        result.setImage(parseImage.getData());
                                     }
+                                } catch (Exception ex) {
+                                    Log.d("DataSyncManager", "Line 755 " + ex.getMessage());
                                 }
-                            }
 
-                            JSONArray filesJSONArr = parseObject.getJSONArray("slidesFiles");
+                                JSONArray linksJSONArr = parseObject.getJSONArray("links");
 
-                            Log.d("APD", "APD slidesFiles: " + filesJSONArr.toString());
+                                realm.where(SpeakerLink.class).equalTo("speakerID", parseObject.getObjectId()).findAll().deleteAllFromRealm();
 
-                            if (filesJSONArr != null) {
-                                for (int m = 0; m < filesJSONArr.length(); ++m) {
-                                    try {
-                                        JSONObject fileObj = filesJSONArr.getJSONObject(m);
+                                if (linksJSONArr != null) {
+                                    for (int m = 0; m < linksJSONArr.length(); ++m) {
+                                        try {
+                                            JSONObject linksObj = linksJSONArr.getJSONObject(m);
 
-                                        SpeakerFile speakerFile = realm.where(SpeakerFile.class).equalTo("objectId", parseObject.getObjectId() + m).findFirst();
+                                            SpeakerLink speakerLink = realm.createObject(SpeakerLink.class, parseObject.getObjectId() + m);
 
-                                        if (speakerFile == null) {
-                                            speakerFile = realm.createObject(SpeakerFile.class, parseObject.getObjectId() + m);
+                                            speakerLink.setSpeakerID(parseObject.getObjectId());
+                                            speakerLink.setLabel(linksObj.getString("label"));
+                                            speakerLink.setLink(linksObj.getString("link"));
+                                        } catch (Exception ex) {
+                                            Log.d("DataSync", ex.getMessage());
                                         }
-
-                                        speakerFile.setSpeakerID(parseObject.getObjectId());
-                                        speakerFile.set__type(fileObj.getString("__type"));
-                                        speakerFile.setName(fileObj.getString("name"));
-                                        speakerFile.setUrl(fileObj.getString("url"));
-                                    } catch (Exception ex) {
-                                        Log.d("DataSync", "APD SpeakerFile exception: " + ex.getMessage());
                                     }
                                 }
-                            }
 
-                            JSONArray journalsJSONArr = parseObject.getJSONArray("journalFiles");
+                                JSONArray filesJSONArr = parseObject.getJSONArray("slidesFiles");
 
-                            if (journalsJSONArr != null) {
-                                for (int m = 0; m < journalsJSONArr.length(); ++m) {
-                                    try {
-                                        JSONObject fileObj = journalsJSONArr.getJSONObject(m);
+                                // Log.d("APD", "APD slidesFiles: " + filesJSONArr.toString());
 
-                                        SpeakerJournal speakerJournal = realm.createObject(SpeakerJournal.class, parseObject.getObjectId() + m);
+                                realm.where(SpeakerFile.class).equalTo("speakerID", parseObject.getObjectId()).findAll().deleteAllFromRealm();
 
-                                        speakerJournal.setSpeakerID(parseObject.getObjectId());
-                                        speakerJournal.set__type(fileObj.getString("__type"));
-                                        speakerJournal.setName(fileObj.getString("name"));
-                                        speakerJournal.setUrl(fileObj.getString("url"));
-                                    } catch (Exception ex) {
-                                        Log.d("DataSync", ex.getMessage());
+                                if (filesJSONArr != null) {
+                                    for (int m = 0; m < filesJSONArr.length(); ++m) {
+                                        try {
+                                            JSONObject fileObj = filesJSONArr.getJSONObject(m);
+
+                                            SpeakerFile speakerFile = realm.where(SpeakerFile.class).equalTo("objectId", parseObject.getObjectId() + m).findFirst();
+
+                                            if (speakerFile == null) {
+                                                speakerFile = realm.createObject(SpeakerFile.class, parseObject.getObjectId() + m);
+                                            }
+
+                                            speakerFile.setSpeakerID(parseObject.getObjectId());
+                                            speakerFile.set__type(fileObj.getString("__type"));
+                                            speakerFile.setName(fileObj.getString("name"));
+                                            speakerFile.setUrl(fileObj.getString("url"));
+                                        } catch (Exception ex) {
+                                            Log.d("DataSync", "APD SpeakerFile exception: " + ex.getMessage());
+                                        }
                                     }
                                 }
-                            }
 
-                            JSONArray miscJSONArr = parseObject.getJSONArray("miscellaneousFiles");
+                                JSONArray journalsJSONArr = parseObject.getJSONArray("journalFiles");
 
-                            if (miscJSONArr != null) {
-                                for (int m = 0; m < miscJSONArr.length(); ++m) {
-                                    try {
-                                        JSONObject fileObj = miscJSONArr.getJSONObject(m);
+                                realm.where(SpeakerJournal.class).equalTo("speakerID", parseObject.getObjectId()).findAll().deleteAllFromRealm();
 
-                                        SpeakerMisc speakerMisc = realm.createObject(SpeakerMisc.class, parseObject.getObjectId() + m);
+                                if (journalsJSONArr != null) {
+                                    for (int m = 0; m < journalsJSONArr.length(); ++m) {
+                                        try {
+                                            JSONObject fileObj = journalsJSONArr.getJSONObject(m);
 
-                                        speakerMisc.setSpeakerID(parseObject.getObjectId());
-                                        speakerMisc.set__type(fileObj.getString("__type"));
-                                        speakerMisc.setName(fileObj.getString("name"));
-                                        speakerMisc.setUrl(fileObj.getString("url"));
-                                    } catch (Exception ex) {
-                                        Log.d("DataSync", ex.getMessage());
+                                            SpeakerJournal speakerJournal = realm.createObject(SpeakerJournal.class, parseObject.getObjectId() + m);
+
+                                            speakerJournal.setSpeakerID(parseObject.getObjectId());
+                                            speakerJournal.set__type(fileObj.getString("__type"));
+                                            speakerJournal.setName(fileObj.getString("name"));
+                                            speakerJournal.setUrl(fileObj.getString("url"));
+                                        } catch (Exception ex) {
+                                            Log.d("DataSync", ex.getMessage());
+                                        }
                                     }
                                 }
-                            }
 
-                            JSONArray abstractJSONArr = parseObject.getJSONArray("abstractFiles");
+                                JSONArray miscJSONArr = parseObject.getJSONArray("miscellaneousFiles");
 
-                            if (abstractJSONArr != null) {
-                                for (int m = 0; m < abstractJSONArr.length(); ++m) {
-                                    try {
-                                        JSONObject fileObj = abstractJSONArr.getJSONObject(m);
+                                realm.where(SpeakerMisc.class).equalTo("speakerID", parseObject.getObjectId()).findAll().deleteAllFromRealm();
 
-                                        SpeakerAbstract speakerAbstract = realm.createObject(SpeakerAbstract.class, parseObject.getObjectId() + m);
+                                if (miscJSONArr != null) {
+                                    for (int m = 0; m < miscJSONArr.length(); ++m) {
+                                        try {
+                                            JSONObject fileObj = miscJSONArr.getJSONObject(m);
 
-                                        speakerAbstract.setSpeakerID(parseObject.getObjectId());
-                                        speakerAbstract.set__type(fileObj.getString("__type"));
-                                        speakerAbstract.setName(fileObj.getString("name"));
-                                        speakerAbstract.setUrl(fileObj.getString("url"));
-                                    } catch (Exception ex) {
-                                        Log.d("DataSync", ex.getMessage());
+                                            SpeakerMisc speakerMisc = realm.createObject(SpeakerMisc.class, parseObject.getObjectId() + m);
+
+                                            speakerMisc.setSpeakerID(parseObject.getObjectId());
+                                            speakerMisc.set__type(fileObj.getString("__type"));
+                                            speakerMisc.setName(fileObj.getString("name"));
+                                            speakerMisc.setUrl(fileObj.getString("url"));
+                                        } catch (Exception ex) {
+                                            Log.d("DataSync", ex.getMessage());
+                                        }
                                     }
                                 }
-                            }
+
+                                JSONArray abstractJSONArr = parseObject.getJSONArray("abstractFiles");
+
+                                realm.where(SpeakerAbstract.class).equalTo("speakerID", parseObject.getObjectId()).findAll().deleteAllFromRealm();
+
+                                if (abstractJSONArr != null) {
+                                    for (int m = 0; m < abstractJSONArr.length(); ++m) {
+                                        try {
+                                            JSONObject fileObj = abstractJSONArr.getJSONObject(m);
+
+                                            SpeakerAbstract speakerAbstract = realm.createObject(SpeakerAbstract.class, parseObject.getObjectId() + m);
+
+                                            speakerAbstract.setSpeakerID(parseObject.getObjectId());
+                                            speakerAbstract.set__type(fileObj.getString("__type"));
+                                            speakerAbstract.setName(fileObj.getString("name"));
+                                            speakerAbstract.setUrl(fileObj.getString("url"));
+                                        } catch (Exception ex) {
+                                            Log.d("DataSync", ex.getMessage());
+                                        }
+                                    }
+                                }
 
                             /*
                             ParseRelation<ParseObject> eventsRelation = parseObject.getRelation("event");
@@ -1506,6 +1525,9 @@ public class DataSyncManager {
                             }
                             */
 
+                            }
+                        } catch (Exception ex) {
+                            Log.d("APD", "APD Special Speaker exception: " + ex.getMessage());
                         }
                     }
 

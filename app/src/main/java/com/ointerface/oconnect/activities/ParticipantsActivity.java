@@ -385,14 +385,19 @@ public class ParticipantsActivity extends OConnectBaseActivity implements IDataS
         attendeeResults = realm.where(Attendee.class).equalTo("conference", AppUtil.getSelectedConferenceID(ParticipantsActivity.this)).findAllSorted("name", Sort.ASCENDING);
 
         for (int i = 0; i < attendeeResults.size(); ++i) {
-            sortedUsers.add(attendeeResults.get(i));
+            if (attendeeResults.get(i).getName() != null) {
+                sortedUsers.add(attendeeResults.get(i));
+            }
         }
 
         RealmList<Person> peopleList = OConnectBaseActivity.selectedConference.getPeople();
 
         if (peopleList != null) {
             for (int i = 0; i < peopleList.size(); ++i) {
-                sortedUsers.add(peopleList.get(i));
+                if (peopleList.get(i).getFirstName() != null &&
+                        peopleList.get(i).getLastName() != null) {
+                    sortedUsers.add(peopleList.get(i));
+                }
             }
         }
 

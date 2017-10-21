@@ -590,22 +590,69 @@ public class SignInActivity2 extends AppCompatActivity {
                                                     } catch (Exception exception) {
                                                         Log.d("linkedInDataObject", exception.getLocalizedMessage());
                                                     }
-                                                }
 
-                                                OConnectBaseActivity.currentPerson = Person.saveFromParseUserOnly(user);
+                                                    OConnectBaseActivity.currentPerson = Person.saveFromParseUserOnly(user);
 
-                                                runOnUiThread(new Runnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        AppUtil.setIsSignedIn(SignInActivity2.this, true);
-                                                        AppUtil.setSignedInUserID(SignInActivity2.this, user.getObjectId());
+                                                    runOnUiThread(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            AppUtil.setIsSignedIn(SignInActivity2.this, true);
+                                                            AppUtil.setSignedInUserID(SignInActivity2.this, user.getObjectId());
 
-                                                        addPersonToConference(user);
+                                                            addPersonToConference(user);
 
-                                                        executePINPromptWorkflow(user);
+                                                            executePINPromptWorkflow(user);
+                                                        }
+                                                    });
+                                                } else {
+                                                    Log.d("APD", "APD signUpInBackground exception message: " + e.getLocalizedMessage());
+
+                                                    ParseQuery<ParseUser> query = ParseUser.getQuery();
+                                                    query.whereEqualTo("email", user.getEmail());
+
+                                                    try {
+                                                        List<ParseUser> objects = query.find();
+
+                                                        if (objects.size() > 0) {
+                                                            final ParseUser existingUser = objects.get(0);
+
+                                                            ParseObject linkedInDataObject = new ParseObject("LinkedInData");
+
+                                                            linkedInDataObject.put("location", finalLocation);
+                                                            linkedInDataObject.put("avatar", finalPictureUrl);
+                                                            linkedInDataObject.put("summary", finalSummary);
+                                                            linkedInDataObject.put("ocUser", existingUser.getObjectId());
+                                                            linkedInDataObject.put("linkedInId", finalId);
+                                                            linkedInDataObject.put("lastName", finalLastName);
+                                                            linkedInDataObject.put("firstName", finalFirstName);
+                                                            linkedInDataObject.put("email", finalEmailAddress);
+
+                                                            try {
+                                                                linkedInDataObject.saveInBackground();
+                                                            } catch (Exception exception) {
+                                                                Log.d("linkedInDataObject", exception.getLocalizedMessage());
+                                                            }
+
+                                                            existingUser.put("pictureURL", finalPictureUrl);
+
+                                                            OConnectBaseActivity.currentPerson = Person.saveFromParseUserOnly(existingUser);
+
+                                                            runOnUiThread(new Runnable() {
+                                                                @Override
+                                                                public void run() {
+                                                                    AppUtil.setIsSignedIn(SignInActivity2.this, true);
+                                                                    AppUtil.setSignedInUserID(SignInActivity2.this, existingUser.getObjectId());
+
+                                                                    addPersonToConference(existingUser);
+
+                                                                    executePINPromptWorkflow(existingUser);
+                                                                }
+                                                            });
+                                                        }
+                                                    } catch (Exception ex) {
+
                                                     }
-                                                });
-
+                                                }
                                             }
                                         });
                                     }
